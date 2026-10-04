@@ -1,31 +1,24 @@
+//! 合并同一查询的各读法，后台一次完成；排队时只保留最新输入任务。
+
 use std::sync::mpsc::{Receiver, Sender, channel};
+use std::sync::{
+    Arc,
+    atomic::{AtomicU64, Ordering},
+};
 use std::thread::JoinHandle;
 
 use crate::sentence::SentenceScorer;
 
+use super::batch::ScoreBatch;
 use super::{GENERATE_BEAM, GENERATE_MAX_CHARS};
 
-/// 一次后台任务：两个条件与一批要打分的文本，外加可选的「直接按这段按键生成整句」。
-/// 两件事合成一条任务是因为它们都在用户停顿后一起发出，而排队的任务只算最新一条。
-struct Job {
-    context: String,
-    keys: String,
-    texts: Vec<String>,
+mod job;
+mod scored;
+#[cfg(test)]
+mod tests;
 
-    /// 要生成整句的那段按键（整段作用域）；`None` 就只打分。
-    generate: Option<String>,
-}
-
-/// 后台算好的结果，与任务一一对应。
-pub(crate) struct Scored {
-    pub context: String,
-    pub keys: String,
-    pub texts: Vec<String>,
-    pub scores: Vec<f64>,
-
-    /// 生成用的按键与生成出来的整句，对应任务里的 `generate`。
-    pub generated: Option<(String, Vec<String>)>,
-}
+use job::Job;
+pub(crate) use scored::Scored;
 
 /// 后台打分线程：模型前向要几十毫秒，不能放在按键回调里。
 /// 任务排队时只算最新的一条（旧的对应已经过去的输入状态）；线程随本结构一起结束。
@@ -33,12 +26,17 @@ pub(crate) struct RescoreWorker {
     jobs: Sender<Job>,
     results: Receiver<Scored>,
     handle: Option<JoinHandle<()>>,
+
+    /// 最新输入代；换输入或卸载模型后停止后续批次。
+    latest: Arc<AtomicU64>,
 }
 
 impl RescoreWorker {
     pub fn spawn(scorer: Box<dyn SentenceScorer>) -> Self {
         let (jobs, job_rx) = channel::<Job>();
         let (result_tx, results) = channel::<Scored>();
+        let latest = Arc::new(AtomicU64::new(0));
+        let active = latest.clone();
         let handle = std::thread::Builder::new()
             .name("qingjian-rescore".to_owned())
             .spawn(move || {
@@ -47,16 +45,23 @@ impl RescoreWorker {
                     while let Ok(newer) = job_rx.try_recv() {
                         job = newer;
                     }
-                    let texts: Vec<&str> = job.texts.iter().map(String::as_str).collect();
-                    let started = std::time::Instant::now();
-                    let scores = scorer.score(&job.context, &job.keys, &texts);
-                    tracing::debug!(
-                        texts = texts.len(),
-                        context_chars = job.context.chars().count(),
-                        keys = job.keys.len(),
-                        ms = started.elapsed().as_millis(),
-                        "神经重打分完成"
-                    );
+                    for batch in &mut job.batches {
+                        if active.load(Ordering::Acquire) != job.epoch {
+                            break;
+                        }
+                        let texts: Vec<&str> = batch.texts.iter().map(String::as_str).collect();
+                        let started = std::time::Instant::now();
+                        batch.scores = scorer.score(&job.context, &batch.keys, &texts);
+                        tracing::debug!(
+                            texts = texts.len(),
+                            keys = batch.keys.len(),
+                            ms = started.elapsed().as_millis(),
+                            "神经重打分完成"
+                        );
+                    }
+                    if active.load(Ordering::Acquire) != job.epoch {
+                        continue;
+                    }
                     let generated = job.generate.map(|keys| {
                         let started = std::time::Instant::now();
                         let texts = scorer.generate(&keys, GENERATE_BEAM, GENERATE_MAX_CHARS);
@@ -69,12 +74,13 @@ impl RescoreWorker {
                         (keys, texts)
                     });
                     let done = Scored {
-                        context: job.context,
-                        keys: job.keys,
-                        texts: job.texts,
-                        scores,
+                        epoch: job.epoch,
+                        batches: job.batches,
                         generated,
                     };
+                    if active.load(Ordering::Acquire) != done.epoch {
+                        continue;
+                    }
                     if result_tx.send(done).is_err() {
                         break;
                     }
@@ -88,6 +94,7 @@ impl RescoreWorker {
             jobs,
             results,
             handle,
+            latest,
         }
     }
 
@@ -95,19 +102,25 @@ impl RescoreWorker {
         self.handle.is_some()
     }
 
+    /// 输入变了就取消旧批次，不等下一次防抖请求才停止。
+    pub fn cancel_outdated(&self, epoch: u64) {
+        self.latest.store(epoch, Ordering::Release);
+    }
+
     pub fn submit(
         &self,
         context: String,
-        keys: String,
-        texts: Vec<String>,
+        epoch: u64,
+        batches: Vec<ScoreBatch>,
         generate: Option<String>,
     ) {
+        self.latest.store(epoch, Ordering::Release);
         if self
             .jobs
             .send(Job {
                 context,
-                keys,
-                texts,
+                epoch,
+                batches,
                 generate,
             })
             .is_err()
@@ -124,7 +137,8 @@ impl RescoreWorker {
 
 impl Drop for RescoreWorker {
     fn drop(&mut self) {
-        // 关掉任务通道线程就会退出；不等它（模型可能正算到一半）
+        self.latest.store(0, Ordering::Release);
+        // 关掉任务通道线程就会退出；已在算的单批不能中断，但不继续算剩下的批次。
         let _ = self.handle.take();
     }
 }

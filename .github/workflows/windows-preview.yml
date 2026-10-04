@@ -64,6 +64,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: bash tools/release/data-fetch.sh
+      - name: Verify shipped model becomes idle after typing
+        run: cargo test -p qingjian-windows-server --test model_idle --locked -- --ignored --nocapture
       - name: Build evaluation CLI
         run: cargo build --release -p qingjian-cli --locked
       - name: Evaluate fixed journal corpus with shipped model

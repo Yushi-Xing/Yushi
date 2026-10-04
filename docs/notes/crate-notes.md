@@ -120,6 +120,7 @@ Engine 侧在 `engine/rescoring/`：接了打分器就取 Viterbi 前 `RESCORE_P
 按键取的是**当前这批 patterns 覆盖的字母**而不是整个作用域——英文尾巴那条只转换 head，拿整段当条件会让它凭空背上没覆盖的字母；
 同步打分器（`with_sentence_scorer`，CLI 评测）当场补分，
 异步的（`with_async_sentence_scorer`，后台线程 `RescoreWorker`）查询不等模型：缺分的记下来，壳停键后 `request_rescoring`、`poll_rescoring` 到了再 `query` 一次。
+同一输入作用域下缓存保留所有读法（前文、读法、文本分别参与身份），不能在混输／纠错读法间切换时互相清空。一次后台任务合并各读法；分数槽位最多 1024 条，满后保留已有分数并回退静态排序，不清空后重算。输入／前文变化与会话重置使用唯一查询代，旧结果不触发新重排；换输入或卸载模型时停止剩余批次，已在执行的单批前向无法立即中断。
 前文优先用壳给的应用光标前文（`set_rescoring_context`），没有用本会话最近 64 个上屏字符。CLI `--neural <导出目录>`（`--neural-weight` / `--neural-context` / `--neural-async`）。
 
 P2C 教师强制打分 `CharScorer::score_p2c(keys, texts)`：前缀 `<eos> + 完整拼音 + <sep>`，只累加候选字符的 log 概率（不计 EOS），

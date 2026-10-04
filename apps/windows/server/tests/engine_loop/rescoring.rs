@@ -106,3 +106,49 @@ fn privacy_follows_the_focused_session() {
     );
     assert!(!router.is_private());
 }
+
+/// 实际 Server 按键→后台重排→Poll 路径：停键后不能再自己提交模型任务。
+#[test]
+fn stopped_mixed_input_keeps_the_model_idle_during_repeated_polls() {
+    use qingjian_dictionary::{Dictionary, WordList};
+    use std::sync::Arc;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+    use std::time::{Duration, Instant};
+
+    struct Counts(Arc<AtomicUsize>);
+    impl qingjian_core::sentence::SentenceScorer for Counts {
+        fn score(&self, _context: &str, _keys: &str, texts: &[&str]) -> Vec<f64> {
+            self.0.fetch_add(1, Ordering::SeqCst);
+            texts
+                .iter()
+                .map(|t| if *t == "我的" { -1.0 } else { -20.0 })
+                .collect()
+        }
+    }
+    let calls = Arc::new(AtomicUsize::new(0));
+    let dict = Dictionary::parse("我\two\t900000\n的\tde\t800000\n我的\two de\t500000\n大\tda\t50000\n塔\tta\t3000\n巴\tba\t3000\n瑟\tse\t500\n").unwrap();
+    let engine = qingjian_core::Engine::new(dict)
+        .with_english(WordList::parse("database\tdatabase\t4310\n").unwrap())
+        .with_async_sentence_scorer(Box::new(Counts(calls.clone())), None, None, None);
+    let mut router = Router::new(engine, RouterConfig::default());
+    open_session(&mut router, SESSION, None);
+    type_letters(&mut router, "wodedatabase");
+    let started = Instant::now();
+    while calls.load(Ordering::SeqCst) == 0 || router.next_tick() != Duration::from_secs(1) {
+        assert!(started.elapsed() < Duration::from_secs(3), "重排未收敛");
+        std::thread::sleep(Duration::from_millis(20));
+        router.tick();
+        router.handle(ClientMessage::Poll { session: SESSION });
+    }
+    let settled = calls.load(Ordering::SeqCst);
+    for _ in 0..200 {
+        router.tick();
+        let frame = match router.handle(ClientMessage::Poll { session: SESSION }) {
+            Some(ServerMessage::Update { frame, .. }) => frame,
+            other => panic!("expected Update, got {other:?}"),
+        };
+        assert_eq!(candidate_texts(&frame).first(), Some(&"我的database"));
+        assert_eq!(router.next_tick(), Duration::from_secs(1));
+    }
+    assert_eq!(calls.load(Ordering::SeqCst), settled);
+}

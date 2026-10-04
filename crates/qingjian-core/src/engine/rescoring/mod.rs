@@ -6,6 +6,7 @@
 //! 一次送去后台，[`Engine::poll_rescoring`] 收到结果后再查一次，这时全部路径的分都在缓存里，排序自然换成重排后的。
 //! 按键回调永远不等模型：先按词级模型出候选，模型的意见晚几十毫秒到。
 
+mod batch;
 mod cache;
 mod worker;
 
@@ -14,6 +15,7 @@ mod tests;
 
 use super::*;
 
+use batch::ScoreBatch;
 pub(crate) use cache::NeuralCache;
 pub(crate) use worker::RescoreWorker;
 
@@ -69,6 +71,9 @@ impl Engine {
             }
         }
         if !missing.is_empty() {
+            if !missing.iter().all(|text| cache.reserve(text)) {
+                return;
+            }
             match &self.sentence_scorer {
                 Some(scorer) => {
                     let texts: Vec<&str> = missing.iter().map(String::as_str).collect();
@@ -148,14 +153,21 @@ impl Engine {
             return false;
         }
         tracing::debug!(
-            texts = wanted.len(),
+            batches = wanted.len(),
             generate = generate.is_some(),
             "神经请求"
         );
         worker.submit(
             cache.context().to_owned(),
-            cache.keys().to_owned(),
-            wanted,
+            cache.epoch(),
+            wanted
+                .into_iter()
+                .map(|(keys, texts)| ScoreBatch {
+                    keys,
+                    texts,
+                    scores: Vec::new(),
+                })
+                .collect(),
             generate,
         );
         true
@@ -169,21 +181,23 @@ impl Engine {
         let mut updated = false;
         while let Some(scored) = worker.poll() {
             let mut cache = self.neural_cache.borrow_mut();
-            // 生成的结果自带按键、与前文无关，不跟着打分那边的条件一起作废
+            if scored.epoch != cache.epoch() {
+                continue;
+            }
+            // 生成不依赖前文，但结果仍须属于当前输入代，避免旧输入再次唤醒重排。
             if let Some((keys, texts)) = scored.generated {
                 cache.insert_generated(&keys, texts);
                 updated = true;
             }
-            if scored.context != cache.context()
-                || scored.keys != cache.keys()
-                || scored.scores.len() != scored.texts.len()
-            {
-                continue;
+            for batch in scored.batches {
+                if batch.scores.len() != batch.texts.len() {
+                    continue;
+                }
+                for (text, score) in batch.texts.iter().zip(batch.scores) {
+                    cache.insert_for(&batch.keys, text, score);
+                }
+                updated = true;
             }
-            for (text, score) in scored.texts.iter().zip(scored.scores) {
-                cache.insert(text, score);
-            }
-            updated = true;
         }
         updated
     }

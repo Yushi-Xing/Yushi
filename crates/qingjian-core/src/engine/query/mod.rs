@@ -24,6 +24,13 @@ impl Engine {
     /// 光标停在拼音中间时只按光标前的那段算候选（`ni|hao` 出 你），光标后的拼音留着，
     /// 上屏之后接着组句；见 [`Composition::scope`]。
     pub fn query(&self) -> Result<Query, ParseError> {
+        if self.has_sentence_scorer() {
+            let mut cache = self.neural_cache.borrow_mut();
+            cache.prepare(&self.rescoring_context(), self.composition.scope());
+            if let Some(worker) = &self.rescorer {
+                worker.cancel_outdated(cache.epoch());
+            }
+        }
         self.last_rescored.set(false);
         let mut query = match self.query_inner() {
             Ok(query) => query,

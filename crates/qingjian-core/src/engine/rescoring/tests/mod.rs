@@ -1,3 +1,8 @@
+//! 模型缓存与异步重排回归测试。
+
+mod alternatives;
+mod cache;
+
 use std::time::{Duration, Instant};
 
 use super::*;
