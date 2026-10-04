@@ -9,7 +9,7 @@ use std::time::Duration;
 
 use qingjian_core::Language;
 use qingjian_platform::protocol::{
-    ClientMessage, KeyEvent, PROTOCOL_VERSION, ServerMessage, SessionId,
+    ClientMessage, CodecError, KeyEvent, PROTOCOL_VERSION, ServerMessage, SessionId,
 };
 use qingjian_windows_server::ipc::pipe::serve_pipe;
 use qingjian_windows_server::ipc::{read_message, write_message};
@@ -148,9 +148,11 @@ fn named_pipe_round_trips_the_open_type_loop() {
 
     let mut unregistered = connect(&name);
     write_message(&mut unregistered, &ClientMessage::Poll { session: SESSION }).unwrap();
-    assert!(
-        read_message::<_, ServerMessage>(&mut unregistered)
-            .unwrap()
-            .is_none()
-    );
+    // Windows 关闭命名管道可返回 ERROR_BROKEN_PIPE / ERROR_PIPE_NOT_CONNECTED；
+    // 拒绝未登记请求时两者都表示连接已断开，不能假定字节流一定返回零字节。
+    match read_message::<_, ServerMessage>(&mut unregistered) {
+        Ok(None) => {}
+        Err(CodecError::Io(error)) if matches!(error.raw_os_error(), Some(109 | 233)) => {}
+        other => panic!("expected disconnected unauthorized pipe, got {other:?}"),
+    }
 }

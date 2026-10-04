@@ -347,7 +347,7 @@ Unix socket 用共享长度前缀与 Frame（当前公共版本 7，与 `PROTOCO
 候选回报绑定连接代次、上下文和服务端帧序号，仅当前聚焦页的有效释义进入 `note_displayed`，不把生成帧算作已展示。
 `[general] preedit` 使用已有 `both` / `inline` / `window`；没有新增 Linux 自绘配置。详见 [linux-fcitx5.md](linux-fcitx5.md)。
 
-## Windows fork 0.1.6-beta.1 的输入与评测修复
+## Windows fork 0.1.6-beta.2 的输入与评测修复
 
 - `parser::segment_with` 允许显式模糊音配置认可的非标准完整音节，保留敲入原串的长度。`Engine::segment_phonetic` 用于候选、整串纠错和上屏后的词序列重建，防止 `tin` 在 in/ing 开启时被改成其他声母。
 - `Dictionary::builtin_patch` 嵌入 `assets/lexicon/patches.tsv`；Windows 装配与热加载、CLI 同时追加，原 data-v3 不变，不把评测句写入词库。
