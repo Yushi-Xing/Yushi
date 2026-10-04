@@ -33,36 +33,37 @@ pub(super) fn log_dir() -> Option<PathBuf> {
     Some(dir)
 }
 
-/// 把整个日志目录加 `config.toml` 打成 `qingjian-logs-<日期>.zip` 放到桌面，再在资源管理器里选中它——
-/// 用户反馈问题时一个附件搞定。压缩交给 PowerShell 的 Compress-Archive，不为此拉一个压缩库；
-/// 桌面路径也让 PowerShell 取（OneDrive 会把桌面挪到别处）。脚本先写成临时 .ps1 再跑，免得命令行引号转义。
+/// 后台暂存配置摘要与运行日志，再用 PowerShell 打包到桌面；完成后清理暂存目录。
 pub(super) fn export_logs() {
-    use std::os::windows::process::CommandExt;
-    const CREATE_NO_WINDOW: u32 = 0x0800_0000;
     let Some(logs) = log_dir() else {
         return;
     };
     log::warn("用户导出日志");
-    let mut sources = vec![format!("'{}\\*'", logs.display())];
-    if let Some(config) = qingjian_platform::dirs::config_path().filter(|path| path.is_file()) {
-        sources.push(format!("'{}'", config.display()));
+    if let Err(error) = std::thread::Builder::new()
+        .name("diagnostic-export".into())
+        .spawn(move || {
+            if let Err(error) = run_log_export(&logs) {
+                log::warn(format!("导出日志失败: {error}"));
+            }
+        })
+    {
+        log::warn(format!("启动日志导出失败: {error}"));
     }
+}
+
+fn run_log_export(logs: &Path) -> std::io::Result<()> {
+    use qingjian_platform::diagnostics::DiagnosticExport;
+    use std::os::windows::process::CommandExt;
+
+    const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+    let config = qingjian_platform::dirs::config_path();
+    let export = DiagnosticExport::prepare(logs, config.as_deref())?;
     let zip_name = format!(
         "qingjian-logs-{}.zip",
         jiff::Zoned::now().strftime("%Y-%m-%d")
     );
-    let script = format!(
-        "$zip = Join-Path ([Environment]::GetFolderPath('Desktop')) '{zip_name}'\n\
-         Compress-Archive -Path {} -DestinationPath $zip -Force\n\
-         explorer.exe \"/select,`\"$zip`\"\"\n",
-        sources.join(",")
-    );
-    let script_path = std::env::temp_dir().join("qingjian-export-logs.ps1");
-    if let Err(error) = std::fs::write(&script_path, script) {
-        log::warn(format!("写导出脚本失败: {error}"));
-        return;
-    }
-    let spawned = std::process::Command::new("powershell")
+    let script_path = export.write_script(&zip_name)?;
+    let status = std::process::Command::new("powershell")
         .args([
             "-NoProfile",
             "-NonInteractive",
@@ -72,10 +73,11 @@ pub(super) fn export_logs() {
         ])
         .arg(&script_path)
         .creation_flags(CREATE_NO_WINDOW)
-        .spawn();
-    if let Err(error) = spawned {
-        log::warn(format!("导出日志失败: {error}"));
+        .status()?;
+    if !status.success() {
+        return Err(std::io::Error::other("PowerShell diagnostic export failed"));
     }
+    Ok(())
 }
 
 /// 一行设置：固定宽标签 + 控件。

@@ -1,6 +1,17 @@
 //! 拼音侧的候选生成：切分、拼写纠错、词级查找与排序，再补上整句、英文、快捷与 emoji 候选。
 
-use super::*;
+use super::{Query, chinese_candidate, join_marked_typed};
+use crate::candidate::{Candidate, CandidateList};
+use crate::correction;
+use crate::engine::{
+    Engine, Learner, MAX_CANDIDATES, Timings, abbreviated_count, choice_key, pattern_key,
+};
+use crate::parser::{self, ParseError, Segmentation};
+use crate::ranking::{self, Scored};
+use crate::sentence;
+use qingjian_dictionary::Match;
+use std::collections::HashMap;
+use std::time::{Duration, Instant};
 
 impl Engine {
     /// 拼音侧（全拼 / 双拼 / 注音）的候选生成：整段作用域是一串读音。
@@ -32,7 +43,7 @@ impl Engine {
             (None, Some(tail)) if head_wins => {
                 parser::segment(&keys[..tail.head_len]).map(|s| (s, ""))
             }
-            _ => segment_longest_prefix(keys),
+            _ => self.segment_phonetic(keys),
         };
         // 连第一个字母都切不动（`impor`）：拼音这边没戏，但英文词 / 补全、快捷候选还可以有
         let (segmentations, tail) = match parsed {

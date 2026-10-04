@@ -167,15 +167,13 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
     let mut engine = Engine::new(dictionary)
         .with_translator(Box::new(glossary))
         .with_learner(Box::new(learner));
-    if !args.extra_dict.is_empty() {
-        let mut extras = Vec::new();
-        for path in &args.extra_dict {
-            let dictionary = Dictionary::from_path(path)?;
-            tracing::info!(path = %path.display(), entries = dictionary.len(), "附加词库已加载");
-            extras.push(dictionary);
-        }
-        engine.set_extra_dictionaries(extras);
+    let mut extras = vec![Dictionary::builtin_patch()?];
+    for path in &args.extra_dict {
+        let dictionary = Dictionary::from_path(path)?;
+        tracing::info!(path = %path.display(), entries = dictionary.len(), "附加词库已加载");
+        extras.push(dictionary);
     }
+    engine.set_extra_dictionaries(extras);
     // 英文候选的中文释义可选
     let zh_glossary = args::default_data_file("glossary-zh.tsv");
     if zh_glossary.is_file() {

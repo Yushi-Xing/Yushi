@@ -1,0 +1,95 @@
+{
+  "tracked_files": 965,
+  "code_files": 742,
+  "code_lines": 85024,
+  "binary_magic_files": [],
+  "network_hosts": {
+    "OpenCode.ai": [
+      "crates/qingjian-predict/src/chat_client.rs:260"
+    ],
+    "api.cognitive.microsofttranslator.com": [
+      "tools/corpus/glossary_es.py:88"
+    ],
+    "api.deepseek.com": [
+      "crates/qingjian-platform/src/config/mod.rs:320",
+      "crates/qingjian-predict/src/chat_client.rs:248",
+      "crates/qingjian-predict/src/chat_client.rs:262",
+      "crates/qingjian-predict/src/chat_client.rs:281",
+      "crates/qingjian-predict/src/config.rs:51",
+      "tools/gloss-gen/src/args.rs:61",
+      "tools/gloss-gen/src/args.rs:111",
+      "tools/gloss-gen/src/args.rs:158"
+    ],
+    "api.opencode.ai": [
+      "crates/qingjian-predict/src/chat_client.rs:261"
+    ],
+    "api.z.ai": [
+      "crates/qingjian-predict/src/chat_client.rs:243"
+    ],
+    "cc-cedict.org）。词\\\\t译文\\\\t译文": [
+      "tools/dict-convert/src/cedict.rs:66"
+    ],
+    "data.gov.tw": [
+      "tools/dict-convert/src/pack.rs:26"
+    ],
+    "example.com": [
+      "crates/qingjian-predict/src/chat_client.rs:252",
+      "crates/qingjian-predict/src/chat_client.rs:263"
+    ],
+    "github.com": [
+      ".github/workflows/release.yml:237",
+      "Cargo.toml:22",
+      "Cargo.toml:99",
+      "apps/macos/scripts/bundle.sh:83",
+      "apps/macos/src/preferences/pages/about.rs:52",
+      "apps/windows/settings/src/panel/pages/about.rs:15",
+      "tools/corpus/levels.py:32",
+      "tools/corpus/levels.py:37",
+      "tools/dict-convert/src/lexicon/mod.rs:70",
+      "tools/release/data-fetch.sh:34",
+      "tools/release/pack-model.sh:44",
+      "tools/release/releases_json.py:37"
+    ],
+    "open.bigmodel.cn": [
+      "crates/qingjian-predict/src/chat_client.rs:239"
+    ],
+    "opencode.ai": [
+      "crates/qingjian-predict/src/chat_client.rs:259",
+      "crates/qingjian-predict/src/chat_client.rs:277"
+    ],
+    "pan.quark.cn": [
+      "tools/release/releases_json.py:11",
+      "tools/release/releases_json.py:33"
+    ],
+    "qingjian.app": [
+      ".github/ISSUE_TEMPLATE/bug_report.yml:19",
+      ".github/ISSUE_TEMPLATE/bug_report.yml:93",
+      ".github/ISSUE_TEMPLATE/config.yml:4",
+      ".github/ISSUE_TEMPLATE/config.yml:7",
+      ".github/ISSUE_TEMPLATE/feature_request.yml:18",
+      ".github/ISSUE_TEMPLATE/question.yml:10",
+      ".github/ISSUE_TEMPLATE/question.yml:18",
+      "apps/macos/src/preferences/pages/about.rs:49",
+      "apps/windows/settings/src/panel/pages/about.rs:13",
+      "crates/qingjian-update/src/index/fetch.rs:7",
+      "crates/qingjian-update/src/lib.rs:19"
+    ],
+    "qingjian.im": [
+      "apps/windows/installer/qingjian.iss:29"
+    ],
+    "rustup.rs": [
+      "apps/linux/scripts/install.sh:31"
+    ],
+    "www.cefr-j.org": [
+      "tools/corpus/levels.py:31"
+    ],
+    "x-access-token:${token}@github.com": [
+      "tools/release/bump-website.sh:17"
+    ],
+    "{}": [
+      "crates/qingjian-predict/src/chat_client.rs:292"
+    ]
+  },
+  "secret_pattern_locations": [],
+  "external_manifest_names": []
+}

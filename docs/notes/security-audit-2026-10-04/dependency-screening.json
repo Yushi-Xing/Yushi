@@ -1,0 +1,43 @@
+{
+  "method": "Python range screening; not cargo-audit; ranges supporting stable versions and packaging prerelease ordering",
+  "external_package_versions": 453,
+  "database_sha256": "42c1e920990b05c2c5ef09ba3b6a8e2b14c69149e7f44a7c63ac504a7f1c6fbf",
+  "candidate_count": 88,
+  "vulnerability_or_unsound_matches": [],
+  "maintenance_warnings": [
+    {
+      "package": "paste",
+      "locked": [
+        "1.0.15"
+      ],
+      "id": "RUSTSEC-2024-0436",
+      "date": "2024-10-07",
+      "informational": "unmaintained",
+      "versions": {
+        "patched": []
+      },
+      "title": "# paste - no longer maintained",
+      "url": "https://github.com/dtolnay/paste",
+      "affected_locked": [
+        "1.0.15"
+      ]
+    },
+    {
+      "package": "ttf-parser",
+      "locked": [
+        "0.25.1"
+      ],
+      "id": "RUSTSEC-2026-0192",
+      "date": "2026-06-28",
+      "informational": "unmaintained",
+      "versions": {
+        "patched": []
+      },
+      "title": "# `ttf-parser` is unmaintained",
+      "url": "https://github.com/harfbuzz/ttf-parser/issues/217",
+      "affected_locked": [
+        "0.25.1"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 /// 评测集里的一条：一句汉字、它的全拼、句子前面的真实上文。
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Pair {
     /// 要还原的句子（纯汉字）。
     pub text: String,

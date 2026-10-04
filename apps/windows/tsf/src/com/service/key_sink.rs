@@ -153,10 +153,7 @@ impl TextService_Impl {
         if !self.ensure_connected() {
             let eat = eats_without_server(&event);
             if eat {
-                log(&format!(
-                    "没连上 Server，吃掉 vk={} char={:?}",
-                    event.virtual_key, event.character
-                ));
+                log("没连上 Server，暂时无法处理中文输入");
             }
             return eat;
         }
@@ -190,18 +187,6 @@ impl TextService_Impl {
                     // 翻译评审的任何键都结束评审（Server 侧已同步结束）。
                     self.shared.set_translating(false);
                     let consumed = matches!(response.outcome, KeyOutcome::Consumed);
-                    let m = event.modifiers;
-                    log(&format!(
-                        "收键 vk={} ctrl={} alt={} shift={} caps={} en={} char={:?} candidates={} preedit={preedit:?} consumed={consumed}",
-                        event.virtual_key,
-                        m.ctrl,
-                        m.alt,
-                        m.shift,
-                        m.caps,
-                        m.english_mode,
-                        event.character,
-                        response.frame.candidates.items.len()
-                    ));
                     Next::Document {
                         commit: response.commit,
                         preedit,

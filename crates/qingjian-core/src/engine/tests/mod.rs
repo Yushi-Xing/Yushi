@@ -7,6 +7,7 @@ mod correction;
 mod custom;
 mod emoji;
 mod english;
+mod fuzzy_sequences;
 mod learning;
 mod lookup;
 mod privacy;

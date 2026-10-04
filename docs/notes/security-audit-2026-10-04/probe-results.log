@@ -1,0 +1,37 @@
+   Compiling strsim v0.11.1
+   Compiling tokio v1.53.1
+   Compiling darling_core v0.20.11
+   Compiling darling_macro v0.20.11
+   Compiling darling v0.20.11
+   Compiling derive_builder_core v0.20.2
+   Compiling derive_builder_macro v0.20.2
+   Compiling derive_builder v0.20.2
+   Compiling tokenizers v0.22.2
+   Compiling hyper v1.11.1
+   Compiling tokio-util v0.7.19
+   Compiling tokio-native-tls v0.3.1
+   Compiling tokio-stream v0.1.19
+   Compiling tower v0.5.3
+   Compiling hyper-util v0.1.20
+   Compiling tower-http v0.6.11
+   Compiling hyper-tls v0.6.0
+   Compiling reqwest v0.13.5
+   Compiling async-openai v0.42.0
+   Compiling candle-core v0.11.0
+   Compiling qingjian-predict v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-predict)
+   Compiling qingjian-platform v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-platform)
+   Compiling candle-nn v0.11.0
+   Compiling qingjian-update v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-update)
+   Compiling qingjian-neural v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-neural)
+   Compiling qingjian-windows-server v0.1.5-dev (/mnt/d/code/gitlab/Yushi/apps/windows/server)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 22.92s
+     Running tests/security_audit_20261004.rs (/tmp/yushi-security-target/debug/deps/security_audit_20261004-f1e132b4948901d7)
+
+running 5 tests
+test confirms_translation_uses_unconfirmed_private_state ... ok
+test known_private_state_blocks_translation_control ... ok
+test confirms_router_accepts_key_without_opening_a_session ... ok
+test confirms_claimed_session_can_read_and_commit_composition ... ok
+test confirms_input_log_and_config_permissions_under_umask_022 ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s

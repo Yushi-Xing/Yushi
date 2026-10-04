@@ -5,6 +5,7 @@
 
 pub mod code_tables;
 mod config;
+pub mod diagnostics;
 pub mod dirs;
 mod error;
 pub mod extra_dictionaries;

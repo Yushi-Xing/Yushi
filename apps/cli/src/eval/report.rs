@@ -28,9 +28,12 @@ pub struct Report {
     /// 整句候选（第一个盖住全部拼音的候选）就是原句。
     pub sentence_hit: usize,
 
-    /// 整句候选与原句逐字比对：对上的字数 / 总字数。
+    /// 实际首选按 Unicode 编辑距离计字准确率，漏字与增字都计错。
     pub chars_correct: usize,
     pub chars_total: usize,
+
+    /// 实际首选与答案的 Unicode 编辑距离总和。
+    pub char_errors: usize,
 
     /// 查询耗时之和与最大值。
     pub query_time: Duration,
@@ -41,12 +44,6 @@ pub struct Report {
 
     /// 没命中首选的例子。
     pub misses: Vec<String>,
-}
-
-impl Report {
-    pub fn evaluated(&self) -> usize {
-        self.total - self.unparsable
-    }
 }
 
 fn percent(part: usize, whole: usize) -> String {
@@ -60,7 +57,7 @@ fn percent(part: usize, whole: usize) -> String {
 impl fmt::Display for Report {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "整句评测（冷启动，不学习，不写用户数据）")?;
-        let evaluated = self.evaluated();
+        let evaluated = self.total;
         writeln!(
             f,
             "句子 {:>5} 条  首选 {:>6}  前三 {:>6}  前五 {:>6}  整句候选 {:>6}  字准确率 {:>6}",
@@ -70,6 +67,13 @@ impl fmt::Display for Report {
             percent(self.top5, evaluated),
             percent(self.sentence_hit, evaluated),
             percent(self.chars_correct, self.chars_total),
+        )?;
+        writeln!(
+            f,
+            "字错误率 {}（{} / {}，包含插入、删除、替换）",
+            percent(self.char_errors, self.chars_total),
+            self.char_errors,
+            self.chars_total
         )?;
         if evaluated > 0 {
             writeln!(

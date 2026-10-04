@@ -26,6 +26,7 @@ use windows::core::{HRESULT, HSTRING};
 use qingjian_platform::protocol::{ClientMessage, ServerMessage, read_message, write_message};
 
 use super::Work;
+use super::session_map::SessionMap;
 use crate::dispatch::Router;
 
 pub use qingjian_platform::protocol::DEFAULT_PIPE_NAME;
@@ -74,6 +75,11 @@ pub fn serve_pipe(
                 let _ = reply.send(router.handle(message));
             }
             Ok(Work::Status(event)) => router.handle_status_event(event),
+            Ok(Work::Disconnect(sessions)) => {
+                for session in sessions {
+                    router.handle(ClientMessage::CloseSession { session });
+                }
+            }
             Err(RecvTimeoutError::Timeout) => continue,
             Err(RecvTimeoutError::Disconnected) => break,
         }
@@ -168,6 +174,7 @@ fn wait_client(stream: File) -> io::Result<File> {
 /// 服务一条连接：读消息 → 转给工人线程 → 写回，直到对端在帧边界关闭或出错。
 fn serve_connection(mut stream: File, sender: Sender<Work>) {
     let (reply_sender, reply_receiver) = mpsc::channel::<Option<ServerMessage>>();
+    let mut sessions = SessionMap::default();
     loop {
         let message = match read_message::<_, ClientMessage>(&mut stream) {
             Ok(Some(message)) => message,
@@ -177,14 +184,27 @@ fn serve_connection(mut stream: File, sender: Sender<Work>) {
                 break;
             }
         };
+        let closing = matches!(message, ClientMessage::CloseSession { .. });
+        let (message, external) = match sessions.map(message) {
+            Ok(mapped) => mapped,
+            Err(_) => {
+                tracing::warn!("拒绝未登记或超额的连接会话");
+                break;
+            }
+        };
         if sender
             .send(Work::Client(message, reply_sender.clone()))
             .is_err()
         {
             break;
         }
-        match reply_receiver.recv() {
-            Ok(Some(response)) => {
+        let response = reply_receiver.recv();
+        if closing && response.is_ok() {
+            sessions.closed(external);
+        }
+        match response {
+            Ok(Some(mut response)) => {
+                *response.session_mut() = external;
                 if write_message(&mut stream, &response).is_err() {
                     break;
                 }
@@ -193,6 +213,7 @@ fn serve_connection(mut stream: File, sender: Sender<Work>) {
             Err(_) => break,
         }
     }
+    let _ = sender.send(Work::Disconnect(sessions.into_sessions()));
     let _ = unsafe { DisconnectNamedPipe(HANDLE(stream.as_raw_handle())) };
     tracing::debug!("客户端断开");
 }

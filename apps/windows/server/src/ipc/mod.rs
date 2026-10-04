@@ -3,6 +3,7 @@
 
 #[cfg(windows)]
 pub mod pipe;
+mod session_map;
 mod work;
 
 pub use qingjian_platform::protocol::{CodecError, read_message, write_message};
@@ -13,13 +14,28 @@ use std::io::{Read, Write};
 use qingjian_platform::protocol::ClientMessage;
 
 use crate::dispatch::Router;
+use session_map::SessionMap;
 
 /// 在一条已连上的双工流上服务一个客户端：读消息、交给 Router、写回，直到对端在帧边界关闭。
 pub fn serve<S: Read + Write>(stream: &mut S, router: &mut Router) -> Result<(), CodecError> {
-    while let Some(message) = read_message::<_, ClientMessage>(&mut *stream)? {
-        if let Some(response) = router.handle(message) {
-            write_message(&mut *stream, &response)?;
+    let mut sessions = SessionMap::default();
+    let result = (|| {
+        while let Some(message) = read_message::<_, ClientMessage>(&mut *stream)? {
+            let closing = matches!(message, ClientMessage::CloseSession { .. });
+            let (message, external) = sessions.map(message)?;
+            let response = router.handle(message);
+            if closing {
+                sessions.closed(external);
+            }
+            if let Some(mut response) = response {
+                *response.session_mut() = external;
+                write_message(&mut *stream, &response)?;
+            }
         }
+        Ok(())
+    })();
+    for session in sessions.into_sessions() {
+        router.handle(ClientMessage::CloseSession { session });
     }
-    Ok(())
+    result
 }

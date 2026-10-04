@@ -50,7 +50,8 @@ fn import_replace_and_remove_without_config_changes() {
     modified_at(&imported.path, 100);
     poll(&mut router);
     let dictionaries = router.engine.extra_dictionaries();
-    assert_eq!(dictionaries.len(), 1);
+    assert_eq!(dictionaries.len(), 2);
+    assert_eq!(dictionaries[1].lookup(&["en"], false)[0].text, "嗯");
     assert_eq!(
         dictionaries[0].lookup(&["he", "tong", "fa"], false)[0].text,
         "合同法"
@@ -95,7 +96,11 @@ fn import_replace_and_remove_without_config_changes() {
     std::fs::create_dir_all(&removed).unwrap();
     std::fs::rename(&imported.path, removed.join("law.qj")).unwrap();
     poll(&mut router);
-    assert!(router.engine.extra_dictionaries().is_empty());
+    assert_eq!(router.engine.extra_dictionaries().len(), 1);
+    assert_eq!(
+        router.engine.extra_dictionaries()[0].lookup(&["en"], false)[0].text,
+        "嗯"
+    );
     assert_eq!(std::fs::read(&config_path).unwrap(), original_config);
     drop(router);
     std::fs::remove_dir_all(&dir).unwrap();
@@ -132,7 +137,7 @@ fn dictionary_changes_do_not_retry_broken_config() {
     let imported = import::import(&source, &dir.join("dicts")).unwrap();
     poll(&mut router);
     assert_eq!(router.config.page_size, 5);
-    assert_eq!(router.engine.extra_dictionaries().len(), 1);
+    assert_eq!(router.engine.extra_dictionaries().len(), 2);
 
     // 保持坏配置的 mtime，以可观察的配置值确认后续轮询不会重新读它。
     std::fs::write(&config_path, "[general]\npage_size = 9\n").unwrap();
@@ -144,7 +149,11 @@ fn dictionary_changes_do_not_retry_broken_config() {
     std::fs::rename(&imported.path, removed.join("law.qj")).unwrap();
     poll(&mut router);
     assert_eq!(router.config.page_size, 5);
-    assert!(router.engine.extra_dictionaries().is_empty());
+    assert_eq!(router.engine.extra_dictionaries().len(), 1);
+    assert_eq!(
+        router.engine.extra_dictionaries()[0].lookup(&["en"], false)[0].text,
+        "嗯"
+    );
 
     modified_at(&config_path, 300);
     poll(&mut router);

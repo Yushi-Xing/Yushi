@@ -9,9 +9,12 @@
 pub mod coverage;
 mod extract;
 pub mod generate;
+mod metrics;
 pub mod p2c;
 mod pair;
 mod report;
+#[cfg(test)]
+mod tests;
 mod transcribe;
 
 use std::collections::HashSet;
@@ -19,7 +22,7 @@ use std::io::{BufWriter, Write};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
-use qingjian_core::Engine;
+use qingjian_core::{CandidateKind, Engine};
 
 pub use report::Report;
 
@@ -93,7 +96,7 @@ pub(super) fn collect(
     report: &mut Report,
 ) -> Result<Vec<Pair>, EvalError> {
     let mut transcriber: Option<Transcriber> = None;
-    let mut seen: HashSet<String> = HashSet::new();
+    let mut seen = HashSet::new();
     let mut pairs = Vec::new();
     for path in paths {
         let text = std::fs::read_to_string(path).map_err(|source| EvalError::Read {
@@ -103,7 +106,7 @@ pub(super) fn collect(
         if text.contains('\t') {
             for line in text.lines() {
                 if let Some(pair) = Pair::parse(line)
-                    && seen.insert(pair.text.clone())
+                    && seen.insert(pair.clone())
                 {
                     pairs.push(pair);
                 }
@@ -118,16 +121,18 @@ pub(super) fn collect(
             transcriber
         });
         for extracted in extract::extract(&text) {
-            if !seen.insert(extracted.text.clone()) {
-                continue;
-            }
             report.extracted += 1;
             match transcriber.transcribe(&extracted.text, engine.language_model()) {
-                Some(pinyin) => pairs.push(Pair {
-                    text: extracted.text,
-                    pinyin,
-                    context: extracted.context,
-                }),
+                Some(pinyin) => {
+                    let pair = Pair {
+                        text: extracted.text,
+                        pinyin,
+                        context: extracted.context,
+                    };
+                    if seen.insert(pair.clone()) {
+                        pairs.push(pair);
+                    }
+                }
                 None => report.untranscribable += 1,
             }
         }
@@ -143,6 +148,8 @@ fn evaluate(
     show_misses: usize,
 ) -> serde_json::Value {
     report.total += 1;
+    let length = pair.text.chars().count();
+    report.chars_total += length;
     engine.clear();
     engine.break_chain();
     engine.history_mut().clear();
@@ -153,8 +160,12 @@ fn evaluate(
         Ok(query) => query,
         Err(error) => {
             report.unparsable += 1;
+            report.char_errors += length;
+            let elapsed = started.elapsed();
+            report.query_time += elapsed;
+            report.slowest_query = report.slowest_query.max(elapsed);
             engine.clear();
-            return serde_json::json!({"text": pair.text, "pinyin": pair.pinyin, "error": error.to_string()});
+            return serde_json::json!({"text": pair.text, "pinyin": pair.pinyin, "context": pair.context, "top": null, "candidates": [], "char_errors": length, "query_ms": elapsed.as_secs_f64() * 1000.0, "error": error.to_string()});
         }
     };
     // 异步重打分：像壳一样停顿后请求、等结果、再查一次；等的时间也算进查询耗时
@@ -175,21 +186,17 @@ fn evaluate(
         report.top3 += usize::from(rank < 3);
         report.top5 += usize::from(rank < 5);
     }
-    // 第一个盖住全部拼音的候选就是整句转换的答案（整句本身是个词时也可能是词库词）
-    let length = pair.text.chars().count();
-    let sentence = items.iter().find(|c| c.text.chars().count() == length);
-    report.chars_total += length;
-    if let Some(sentence) = sentence {
-        if sentence.text == pair.text {
-            report.sentence_hit += 1;
-        }
-        report.chars_correct += sentence
-            .text
-            .chars()
-            .zip(pair.text.chars())
-            .filter(|(a, b)| a == b)
-            .count();
+    // 不借助答案的长度挑候选；字误差只比较实际首选，包含增字、漏字和解析失败。
+    let sentence = items
+        .iter()
+        .find(|c| c.kind == CandidateKind::Sentence)
+        .or_else(|| items.first());
+    if sentence.is_some_and(|c| c.text == pair.text) {
+        report.sentence_hit += 1;
     }
+    let errors = metrics::edit_distance(&pair.text, items.first().map_or("", |c| c.text.as_str()));
+    report.char_errors += errors;
+    report.chars_correct += length.saturating_sub(errors);
     if position != Some(0) && report.misses.len() < show_misses {
         let top: Vec<&str> = items.iter().take(3).map(|c| c.text.as_str()).collect();
         report.misses.push(format!(
@@ -208,6 +215,8 @@ fn evaluate(
         "top": items.first().map(|c| c.text.as_str()),
         "sentence": sentence.map(|c| c.text.as_str()),
         "position": position,
+        "char_errors": errors,
+        "corrected": query.correction.as_ref().map(|c| c.corrected.as_str()),
         "query_ms": elapsed.as_secs_f64() * 1000.0,
         "candidates": items.iter().map(|c| c.text.as_str()).collect::<Vec<_>>(),
     });

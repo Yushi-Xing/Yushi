@@ -181,6 +181,8 @@ P2C 自由生成实验：`--eval-text <集> --eval-generate data/models/hanzhang
 （`ClientMessage` / `ServerMessage` / `Frame` / `PreeditSegment`，全 serde，两端共用，见 `docs/design/architecture.md`「Windows：TSF」；
 `PROTOCOL_VERSION` = 7（v7 加任务栏图标右键菜单的 `Indicator`），`PreeditKind::AuxCode` 对应 Core 的 `MarkedKind::AuxCode`，`Frame.aux_code_show` 随帧下发显示码开关）。
 
+`diagnostics` 为 Windows 诊断包提供配置摘要和 `DiagnosticExport` 暂存：只从已解析类型生成固定允许字段，不复制配置原文／注释／任意文本字段。配置读取限 1 MiB，损坏时输出固定说明；只暂存 server/tsf/settings 的日期运行日志，单份读取限 8 MiB、最多 32 份、总读取限 32 MiB。暂存用独占随机目录，完成后自动清理；运行日志再次掩码当前已知密钥，历史输入与未知旧密钥仍需用户检查。导出脚本有 UTF-8 BOM，所有路径用单引号字面量；通过系统 .NET ZIP 接口打包，绕开 PowerShell 5.1 `Compress-Archive` 在特殊路径上的失败。脚本放在被压缩目录之外。
+
 ## crates/qingjian-render
 
 横排矩阵：`Frame::columns` 不为 0 时 `Layout::Horizontal` 走 `renderer/matrix.rs`（列宽用帧里的 `column_ems`，Core `Grid::column_ems` 按整份候选估、
@@ -195,7 +197,7 @@ P2C 自由生成实验：`--eval-text <集> --eval-generate data/models/hanzhang
 
 ## crates/qingjian-update
 
-检查更新（设计见 `docs/design/update.md`）：`index/` 是索引的类型、下载（`fetch.rs`，复用 workspace 的 reqwest + 单线程 tokio，20 秒超时、2 MB 上限）与验签
+检查更新（设计见 `docs/design/update.md`）：`index/` 是索引的类型、下载（`fetch/`，复用 workspace 的 reqwest + 单线程 tokio，20 秒超时；索引 2 MiB、签名 1 KiB 上限，先检查声明长度，再逐块累计限额，未知长度也受限）与验签
 （`signature.rs`，`PUBLIC_KEYS` 列表，`verify_strict`）；`checker/` 是调度（`Checker::poll` 由壳的每秒定时器调，到点起一次性线程）、落盘状态 `UpdateState`（`update.json`，先写临时文件再改名）
 与查到的结果 `Available`。`Version` 自己实现语义化版本比较，不引 semver。`[update]` 配置与 `UpdateChannel` 在 `qingjian-platform`。
 `examples/check.rs` 手动走一遍；`tools/release-sign` 是发版侧的 keygen / sign / verify。
@@ -251,6 +253,8 @@ IMK 输入法，源码按 `app / host / imk / candidates / menubar / preferences
 - 端到端验证可用 `osascript` 的 System Events 往 TextEdit 发按键再读回文本（终端需要辅助功能权限；输入法得在中文模式）。
 
 ## apps/windows
+
+IPC 传输入口用每连接 `SessionMap` 把外部编号换成进程内唯一编号（每连接最多 64 个会话），回包再还原编号；未登记的会话操作拒绝并断开，EOF／坏帧／写失败均回收本连接的会话。重复外部编号不能跨连接访问；非聚焦会话的 Commit 不再清掉前台组句。旧 DLL 的临时 `ImeSwitched` 只允许影响状态条，不注册会话、不能读输入；管道账户／登录身份认证、队列与截止时间仍待后续修复，详见重构清单。TSF 的逐键、preedit、失焦上屏内容运行日志已移除，Server 的 Commit 调试日志也不再写文本。协议 JSON 格式和版本保持兼容。
 
 一个产品两个 package：`server`（Server 进程：IPC 分派 + Engine + 命名管道 + 自绘候选窗与悬浮状态条）与 `tsf`（TSF 文本服务 DLL，lib 名固定 `qingjian_tsf`），
 外加 `settings`（WinUI 3 设置程序，含「辅码」页）与 `installer`（Inno Setup）。
@@ -342,3 +346,11 @@ DLL 不读文件、不查 mtime。`SessionOpened` 只回过协议版本对得上
 Unix socket 用共享长度前缀与 Frame（当前公共版本 7，与 `PROTOCOL_VERSION` 同步，Fcitx5 插件里写死在 `qingjian.cpp` 的 OpenSession）；插件复用一条连接，每个上下文独立会话。Linux v3 扩展逐会话握手、确认 Sensitive/Password/Disable 后接受按下/释放、焦点和点击事实。
 候选回报绑定连接代次、上下文和服务端帧序号，仅当前聚焦页的有效释义进入 `note_displayed`，不把生成帧算作已展示。
 `[general] preedit` 使用已有 `both` / `inline` / `window`；没有新增 Linux 自绘配置。详见 [linux-fcitx5.md](linux-fcitx5.md)。
+
+## Windows fork 0.1.6-beta.1 的输入与评测修复
+
+- `parser::segment_with` 允许显式模糊音配置认可的非标准完整音节，保留敲入原串的长度。`Engine::segment_phonetic` 用于候选、整串纠错和上屏后的词序列重建，防止 `tin` 在 in/ing 开启时被改成其他声母。
+- `Dictionary::builtin_patch` 嵌入 `assets/lexicon/patches.tsv`；Windows 装配与热加载、CLI 同时追加，原 data-v3 不变，不把评测句写入词库。
+- CLI 冻结集按 `(text,pinyin,context)` 去重；解析失败计入总分母和字符错误。字准确率按实际首选的 Unicode 编辑距离计算，整句候选不按标准答案长度筛选。自由生成的失败样本也计入字符分母。
+- `tools/eval/journal.py` 固定人工读音、确定性生成 336 个输入，分别导出来源与错拼类别统计、CER 和完整失败列表，校验二进制在评测期间没有变化。
+- `windows-preview.yml` 只接受 `yushi-windows-vX.Y.Z-beta.N` 等显式预发布标签；Linux/Windows 测试通过、产品数据哈希验证和原生 MSVC 构建完成后发布本 fork 附件，不写上游官网索引。

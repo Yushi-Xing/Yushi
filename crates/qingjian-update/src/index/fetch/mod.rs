@@ -1,3 +1,5 @@
+//! 更新索引与分离签名的有界下载；先验证签名，再解析索引。
+
 use std::time::Duration;
 
 use super::{Index, signature};
@@ -7,6 +9,7 @@ use crate::UpdateError;
 const INDEX_URL: &str = "https://qingjian.app/releases.json";
 
 const MAX_INDEX_BYTES: usize = 2 * 1024 * 1024;
+const MAX_SIGNATURE_BYTES: usize = 1024;
 
 const TIMEOUT: Duration = Duration::from_secs(20);
 
@@ -21,8 +24,8 @@ pub(crate) fn fetch_index(current_version: &str) -> Result<Index, UpdateError> {
             .timeout(TIMEOUT)
             .user_agent(format!("qingjian/{current_version}"))
             .build()?;
-        let index = download(&client, &url).await?;
-        let signature_bytes = download(&client, &format!("{url}.sig")).await?;
+        let index = download(&client, &url, MAX_INDEX_BYTES).await?;
+        let signature_bytes = download(&client, &format!("{url}.sig"), MAX_SIGNATURE_BYTES).await?;
         let signature_text =
             String::from_utf8(signature_bytes).map_err(|_| UpdateError::MalformedSignature)?;
         signature::verify(&index, &signature_text)?;
@@ -30,11 +33,27 @@ pub(crate) fn fetch_index(current_version: &str) -> Result<Index, UpdateError> {
     })
 }
 
-async fn download(client: &reqwest::Client, url: &str) -> Result<Vec<u8>, UpdateError> {
-    let response = client.get(url).send().await?.error_for_status()?;
-    let bytes = response.bytes().await?;
-    if bytes.len() > MAX_INDEX_BYTES {
-        return Err(UpdateError::TooLarge(MAX_INDEX_BYTES));
+async fn download(
+    client: &reqwest::Client,
+    url: &str,
+    limit: usize,
+) -> Result<Vec<u8>, UpdateError> {
+    let mut response = client.get(url).send().await?.error_for_status()?;
+    if response
+        .content_length()
+        .is_some_and(|size| size > limit as u64)
+    {
+        return Err(UpdateError::TooLarge(limit));
     }
-    Ok(bytes.to_vec())
+    let mut bytes = Vec::new();
+    while let Some(chunk) = response.chunk().await? {
+        if chunk.len() > limit - bytes.len() {
+            return Err(UpdateError::TooLarge(limit));
+        }
+        bytes.extend_from_slice(&chunk);
+    }
+    Ok(bytes)
 }
+
+#[cfg(test)]
+mod tests;

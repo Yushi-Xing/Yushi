@@ -51,10 +51,12 @@ impl Router {
         }
     }
 
-    /// 焦点离开：把缓冲区原样交出并清组句。组句不属于 `session` 时只清不交，别把 A 应用的拼音落进 B。
+    /// 焦点离开：仅提交并清理属于本会话的组句。
     pub(super) fn commit_raw_for(&mut self, session: SessionId) -> Option<String> {
-        let text = (self.focused == Some(session) && !self.engine.composition().is_empty())
-            .then(|| self.engine.take_raw());
+        if self.focused != Some(session) {
+            return None;
+        }
+        let text = (!self.engine.composition().is_empty()).then(|| self.engine.take_raw());
         self.reset_composition();
         text
     }

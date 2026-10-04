@@ -52,6 +52,14 @@ const MAX_SEGMENTATIONS: usize = 8;
 
 /// 切分。返回按「音节少、不完整音节少、前面的音节长」排序的切分，最多 [`MAX_SEGMENTATIONS`] 种。
 pub fn segment(input: &str) -> Result<Vec<Segmentation>, ParseError> {
+    segment_with(input, |_| false)
+}
+
+/// 额外的完整音节来自显式模糊音配置，仍保留原始键串用于显示、消耗和学习。
+pub(crate) fn segment_with(
+    input: &str,
+    extra_syllable: impl Fn(&str) -> bool,
+) -> Result<Vec<Segmentation>, ParseError> {
     let input = input.trim();
     if input.is_empty() {
         return Err(ParseError::Empty);
@@ -75,7 +83,7 @@ pub fn segment(input: &str) -> Result<Vec<Segmentation>, ParseError> {
     }];
     for (index, chunk) in chunks.iter().enumerate() {
         let is_last = index + 1 == chunks.len();
-        let options = segment_chunk(chunk, is_last);
+        let options = segment_chunk(chunk, is_last, &extra_syllable);
         if options.is_empty() {
             return Err(ParseError::NoSegmentation);
         }
@@ -115,7 +123,11 @@ fn sort_key(segmentation: &Segmentation) -> (usize, usize, Vec<Reverse<usize>>) 
 
 /// 切分不含 `'` 的一段：按位置做动态规划，每个位置只保留最优的几种前缀切分。
 /// `allow_partial` 为真时末尾允许留一个残缺音节。
-fn segment_chunk(chunk: &str, allow_partial: bool) -> Vec<Segmentation> {
+fn segment_chunk(
+    chunk: &str,
+    allow_partial: bool,
+    extra_syllable: &impl Fn(&str) -> bool,
+) -> Vec<Segmentation> {
     let n = chunk.len();
     let mut best: Vec<Vec<Segmentation>> = vec![Vec::new(); n + 1];
     best[0].push(Segmentation {
@@ -130,6 +142,11 @@ fn segment_chunk(chunk: &str, allow_partial: bool) -> Vec<Segmentation> {
         let matches = SYLLABLE_TRIE.matches(rest);
         // (长度, 是否完整音节)
         let mut tokens: Vec<(usize, bool)> = matches.lengths().map(|len| (len, true)).collect();
+        for len in 1..=rest.len().min(MAX_SYLLABLE_LEN) {
+            if !tokens.contains(&(len, true)) && extra_syllable(&rest[..len]) {
+                tokens.push((len, true));
+            }
+        }
         for len in initial_lengths(rest) {
             if !tokens.contains(&(len, true)) {
                 tokens.push((len, false));

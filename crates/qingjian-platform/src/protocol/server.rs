@@ -1,3 +1,5 @@
+//! 服务端组句结果与输入设置。
+
 use serde::{Deserialize, Serialize};
 
 use super::frame::Frame;
@@ -114,4 +116,30 @@ pub enum ServerMessage {
         /// 请求标识，回时带上。
         request: u64,
     },
+}
+
+impl ServerMessage {
+    /// 会话编号；传输层在连接边界映射，业务层只接触内部编号。
+    pub fn session(&self) -> SessionId {
+        match self {
+            Self::SessionOpened { session, .. }
+            | Self::KeyResult { session, .. }
+            | Self::Committed { session, .. }
+            | Self::Update { session, .. }
+            | Self::ModeSync { session, .. }
+            | Self::RequestSelection { session, .. } => *session,
+        }
+    }
+
+    /// 修改传输层使用的会话编号，不改变消息正文。
+    pub fn session_mut(&mut self) -> &mut SessionId {
+        match self {
+            Self::SessionOpened { session, .. }
+            | Self::KeyResult { session, .. }
+            | Self::Committed { session, .. }
+            | Self::Update { session, .. }
+            | Self::ModeSync { session, .. }
+            | Self::RequestSelection { session, .. } => session,
+        }
+    }
 }

@@ -48,11 +48,13 @@ pub fn assemble(spec: &AssemblySpec) -> Result<Engine, ServerError> {
             engine = engine.with_input_logger(Box::new(InputLog::open(path)));
         }
     }
-    engine.set_extra_dictionaries(extra_dictionaries::load(
+    let mut dictionaries = extra_dictionaries::load(
         spec.bundled_dicts_dir.as_deref(),
         user_dicts_dir(spec.user_dir.as_deref()).as_deref(),
         &spec.dictionaries,
-    ));
+    );
+    dictionaries.push(Dictionary::builtin_patch()?);
+    engine.set_extra_dictionaries(dictionaries);
     engine.set_aux_codes(code_tables::load(
         spec.bundled_codes_dir.as_deref(),
         user_codes_dir(spec.user_dir.as_deref()).as_deref(),

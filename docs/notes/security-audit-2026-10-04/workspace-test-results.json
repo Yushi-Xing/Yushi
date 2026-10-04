@@ -1,0 +1,465 @@
+{
+  "command": "cargo test --workspace --exclude qingjian-macos --locked --target-dir /tmp/yushi-security-target",
+  "exit_code": 0,
+  "platform": "x86_64-unknown-linux-gnu",
+  "toolchain": "1.96.0",
+  "totals": {
+    "passed": 641,
+    "failed": 0,
+    "ignored": 1,
+    "measured": 0,
+    "filtered_out": 0
+  },
+  "suites": [
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-2c8070a335c17bfa)",
+      "result": "ok",
+      "passed": 13,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "result": "ok",
+      "passed": 303,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "result": "ok",
+      "passed": 38,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "result": "ok",
+      "passed": 37,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_format-70ee5b8ff73f80b0)",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_gloss_gen-163fb5a14168eb95)",
+      "result": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "result": "ok",
+      "passed": 18,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ba8d17c58265e04d)",
+      "result": "ok",
+      "passed": 13,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-3b787d59da118095)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/config.rs (/tmp/yushi-security-target/debug/deps/config-e4d4ad3d9d5f7885)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/display/main.rs (/tmp/yushi-security-target/debug/deps/display-0d22ca29171e41d5)",
+      "result": "ok",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/events/main.rs (/tmp/yushi-security-target/debug/deps/events-fe7569304cd7c950)",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/multiplex.rs (/tmp/yushi-security-target/debug/deps/multiplex-136839ce9ad72562)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/privacy.rs (/tmp/yushi-security-target/debug/deps/privacy-2ad00814453fe26f)",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/protocol.rs (/tmp/yushi-security-target/debug/deps/protocol-5a48345efd4aa465)",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/rescoring.rs (/tmp/yushi-security-target/debug/deps/rescoring-e0096cddf4112b4f)",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/router.rs (/tmp/yushi-security-target/debug/deps/router-7461604c11578342)",
+      "result": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/socket.rs (/tmp/yushi-security-target/debug/deps/socket-5015554e8f476cb8)",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/vocabulary.rs (/tmp/yushi-security-target/debug/deps/vocabulary-b5f365a334c4c0e5)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_lm-a1cdaad11926e030)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_neural-f785d77d60f99a99)",
+      "result": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 1,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-cadb9774c74af0fd)",
+      "result": "ok",
+      "passed": 45,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/custom_phrases.rs (/tmp/yushi-security-target/debug/deps/custom_phrases-ab5b2699903d9892)",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "result": "ok",
+      "passed": 15,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_release_sign-75b97c92af5ce97b)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_render-95e94b4785e0597f)",
+      "result": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_translate-7faee965777559a4)",
+      "result": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-afeef6201a2ea24c)",
+      "result": "ok",
+      "passed": 13,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_windows_server-00b80f600e1be123)",
+      "result": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_server-47bbee83cbe8ec48)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-f4d6dc8cf6b34537)",
+      "result": "ok",
+      "passed": 67,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/ipc_loop.rs (/tmp/yushi-security-target/debug/deps/ipc_loop-702da0c30296a6fa)",
+      "result": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/pipe.rs (/tmp/yushi-security-target/debug/deps/pipe-6a02103b42237657)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_settings-dbdf8e79e68d353e)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_tsf-78fb267ddd0651de)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/protocol_loop.rs (/tmp/yushi-security-target/debug/deps/protocol_loop-5c4e335ef5ecc2d2)",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_core",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_dictionary",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_format",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_learning",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_linux_server",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_lm",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_neural",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_platform",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_predict",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_render",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_translate",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_update",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_windows_server",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests qingjian_tsf",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    }
+  ]
+}

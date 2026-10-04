@@ -1,6 +1,7 @@
 //! 整段拼写纠错：找一处编辑的纠正并按个人敲错表打折。
 
-use super::*;
+use super::{Engine, Learner, MAX_CODE_LENGTH};
+use crate::correction::{self, Correction};
 
 impl Engine {
     /// 这段作用域生效的拼写纠正（带缓存）：拼音不像话、用户没对它回车原样上屏过、
@@ -36,7 +37,7 @@ impl Engine {
         {
             return None;
         }
-        let (segmentations, tail) = segment_longest_prefix(scope).ok()?;
+        let (segmentations, tail) = self.segment_phonetic(scope).ok()?;
         // 不像话的拼音试全部一处编辑；末尾单字母的只试相邻换位（`mingtain` → `mingtian`），其余合法拼音不碰
         let candidates = if correction::unlikely_pinyin(segmentations.first(), tail) {
             correction::candidates(scope)

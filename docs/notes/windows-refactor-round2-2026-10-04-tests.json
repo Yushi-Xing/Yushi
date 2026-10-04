@@ -1,0 +1,3415 @@
+{
+  "platform": "WSL Ubuntu 22.04; rustc 1.96.0",
+  "command": "cargo test --workspace --exclude qingjian-macos --locked",
+  "passed": 677,
+  "failed": 0,
+  "ignored": 2,
+  "native_powershell_extra": {
+    "passed": 1,
+    "failed": 0
+  },
+  "python_generator_tests": {
+    "passed": 2,
+    "failed": 0
+  },
+  "clippy_linux": "passed",
+  "clippy_windows_gnu_all_targets": "passed",
+  "native_windows_msvc": "GitHub Actions pending",
+  "tests": [
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "cold::tests::merging_preserves_baseline_and_adds_only_novel_terms",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "eval::extract::tests::drops_clauses_out_of_range",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "eval::extract::tests::splits_paragraphs_into_han_clauses_with_context",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "eval::pair::tests::parses_and_writes_the_same_line",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "eval::metrics::tests::counts_unicode_insertions_deletions_and_substitutions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "eval::tests::identical_text_with_distinct_typo_or_context_remains_separate",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "eval::transcribe::tests::prefers_the_word_reading_over_the_most_common_char_reading",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "replay::line::tests::parses_commit_and_retract_lines",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "replay::scheme::tests::recognizes_which_schemes_need_a_table",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "replay::scheme::tests::scheme_strings_split_into_the_two_axes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "tuning::tests::rejects_bad_syntax_values_and_names",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "tuning::tests::empty_settings_keep_defaults",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "tuning::tests::settings_override_only_the_named_values",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "cold::tests::isolation_rejects_personal_files_and_config",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "replay::scheme::tests::applying_a_code_scheme_hands_the_table_to_the_engine",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "eval::tests::wrong_length_top_candidate_is_counted_without_looking_at_gold_length",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_cli-bf6e6ae21a49487a)",
+      "name": "eval::tests::unparseable_queries_reduce_sentence_and_character_accuracy",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::furigana::tests::kana_words_and_mismatches",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::candidate_layout::tests::duplicates_of_local_candidates_are_dropped_and_fewer_words_take_fewer_cells",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::furigana::tests::annotates_each_kanji_run",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::candidate_layout::tests::cloud_words_take_the_end_of_the_first_page_and_only_bump_those_cells",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::language::tests::parses_language_codes_case_insensitively",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::candidate_layout::tests::no_words_means_nothing_changes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::candidate_layout::tests::slots_never_push_the_first_local_candidate_off_the_first_page",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::candidate_layout::tests::sparse_custom_positions_are_layout_cells_not_candidates",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::candidate_layout::tests::without_local_candidates_the_whole_page_goes_to_the_cloud",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::candidate_layout::tests::zero_slots_means_no_cloud_cells_at_all",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::language::tests::codes_are_iso_639_1",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::language::tests::rejects_unknown_codes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::candidate_layout::tests::ninth_position_stays_on_second_page_without_cloud_displacement",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::grid::tests::cells_move_in_reading_order_across_rows",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::grid::tests::column_widths_come_from_the_whole_list_and_are_capped",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::part_of_speech::tests::parses_with_or_without_dot",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::translation::tests::keeps_at_most_two_senses",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "composition::tests::drain_prefix_moves_cursor_back",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "composition::tests::draining_past_the_cursor_moves_it_to_the_end",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::grid::tests::expanding_near_the_end_fills_the_viewport_upwards",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::edit::tests::generates_every_single_edit_once",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::result::tests::extra_letter_at_the_end_and_missing_letter",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::edit::tests::maps_consumed_length_back_to_the_original",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "composition::tests::edits_happen_at_the_cursor",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::result::tests::strikes_the_replaced_letter_in_place",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::grid::tests::viewport_scrolls_by_one_row_when_the_highlight_leaves_it",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "composition::tests::shifted_letters_match_lowercase_and_restore_case_on_raw_commit",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::result::tests::typo_pair_is_the_syllable_around_the_edit",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "candidate::layout::grid::tests::rows_keep_the_column_and_clamp_to_the_last_candidate_of_a_short_row",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::tests::eligibility_bounds",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "composition::tests::scope_is_text_before_cursor_unless_cursor_is_at_either_end",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::tests::personal_discount_is_capped",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "composition::tests::delete_before_cursor_stops_at_the_start",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "custom_phrase::tests::replacements_take_the_first_free_slot_of_their_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "emoji::table::tests::parses_and_deduplicates",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::commit::chain::tests::keeps_the_last_two_words_as_context",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::typo::tests::keyboard_adjacency",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::learning::muted::tests::private_and_disabled_each_block_writes_but_not_reads",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::mode_keys::tests::defaults_are_v_and_u_and_question_mark_is_off",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::tests::transposition_may_leave_the_last_syllable_unfinished",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::mode_keys::tests::question_mark_is_an_alias_only_when_switched_on",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::prediction::fuzzy::tests::exact_and_abbreviated_pinyin_cost_nothing",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::prediction::fuzzy::tests::tolerance_grows_slowly_with_length",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::prediction::fuzzy::tests::typos_are_counted_and_unrelated_words_rejected",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "composition::tests::push_and_backspace",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::prediction::question::tests::restated_questions_are_dropped_and_real_answers_kept",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "custom_phrase::tests::replacements_stop_at_nine_slots_per_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::tests::unlikely_when_tail_or_inner_abbreviation",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::prediction::script::tests::chinese_text_goes_to_the_learning_language",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::prediction::question::tests::short_questions_keep_short_answers",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::prediction::script::tests::mixed_text_follows_the_majority",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::prediction::script::tests::latin_or_kana_text_goes_back_to_chinese",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::mode_keys::tests::invalid_combinations_fall_back_to_defaults",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "emoji::table::tests::merge_appends_without_duplicates",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::tests::finds_full_syllable_variants",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::rescoring::tests::the_shell_context_wins_over_session_history",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::statistics::book::tests::picks_the_thickest_book_not_exceeding_the_count",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::statistics::book::tests::books_are_sorted_from_thin_to_thick",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::statistics::usage::tests::adds_up",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::statistics::usage::tests::counts_hanzi_and_english_words_separately",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::backspace_in_pinyin_state_deletes_a_letter",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::mode_keys::tests::letterless_leaves_only_the_question_mark",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::mode_keys::tests::deserializes_from_single_character_strings",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::tests::unfinished_variants_yield_to_fully_segmentable_ones",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::candidates_without_a_code_are_hidden",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::rescoring::tests::sync_scorer_reorders_paths_in_place",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::each_code_letter_narrows_the_candidates",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::exact_code_matches_come_first_and_longer_codes_before_shorter_ones",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::rescoring::tests::a_changed_context_discards_the_cached_scores",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::incomplete_or_mid_cursor_pinyin_does_not_trigger",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::paging_keys_and_apostrophes_do_not_enter_the_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::rescoring::tests::async_scorer_waits_for_the_shell_to_request_and_poll",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::rescoring::tests::changed_keys_discard_the_cached_scores",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::punctuation_ends_the_aux_state",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::the_enabled_gate_defaults_off",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::take_raw_keeps_the_code_out_of_the_text",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::semicolon_as_a_final_beats_the_trigger",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::trigger_key_validation",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::triggering_again_is_idempotent",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::without_any_table_the_trigger_stays_off",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::typo::tests::variants_are_legal_syllables_one_edit_away",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "correction::typo::tests::keeps_the_cheapest_kind_per_variant",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::committing_from_aux_records_the_choice_under_the_pinyin",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::empty_code_segment_keeps_the_first_code_regardless_of_show",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::bare_question_restores_punctuation_once_in_each_mode",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::escape_clears_the_code_then_the_pinyin",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::backspace_on_an_empty_code_leaves_the_pinyin_alone",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::backspace_leaves_aux_mode_when_keep_empty_is_off",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::accepted_sentence_completion_feeds_the_personal_ngram_and_can_be_retracted",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::cloud_words_are_validated_against_abbreviated_pinyin",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::the_input_log_records_the_trigger_and_the_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::pure_pinyin_skips_first_code_unless_shown",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::prediction_request_uses_the_scope_only",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::trigger_enters_aux_without_filtering",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::question_key_answers_code_points_locally_and_keeps_question_mark_alias",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::prediction_request_trims_context_and_only_fires_while_composing",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::abbreviated_input_only_asks_for_the_sentence",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::question_mode_asks_the_cloud_and_shows_answers_unvalidated",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::aux_code::backspace_widens_then_stays_in_aux_mode",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::no_predictor_never_requests",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::cursor_in_the_middle_scopes_candidates_and_prediction_to_the_left_part",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::cloud_words_are_learned_with_the_typed_reading_when_it_fits",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::restoring_question_preserves_other_compositions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::translation_requests_carry_the_text_and_target_language",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::stale_predictions_are_dropped_and_accept_clears_composition",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::a_word_chosen_under_a_code_rises_next_time",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::code_candidates_get_translations_like_pinyin_ones",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::letters_never_start_a_mode_under_wubi",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::a_longer_input_drops_the_code_side_by_itself",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::code_commits_still_feed_translations_vocabulary_and_usage",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::mixed_input_falls_back_to_the_code_side_when_pinyin_cannot_read_it",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::mixed_input_keeps_the_shifted_mode_letters",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::takes_no_part_in_the_pinyin_machinery",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::mixed_input_orders_finished_codes_then_pinyin_then_code_prefixes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::switching_back_to_pinyin_drops_the_code_table",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::turning_the_pinyin_side_off_leaves_only_the_code_table",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::cloud_words_tolerate_typos_but_not_unrelated_words",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::keys_outside_the_code_alphabet_fall_back_to_raw",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::looks_up_by_code_prefix_and_prefers_the_finished_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::code::commits_the_whole_code_and_empties_the_buffer",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::correction::fuzzy_hits_consume_the_typed_syllables",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::correction::fuzzy_rules_add_homophones_behind_exact_hits",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::correction::unfinished_last_syllable_is_not_recorded_as_a_typo",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::custom::custom_only_query_preserves_raw_preedit_and_logs_custom_source",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::committing_a_cloud_word_learns_it_and_it_ranks_first_next_time",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::custom::custom_exact_codes_override_mode_prefixes_but_not_longer_input",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::correction::typo_edges_in_the_lattice_correct_legal_but_unlikely_pinyin",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::correction::transposition_is_corrected_while_the_last_syllable_is_still_unfinished",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::correction::commit_alignment_backtracks_over_typo_variants",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::correction::accepted_whole_string_correction_feeds_the_typo_table",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::custom::custom_conflicts_reject_update_and_disabled_rules_stay_disabled",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::custom::custom_positions_survive_normal_candidates_and_cloud",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::custom::custom_preview_handles_unicode_controls_and_limits",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::custom::punctuation_mode_does_not_change_custom_text",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::emoji::emoji_follow_their_word_and_consume_its_syllables",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::hyphen_turns_the_buffer_into_a_raw_english_segment",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::emoji::english_words_bring_their_emoji_and_the_emoji_consumes_the_whole_input",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::english_word_ranks_first_when_input_is_unlikely_pinyin",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::english_completions_appear_when_pinyin_is_unlikely",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::english_mode_suggests_from_the_word_list_and_keeps_the_typed_text",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::learned_english_word_keeps_first_place_over_the_two_letter_acronym_rule",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::a_long_raw_commit_with_english_in_the_middle_is_not_learned",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::english_word_yields_to_a_chinese_word_the_user_keeps_choosing",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::raw_committed_english_words_are_learned_and_come_back_as_candidates",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::personal_english_usage_count_does_not_replace_the_shipped_frequency",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::personal_ngram_does_not_decide_between_mixed_and_plain_readings",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::short_all_caps_acronym_yields_to_chinese",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::custom::custom_long_text_exact_keys_and_sparse_positions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::fuzzy_sequences::configured_nonstandard_fuzzy_syllables_beat_spelling_correction",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::usage_meter_counts_hanzi_words_and_english_words_per_commit",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::correction::spelling_correction_fixes_one_edit_and_learns_from_enter",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::a_raw_committed_mixed_input_does_not_block_the_english_tail",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::fuzzy_sequences::fuzzy_input_survives_each_prefix_backspace_and_retyping",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::backspace_that_restores_the_same_keys_is_not_a_retype",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::fuzzy_sequences::disabled_rules_and_apostrophes_do_not_accept_unrelated_nonstandard_readings",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::english_word_at_the_end_of_pinyin_joins_the_sentence",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::committing_the_translation_learns_the_word_and_returns_the_gloss",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::english::pinyin_like_english_tail_competes_with_the_plain_reading",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::empty_take_raw_is_not_logged",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::commit_feeds_learner_and_reorders",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::annotate_fills_only_known_words",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::input_log_flushes_passthrough_before_the_next_commit_and_marks_breaks",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::input_log_records_a_retype_when_keys_change_after_backspace_in_composition",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::erasing_several_commits_and_retyping_retracts_the_wrong_one",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::input_log_records_a_retype_across_commits_when_similar_keys_are_retyped",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::input_log_records_the_session_and_page_turns",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::erasing_a_committed_sentence_retracts_its_transitions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::input_log_records_commits_with_their_context_and_retractions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::commits_feed_the_personal_bigram_and_form_words",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::missing_glosses_are_requested_on_commit_and_learned_when_they_arrive",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::word_ranking_follows_the_previous_committed_word",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::fresh_translations_are_marked_until_seen_enough_times_at_commit",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::extra_dictionaries_join_lookup_and_sentences",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::erasing_the_last_commit_and_choosing_another_word_retracts_its_learning",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::ambiguous_segmentation_merges_results",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::choice_key_strips_separators_and_clamps",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::empty_input_is_an_error",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::learning::splitting_a_buffer_into_a_word_and_a_sentence_forms_the_whole_phrase",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::keyboard_u_umlaut_spelling_matches_canonical_dictionary_keys",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::option_arrows_move_the_cursor_by_syllable",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::a_word_spelling_the_sentence_keeps_its_rank_unless_its_reading_differs",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::initials_match_abbreviated_words_and_commit_consumes_letters",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::option_backspace_deletes_a_syllable_and_command_backspace_deletes_to_the_start",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::marked_text_joins_best_segmentation_with_apostrophes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::partial_last_syllable_expands",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::commit_consumes_only_the_candidate_syllables",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::exact_word_first_then_longer_then_prefix_expansions_then_prefix_words",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::punctuation_follows_committed_text",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::complete_syllable_that_is_also_prefix_expands_after_exact",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::take_raw_returns_pinyin_and_clears",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::cursor_edits_requery_from_the_start_and_map_into_marked_text",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::prefix_words_appear_after_full_matches",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::shortcuts_follow_the_first_local_candidate",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::expression_mode_skips_pinyin_and_evaluates",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::privacy::explicit_discard_removes_private_history_and_saved_input_state",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::unparsable_tail_is_kept_aside",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::shift_letters_join_the_buffer_only_when_configured",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::raw::basic::raw_preedit_keeps_suffix_after_editing_and_excludes_auxiliary_codes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::privacy::private_input_does_not_write_vocabulary_and_normal_input_recovers",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::privacy::private_input_learns_nothing_and_logs_nothing",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::raw::basic::raw_preedit_cursor_covers_home_middle_and_end",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::cloud::traditional_mode_preserves_original_text_across_queries",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::privacy::reporting_privacy_after_first_frame_does_not_discard_that_frame",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::raw::basic::raw_preedit_keeps_shuangpin_keys_and_english_case",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::raw::basic::raw_preedit_only_contains_the_uncommitted_remainder",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::privacy::private_input_sends_nothing_to_the_cloud",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::shuangpin::shuangpin_moves_mode_keys_to_shifted_letters",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::raw::zhuyin::raw_preedit_zhuyin_cursor_follows_output_character_boundaries",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::shuangpin::shuangpin_records_choices_by_full_pinyin",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::raw::zhuyin::raw_preedit_zhuyin_middle_edit_and_english_fallback",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::shuangpin::microsoft_semicolon_is_a_final_only_after_a_lone_initial",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::lookup::sentence_conversion_leads_when_input_spans_several_words",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::raw::basic::raw_preedit_preserves_typed_text_without_automatic_separators",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::raw::basic::raw_preedit_does_not_accept_or_record_a_spelling_correction",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::shuangpin::shuangpin_decodes_keys_before_lookup_and_shows_full_pinyin",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::shuangpin::shuangpin_raw_commit_does_not_learn_decodable_keys_as_english",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "english::tests::case_follows_the_typed_letters",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::shuangpin::shuangpin_shows_raw_keys_in_preedit_and_decoded_pinyin_in_segments",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::shuangpin::shuangpin_commit_consumes_keys_per_syllable",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "english::tests::exact_then_completions_then_corrections",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "english::edit::tests::recognizes_each_kind_of_edit",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "english::tests::user_choices_and_limit_shape_the_order",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "engine::tests::zhuyin::zhuyin_decodes_keys_before_lookup_and_shows_zhuyin_symbols",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "english::tests::earlier_lists_win_for_exact_words_and_pool_for_completions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "fuzzy::expanded::tests::costs_follow_the_matched_form",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "fuzzy::rules::tests::initial_rules_apply_both_ways_and_combine_with_finals",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "fuzzy::rules::tests::only_enabled_rules_apply",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "fuzzy::rules::tests::prefixes_only_get_initial_rules_and_never_overlap",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "history::tests::drops_oldest_beyond_capacity_on_char_boundaries",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "history::tests::records_in_order_and_returns_recent_chars",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::tests::ambiguous_input_yields_multiple_segmentations",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::tests::apostrophe_forces_boundary",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::tests::complete_segmentation_ranks_before_partial",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::tests::initials_only_segment_as_abbreviations",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::syllable::tests::table_has_no_duplicates_and_respects_max_len",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::tests::greedy_segmentation_comes_first",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::tests::rejects_invalid_input",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::tests::full_segmentability_agrees_with_segment",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::trie::tests::matches_lists_all_syllable_lengths_ascending",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::trie::tests::proper_prefix_excludes_complete_syllables",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "punctuation::tests::converts_common_marks_and_toggles_quotes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::tests::trailing_partial_syllable_is_marked",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::trie::tests::contains_matches_table_exactly",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "punctuation::tests::period_after_digit_stays_ascii",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::tests::mixed_full_and_abbreviated_syllables",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "ranking::tests::deduplicates_by_text_keeping_best",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "ranking::tests::context_score_orders_within_the_same_structure",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::tests::long_input_stays_bounded",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "ranking::tests::weight_bonus_is_logarithmic_and_capped",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::span::cache::tests::key_distinguishes_completeness_and_alternatives",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "ranking::tests::fewer_abbreviated_syllables_win_at_equal_coverage",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "ranking::tests::exact_beats_frequency_and_weight_beats_static_frequency",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::text_segment::tests::punctuation_splits_clauses_and_unknown_chars_stay_single",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::text_segment::tests::picks_the_best_scoring_word_path",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::span::cache::tests::second_lookup_is_served_from_the_cache",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::user_ngram::tests::counts_transitions_and_round_trips_through_tsv",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::user_ngram::tests::forget_word_removes_it_from_every_position",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::user_ngram::tests::parses_bigram_only_files",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::user_ngram::tests::unrecord_reverses_record_and_ignores_unknown_transitions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::user_ngram::tests::trigram_separates_continuations_the_bigram_mixes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::text_segment::tests::without_a_model_nothing_is_learned",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::user_ngram::tests::blend_favors_seen_continuations_but_never_kills_unseen_ones",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::viterbi::tests::abbreviated_sentences_convert_by_prefix",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "english::edit::tests::rejects_two_edits",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::viterbi::tests::language_model_decides_between_homophones",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::viterbi::tests::cached_spans_give_the_same_sentence_and_only_new_spans_are_computed",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::viterbi::tests::partial_last_syllable_of_a_full_pinyin_sentence",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::viterbi::tests::personal_ngram_overrides_static_model_after_two_selections",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::viterbi::tests::picks_common_words_over_characters",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::viterbi::tests::language_model_decides_abbreviated_homophones",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shortcut::evaluator::tests::rejects_bad_input",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::viterbi::tests::typo_alternatives_are_penalized_edges",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::viterbi::tests::trigram_context_comes_from_the_predecessor_chain",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shortcut::numeral::tests::decimals_read_digit_by_digit",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shortcut::numeral::tests::lower_numerals",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shortcut::tests::calendar_shortcuts",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shortcut::tests::expression_chars",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shortcut::numeral::tests::upper_numerals_keep_leading_one",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shortcut::evaluator::tests::arithmetic",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shortcut::tests::expression_shortcuts",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shuangpin::decoded::tests::keys_follow_consumed_syllables",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shuangpin::decoded::tests::partial_last_unit_counts_one_key",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::viterbi::tests::unknown_syllables_are_kept_as_pinyin",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shuangpin::decoded::tests::pending_initial_wants_a_final",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shortcut::tests::unicode_bodies_need_a_digit_or_a_plus",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shortcut::numeral::tests::amounts_follow_the_invoice_style",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shuangpin::scheme::tests::invalid_pair_starts_the_tail",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shuangpin::scheme::tests::parses_config_keys",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shuangpin::scheme::tests::trailing_single_key_is_a_prefix",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shuangpin::decoded::tests::segmentation_mirrors_units",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shuangpin::decoded::tests::separators_go_with_the_syllable_before_them",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shuangpin::scheme::tests::apostrophe_ends_a_pair",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "parser::trie::tests::agrees_with_linear_scan_on_every_prefix",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::viterbi::tests::user_weight_lifts_near_ties_but_is_capped",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "zhuyin::tests::test_decode_zhi",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shuangpin::scheme::tests::well_known_words_decode_per_scheme",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "zhuyin::tests::test_decode_with_space_as_tone1",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "zhuyin::tests::test_decode_bubu",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "zhuyin::tests::test_decode_incomplete",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shuangpin::scheme::tests::every_syllable_round_trips",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "shuangpin::scheme::tests::every_key_pair_is_unambiguous",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "storage::tests::lossy_read_tolerates_broken_utf8_and_missing_files",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "storage::tests::failed_write_keeps_the_old_file",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "storage::tests::private_write_is_owner_only",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "storage::tests::atomic_write_replaces_the_file_and_leaves_no_temporary",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_core-1712181fa479ff24)",
+      "name": "sentence::user_ngram::tests::decays_when_too_many_transitions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "cedict::tests::cleans_leading_usage_notes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "cedict::tests::rejects_garbage",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "cedict::tests::parses_entry_line",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "codes::tests::maps_stroke_codes_to_keys",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "codes::tests::rejects_bad_stroke_table_lines",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "codes::tests::single_char_takes_first_four_and_last",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "codes::tests::words_take_the_first_stroke_of_each_character",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "codes::tests::words_with_an_unknown_character_have_no_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "lexicon::annotations::tests::normalizes_u_umlaut_spellings",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "lexicon::tone::tests::splits_numeric_pinyin",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "lexicon::corpus::tests::normalizes_given_pinyin",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "bigram::tests::vocabulary_skips_hidden_temp_and_non_file_dicts",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "english::tests::skips_the_header_and_keeps_first_seen_casing_within_a_file",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "english::tests::later_files_override_and_reuse_the_existing_position",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "lexicon::tone::tests::strips_tone_marks_and_digits",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "mmh::tests::classifies_turns_short_and_degenerate",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "oov_filter::tests::function_rules_reject_fragments",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "mmh::tests::classifies_straight_directions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "oov_filter::tests::pmi_keeps_words_whose_characters_cling_together",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "lexicon::readings::tests::parses_the_three_fields_and_orders_by_evidence",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "stroke::tests::compare_flags_only_unwhitelisted",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "phrases::rules::tests::boundary_rules",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "stroke::tests::first_compare_requires_whitelist_for_every_mismatch",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "stroke::tests::normalize_merges_dot_and_na",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "stroke::tests::override_wins_over_rules",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "stroke::tests::rejects_bad_lines",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "stroke::tests::rewrites_follow_anchor",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "stroke::tests::sample_picks_every_nth",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "stroke::tests::skip_exempts_a_character",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "lexicon::pack::tests::domain_scan_skips_hidden_temp_and_non_file_entries",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "wubi::tests::rejects_files_that_are_not_rime_dictionaries",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "wubi::tests::keeps_the_highest_frequency_when_a_word_appears_twice",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "wubi::tests::words_missing_from_the_dictionary_get_the_floor_frequency",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "wubi::tests::skips_rows_whose_word_field_is_empty",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "wubi::tests::fills_frequency_by_word_and_sorts_by_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "wubi::tests::takes_the_highest_frequency_across_dictionaries",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "codes::tests::build_writes_codes_for_the_whole_dictionary",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_dict_convert-e4703041e8cfdb79)",
+      "name": "codes::tests::empty_inputs_produce_an_empty_code_table",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::codes_of_and_prefix_lookup_see_every_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::pairs_are_sorted_and_deduplicated",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::inline_and_block_lists_both_parse",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::parses_columns_and_counts_missing_codes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::reads_rime_dict_yaml_and_tsv_from_the_same_entry_point",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::rejects_codes_outside_the_alphabet",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "code_table::tests::keeps_the_highest_frequency_of_a_duplicated_entry",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "code_table::tests::looks_up_by_prefix_and_prefers_the_exact_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "code_table::tests::rejects_lines_without_a_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::tsv_parse_reads_word_and_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::a_file_without_any_code_is_rejected",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "code_table::tests::normalizes_codes_to_lowercase",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "code_table::tests::truncates_to_the_limit_keeping_the_best",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "dictionary::builtin::tests::common_en_reading_is_available_without_external_data",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "dictionary::tests::full_syllables_match_exact_and_longer_words",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "dictionary::tests::exact_lookup_only_returns_words_of_the_same_length",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "dictionary::tests::homophones_are_sorted_by_frequency",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "dictionary::tests::normalizes_u_umlaut_keys_and_queries",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "dictionary::tests::initials_pattern_matches_abbreviations",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "dictionary::tests::partial_last_syllable_matches_by_prefix",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "dictionary::tests::rejects_malformed_line",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "dictionary::tests::single_complete_syllable_does_not_match_longer_syllables",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "import::tests::strips_known_extensions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "pattern::tests::accepts_keyboard_and_canonical_spellings_equally",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "pattern::tests::canonicalizes_keyboard_spelling_for_u_umlaut",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "word_list::tests::completes_prefixes_by_frequency",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "word_list::tests::looks_up_by_lowercase_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::another_kind_is_not_an_aux_code_table",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "dictionary::tests::legacy_qj_umlaut_keys_remain_queryable",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "dictionary::tests::qj_round_trip_preserves_every_lookup",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::skips_bad_codes_but_keeps_the_rest",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::qj_round_trip_keeps_every_lookup",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::headerless_tsv_tolerates_leading_comments_and_blank_lines",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::default_columns_read_word_and_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::info_reports_broken_files_without_failing",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "aux_code_table::tests::import_tables_are_merged_relative_to_the_main_file",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "import::tests::imports_tsv_and_rime_into_qj",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_dictionary-495b09ed3cedc749)",
+      "name": "dictionary::tests::narrowing_agrees_with_linear_scan",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_format-70ee5b8ff73f80b0)",
+      "name": "hash::tests::finds_every_key_and_rejects_unknown_ones",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_format-70ee5b8ff73f80b0)",
+      "name": "hash::tests::hash_is_stable",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_format-70ee5b8ff73f80b0)",
+      "name": "file::container::tests::round_trips_sections_and_metadata",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_format-70ee5b8ff73f80b0)",
+      "name": "file::container::tests::rejects_wrong_kind_and_garbage",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_gloss_gen-163fb5a14168eb95)",
+      "name": "english::tests::cleans_and_limits_chinese_senses",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_gloss_gen-163fb5a14168eb95)",
+      "name": "pinyin::tests::cleans_tones_and_rejects_wrong_syllable_counts",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_gloss_gen-163fb5a14168eb95)",
+      "name": "pinyin::tests::parses_only_requested_words",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_gloss_gen-163fb5a14168eb95)",
+      "name": "english::tests::parses_only_requested_words",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_gloss_gen-163fb5a14168eb95)",
+      "name": "prompt::tests::parses_and_cleans_a_reply",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/main.rs (/tmp/yushi-security-target/debug/deps/qingjian_gloss_gen-163fb5a14168eb95)",
+      "name": "words::tests::filters_and_orders_words",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "frequency_learner::tests::choices_decay_when_over_the_cap",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "frequency_learner::tests::forget_removes_the_user_word_and_every_trace_of_learning",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "frequency_learner::tests::broken_lines_are_skipped_instead_of_failing_the_load",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "frequency_learner::tests::missing_file_is_empty_table",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "frequency_learner::tests::unrecord_reverses_each_kind_of_record",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "vocabulary_book::tests::counts_exposures_and_summarizes_per_language",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "usage_stats::tests::summarizes_today_recent_week_and_total",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "vocabulary_book::tests::splits_the_summary_by_level_when_a_table_is_attached",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "input_log::tests::writes_one_json_line_per_entry_with_a_timestamp",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "frequency_learner::tests::choices_are_keyed_by_input_and_round_trip",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "frequency_learner::tests::english_words_round_trip_through_tsv_and_form_a_word_list",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "frequency_learner::tests::typos_round_trip_and_unrecord",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "frequency_learner::tests::transitions_round_trip_through_ngram_tsv",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "frequency_learner::tests::user_words_round_trip_through_tsv_and_form_a_dictionary",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "usage_stats::tests::round_trips_through_the_file_and_skips_bad_lines",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "vocabulary_book::tests::round_trips_through_the_file_and_skips_bad_lines",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "frequency_learner::tests::records_and_round_trips_through_tsv",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_learning-4cd00daa18dcce70)",
+      "name": "frequency_learner::tests::saving_is_atomic_and_leaves_no_temporary_files",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "dispatch::key::tests::behavior::english_candidates_select_current_page_and_preserve_trailing_space",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "dispatch::key::tests::behavior::keypad_punctuation_is_half_width_and_regular_punctuation_is_full_width",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "dispatch::rescore::tests::p2c_precedes_old_model_and_user_precedes_bundled",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "dispatch::key::tests::behavior::raw_segment_preserves_digit_and_space_exactly_once",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "dispatch::key::tests::behavior::absent_slot_keeps_digit_in_buffer_and_raw_submission",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "dispatch::key::tests::tab::paging_at_the_boundary_returns_to_first_slot_on_the_same_page",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "dispatch::key::tests::tab::tab_with_raw_input_and_no_candidates_is_consumed_without_commit",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "dispatch::key::tests::tab::shift_tab_precedes_prediction_and_english_commit",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "dispatch::key::tests::schemes::shuangpin_shift_mode_keys_respect_custom_bindings_and_english",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "dispatch::key::tests::tab::tab_and_backtab_page_boundaries_and_current_page_selection",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "dispatch::key::tests::behavior::shift_letter_configuration_does_not_change_caps_or_english",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "dispatch::key::tests::schemes::zhuyin_symbol_keys_and_tones_are_input_and_enter_selects",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_linux_server-ed44aa1eb463317c)",
+      "name": "ipc::tests::close_and_disconnect_reclaim_every_router_session",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/config.rs (/tmp/yushi-security-target/debug/deps/config-32891432cae01791)",
+      "name": "learning_language_off_disables_annotations_in_real_server",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/display/main.rs (/tmp/yushi-security-target/debug/deps/display-5d50e76541830826)",
+      "name": "display_ack_replaces_page_and_deduplicates_senses",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/display/main.rs (/tmp/yushi-security-target/debug/deps/display-5d50e76541830826)",
+      "name": "same_frame_fallback_replaces_exposure_without_double_counting",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/display/main.rs (/tmp/yushi-security-target/debug/deps/display-5d50e76541830826)",
+      "name": "poll_with_an_unchanged_frame_keeps_the_acknowledged_display",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/display/main.rs (/tmp/yushi-security-target/debug/deps/display-5d50e76541830826)",
+      "name": "events::reopened_context_rejects_old_revision_even_with_same_local_id",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/display/main.rs (/tmp/yushi-security-target/debug/deps/display-5d50e76541830826)",
+      "name": "unfocused_or_resumed_session_requires_a_new_display_report",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/display/main.rs (/tmp/yushi-security-target/debug/deps/display-5d50e76541830826)",
+      "name": "events::rejected_other_session_action_keeps_current_exposure_eligible",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/display/main.rs (/tmp/yushi-security-target/debug/deps/display-5d50e76541830826)",
+      "name": "private_and_old_frame_reports_cannot_be_replayed",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/display/main.rs (/tmp/yushi-security-target/debug/deps/display-5d50e76541830826)",
+      "name": "wrong_identity_or_indices_cannot_create_exposures",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/events/main.rs (/tmp/yushi-security-target/debug/deps/events-e81cfce8cbd80c98)",
+      "name": "focus_switches_preserve_context_text_but_reject_old_candidate_actions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/events/main.rs (/tmp/yushi-security-target/debug/deps/events-e81cfce8cbd80c98)",
+      "name": "shift_click_and_deactivate_decisions_live_in_server",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/events/main.rs (/tmp/yushi-security-target/debug/deps/events-e81cfce8cbd80c98)",
+      "name": "capability_priority_discards_same_privacy_transitions_and_never_commits_old_text",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/multiplex.rs (/tmp/yushi-security-target/debug/deps/multiplex-f3f9ea892acf6624)",
+      "name": "rejects_old_missing_duplicate_and_unnegotiated_messages",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/multiplex.rs (/tmp/yushi-security-target/debug/deps/multiplex-f3f9ea892acf6624)",
+      "name": "simultaneous_sessions_keep_buffers_and_survive_retirement",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/privacy.rs (/tmp/yushi-security-target/debug/deps/privacy-3a0e887ff6c70e94)",
+      "name": "switching_privacy_contexts_preserves_both_compositions_and_close_logs_normal_only",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/privacy.rs (/tmp/yushi-security-target/debug/deps/privacy-3a0e887ff6c70e94)",
+      "name": "capability_events_preserve_empty_input_learning_and_suppress_sensitive_persistence",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/privacy.rs (/tmp/yushi-security-target/debug/deps/privacy-3a0e887ff6c70e94)",
+      "name": "privacy_boundaries_discard_passthrough_composition_and_learning_chain",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/privacy.rs (/tmp/yushi-security-target/debug/deps/privacy-3a0e887ff6c70e94)",
+      "name": "suspended_privacy_changes_discard_only_that_context",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/protocol.rs (/tmp/yushi-security-target/debug/deps/protocol-466ca2c9b86089f5)",
+      "name": "linux_display_identity_round_trips_without_changing_shared_protocol",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/protocol.rs (/tmp/yushi-security-target/debug/deps/protocol-466ca2c9b86089f5)",
+      "name": "client_key_round_trips_with_length_prefix",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/protocol.rs (/tmp/yushi-security-target/debug/deps/protocol-466ca2c9b86089f5)",
+      "name": "open_session_carries_protocol_and_close_is_replyless",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/protocol.rs (/tmp/yushi-security-target/debug/deps/protocol-466ca2c9b86089f5)",
+      "name": "fcitx5_plugin_opens_sessions_with_the_current_protocol",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/rescoring.rs (/tmp/yushi-security-target/debug/deps/rescoring-cab2934b3dae7583)",
+      "name": "poll_keeps_the_display_identity_until_the_frame_changes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/rescoring.rs (/tmp/yushi-security-target/debug/deps/rescoring-cab2934b3dae7583)",
+      "name": "model_attached_during_composition_rescores_the_current_round",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/rescoring.rs (/tmp/yushi-security-target/debug/deps/rescoring-cab2934b3dae7583)",
+      "name": "local_model_rescoring_reorders_sentence_after_pause",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/rescoring.rs (/tmp/yushi-security-target/debug/deps/rescoring-cab2934b3dae7583)",
+      "name": "local_model_does_not_touch_a_navigated_page",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/router.rs (/tmp/yushi-security-target/debug/deps/router-e52b1df4c436c7b6)",
+      "name": "handshake_mismatch_and_unknown_session_do_not_change_state",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/router.rs (/tmp/yushi-security-target/debug/deps/router-e52b1df4c436c7b6)",
+      "name": "independent_contexts_keep_composition_navigation_and_privacy",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/router.rs (/tmp/yushi-security-target/debug/deps/router-e52b1df4c436c7b6)",
+      "name": "sparse_custom_slots_keep_labels_and_navigation_skips_empty_cells",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/router.rs (/tmp/yushi-security-target/debug/deps/router-e52b1df4c436c7b6)",
+      "name": "editing_commit_escape_and_punctuation",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/router.rs (/tmp/yushi-security-target/debug/deps/router-e52b1df4c436c7b6)",
+      "name": "sessions_share_one_persistent_learner_and_private_input_does_not_write",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/socket.rs (/tmp/yushi-security-target/debug/deps/socket-46fedd8c87a9f31f)",
+      "name": "socket_path_does_not_replace_regular_files_or_symlinks",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/socket.rs (/tmp/yushi-security-target/debug/deps/socket-46fedd8c87a9f31f)",
+      "name": "linux_ui_negotiates_after_legacy_open_and_binds_ack_to_connection",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/socket.rs (/tmp/yushi-security-target/debug/deps/socket-46fedd8c87a9f31f)",
+      "name": "connections_are_isolated_and_restart_reopens_cleanly",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/vocabulary.rs (/tmp/yushi-security-target/debug/deps/vocabulary-cc4bfc259986fdab)",
+      "name": "private_vocabulary_book_stays_empty_for_selection_and_translation_shortcut",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_lm-a1cdaad11926e030)",
+      "name": "bigram_model::tests::bigram_beats_unigram_and_unknown_words_are_none",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_lm-a1cdaad11926e030)",
+      "name": "bigram_model::tests::qj_round_trip_gives_identical_probabilities",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_neural-f785d77d60f99a99)",
+      "name": "scorer::latency::batch_latency",
+      "result": "ignored"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_neural-f785d77d60f99a99)",
+      "name": "qjm::tests::pack_rejects_missing_files",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_neural-f785d77d60f99a99)",
+      "name": "qjm::tests::finds_packed_file_before_loose_files",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_neural-f785d77d60f99a99)",
+      "name": "scorer::tests::packed_file_scores_like_the_directory",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_neural-f785d77d60f99a99)",
+      "name": "scorer::tests::matches_the_python_scorer",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_neural-f785d77d60f99a99)",
+      "name": "scorer::tests::p2c_cached_scores_match_full_forward",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::apps::tests::prefix_pattern_needs_the_whole_prefix",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::apps::tests::linux_defaults_match_program_names",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::apps::tests::prefix_patterns_survive_multibyte_app_names",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::apps::tests::macos_list_covers_terminals_and_ides_with_prefix_patterns",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::apps::tests::windows_list_matches_exe_names_case_insensitively",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::apps::tests::empty_list_turns_the_feature_off",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::general::tests::aux_code_keep_empty_defaults_on",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::apps::tests::linux_list_matches_program_names_case_insensitively",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::apps::tests::default_list_follows_the_platform",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::general::tests::aux_code_key_falls_back_to_the_default",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::general::tests::horizontal_grid_is_off_unless_switched_on",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::general::tests::legacy_shuangpin_and_zhuyin_keys_are_read_but_scheme_wins",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::general::tests::files_written_before_the_scheme_key_keep_their_scheme",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::general::tests::page_size_and_keys_are_sanitized",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::general::tests::scheme_defaults_to_pinyin_and_unknown_names_fall_back",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::general::tests::the_two_axes_are_independent_and_their_combination_is_mixed_input",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::general::tests::the_old_wubi_scheme_spelling_still_turns_wubi_on",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::modifiers::tests::parses_aliases_in_any_order_and_prints_canonically",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::scheme::tests::the_old_wubi_spelling_means_turn_the_pinyin_side_off",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::shift_letter::tests::keys_round_trip_through_lowercase",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::shortcut::tests::delete_keys_fall_back_when_clashing_with_translation_keys",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::shortcut::tests::old_files_without_modifier_keys_still_parse_and_get_defaults",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::switch_key::tests::unknown_values_are_rejected",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::shortcut::tests::switch_mode_parses_and_defaults_to_shift",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::scheme::tests::parses_every_key_it_prints",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::tests::missing_file_is_default",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::tests::general_and_shortcut_sections_parse",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::switch_key::tests::writes_a_list_in_display_order",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::tests::fuzzy_section_parses",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::tests::partial_file_keeps_other_defaults",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::switch_key::tests::reads_lists_and_old_single_values",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "diagnostics::tests::inline_sections_unknown_scheme_and_empty_file_do_not_leak",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::scheme::tests::empty_and_unknown_spellings",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::key_combo::tests::parses_and_labels",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::tests::template_parses_to_defaults",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::tests::set_bool_refuses_broken_file",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "diagnostics::tests::independent_staging_directories_clean_on_drop_and_script_has_bom",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "diagnostics::tests::paths_are_powershell_literals_not_executable_fragments",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "diagnostics::tests::legacy_scheme_summary_is_canonical_without_unknown_user_strings",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "logs::daily::tests::day_numbers_follow_the_calendar",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "logs::daily::tests::only_dated_logs_of_the_prefix_are_recognised",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "diagnostics::tests::summary_keeps_safe_settings_and_omits_all_user_text",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "logs::secrets::tests::registered_secrets_are_masked_everywhere_they_appear",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "logs::secrets::tests::writer_masks_before_the_bytes_reach_the_file",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "extra_dictionaries::tests::list_prefers_packed_over_tsv_with_same_stem",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "diagnostics::tests::staging_preserves_sources_filters_files_and_masks_current_key",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "diagnostics::tests::log_symlink_does_not_copy_external_user_file",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "logs::daily::tests::prune_keeps_recent_and_foreign_files",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "diagnostics::tests::limits::too_many_logs_export_at_most_32_files",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::tests::set_bool_starts_from_template_when_missing",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "diagnostics::tests::unreadable_broken_oversized_and_missing_configs_never_copy_raw_file",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::tests::set_bool_keeps_comments_and_flips_only_that_key",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::tests::writes_create_the_data_directory_for_a_fresh_account",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "config::tests::set_value_writes_strings_and_integers",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_platform-c21eb3c7f4a8e895)",
+      "name": "diagnostics::tests::limits::log_reads_stop_at_per_file_and_total_limits",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/custom_phrases.rs (/tmp/yushi-security-target/debug/deps/custom_phrases-6e0ff14f9827cae8)",
+      "name": "custom_log_source_preserves_existing_shortcut_encoding",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/custom_phrases.rs (/tmp/yushi-security-target/debug/deps/custom_phrases-6e0ff14f9827cae8)",
+      "name": "save_roundtrip_preserves_text_and_rejects_conflicting_positions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/custom_phrases.rs (/tmp/yushi-security-target/debug/deps/custom_phrases-6e0ff14f9827cae8)",
+      "name": "phrase_comments_follow_edits_reordering_and_deletion",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/native_diagnostics.rs (/tmp/yushi-security-target/debug/deps/native_diagnostics-6baae8bbdefdfe1e)",
+      "name": "powershell_archive_handles_literal_paths_and_contains_no_raw_config",
+      "result": "ignored, 需要 Windows PowerShell；WSL 中还需 Windows 共享盘与互操作权限"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "cache::tests::evicts_oldest_beyond_capacity",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "chat_client::tests::reasoning_effort_parses_known_values_and_ignores_the_rest",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "chat_client::tests::session_id_is_stable_within_the_process",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "chat_client::tests::opencode_is_recognized_by_host_only",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "gloss::prompt::tests::keeps_kana_readings_only_for_japanese",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "gloss::prompt::tests::parses_english_items_and_drops_explanations",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "gloss::prompt::tests::spanish_keeps_accented_words_but_rejects_han_and_cyrillic",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "chat_client::tests::zhipu_hosts_disable_thinking_with_their_own_field",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "prompt::tests::question_replies_keep_answers_with_readings",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "prompt::tests::garbage_replies_are_empty",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "prompt::tests::reply_keeps_words_with_pinyin_and_drops_the_local_first",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "prompt::tests::translate_requests_use_their_own_prompt_and_keep_the_translation",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "prompt::tests::user_prompt_is_the_request_as_json",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "gloss::prompt::tests::keeps_spanish_accents_and_drops_explanations",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_predict-5049e4953d7e00b4)",
+      "name": "chat_client::tests::opencode_client_sends_the_session_header",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_render-95e94b4785e0597f)",
+      "name": "color::tests::premultiplies_with_coverage",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_render-95e94b4785e0597f)",
+      "name": "canvas::tests::half_alpha_over_white_lightens",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_render-95e94b4785e0597f)",
+      "name": "fonts::trak::tests::interpolates_between_sizes_and_clamps",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_render-95e94b4785e0597f)",
+      "name": "canvas::tests::blends_source_over_and_clips_to_bounds",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_render-95e94b4785e0597f)",
+      "name": "shadow::tests::blur_spreads_and_preserves_mass",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_render-95e94b4785e0597f)",
+      "name": "renderer::status::tests::cells_have_increasing_edges_ending_at_content_width",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_translate-7faee965777559a4)",
+      "name": "glossary::tests::parses_up_to_two_senses_with_optional_part_of_speech",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_translate-7faee965777559a4)",
+      "name": "glossary::tests::japanese_senses_carry_kana_readings",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_translate-7faee965777559a4)",
+      "name": "glossary::tests::rejects_line_without_senses",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_translate-7faee965777559a4)",
+      "name": "level_table::tests::levels_default_to_order_of_appearance_and_bad_lines_are_errors",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_translate-7faee965777559a4)",
+      "name": "level_table::tests::parses_levels_and_looks_up_with_normalization",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_translate-7faee965777559a4)",
+      "name": "glossary::tests::qj_round_trip_keeps_every_sense",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_translate-7faee965777559a4)",
+      "name": "personal_glossary::tests::round_trips_through_the_file_in_glossary_format",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "checker::tests::dev_builds_are_never_prompted",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "checker::tests::saved_prerelease_is_hidden_on_the_stable_channel_and_when_off",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "checker::tests::saved_result_expires_once_the_new_version_is_installed",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::signature::tests::embedded_keys_are_well_formed",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::tests::only_releases_with_a_package_for_this_machine_count",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::tests::beta_channel_takes_the_newest_of_both",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::tests::unknown_schema_is_rejected",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::tests::stable_channel_skips_prereleases",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "version::tests::orders_like_semver",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "version::tests::recognizes_dev_builds",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "version::tests::rejects_malformed_versions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::signature::tests::accepts_a_signature_from_a_trusted_key",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::signature::tests::rejects_tampered_content_and_foreign_keys",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::fetch::tests::oversized_header_is_rejected_without_waiting_for_body",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::fetch::tests::chunked_overflow_is_rejected_before_the_stream_ends",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::fetch::tests::production_index_and_signature_limits_allow_exact_boundary",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::fetch::tests::bad_status_and_truncated_body_return_request_errors",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::fetch::tests::chunked_responses_limit_cumulative_bytes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::fetch::tests::unknown_length_and_utf8_are_bounded_by_bytes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_update-3a53424825b1e056)",
+      "name": "index::fetch::tests::declared_lengths_empty_exact_and_oversized",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_windows_server-dcaef0fc24ce7030)",
+      "name": "ipc::session_map::tests::equal_external_ids_and_guessed_internal_ids_are_isolated",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_windows_server-dcaef0fc24ce7030)",
+      "name": "ipc::session_map::tests::legacy_switch_notice_is_not_a_session_registration",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_windows_server-dcaef0fc24ce7030)",
+      "name": "ipc::session_map::tests::every_session_operation_requires_open_on_this_connection",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_windows_server-dcaef0fc24ce7030)",
+      "name": "ipc::session_map::tests::reopen_close_and_capacity_recovery",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_windows_server-dcaef0fc24ce7030)",
+      "name": "dispatch::key::tests::shift_tab_precedes_prediction_and_english_commit",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_windows_server-dcaef0fc24ce7030)",
+      "name": "dispatch::key::tests::tab_with_raw_input_and_no_candidates_is_consumed_without_commit",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_windows_server-dcaef0fc24ce7030)",
+      "name": "dispatch::key::tests::tab_and_backtab_page_boundaries_and_current_page_selection",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_windows_server-dcaef0fc24ce7030)",
+      "name": "dispatch::reload::tests::dictionary_changes_do_not_retry_broken_config",
+      "result": "ok"
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/tmp/yushi-security-target/debug/deps/qingjian_windows_server-dcaef0fc24ce7030)",
+      "name": "dispatch::reload::tests::import_replace_and_remove_without_config_changes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/connection_sessions.rs (/tmp/yushi-security-target/debug/deps/connection_sessions-b2867fe23b34f5ae)",
+      "name": "duplicate_external_id_cannot_poll_commit_or_close_victim",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/connection_sessions.rs (/tmp/yushi-security-target/debug/deps/connection_sessions-b2867fe23b34f5ae)",
+      "name": "current_and_legacy_open_keep_wire_response_order",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/connection_sessions.rs (/tmp/yushi-security-target/debug/deps/connection_sessions-b2867fe23b34f5ae)",
+      "name": "unauthorized_wire_requests_never_read_or_mutate_existing_input",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/connection_sessions.rs (/tmp/yushi-security-target/debug/deps/connection_sessions-b2867fe23b34f5ae)",
+      "name": "eof_bad_frame_truncation_and_write_failure_clean_only_own_sessions",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/connection_sessions.rs (/tmp/yushi-security-target/debug/deps/connection_sessions-b2867fe23b34f5ae)",
+      "name": "fragmented_reads_and_writes_preserve_commit_and_connection_isolation",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/connection_sessions.rs (/tmp/yushi-security-target/debug/deps/connection_sessions-b2867fe23b34f5ae)",
+      "name": "every_truncated_wire_offset_cleans_owned_sessions_without_touching_other_input",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::an_old_dll_gets_the_code_segment_downgraded",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::escape_in_aux_only_clears_the_code",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::deleting_the_whole_code_brings_every_candidate_back",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::aux_trigger_filters_candidates_and_marks_the_code_segment",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::pressing_the_trigger_again_in_aux_mode_is_a_no_op",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::an_empty_filter_swallows_space_and_punctuation",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::punctuation_in_aux_commits_the_highlighted_candidate_first",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::the_self_drawn_window_keeps_the_code_segment_for_an_old_dll",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::commit_from_other_session_does_not_take_buffer",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::backspace_shrinks_preedit",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::en_contains_common_interjection_with_packaged_reading_patch",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::aux_code_show_rides_the_frame",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::aux_trigger_key_follows_config",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::focus_leave_commits_raw_pinyin",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::digit_without_a_slot_joins_the_buffer",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::uppercase_with_shift_letter_compose_exits_aux_before_pushing",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::non_letter_without_composing_passes_through",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::shift_uppercase_while_composing_commits_raw_first",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::raw_segment_takes_digits_and_keeps_the_space",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::shuangpin_raw_preedit_goes_to_the_app_and_full_pinyin_to_the_window",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::space_commits_first_candidate",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::selecting_by_digit_commits_and_clears",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::minus_equals_page_keys_preserve_expression_input",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::learning_data_persists_to_user_dir",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "english::english_digits_pick_candidates_or_join_the_word",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "english::app_list_is_looked_up_per_session",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "english::english_digit_without_a_slot_joins_the_word",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "english::english_candidates_stay_on_in_other_apps",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "english::english_candidates_are_off_in_listed_apps_by_exe_name",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "english::caps_lock_types_direct_uppercase_english_regardless_of_mode",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::frame_carries_the_preedit_mode",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::typing_pinyin_shows_candidates",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "english::english_without_candidates_is_passthrough_with_shift_case",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "english::switching_to_chinese_mid_word_flushes_english_letters",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "english::english_mode_gives_candidates_and_space_picks_highlighted",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::bare_question_mark_is_plain_punctuation_by_default",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::bare_question_mark_is_half_width_when_full_width_is_off",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::bare_question_mark_restores_when_followed_by_other_keys",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::bare_question_mark_enters_question_mode_in_both_modes",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "english::english_tab_and_arrow_keys_pick_candidates",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::chinese_punctuation_is_full_width_only_when_not_composing",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "composing::page_keys_follow_config",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::expression_mode_takes_digits_and_operators",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::expression_mode_other_punctuation_commits_then_applies",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::shuangpin_semicolon_stays_in_buffer_in_question_mode",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::question_key_unicode_entry_takes_digits",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::punctuation_toggle_is_remembered_per_mode",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::expression_mode_spells_chinese_numerals",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::shuangpin_enters_modes_with_shifted_letters",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "modes::shift_letters_follow_the_configuration",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "shortcuts::second_translation_key_without_second_sense_is_swallowed",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "shortcuts::shift_digit_forgets_candidate_and_requeries",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "shortcuts::deleting_a_candidate_shows_a_notice_until_next_key",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "shortcuts::alt_digit_commits_first_translation",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "rescoring::privacy_follows_the_focused_session",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "status::indicator_menu_toggles_status_bar",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "status::status_bar_mode_click_is_ignored_when_builtin_english_is_off",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "status::status_bar_mode_click_changes_the_global_mode",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "status::status_bar_follows_mode_when_enabled",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "status::status_bar_shows_shuangpin_scheme_in_chinese",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "status::mode_is_shared_by_every_app",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "shortcuts::unconfigured_modifier_digit_is_not_a_selection",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "status::status_bar_stays_hidden_when_disabled",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "rescoring::local_model_rescoring_reorders_sentence_after_pause",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "rescoring::surrounding_text_arriving_after_the_first_key_still_rescoring",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "rescoring::local_model_does_not_touch_a_navigated_page",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::a_rewritten_code_table_hot_reloads",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/engine_loop/main.rs (/tmp/yushi-security-target/debug/deps/engine_loop-cf3e851ece588194)",
+      "name": "aux_code::a_new_code_table_in_the_user_dir_hot_reloads",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/ipc_loop.rs (/tmp/yushi-security-target/debug/deps/ipc_loop-8d28db9ebacbd12f)",
+      "name": "codec_round_trips_a_message",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/ipc_loop.rs (/tmp/yushi-security-target/debug/deps/ipc_loop-8d28db9ebacbd12f)",
+      "name": "serve_runs_the_open_type_loop_over_a_stream",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/protocol_loop.rs (/tmp/yushi-security-target/debug/deps/protocol_loop-ef53a47486905ea1)",
+      "name": "translate_combo_is_dormant_without_cloud",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/protocol_loop.rs (/tmp/yushi-security-target/debug/deps/protocol_loop-ef53a47486905ea1)",
+      "name": "space_commits_first_candidate",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/protocol_loop.rs (/tmp/yushi-security-target/debug/deps/protocol_loop-ef53a47486905ea1)",
+      "name": "client_types_pinyin_and_gets_candidates",
+      "result": "ok"
+    },
+    {
+      "suite": "Running tests/protocol_loop.rs (/tmp/yushi-security-target/debug/deps/protocol_loop-ef53a47486905ea1)",
+      "name": "commit_returns_raw_text",
+      "result": "ok"
+    }
+  ]
+}

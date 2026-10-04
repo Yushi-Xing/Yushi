@@ -18,10 +18,13 @@ README.md 只介绍项目，所有技术内容放在这里，分四类：前三�
 | [design/rendering.md](design/rendering.md) | 跨平台 UI 与自绘渲染器（2026-09-13）：显示面与控件面的区分、Flutter / Avalonia / WebView 的调研结论、主题的两条路、tiny-skia + cosmic-text 的 spike 结果与两平台接入 |
 | [design/aux-code.md](design/aux-code.md) | 辅码（2026-09-14）：触发键与过滤语义、Rime 码表导入、笔画原生表与大陆序覆盖、候选注记与设置界面 |
 | [plan/roadmap.md](plan/roadmap.md) | 分阶段路线图、各阶段的依赖关系与已完成项 |
+| [plan/windows-focused-refactor.md](plan/windows-focused-refactor.md) | Windows 专用重构目标：全拼与自动纠错优先、按需英语句译、Win10/Win11 兼容验收、功能删减与包体优化 |
+| [plan/windows-refactor-tasks.md](plan/windows-refactor-tasks.md) | 按轮次实施的任务状态、自动测试用例与基础输入框／浏览器／VS Code／微信的兼容验收顺序 |
 | [plan/zh_tw_support_plan.md](plan/zh_tw_support_plan.md) | 繁体输出与台湾注音支持的分析与方案（贡献者 pinchiu，#22）：读音标准差异、台湾用语、简转繁一对多；两条路线 |
 | [plan/todo.md](plan/todo.md) | 待办清单，按「从自用到能给别人用」排 |
 | [plan/wubi.md](plan/wubi.md) | 五笔（形码）支持方案（2026-09-15）：为什么不能按双拼的方式接、两条平行管线、码表与词频、`[general] scheme` 收敛、分期 |
 | [notes/crate-notes.md](notes/crate-notes.md) | 各 crate / app / tool 的实现要点：入口类型、数据文件、常数、生成命令 |
+| [notes/windows-refactor-round1-2026-10-04.md](notes/windows-refactor-round1-2026-10-04.md) | Windows 重构第一轮：会话隔离、诊断导出、日志与下载限额修复，自动与原生 ZIP 测试结果及未验项目 |
 | [notes/linux-fcitx5.md](notes/linux-fcitx5.md) | Linux 默认面板构建、协议、安装与排错 |
 | [notes/performance.md](notes/performance.md) | 历次性能优化：起因、定位方法、改法、数字前后对比与经验 |
 | [notes/release.md](notes/release.md) | 发版流程：CHANGELOG、标签触发的 CI 打包、产品数据包、签名公证的 Secrets、官网用的 `releases.json` |
@@ -32,3 +35,5 @@ README.md 只介绍项目，所有技术内容放在这里，分四类：前三�
 | [notes/windows-win10.md](notes/windows-win10.md) | Windows 10 与设置程序（2026-09-13）：Reactor 早期绑定 Windows 11 才有的 AppModel API 导致加载期失败，改自包含部署 + 延迟加载 |
 
 约定：文档写中文，代码标识符一律英文。实现与文档产生分歧时以代码为准，并同步更新文档。
+
+- [Windows 第二轮修复与评测](notes/windows-refactor-round2-2026-10-04.md)：已知问题复核、336 个输入、前后对照和预览发布。

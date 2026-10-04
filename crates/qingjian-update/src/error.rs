@@ -9,7 +9,7 @@ pub enum UpdateError {
     #[error("runtime failed: {0}")]
     Runtime(#[from] std::io::Error),
 
-    #[error("index is larger than {0} bytes")]
+    #[error("response is larger than {0} bytes")]
     TooLarge(usize),
 
     #[error("signature is malformed")]

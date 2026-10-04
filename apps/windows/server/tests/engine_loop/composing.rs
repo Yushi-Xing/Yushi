@@ -148,7 +148,7 @@ fn commit_from_other_session_does_not_take_buffer() {
         app: None,
         protocol: PROTOCOL_VERSION,
     });
-    // 别的会话拿不到这个会话的拼音，但残留组句一并清掉。
+    // 别的会话既拿不到拼音，也不能清掉前台仍在输入的组句。
     assert_eq!(
         router.handle(ClientMessage::Commit { session: other }),
         Some(ServerMessage::Committed {
@@ -157,44 +157,45 @@ fn commit_from_other_session_does_not_take_buffer() {
         })
     );
     let space = KeyEvent::new(0x20, Some(' '), Default::default());
-    let (outcome, _, _) = key_result(router.handle(ClientMessage::Key {
+    let (outcome, commit, _) = key_result(router.handle(ClientMessage::Key {
         session: SESSION,
         event: space,
     }));
-    assert_eq!(outcome, KeyOutcome::Passthrough);
+    assert_eq!(outcome, KeyOutcome::Consumed);
+    assert!(commit.is_some());
 }
 
 #[test]
 fn page_keys_follow_config() {
-    // 每页 1 条保证多页；翻页键改成 `,` `.`。
-    let mut router = router_with(RouterConfig {
-        page_size: 1,
-        page_keys: (',', '.'),
-        ..RouterConfig::default()
-    });
-    let (_, _, frame) = type_letters(&mut router, "ni");
-    assert!(frame.page_count > 1, "样例词库里 ni 应不止一个候选");
-    assert_eq!(frame.page, 0);
-
-    let key = |router: &mut Router, c| {
-        key_result(router.handle(ClientMessage::Key {
-            session: SESSION,
-            event: punct(c),
-        }))
-    };
-    let (outcome, commit, frame) = key(&mut router, '.');
-    assert_eq!((outcome, commit), (KeyOutcome::Consumed, None));
-    assert_eq!(frame.page, 1, "`.` 应翻到下一页");
-    let (_, _, frame) = key(&mut router, ',');
-    assert_eq!(frame.page, 0, "`,` 应翻回上一页");
-    // 缺省的 `]` 此时不再翻页，进直输段。
-    let (_, _, frame) = key(&mut router, ']');
-    assert_eq!(frame.page, 0);
-    assert!(
-        preedit(&frame).contains(']'),
-        "`]` 应进直输段：{}",
-        preedit(&frame)
-    );
+    for (previous, next) in [('[', ']'), (',', '.'), ('-', '=')] {
+        let mut router = router_with(RouterConfig {
+            page_size: 1,
+            page_keys: (previous, next),
+            ..RouterConfig::default()
+        });
+        let (_, _, first) = type_letters(&mut router, "ni");
+        assert!(first.page_count > 1);
+        for _ in 0..first.page_count + 2 {
+            let (outcome, commit, frame) = press(&mut router, punct(next));
+            assert_eq!((outcome, commit), (KeyOutcome::Consumed, None));
+            assert!(frame.page < frame.page_count);
+            assert_eq!(preedit(&frame), "ni");
+        }
+        for _ in 0..first.page_count + 2 {
+            let (outcome, commit, frame) = press(&mut router, punct(previous));
+            assert_eq!((outcome, commit), (KeyOutcome::Consumed, None));
+            assert!(frame.page < frame.page_count);
+            assert_eq!(preedit(&frame), "ni");
+        }
+        let (_, _, frame) = press(&mut router, punct(next));
+        let expected = frame.candidates.items[frame.highlight].text.clone();
+        let (outcome, committed, frame) = press(&mut router, digit(1));
+        assert_eq!(
+            (outcome, committed.as_deref()),
+            (KeyOutcome::Consumed, Some(expected.as_str()))
+        );
+        assert!(frame.is_empty());
+    }
 }
 
 #[test]
@@ -352,4 +353,17 @@ fn shuangpin_raw_preedit_goes_to_the_app_and_full_pinyin_to_the_window() {
     let shown = sink.0.lock().unwrap();
     let last = shown.last().expect("自绘窗收到过帧");
     assert_eq!((preedit(last).as_str(), last.cursor), ("kai'fa", 3));
+}
+
+#[test]
+fn en_contains_common_interjection_with_packaged_reading_patch() {
+    let mut router = router();
+    let (_, _, frame) = type_letters(&mut router, "en");
+    let slot = slot_of(&frame, "嗯");
+    let (outcome, committed, after) = press(&mut router, digit(slot));
+    assert_eq!(
+        (outcome, committed.as_deref()),
+        (KeyOutcome::Consumed, Some("嗯"))
+    );
+    assert!(after.is_empty());
 }

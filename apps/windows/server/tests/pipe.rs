@@ -99,4 +99,58 @@ fn named_pipe_round_trips_the_open_type_loop() {
         texts.contains(&"你好"),
         "候选里应有「你好」，实际：{texts:?}"
     );
+
+    // 两条真实连接使用同一个线程编号：第二条不能读取或提交第一条的拼音。
+    let mut other = connect(&name);
+    write_message(
+        &mut other,
+        &ClientMessage::OpenSession {
+            session: SESSION,
+            app: None,
+            protocol: PROTOCOL_VERSION,
+        },
+    )
+    .unwrap();
+    assert!(matches!(
+        read_message::<_, ServerMessage>(&mut other).unwrap(),
+        Some(ServerMessage::SessionOpened {
+            session: SESSION,
+            ..
+        })
+    ));
+    write_message(&mut other, &ClientMessage::Poll { session: SESSION }).unwrap();
+    let Some(ServerMessage::Update { frame, .. }) = read_message(&mut other).unwrap() else {
+        panic!("expected Update");
+    };
+    assert!(frame.is_empty());
+    write_message(&mut other, &ClientMessage::Commit { session: SESSION }).unwrap();
+    assert!(matches!(
+        read_message::<_, ServerMessage>(&mut other).unwrap(),
+        Some(ServerMessage::Committed { text: None, .. })
+    ));
+    drop(other);
+    write_message(&mut client, &ClientMessage::Poll { session: SESSION }).unwrap();
+    let Some(ServerMessage::Update {
+        frame,
+        session: SESSION,
+    }) = read_message(&mut client).unwrap()
+    else {
+        panic!("expected victim Update");
+    };
+    assert_eq!(
+        frame
+            .preedit
+            .iter()
+            .map(|part| part.text.as_str())
+            .collect::<String>(),
+        "ni'hao"
+    );
+
+    let mut unregistered = connect(&name);
+    write_message(&mut unregistered, &ClientMessage::Poll { session: SESSION }).unwrap();
+    assert!(
+        read_message::<_, ServerMessage>(&mut unregistered)
+            .unwrap()
+            .is_none()
+    );
 }

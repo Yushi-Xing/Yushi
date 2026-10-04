@@ -16,6 +16,7 @@ mod input_log;
 mod learning;
 mod marked;
 mod mode_keys;
+mod parsing;
 mod prediction;
 mod privacy;
 mod query;

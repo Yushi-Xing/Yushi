@@ -53,7 +53,7 @@ impl Router {
             ClientMessage::Poll { session } => Some(self.handle_poll(session)),
             ClientMessage::Commit { session } => {
                 let text = self.commit_raw_for(session);
-                tracing::debug!(?session, ?text, "焦点离开，结束组句");
+                tracing::debug!(?session, "焦点离开，结束组句");
                 Some(ServerMessage::Committed { session, text })
             }
             ClientMessage::Surrounding { session, text } => {

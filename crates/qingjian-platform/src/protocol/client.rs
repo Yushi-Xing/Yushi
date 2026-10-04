@@ -1,3 +1,5 @@
+//! 客户端输入事件与会话通知。
+
 use serde::{Deserialize, Serialize};
 
 use super::indicator::IndicatorCommand;
@@ -141,4 +143,46 @@ pub enum ClientMessage {
         /// 会话标识。
         session: SessionId,
     },
+}
+
+impl ClientMessage {
+    /// 会话编号；传输层在连接边界映射，业务层只接触内部编号。
+    pub fn session(&self) -> SessionId {
+        match self {
+            Self::OpenSession { session, .. }
+            | Self::Key { session, .. }
+            | Self::Commit { session, .. }
+            | Self::Poll { session, .. }
+            | Self::Surrounding { session, .. }
+            | Self::Privacy { session, .. }
+            | Self::Selection { session, .. }
+            | Self::PositionCandidates { session, .. }
+            | Self::HideCandidates { session, .. }
+            | Self::ModeChanged { session, .. }
+            | Self::SyncMode { session, .. }
+            | Self::ImeSwitched { session, .. }
+            | Self::Indicator { session, .. }
+            | Self::CloseSession { session, .. } => *session,
+        }
+    }
+
+    /// 修改传输层使用的会话编号，不改变消息正文。
+    pub fn session_mut(&mut self) -> &mut SessionId {
+        match self {
+            Self::OpenSession { session, .. }
+            | Self::Key { session, .. }
+            | Self::Commit { session, .. }
+            | Self::Poll { session, .. }
+            | Self::Surrounding { session, .. }
+            | Self::Privacy { session, .. }
+            | Self::Selection { session, .. }
+            | Self::PositionCandidates { session, .. }
+            | Self::HideCandidates { session, .. }
+            | Self::ModeChanged { session, .. }
+            | Self::SyncMode { session, .. }
+            | Self::ImeSwitched { session, .. }
+            | Self::Indicator { session, .. }
+            | Self::CloseSession { session, .. } => session,
+        }
+    }
 }

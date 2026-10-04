@@ -102,6 +102,16 @@ impl FuzzyRules {
         })
     }
 
+    /// 非标准写法（如 tin、suang）只有在当前规则能得到标准音节时才允许参与切分。
+    pub(crate) fn accepts_nonstandard(&self, typed: &str) -> bool {
+        self.any()
+            && !parser::is_syllable(typed)
+            && self
+                .alternatives(SyllablePattern::complete(typed))
+                .iter()
+                .any(|form| parser::is_syllable(form))
+    }
+
     /// 把一串模式扩展成每个位置的多种写法（第一种是用户敲的，代价 0；模糊音写法扣 [`FUZZY_PENALTY`]）。
     pub fn expand(&self, patterns: &[SyllablePattern<'_>]) -> Expanded {
         Expanded::new(patterns.iter().map(|p| {

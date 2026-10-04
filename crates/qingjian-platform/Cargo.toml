@@ -15,6 +15,7 @@ qingjian-dictionary.workspace = true
 qingjian-predict.workspace = true
 serde.workspace = true
 serde_json.workspace = true
+tempfile = "3.27.0"
 thiserror.workspace = true
 toml.workspace = true
 toml_edit.workspace = true

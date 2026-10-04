@@ -10,7 +10,7 @@ use std::time::{Duration, Instant};
 use qingjian_core::Engine;
 use qingjian_neural::{CharScorer, P2c};
 
-use super::{EvalError, collect};
+use super::{EvalError, collect, metrics};
 
 /// 取前几条生成候选。
 const BEAM: usize = 5;
@@ -99,6 +99,8 @@ pub fn run(
     let mut out = GenerateReport::default();
     for (index, pair) in pairs.iter().enumerate() {
         out.total += 1;
+        let length = pair.text.chars().count();
+        out.chars_total += length;
         let keys = pair.pinyin.replace('\'', "");
         let started = Instant::now();
         let generated = decoder.convert(&keys, BEAM, MAX_CHARS);
@@ -109,14 +111,10 @@ pub fn run(
             out.failed += 1;
             continue;
         };
-        out.chars_total += pair.text.chars().count();
+
         if let Some(first) = generated.first() {
-            out.chars_correct += first
-                .text
-                .chars()
-                .zip(pair.text.chars())
-                .filter(|(a, b)| a == b)
-                .count();
+            out.chars_correct +=
+                length.saturating_sub(metrics::edit_distance(&pair.text, &first.text));
             if first.text == pair.text {
                 out.top1 += 1;
             }

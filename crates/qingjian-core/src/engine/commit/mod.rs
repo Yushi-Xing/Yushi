@@ -7,7 +7,7 @@ use super::learning::Learner;
 use super::query::EnglishTail;
 use super::{
     AUTO_WORD_MAX_CHARS, AUTO_WORD_THRESHOLD, AUTO_WORD_THRESHOLD_SAME_BUFFER,
-    EXPLICIT_TRANSITION_WEIGHT, Engine, choice_key, segment_longest_prefix,
+    EXPLICIT_TRANSITION_WEIGHT, Engine, choice_key,
 };
 use crate::candidate::{Candidate, CandidateKind, CandidateList, Language};
 use crate::correction::typo;
@@ -413,7 +413,7 @@ impl Engine {
             }
             (None, Some(c)) => self.convert_sentence(&c.segmentation.patterns(), false)?,
             (None, None) => {
-                let (segmentations, _) = segment_longest_prefix(scope).ok()?;
+                let (segmentations, _) = self.segment_phonetic(scope).ok()?;
                 self.convert_sentence(&segmentations.first()?.patterns(), true)?
             }
         };

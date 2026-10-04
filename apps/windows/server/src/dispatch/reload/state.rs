@@ -94,11 +94,14 @@ pub(crate) struct ConfigReload {
 impl ConfigReload {
     /// 按上次有效配置装配词库，不把用户目录中的学习数据当作词库。
     pub(super) fn load_dictionaries(&self) -> Vec<Dictionary> {
-        let dictionaries = extra_dictionaries::load(
+        let mut dictionaries = extra_dictionaries::load(
             self.dirs.bundled_dicts.as_deref(),
             self.dirs.user_dicts.as_deref(),
             &self.applied_dictionaries,
         );
+        if let Ok(patch) = Dictionary::builtin_patch() {
+            dictionaries.push(patch);
+        }
         tracing::info!(count = dictionaries.len(), "附加词库已热重装");
         dictionaries
     }
