@@ -41,8 +41,10 @@
 
 未逐一重写所有历史测试；按关键失效路径增加复杂条件、加强既有断言，并对全套测试运行回归。测试清单与实际执行汇总另附。宿主验收顺序保持：Windows 基础输入框 → 浏览器 → VS Code → 微信；两种系统需分别安装测试。
 
-Windows 三件套版本统一为 0.1.6-beta.2。独立 `windows-preview.yml` 在本 fork 发布预览，门禁包含标签与版本一致、main 祖先检查、Linux/Windows 全 workspace 测试（排除 macOS 壳）、Clippy、Windows PowerShell 原生诊断 ZIP、数据 SHA256、MSVC x64 产物及 x86 DLL、安装器与附件 SHA256。只发布 prerelease，不伪造上游官网签名，也不更改原发布频道。安装包、构建信息与评测 ZIP 一同发布。
+Windows 三件套版本统一为 0.1.6-beta.3。独立 `windows-preview.yml` 在本 fork 发布预览，门禁包含标签与版本一致、main 祖先检查、Linux/Windows 全 workspace 测试（排除 macOS 壳）、Clippy、Windows PowerShell 原生诊断 ZIP、数据 SHA256、MSVC x64 产物及 x86 DLL、安装器与附件 SHA256。只发布 prerelease，不伪造上游官网签名，也不更改原发布频道。安装包、构建信息与评测 ZIP 一同发布。
 
 本机最终回归：677 条通过、0 失败、2 条默认忽略；另运行原生 PowerShell 诊断 ZIP 1 条通过，Python 生成器/统计 2 条通过。Linux 工作区 Clippy 与 Windows GNU 三组件所有 target 的 Clippy 均通过。MSVC 真编译、Windows 管道测试与 TSF 单元测试待 Actions 执行。
 
 首次 Windows Actions 检出了真实平台差异：未登记请求被服务器关闭后，客户端读取返回 Windows 错误 233（ERROR_PIPE_NOT_CONNECTED），原测试只接受 EOF。断连与拒绝逻辑已生效；修正原生测试为接受 EOF 或明确的 Windows 管道已断开错误 109/233，其他错误和任何返回帧仍然失败。首次 beta.1 标签未发布安装包，保留失败记录；修正后发布 beta.2，不移动旧标签。原生窗口输入的人工验收仍未完成。
+
+beta.2 的 Windows 常规全 workspace 回归与管道测试通过，额外启用的 PowerShell 测试检出 `canonicalize()` 产生的 `\\?\D:\...` 测试路径无法用于 PowerShell 5.1 `Join-Path`。只在传递给 shell 时转换 drive/UNC 前缀，保留文件系统 Path 与全部特殊字符，并增加跨平台的纯路径回归。beta.2 未发布附件；最终候选版本更新为 beta.3。

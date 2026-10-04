@@ -9,7 +9,7 @@ use qingjian_platform::diagnostics::{DiagnosticExport, powershell_literal};
 fn native_path(path: &Path) -> String {
     let text = path.to_string_lossy();
     if cfg!(windows) {
-        text.into_owned()
+        windows_shell_path(&text)
     } else {
         let rest = text
             .strip_prefix("/mnt/")
@@ -20,6 +20,30 @@ fn native_path(path: &Path) -> String {
             drive.to_ascii_uppercase(),
             tail.replace('/', "\\")
         )
+    }
+}
+
+// Rust canonicalize 的 verbatim 前缀不能交给 PowerShell 5.1 的路径 provider；
+// 只转换传给 shell 的路径，文件系统操作仍使用原始 Path。
+fn windows_shell_path(text: &str) -> String {
+    if let Some(rest) = text.strip_prefix(r"\\?\UNC\") {
+        format!(r"\\{rest}")
+    } else {
+        text.strip_prefix(r"\\?\").unwrap_or(text).to_owned()
+    }
+}
+
+#[test]
+fn windows_shell_paths_preserve_unicode_special_characters_and_unc_roots() {
+    for (path, expected) in [
+        (
+            r"\\?\D:\中文 O'Brien $x`z [1]\stage",
+            r"D:\中文 O'Brien $x`z [1]\stage",
+        ),
+        (r"\\?\UNC\server\share\中文 [1]", r"\\server\share\中文 [1]"),
+        (r"D:\中文 O'Brien $x`z [1]", r"D:\中文 O'Brien $x`z [1]"),
+    ] {
+        assert_eq!(windows_shell_path(path), expected);
     }
 }
 
