@@ -22,3 +22,13 @@
 本机原评测全组合和两种模型状态的文章集均保留完整失败；发布附件另有 Windows CI 实际结果。Win11 搜索栏候选被遮挡已经由 beta.6 用户截图证实仍存在，本次补库不声称解决遮挡。整句排序、本地模型体验与真实应用兼容继续保留为待办。
 
 发布门禁在 beta.7 的原生 Windows 检出上发现 LF → CRLF 导致 SHA256 不一致，已阻止安装包发布。beta.8 通过 `.gitattributes` 固定词源与评测数据 LF，生成器也显式 LF；新增开启 `core.autocrlf=true` 的真实 Git 检出回归。原词库内容、筛选与哈希均保持，不把换行差异当作允许跳过哈希验证的理由。
+
+## 最终发布核验
+
+代码 `11e2d683452e545269447630b9fa5a65231e390f` 已经由 Windows Actions [37321608447](https://github.com/Yushi-Xing/Yushi/actions/runs/37321608447) 编译并发布为 [beta.10](https://github.com/Yushi-Xing/Yushi/releases/tag/yushi-windows-v0.1.6-beta.10)。Linux／macOS／Windows 常规 CI、两次安全审计和预发布门禁均成功；本机适用全仓 705 项通过，原生 Windows 累计 716 项通过、0 失败、默认忽略 3 项，额外运行了真实模型与原生诊断门禁。14 项 Python 数据、评测与打包测试通过。
+
+安装包 `qingjian-0.1.6-beta.10-windows-x86_64-setup.exe` 为 139,947,945 字节，SHA256 为 `78f7d63f6c0bbedca6f80c3f54aaa0b9e95dfd4f6a88cbf817434ccc6ea7251e`；相比 beta.6 增加 159,555 字节，约 156 KiB。独立下载后核对 MZ、声明长度、所有附件 SHA256、三个 ZIP CRC、两种状态各 1,123 条文章结果、237 条补库样本、1,444 条组合与构建／词库指纹，结果见 [release-proof.json](release-proof.json)。
+
+Windows 实测与本机汇总一致：文章无模型正常 43/64、有模型 42/64；原组合正常 84/92、单处错拼 757/1104；补库样本完整词条覆盖 220/220，人工核验词首选 24/28，品牌简拼／漏键／互换 3/3 首选正确。各组全部失败保留于发布附件，没有把“候选存在”当作“首选成功”。
+
+真实模型的 plain、mixed、mixed_typo、last_initial 四个场景分别在 205／205／449／102 ms 后稳定，后续两秒内均无新推理调用，测得进程 CPU 增量均为 0 ms。此结果只覆盖 CI 的固定输入，不替代用户笔记本电流声或 Win10／Win11 真实宿主验收。底部搜索遮挡、整句排序与下一轮功能仍按计划保留待办。
