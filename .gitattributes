@@ -1,0 +1,3 @@
+# 固定词源与评测数据的字节表示，Windows 自动换行不能改变冻结 SHA256。
+assets/lexicon/** text=auto eol=lf
+assets/eval/** text=auto eol=lf

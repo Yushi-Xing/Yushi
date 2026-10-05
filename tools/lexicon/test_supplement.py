@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """检查补库来源、独立性与多音字边界；不以评测答案驱动导入。"""
 import json
+import shutil
+import subprocess
 from pathlib import Path
 import tempfile
 import unittest
@@ -50,6 +52,20 @@ class SupplementTests(unittest.TestCase):
         seeds = json.loads((supplement.ROOT/'assets/eval/daily-reading/seeds.json').read_text(encoding='utf-8'))
         words = {r['word'] for r in rows}
         self.assertFalse(words & {s['text'] for s in seeds if s['kind']=='sentence'})
+
+    @unittest.skipUnless(shutil.which('git'), 'Git is required for checkout normalization')
+    def test_windows_style_checkout_preserves_frozen_source_bytes(self):
+        manifest = json.loads((supplement.OUTPUT/'manifest.json').read_text(encoding='utf-8'))
+        expected = dict(manifest['inputs'])
+        expected['assets/lexicon/supplement/dict.tsv'] = manifest['dictionary_sha256']
+        expected['assets/lexicon/supplement/provenance.jsonl'] = manifest['provenance_sha256']
+        with tempfile.TemporaryDirectory() as temporary:
+            subprocess.run(['git','-c','core.autocrlf=true','checkout-index',
+                            '--prefix='+Path(temporary).as_posix()+'/', '--stdin'],
+                           input='\n'.join(expected)+'\n', cwd=supplement.ROOT,
+                           encoding='utf-8', capture_output=True, check=True, timeout=30)
+            for name, fingerprint in expected.items():
+                self.assertEqual(supplement.digest(Path(temporary)/name), fingerprint, name)
 
     def test_untrusted_source_is_rejected_before_writing(self):
         with tempfile.TemporaryDirectory() as temporary:

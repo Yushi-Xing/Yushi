@@ -127,16 +127,16 @@ def generate(jieba, unihan, output):
              '# 第三列是保守排序权重，不是统一语料频次；多音字只使用核验过的整词读音。']
     lines += [f"{word}\t{row['pinyin']}\t{row['weight']}" for word,row in sorted(selected.items())]
     dictionary = output/'dict.tsv'
-    dictionary.write_text('\n'.join(lines)+'\n', encoding='utf-8')
+    dictionary.write_text('\n'.join(lines)+'\n', encoding='utf-8', newline='\n')
     provenance = output/'provenance.jsonl'
-    provenance.write_text(''.join(json.dumps(dict(word=word, **row),ensure_ascii=False,separators=(',',':'))+'\n' for word,row in sorted(selected.items())), encoding='utf-8')
+    provenance.write_text(''.join(json.dumps(dict(word=word, **row),ensure_ascii=False,separators=(',',':'))+'\n' for word,row in sorted(selected.items())), encoding='utf-8', newline='\n')
     report = dict(schema=1, count=len(selected), dictionary_sha256=digest(dictionary), dictionary_bytes=dictionary.stat().st_size, provenance_sha256=digest(provenance),
                   jieba_revision='67fa2e36e72f69d9134b8a1037b83fbb070b9775', jieba_sha256=digest(jieba),
                   unihan_version='17.0.0', unihan_readings_sha256=digest(unihan),
                   thresholds=dict(jieba_min=20, min_chars=2, max_chars=8, domain_df=DOMAIN_MIN),
                   reading_methods=dict(Counter(r['reading'] for r in selected.values())), rejected=dict(rejected),
                   inputs={str(p.relative_to(ROOT)):digest(p) for p in [*paths,LEXICON/'01_characters/standard_8105.tsv',reviewed,LEXICON/'patches.tsv']})
-    (output/'manifest.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    (output/'manifest.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8', newline='\n')
     return report
 
 

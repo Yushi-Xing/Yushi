@@ -20,3 +20,5 @@
 “ 双汇火腿肠 ”的全拼 `shuanghuihuotuichang`、尾字简拼 `shuanghuihuotuic`、漏键 `shuanghuihuotuchang`、末尾互换 `shuanghuihuotuichnag` 均首选正确。康师傅方便面和充电宝全拼也首选正确，不需要模型。
 
 本机原评测全组合和两种模型状态的文章集均保留完整失败；发布附件另有 Windows CI 实际结果。Win11 搜索栏候选被遮挡已经由 beta.6 用户截图证实仍存在，本次补库不声称解决遮挡。整句排序、本地模型体验与真实应用兼容继续保留为待办。
+
+发布门禁在 beta.7 的原生 Windows 检出上发现 LF → CRLF 导致 SHA256 不一致，已阻止安装包发布。beta.8 通过 `.gitattributes` 固定词源与评测数据 LF，生成器也显式 LF；新增开启 `core.autocrlf=true` 的真实 Git 检出回归。原词库内容、筛选与哈希均保持，不把换行差异当作允许跳过哈希验证的理由。

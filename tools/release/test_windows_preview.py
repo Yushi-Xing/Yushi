@@ -3,6 +3,7 @@
 import importlib.util
 import json
 import os
+import re
 import shutil
 from pathlib import Path
 import tempfile
@@ -14,6 +15,7 @@ SPEC = importlib.util.spec_from_file_location('preview', Path(__file__).with_nam
 preview = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(preview)
 REPO = preview.ROOT
+RELEASE = re.search(r'^version = "([^"]+)"$', (REPO/'apps/windows/server/Cargo.toml').read_text(encoding='utf-8'), re.MULTILINE)[1]
 
 
 class PreviewTests(unittest.TestCase):
@@ -31,7 +33,7 @@ class PreviewTests(unittest.TestCase):
         lock = root/'tools/release/data.lock'
         lock.parent.mkdir(parents=True)
         lock.write_text((REPO/'tools/release/data.lock').read_text())
-        installer = root/'target/installer/qingjian-0.1.6-beta.7-windows-x86_64-setup.exe'
+        installer = root/f'target/installer/qingjian-{RELEASE}-windows-x86_64-setup.exe'
         installer.parent.mkdir(parents=True)
         installer.write_bytes(b'MZ'+b'\0'*1_000_000)
         fingerprint = preview.sha(REPO/'assets/lexicon/supplement/dict.tsv')
@@ -51,7 +53,7 @@ class PreviewTests(unittest.TestCase):
             (directory/'summary.json').write_text(json.dumps(report))
 
     def run_stage(self, root):
-        env=dict(PREVIEW_TAG='yushi-windows-v0.1.6-beta.7',GITHUB_SHA='test-commit',GITHUB_RUN_ID='test-run')
+        env=dict(PREVIEW_TAG=f'yushi-windows-v{RELEASE}',GITHUB_SHA='test-commit',GITHUB_RUN_ID='test-run')
         with patch.object(preview,'ROOT',root),patch.dict(os.environ,env):
             preview.stage()
 
