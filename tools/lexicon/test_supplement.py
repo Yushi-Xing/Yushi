@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """检查补库来源、独立性与多音字边界；不以评测答案驱动导入。"""
 import json
+import csv
 import shutil
 import subprocess
 from pathlib import Path
@@ -52,6 +53,22 @@ class SupplementTests(unittest.TestCase):
         seeds = json.loads((supplement.ROOT/'assets/eval/daily-reading/seeds.json').read_text(encoding='utf-8'))
         words = {r['word'] for r in rows}
         self.assertFalse(words & {s['text'] for s in seeds if s['kind']=='sentence'})
+
+    def test_domain_provenance_retains_original_df_separately_from_weight(self):
+        rows = [json.loads(s) for s in (supplement.OUTPUT/'provenance.jsonl').read_text(encoding='utf-8').splitlines()]
+        counts = {}
+        for domain in supplement.DOMAIN_MIN:
+            path = supplement.LEXICON/'03_domains'/f'{domain}.tsv'
+            with path.open(encoding='utf-8') as source:
+                counts[domain] = {r['word']:int(r['doc_freq']) for r in csv.DictReader(source, delimiter='\t') if r['doc_freq']}
+        seen = 0
+        for row in rows:
+            for source, df in row['evidence']:
+                if source.startswith('thuocl_'):
+                    self.assertEqual(df, counts[source.removeprefix('thuocl_')][row['word']])
+                    self.assertGreaterEqual(df, supplement.DOMAIN_MIN[source.removeprefix('thuocl_')])
+                    seen += 1
+        self.assertGreater(seen, 5000)
 
     @unittest.skipUnless(shutil.which('git'), 'Git is required for checkout normalization')
     def test_windows_style_checkout_preserves_frozen_source_bytes(self):

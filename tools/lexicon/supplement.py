@@ -84,7 +84,7 @@ def generate(jieba, unihan, output):
     standard = {r['word'] for r in csv.DictReader((LEXICON/'01_characters/standard_8105.tsv').open(encoding='utf-8'), delimiter='\t')}
     selected, rejected = {}, Counter()
 
-    def add(word, count, source, proper=False):
+    def add(word, count, source, proper=False, weight=None):
         if word in base:
             rejected['already_in_base'] += 1
             return
@@ -100,7 +100,7 @@ def generate(jieba, unihan, output):
             return
         pinyin, method = reading
         if word not in selected:
-            selected[word] = dict(pinyin=pinyin, weight=max(20, min(500, count)), evidence=[], reading=method)
+            selected[word] = dict(pinyin=pinyin, weight=max(20, min(500, count if weight is None else weight)), evidence=[], reading=method)
         selected[word]['evidence'].append([source, count])
 
     for line in jieba.read_text(encoding='utf-8').splitlines():
@@ -113,7 +113,7 @@ def generate(jieba, unihan, output):
         for row in csv.DictReader(path.open(encoding='utf-8'), delimiter='\t'):
             if row['doc_freq'] and int(row['doc_freq']) >= minimum:
                 # DF 仅在同领域筛选；低权重补充，不能冒充本项目语料出现次数。
-                add(row['word'], 20, f'thuocl_{domain}')
+                add(row['word'], int(row['doc_freq']), f'thuocl_{domain}', weight=20)
     reviewed = OUTPUT/'reviewed.tsv'
     for row in csv.DictReader(reviewed.open(encoding='utf-8'), delimiter='\t'):
         word, pinyin = row['word'], row['pinyin']
