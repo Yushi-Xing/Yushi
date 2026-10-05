@@ -1,0 +1,1051 @@
+[
+  {
+    "id": "reading-00",
+    "source": "reading",
+    "text": "书房",
+    "syllables": [
+      "shu",
+      "fang"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "reading-01",
+    "source": "reading",
+    "text": "书架",
+    "syllables": [
+      "shu",
+      "jia"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "reading-02",
+    "source": "reading",
+    "text": "阅读",
+    "syllables": [
+      "yue",
+      "du"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "reading-03",
+    "source": "reading",
+    "text": "藏书",
+    "syllables": [
+      "cang",
+      "shu"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "reading-04",
+    "source": "reading",
+    "text": "笔记本",
+    "syllables": [
+      "bi",
+      "ji",
+      "ben"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "reading-05",
+    "source": "reading",
+    "text": "键盘",
+    "syllables": [
+      "jian",
+      "pan"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "reading-06",
+    "source": "reading",
+    "text": "文件",
+    "syllables": [
+      "wen",
+      "jian"
+    ],
+    "kind": "word",
+    "split": "holdout",
+    "provenance": "common_word"
+  },
+  {
+    "id": "reading-07",
+    "source": "reading",
+    "text": "纸页",
+    "syllables": [
+      "zhi",
+      "ye"
+    ],
+    "kind": "word",
+    "split": "holdout",
+    "provenance": "common_word"
+  },
+  {
+    "id": "reading-08",
+    "source": "reading",
+    "text": "我打开笔记本电脑",
+    "syllables": [
+      "wo",
+      "da",
+      "kai",
+      "bi",
+      "ji",
+      "ben",
+      "dian",
+      "nao"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "short_excerpt"
+  },
+  {
+    "id": "reading-09",
+    "source": "reading",
+    "text": "把旧书放回书架上",
+    "syllables": [
+      "ba",
+      "jiu",
+      "shu",
+      "fang",
+      "hui",
+      "shu",
+      "jia",
+      "shang"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "reading-10",
+    "source": "reading",
+    "text": "我想在书房安静地看书",
+    "syllables": [
+      "wo",
+      "xiang",
+      "zai",
+      "shu",
+      "fang",
+      "an",
+      "jing",
+      "de",
+      "kan",
+      "shu"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "reading-11",
+    "source": "reading",
+    "text": "这个文件里面有很多图片",
+    "syllables": [
+      "zhe",
+      "ge",
+      "wen",
+      "jian",
+      "li",
+      "mian",
+      "you",
+      "hen",
+      "duo",
+      "tu",
+      "pian"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "reading-12",
+    "source": "reading",
+    "text": "先看目录再找需要的内容",
+    "syllables": [
+      "xian",
+      "kan",
+      "mu",
+      "lu",
+      "zai",
+      "zhao",
+      "xu",
+      "yao",
+      "de",
+      "nei",
+      "rong"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "reading-13",
+    "source": "reading",
+    "text": "你今天准备读哪本书",
+    "syllables": [
+      "ni",
+      "jin",
+      "tian",
+      "zhun",
+      "bei",
+      "du",
+      "na",
+      "ben",
+      "shu"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "reading-14",
+    "source": "reading",
+    "text": "我把读书笔记保存到电脑里",
+    "syllables": [
+      "wo",
+      "ba",
+      "du",
+      "shu",
+      "bi",
+      "ji",
+      "bao",
+      "cun",
+      "dao",
+      "dian",
+      "nao",
+      "li"
+    ],
+    "kind": "sentence",
+    "split": "holdout",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "reading-15",
+    "source": "reading",
+    "text": "朋友借走的那本书还没有归还",
+    "syllables": [
+      "peng",
+      "you",
+      "jie",
+      "zou",
+      "de",
+      "na",
+      "ben",
+      "shu",
+      "hai",
+      "mei",
+      "you",
+      "gui",
+      "huan"
+    ],
+    "kind": "sentence",
+    "split": "holdout",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "tidying-00",
+    "source": "tidying",
+    "text": "桌面",
+    "syllables": [
+      "zhuo",
+      "mian"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "tidying-01",
+    "source": "tidying",
+    "text": "整理",
+    "syllables": [
+      "zheng",
+      "li"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "tidying-02",
+    "source": "tidying",
+    "text": "文具",
+    "syllables": [
+      "wen",
+      "ju"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "tidying-03",
+    "source": "tidying",
+    "text": "笔筒",
+    "syllables": [
+      "bi",
+      "tong"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "tidying-04",
+    "source": "tidying",
+    "text": "文件夹",
+    "syllables": [
+      "wen",
+      "jian",
+      "jia"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "tidying-05",
+    "source": "tidying",
+    "text": "抽屉",
+    "syllables": [
+      "chou",
+      "ti"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "tidying-06",
+    "source": "tidying",
+    "text": "鼠标",
+    "syllables": [
+      "shu",
+      "biao"
+    ],
+    "kind": "word",
+    "split": "holdout",
+    "provenance": "common_word"
+  },
+  {
+    "id": "tidying-07",
+    "source": "tidying",
+    "text": "分类",
+    "syllables": [
+      "fen",
+      "lei"
+    ],
+    "kind": "word",
+    "split": "holdout",
+    "provenance": "common_word"
+  },
+  {
+    "id": "tidying-08",
+    "source": "tidying",
+    "text": "文具放在笔筒里",
+    "syllables": [
+      "wen",
+      "ju",
+      "fang",
+      "zai",
+      "bi",
+      "tong",
+      "li"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "short_excerpt"
+  },
+  {
+    "id": "tidying-09",
+    "source": "tidying",
+    "text": "暂时不用的文件放进抽屉",
+    "syllables": [
+      "zan",
+      "shi",
+      "bu",
+      "yong",
+      "de",
+      "wen",
+      "jian",
+      "fang",
+      "jin",
+      "chou",
+      "ti"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "tidying-10",
+    "source": "tidying",
+    "text": "先把桌面上的东西整理好",
+    "syllables": [
+      "xian",
+      "ba",
+      "zhuo",
+      "mian",
+      "shang",
+      "de",
+      "dong",
+      "xi",
+      "zheng",
+      "li",
+      "hao"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "tidying-11",
+    "source": "tidying",
+    "text": "请把水杯放到鼠标旁边",
+    "syllables": [
+      "qing",
+      "ba",
+      "shui",
+      "bei",
+      "fang",
+      "dao",
+      "shu",
+      "biao",
+      "pang",
+      "bian"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "tidying-12",
+    "source": "tidying",
+    "text": "这个文件夹里面放了什么",
+    "syllables": [
+      "zhe",
+      "ge",
+      "wen",
+      "jian",
+      "jia",
+      "li",
+      "mian",
+      "fang",
+      "le",
+      "shen",
+      "me"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "tidying-13",
+    "source": "tidying",
+    "text": "把需要修改的文件发给我",
+    "syllables": [
+      "ba",
+      "xu",
+      "yao",
+      "xiu",
+      "gai",
+      "de",
+      "wen",
+      "jian",
+      "fa",
+      "gei",
+      "wo"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "tidying-14",
+    "source": "tidying",
+    "text": "整理完桌子再开始工作",
+    "syllables": [
+      "zheng",
+      "li",
+      "wan",
+      "zhuo",
+      "zi",
+      "zai",
+      "kai",
+      "shi",
+      "gong",
+      "zuo"
+    ],
+    "kind": "sentence",
+    "split": "holdout",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "tidying-15",
+    "source": "tidying",
+    "text": "我找不到昨天保存的那份资料",
+    "syllables": [
+      "wo",
+      "zhao",
+      "bu",
+      "dao",
+      "zuo",
+      "tian",
+      "bao",
+      "cun",
+      "de",
+      "na",
+      "fen",
+      "zi",
+      "liao"
+    ],
+    "kind": "sentence",
+    "split": "holdout",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "travel-00",
+    "source": "travel",
+    "text": "地铁",
+    "syllables": [
+      "di",
+      "tie"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "travel-01",
+    "source": "travel",
+    "text": "公交",
+    "syllables": [
+      "gong",
+      "jiao"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "travel-02",
+    "source": "travel",
+    "text": "出行",
+    "syllables": [
+      "chu",
+      "xing"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "travel-03",
+    "source": "travel",
+    "text": "车站",
+    "syllables": [
+      "che",
+      "zhan"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "travel-04",
+    "source": "travel",
+    "text": "换乘",
+    "syllables": [
+      "huan",
+      "cheng"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "travel-05",
+    "source": "travel",
+    "text": "电梯",
+    "syllables": [
+      "dian",
+      "ti"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "travel-06",
+    "source": "travel",
+    "text": "座椅",
+    "syllables": [
+      "zuo",
+      "yi"
+    ],
+    "kind": "word",
+    "split": "holdout",
+    "provenance": "common_word"
+  },
+  {
+    "id": "travel-07",
+    "source": "travel",
+    "text": "扶手",
+    "syllables": [
+      "fu",
+      "shou"
+    ],
+    "kind": "word",
+    "split": "holdout",
+    "provenance": "common_word"
+  },
+  {
+    "id": "travel-08",
+    "source": "travel",
+    "text": "站内导向标识清晰",
+    "syllables": [
+      "zhan",
+      "nei",
+      "dao",
+      "xiang",
+      "biao",
+      "shi",
+      "qing",
+      "xi"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "short_excerpt"
+  },
+  {
+    "id": "travel-09",
+    "source": "travel",
+    "text": "坐地铁去医院比较方便",
+    "syllables": [
+      "zuo",
+      "di",
+      "tie",
+      "qu",
+      "yi",
+      "yuan",
+      "bi",
+      "jiao",
+      "fang",
+      "bian"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "travel-10",
+    "source": "travel",
+    "text": "我们在哪一站换乘公交",
+    "syllables": [
+      "wo",
+      "men",
+      "zai",
+      "na",
+      "yi",
+      "zhan",
+      "huan",
+      "cheng",
+      "gong",
+      "jiao"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "travel-11",
+    "source": "travel",
+    "text": "我想找附近可以休息的座椅",
+    "syllables": [
+      "wo",
+      "xiang",
+      "zhao",
+      "fu",
+      "jin",
+      "ke",
+      "yi",
+      "xiu",
+      "xi",
+      "de",
+      "zuo",
+      "yi"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "travel-12",
+    "source": "travel",
+    "text": "这部电梯可以到站台吗",
+    "syllables": [
+      "zhe",
+      "bu",
+      "dian",
+      "ti",
+      "ke",
+      "yi",
+      "dao",
+      "zhan",
+      "tai",
+      "ma"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "travel-13",
+    "source": "travel",
+    "text": "请问去医院的公交车在哪里",
+    "syllables": [
+      "qing",
+      "wen",
+      "qu",
+      "yi",
+      "yuan",
+      "de",
+      "gong",
+      "jiao",
+      "che",
+      "zai",
+      "na",
+      "li"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "travel-14",
+    "source": "travel",
+    "text": "车站里面的标识看得很清楚",
+    "syllables": [
+      "che",
+      "zhan",
+      "li",
+      "mian",
+      "de",
+      "biao",
+      "shi",
+      "kan",
+      "de",
+      "hen",
+      "qing",
+      "chu"
+    ],
+    "kind": "sentence",
+    "split": "holdout",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "travel-15",
+    "source": "travel",
+    "text": "今天出门前先查一下路线",
+    "syllables": [
+      "jin",
+      "tian",
+      "chu",
+      "men",
+      "qian",
+      "xian",
+      "cha",
+      "yi",
+      "xia",
+      "lu",
+      "xian"
+    ],
+    "kind": "sentence",
+    "split": "holdout",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "exercise-00",
+    "source": "exercise",
+    "text": "健身",
+    "syllables": [
+      "jian",
+      "shen"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "exercise-01",
+    "source": "exercise",
+    "text": "公园",
+    "syllables": [
+      "gong",
+      "yuan"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "exercise-02",
+    "source": "exercise",
+    "text": "骑行",
+    "syllables": [
+      "qi",
+      "xing"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "exercise-03",
+    "source": "exercise",
+    "text": "篮球",
+    "syllables": [
+      "lan",
+      "qiu"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "exercise-04",
+    "source": "exercise",
+    "text": "晨练",
+    "syllables": [
+      "chen",
+      "lian"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "exercise-05",
+    "source": "exercise",
+    "text": "太极剑",
+    "syllables": [
+      "tai",
+      "ji",
+      "jian"
+    ],
+    "kind": "word",
+    "split": "development",
+    "provenance": "common_word"
+  },
+  {
+    "id": "exercise-06",
+    "source": "exercise",
+    "text": "运动",
+    "syllables": [
+      "yun",
+      "dong"
+    ],
+    "kind": "word",
+    "split": "holdout",
+    "provenance": "common_word"
+  },
+  {
+    "id": "exercise-07",
+    "source": "exercise",
+    "text": "轮滑",
+    "syllables": [
+      "lun",
+      "hua"
+    ],
+    "kind": "word",
+    "split": "holdout",
+    "provenance": "common_word"
+  },
+  {
+    "id": "exercise-08",
+    "source": "exercise",
+    "text": "倡导科学健康生活理念",
+    "syllables": [
+      "chang",
+      "dao",
+      "ke",
+      "xue",
+      "jian",
+      "kang",
+      "sheng",
+      "huo",
+      "li",
+      "nian"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "short_excerpt"
+  },
+  {
+    "id": "exercise-09",
+    "source": "exercise",
+    "text": "我们明天早上去公园运动",
+    "syllables": [
+      "wo",
+      "men",
+      "ming",
+      "tian",
+      "zao",
+      "shang",
+      "qu",
+      "gong",
+      "yuan",
+      "yun",
+      "dong"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "exercise-10",
+    "source": "exercise",
+    "text": "小朋友正在公园里面打篮球",
+    "syllables": [
+      "xiao",
+      "peng",
+      "you",
+      "zheng",
+      "zai",
+      "gong",
+      "yuan",
+      "li",
+      "mian",
+      "da",
+      "lan",
+      "qiu"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "exercise-11",
+    "source": "exercise",
+    "text": "骑自行车到公园要多久",
+    "syllables": [
+      "qi",
+      "zi",
+      "xing",
+      "che",
+      "dao",
+      "gong",
+      "yuan",
+      "yao",
+      "duo",
+      "jiu"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "exercise-12",
+    "source": "exercise",
+    "text": "你今天参加了哪些健身活动",
+    "syllables": [
+      "ni",
+      "jin",
+      "tian",
+      "can",
+      "jia",
+      "le",
+      "na",
+      "xie",
+      "jian",
+      "shen",
+      "huo",
+      "dong"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "exercise-13",
+    "source": "exercise",
+    "text": "我想和朋友一起练习轮滑",
+    "syllables": [
+      "wo",
+      "xiang",
+      "he",
+      "peng",
+      "you",
+      "yi",
+      "qi",
+      "lian",
+      "xi",
+      "lun",
+      "hua"
+    ],
+    "kind": "sentence",
+    "split": "development",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "exercise-14",
+    "source": "exercise",
+    "text": "晚上散步的时候顺便去看球",
+    "syllables": [
+      "wan",
+      "shang",
+      "san",
+      "bu",
+      "de",
+      "shi",
+      "hou",
+      "shun",
+      "bian",
+      "qu",
+      "kan",
+      "qiu"
+    ],
+    "kind": "sentence",
+    "split": "holdout",
+    "provenance": "original_paraphrase"
+  },
+  {
+    "id": "exercise-15",
+    "source": "exercise",
+    "text": "每天坚持锻炼可以保持好心情",
+    "syllables": [
+      "mei",
+      "tian",
+      "jian",
+      "chi",
+      "duan",
+      "lian",
+      "ke",
+      "yi",
+      "bao",
+      "chi",
+      "hao",
+      "xin",
+      "qing"
+    ],
+    "kind": "sentence",
+    "split": "holdout",
+    "provenance": "original_paraphrase"
+  }
+]

@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "count": 19662,
+  "dictionary_sha256": "ec24f3948566ca613fa3c42150de8f87606e3676d1f9b72bf9ca62628c30072b",
+  "dictionary_bytes": 503467,
+  "provenance_sha256": "171be74c8a9038c4a0575c43cd3f6b60f02c48614cd4b86bd27552cb015c0511",
+  "jieba_revision": "67fa2e36e72f69d9134b8a1037b83fbb070b9775",
+  "jieba_sha256": "7197c3211ddd98962b036cdf40324d1ea2bfaa12bd028e68faa70111a88e12a8",
+  "unihan_version": "17.0.0",
+  "unihan_readings_sha256": "575e69c9ad85a4737a889a4f94cbd987042a90a1a6cc16dd3f4ed995c715b17c",
+  "thresholds": {
+    "jieba_min": 20,
+    "min_chars": 2,
+    "max_chars": 8,
+    "domain_df": {
+      "food": 1000,
+      "finance": 1000,
+      "it_computing": 1000,
+      "automotive": 1000,
+      "places": 10000
+    }
+  },
+  "reading_methods": {
+    "unihan_single_reading": 12277,
+    "existing_word": 7357,
+    "reviewed": 28
+  },
+  "rejected": {
+    "already_in_base": 53872,
+    "ambiguous_or_unverified_reading": 5110,
+    "unverified_proper_name": 7569,
+    "length_or_nonstandard": 2331
+  },
+  "inputs": {
+    "assets/lexicon/dict.tsv": "7787d6d219674dd51297652456c55ea2d49a65b5e571d2309a62add0ec2d2279",
+    "assets/lexicon/dicts/animals.tsv": "41dc760e201569e619ac7aa4f5ad2960a1ba78324ddd02f7c3a08f853daa0ade",
+    "assets/lexicon/dicts/automotive.tsv": "a72d87d106d3299789f693ab5b24f3e1162638c66c4c39671aba434db0d0c5d9",
+    "assets/lexicon/dicts/finance.tsv": "a8bc12189e622797b8adeaed00cda6bc7f3824f17a87687965d1d4fe6c441c97",
+    "assets/lexicon/dicts/food.tsv": "44b563b200add437a490d2741e04cc0600d39c57d8f83f4fc356e292d794b0f4",
+    "assets/lexicon/dicts/historical_figures.tsv": "6f701af8f31ed9ced453770f8b2f40aea2dc47dbfb1b4a3a7f3a4d6979922911",
+    "assets/lexicon/dicts/idioms.tsv": "1c1482ef8f28d30c2d6e7ef1a4e28836c40f640baf600cff8898209f60eac652",
+    "assets/lexicon/dicts/it_computing.tsv": "b98ad5ce197a877c63b8d330a5ba12f95b9a48dd559837f9757456d9d40d0ee4",
+    "assets/lexicon/dicts/law.tsv": "08d26235277a1c25018c4e93287d51b19e0bf1c70dbd5cf04886001bf65e720e",
+    "assets/lexicon/dicts/medicine.tsv": "b507951439b789585da640da98afba4b0c48f04cb1333d48af535b5818101f33",
+    "assets/lexicon/dicts/places.tsv": "efd669f3ef06ae70b92d23817d5230c1e3910ab8cb1309b0eec127954968b573",
+    "assets/lexicon/dicts/poetry_lines.tsv": "ae24efff4e6d1d301b64ce576f56e5abb9570aee83252ffc51ac6912ceeaaf1d",
+    "assets/lexicon/03_domains/food.tsv": "0add5729587528225f658b697cb9181c18549b2544c57d9d9f33541192a082d4",
+    "assets/lexicon/03_domains/finance.tsv": "13c01cc8384185e2723405399e5cf20f6055b6c9230f192d79af98e6c173eb08",
+    "assets/lexicon/03_domains/it_computing.tsv": "eb1be4af37cbcd4ec04a3018486e256e680a51d589ab7258466dc380b33f88df",
+    "assets/lexicon/03_domains/automotive.tsv": "5bc81d427d5dd6089d063beb7c9d245efd6986750dc975e7df46ce379f52347a",
+    "assets/lexicon/03_domains/places.tsv": "3817bd5f19fed5f68aeb872c269865b3379537ed6cfd118d9fdd571851eec2e5",
+    "assets/lexicon/01_characters/standard_8105.tsv": "1532f1ec3cffcd6d0e8b031835dd467086c9673fd4c92d90ffbebd6714dd5bf9",
+    "assets/lexicon/supplement/reviewed.tsv": "7e23f3b55bf41c2eb2939578a70b0587653025bca63178820c901ec7410d0ca8",
+    "assets/lexicon/patches.tsv": "2073471029796b927c0f3135e5855c149471bd90864d8f9a35bb9ed72c2a24db"
+  }
+}

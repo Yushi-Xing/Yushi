@@ -63,7 +63,7 @@ def run(binary, output):
     for key in ['QINGJIAN_API_KEY', 'OPENAI_API_KEY']:
         env.pop(key, None)
     binary_hash = hashlib.sha256(Path(binary).read_bytes()).hexdigest()
-    metadata = dict(dictionary_sha256=hashlib.sha256((ROOT / "data/generated/dict.qj").read_bytes()).hexdigest(), model_sha256=None, binary_sha256=binary_hash, seed_sha256=hashlib.sha256(SEEDS.read_bytes()).hexdigest(), builtin_patch_sha256=hashlib.sha256((ROOT / 'assets/lexicon/patches.tsv').read_bytes()).hexdigest())
+    metadata = dict(dictionary_sha256=hashlib.sha256((ROOT / "data/generated/dict.qj").read_bytes()).hexdigest(), model_sha256=None, binary_sha256=binary_hash, seed_sha256=hashlib.sha256(SEEDS.read_bytes()).hexdigest(), builtin_patch_sha256=hashlib.sha256((ROOT / 'assets/lexicon/patches.tsv').read_bytes()).hexdigest(), builtin_supplement_sha256=hashlib.sha256((ROOT / 'assets/lexicon/supplement/dict.tsv').read_bytes()).hexdigest())
     (output / 'build-info.json').write_text(json.dumps(metadata, indent=2) + '\n', encoding='utf-8')
     with (output / 'eval.log').open('w', encoding='utf-8') as log:
         subprocess.run([str(Path(binary).resolve()), '--config', str(config), '--shuangpin', 'off',

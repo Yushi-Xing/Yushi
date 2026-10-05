@@ -30,6 +30,10 @@ jobs:
       - run: cargo test --workspace --exclude qingjian-macos --locked
       - run: python3 tools/eval/test_journal.py
       - run: python3 tools/eval/test_input_quality.py
+      - run: python3 tools/eval/test_daily_reading.py
+      - run: python3 tools/eval/test_lexicon.py
+      - run: python3 tools/lexicon/test_supplement.py
+      - run: python3 tools/release/test_windows_preview.py
 
   windows-build:
     runs-on: windows-latest
@@ -62,6 +66,10 @@ jobs:
           cargo test -p qingjian-platform --test native_diagnostics --locked -- --ignored
           python tools/eval/test_journal.py
           python tools/eval/test_input_quality.py
+          python tools/eval/test_daily_reading.py
+          python tools/eval/test_lexicon.py
+          python tools/lexicon/test_supplement.py
+          python tools/release/test_windows_preview.py
       - name: Fetch and verify locked product data
         env:
           GH_TOKEN: ${{ github.token }}
@@ -74,6 +82,11 @@ jobs:
         run: python tools/eval/journal.py --binary target/release/qingjian-cli.exe --output target/journal-ci --model data/models/hanzhang-tongbian/hanzhang-tongbian-small.qjm
       - name: Evaluate 1444 pinyin combinations without model or network
         run: python tools/eval/input_quality.py --binary target/release/qingjian-cli.exe --output target/input-quality-ci
+      - name: Evaluate independent daily reading and imported lexicon
+        run: |
+          python tools/eval/daily_reading.py --binary target/release/qingjian-cli.exe --output target/daily-static-ci
+          python tools/eval/daily_reading.py --binary target/release/qingjian-cli.exe --output target/daily-model-ci --model data/models/hanzhang-tongbian/hanzhang-tongbian-small.qjm
+          python tools/eval/lexicon.py --binary target/release/qingjian-cli.exe --output target/lexicon-ci
       - name: Install verified Inno Setup 7.1.0
         shell: pwsh
         run: |

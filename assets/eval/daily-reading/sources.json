@@ -1,0 +1,34 @@
+[
+  {
+    "id": "reading",
+    "title": "书房记",
+    "published": "2026-04-27",
+    "url": "https://paper.people.com.cn/rmrb/pc/content/202604/27/content_30153398.html",
+    "accessed": "2026-10-05",
+    "selection": "one_short_excerpt_and_original_daily_paraphrases"
+  },
+  {
+    "id": "tidying",
+    "title": "想提高效率，先整理桌子",
+    "published": "2018-04-24",
+    "url": "https://health.people.com.cn/n1/2018/0424/c14739-29945564.html",
+    "accessed": "2026-10-05",
+    "selection": "one_short_excerpt_and_original_daily_paraphrases"
+  },
+  {
+    "id": "travel",
+    "title": "公共交通更适老，老年人出行更从容",
+    "published": "2026-08-06",
+    "url": "https://society.people.com.cn/n1/2026/0806/c1008-40774606.html",
+    "accessed": "2026-10-05",
+    "selection": "one_short_excerpt_and_original_daily_paraphrases"
+  },
+  {
+    "id": "exercise",
+    "title": "多彩活动迎接全民健身日",
+    "published": "2026-08-06",
+    "url": "https://www.news.cn/photo/20260806/d9e80a4c998f4b82ac2a6d6b6754af1e/c.html",
+    "accessed": "2026-10-05",
+    "selection": "one_short_excerpt_and_original_daily_paraphrases"
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "daily_static": {
+    "count": 1123,
+    "gained": 0,
+    "regressed": 0,
+    "top_changes": []
+  },
+  "daily_model": {
+    "count": 1123,
+    "gained": 0,
+    "regressed": 0,
+    "top_changes": []
+  },
+  "quality": {
+    "count": 1444,
+    "gained": 0,
+    "regressed": 0,
+    "top_changes": [
+      {
+        "text": "电影票",
+        "pinyin": "dyp",
+        "before": "第一排",
+        "after": "电影片"
+      },
+      {
+        "text": "耳机",
+        "pinyin": "erjji",
+        "before": "二甲基",
+        "after": "尔济吉"
+      },
+      {
+        "text": "耳机",
+        "pinyin": "reji",
+        "before": "二级",
+        "after": "若及"
+      },
+      {
+        "text": "时间",
+        "pinyin": "sijian",
+        "before": "四间",
+        "after": "四溅"
+      }
+    ]
+  }
+}

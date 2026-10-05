@@ -371,3 +371,9 @@ Unix socket 用共享长度前缀与 Frame（当前公共版本 7，与 `PROTOCO
 完整词条能够补齐最后单声母时，`completes_last_initial` 同时保护词级排序并跳过生成请求；保留中英混输／真正无路径输入的生成兜底。真实模型停键探针以 `--release` 执行，与安装器二进制一致，仍要求 15 秒内收敛及之后 2 秒内零新增调用，分别记录打分和生成次数；调试构建仅用于诊断，不作为部署性能依据。beta.5 调试门禁失败未发布，记录保留于第三轮报告。
 
 `engine/tests/generation_priority.rs` 覆盖陌生英文、已输入且已知的大小写英文、未输入的已知英文、多段英文、纯中文生成和没有完整中文路径的专名兜底；真实模型停键探针还断言两个用户输入的首选内容，避免只测收敛遗漏准确性。
+
+## 常用词库补充（Windows fork）
+
+`Dictionary::builtin_patch` 合并原 `patches.tsv` 与 `assets/lexicon/supplement/dict.tsv`，经 Windows 装配／热加载与 CLI 原有入口默认接入。补充库 19,662 词形，492 KiB；不改 `data.lock`。`tools/lexicon/supplement.py` 以固定 SHA256 的结巴词表和 Unihan 17.0.0，以及已有 THUOCL 与整词读音离线复现；跳过未知多音字和未核验专名，去重基础词形，保留逐条来源与排序权重说明。Windows 安装器同时安装三个来源的版权许可证、说明与生成清单。
+
+`tools/eval/daily_reading.py` 冻结 64 个词句种子、1,123 个组合，包含 16 个留出种子、跨音节互换和多处错误；`tools/eval/lexicon.py` 对新增词稳定抽样 192 条、全部人工核验词与 14 个对照输入，能力抽测与独立文章准确率分开报告。三个原评测和新文章评测均保存补充库哈希。整句标准答案不进入词库。

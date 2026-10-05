@@ -116,6 +116,7 @@ def run(binary, output, model=None):
                   model_sha256=hashlib.sha256(Path(model).read_bytes()).hexdigest() if model else None,
                   binary_sha256=fingerprint,
                   builtin_patch_sha256=hashlib.sha256((ROOT / 'assets/lexicon/patches.tsv').read_bytes()).hexdigest(),
+                  builtin_supplement_sha256=hashlib.sha256((ROOT / 'assets/lexicon/supplement/dict.tsv').read_bytes()).hexdigest(),
                   corpus_kind='original_paraphrases_based_on_journal_topics',
                   groups={g: summarize([r for r in results if r['group'] == g]) for g in groups},
                   sources={s: summarize([r for r in results if r['source'] == s and r['group'] == 'clean']) for s in sources},

@@ -76,11 +76,39 @@ def stage():
         for path in sorted((ROOT / 'docs/notes/windows-refactor-round3-eval').glob('*')):
             if path.suffix in ['.json', '.jsonl']:
                 archive.write(path, f'local/{path.name}')
+    daily = {}
+    lexicon = json.loads((ROOT / 'target/lexicon-ci/summary.json').read_text(encoding='utf-8'))
+    if lexicon['count'] != 237 or lexicon['coverage']['count'] != 220 or lexicon['coverage']['entries'] != 220:
+        raise ValueError('lexicon coverage evaluation is incomplete')
+    with zipfile.ZipFile(output / 'daily-reading-evaluation.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+        for profile in ['static', 'model']:
+            directory = ROOT / f'target/daily-{profile}-ci'
+            report = json.loads((directory / 'summary.json').read_text(encoding='utf-8'))
+            if report['profile'] != 'full' or report['count'] != 1123 or report['clean']['count'] != 64:
+                raise ValueError('daily reading evaluation is incomplete')
+            daily[profile] = report
+            for name in ['cases.json', 'inputs.tsv', 'details.jsonl', 'summary.json', 'results.jsonl', 'failures.jsonl', 'eval.log', 'config.toml']:
+                archive.write(directory / name, f'ci/{profile}/{name}')
+        for name in ['cases.json', 'inputs.tsv', 'summary.json', 'results.jsonl', 'failures.jsonl', 'eval.log', 'config.toml']:
+            archive.write(ROOT / 'target/lexicon-ci' / name, f'ci/lexicon/{name}')
+        for name in ['seeds.json', 'sources.json', 'README.md']:
+            archive.write(ROOT / 'assets/eval/daily-reading' / name, f'corpus/{name}')
+        for name in ['manifest.json', 'README.md', 'JIEBA-LICENSE.txt', 'UNICODE-LICENSE.txt']:
+            archive.write(ROOT / 'assets/lexicon/supplement' / name, f'lexicon/{name}')
+        archive.write(ROOT / 'assets/lexicon/00_meta/THUOCL_LICENSE.txt', 'lexicon/THUOCL_LICENSE.txt')
+        for path in sorted((ROOT / 'docs/notes/windows-refactor-round4-eval').glob('*.json')):
+            archive.write(path, f'local/{path.name}')
+    supplement_hash = sha(ROOT / 'assets/lexicon/supplement/dict.tsv')
+    for report in [summary, quality_summary, *daily.values()]:
+        if report['binary_sha256'] != quality_summary['binary_sha256'] or report['builtin_supplement_sha256'] != supplement_hash:
+            raise ValueError('evaluation executable or supplement fingerprint mismatch')
+    if lexicon['binary_sha256'] != quality_summary['binary_sha256'] or lexicon['supplement_sha256'] != supplement_hash:
+        raise ValueError('lexicon evaluation fingerprint mismatch')
     info = dict(version=release, tag=os.environ['PREVIEW_TAG'], commit=os.environ['GITHUB_SHA'],
                 workflow_run=os.environ['GITHUB_RUN_ID'], rust=subprocess.check_output(['rustc', '--version'], text=True).strip(),
                 architectures=['x86_64-server-settings-tsf', 'i686-tsf'], uiaccess=False, code_signed=False,
                 data_lock=(ROOT / 'tools/release/data.lock').read_text(encoding='utf-8'),
-                evaluation=summary, input_quality=quality_summary, gui_acceptance='pending user tests on Win10 and Win11')
+                evaluation=summary, input_quality=quality_summary, daily_reading=daily, lexicon=lexicon, gui_acceptance='pending user tests on Win10 and Win11')
     (output / 'build-info.json').write_text(json.dumps(info, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     files = sorted(output.iterdir())
     (output / 'SHA256SUMS').write_text(''.join(f'{sha(path)}  {path.name}\n' for path in files), encoding='utf-8')

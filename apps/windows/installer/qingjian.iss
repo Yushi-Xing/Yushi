@@ -102,6 +102,12 @@ Source: "{#Repo}\assets\levels\levels-ja.tsv";   DestDir: "{app}\assets\levels";
 ; 开发布局（cargo run）也对得上
 Source: "{#Repo}\assets\wubi\wubi86.tsv";        DestDir: "{app}\assets\wubi";   Flags: ignoreversion
 Source: "{#Repo}\assets\sample\dict.tsv";        DestDir: "{app}\assets\sample"; Flags: ignoreversion
+; 常用补充词库编入 Server；随包保留来源及许可声明。
+Source: "{#Repo}\assets\lexicon\supplement\JIEBA-LICENSE.txt"; DestDir: "{app}\licenses\lexicon"; Flags: ignoreversion
+Source: "{#Repo}\assets\lexicon\supplement\UNICODE-LICENSE.txt"; DestDir: "{app}\licenses\lexicon"; Flags: ignoreversion
+Source: "{#Repo}\assets\lexicon\00_meta\THUOCL_LICENSE.txt"; DestDir: "{app}\licenses\lexicon"; Flags: ignoreversion
+Source: "{#Repo}\assets\lexicon\supplement\README.md"; DestDir: "{app}\licenses\lexicon"; Flags: ignoreversion
+Source: "{#Repo}\assets\lexicon\supplement\manifest.json"; DestDir: "{app}\licenses\lexicon"; Flags: ignoreversion
 ; —— Server 放最后：它一落地，旧版 DLL 就能把它拉起来并占住数据文件（见文件头）——
 Source: "{#Repo}\target\release\qingjian-server.exe";   DestDir: "{app}"; Flags: ignoreversion
 

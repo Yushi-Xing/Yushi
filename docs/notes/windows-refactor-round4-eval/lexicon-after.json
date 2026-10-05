@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "count": 237,
+  "corpus_kind": "imported_lexicon_capability_sample_not_independent_accuracy",
+  "binary_sha256": "1e84c63b81eb94e0734b72ec8ac07c6efa1c12607ac91087a6392d0e76cd6dbd",
+  "dictionary_sha256": "3e33b16a84df555e6f16d52ac8ab3c2c6b6f1f71734e69463861fd5abd9c19dc",
+  "supplement_sha256": "ec24f3948566ca613fa3c42150de8f87606e3676d1f9b72bf9ca62628c30072b",
+  "groups": {
+    "sample": {
+      "count": 192,
+      "top1": 112,
+      "top3": 181,
+      "top5": 189,
+      "parse_failures": 0,
+      "corrected": 0,
+      "char_errors": 137,
+      "chars": 558,
+      "top1_percent": 58.333,
+      "cer_percent": 24.552
+    },
+    "reviewed": {
+      "count": 28,
+      "top1": 24,
+      "top3": 28,
+      "top5": 28,
+      "parse_failures": 0,
+      "corrected": 0,
+      "char_errors": 7,
+      "chars": 110,
+      "top1_percent": 85.714,
+      "cer_percent": 6.364
+    },
+    "control": {
+      "count": 14,
+      "top1": 12,
+      "top3": 13,
+      "top5": 14,
+      "parse_failures": 0,
+      "corrected": 0,
+      "char_errors": 10,
+      "chars": 41,
+      "top1_percent": 85.714,
+      "cer_percent": 24.39
+    },
+    "user_typo": {
+      "count": 3,
+      "top1": 3,
+      "top3": 3,
+      "top5": 3,
+      "parse_failures": 0,
+      "corrected": 1,
+      "char_errors": 0,
+      "chars": 15,
+      "top1_percent": 100.0,
+      "cer_percent": 0.0
+    }
+  },
+  "coverage": {
+    "count": 220,
+    "entries": 220
+  }
+}
