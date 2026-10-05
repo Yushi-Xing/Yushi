@@ -59,17 +59,19 @@ jobs:
           components: clippy
           targets: i686-pc-windows-msvc
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
-      - name: Full Windows workspace regression and lint
+      - name: Verify frozen data, Windows checkout and packaging before compilation
         run: |
-          cargo clippy --workspace --exclude qingjian-macos --all-targets --locked -- -D warnings
-          cargo test --workspace --exclude qingjian-macos --locked
-          cargo test -p qingjian-platform --test native_diagnostics --locked -- --ignored
           python tools/eval/test_journal.py
           python tools/eval/test_input_quality.py
           python tools/eval/test_daily_reading.py
           python tools/eval/test_lexicon.py
           python tools/lexicon/test_supplement.py
           python tools/release/test_windows_preview.py
+      - name: Full Windows workspace regression and lint
+        run: |
+          cargo clippy --workspace --exclude qingjian-macos --all-targets --locked -- -D warnings
+          cargo test --workspace --exclude qingjian-macos --locked
+          cargo test -p qingjian-platform --test native_diagnostics --locked -- --ignored
       - name: Fetch and verify locked product data
         env:
           GH_TOKEN: ${{ github.token }}

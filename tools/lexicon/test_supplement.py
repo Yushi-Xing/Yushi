@@ -60,10 +60,12 @@ class SupplementTests(unittest.TestCase):
         expected['assets/lexicon/supplement/dict.tsv'] = manifest['dictionary_sha256']
         expected['assets/lexicon/supplement/provenance.jsonl'] = manifest['provenance_sha256']
         with tempfile.TemporaryDirectory() as temporary:
-            subprocess.run(['git','-c','core.autocrlf=true','checkout-index',
-                            '--prefix='+Path(temporary).as_posix()+'/', '--stdin'],
-                           input='\n'.join(expected)+'\n', cwd=supplement.ROOT,
-                           encoding='utf-8', capture_output=True, check=True, timeout=30)
+            # Git 的 stdin 逐行取路径；Windows 文本管道会加 CR，必须按字节传 LF。
+            result = subprocess.run(['git','-c','core.autocrlf=true','checkout-index',
+                                     '--prefix='+Path(temporary).as_posix()+'/', '--stdin'],
+                                    input=('\n'.join(expected)+'\n').encode('utf-8'), cwd=supplement.ROOT,
+                                    capture_output=True, timeout=30)
+            self.assertEqual(result.returncode, 0, result.stderr.decode('utf-8', errors='replace'))
             for name, fingerprint in expected.items():
                 self.assertEqual(supplement.digest(Path(temporary)/name), fingerprint, name)
 
