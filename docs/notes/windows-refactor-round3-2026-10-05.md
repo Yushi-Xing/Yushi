@@ -41,7 +41,7 @@ beta.4 主词库缺少“环太平洋”完整词条，但全拼可以通过“�
 
 显示协商、未变化帧不重绘、页内选择边界、同会话原始键串与文本校验、过期取消／原样上屏拒绝、不可变搜索快照、枚举克隆／短读、结束反注册均有回归。协议 8 的新帧字段保持旧 JSON 默认值，安装后应重启仍加载旧 DLL 的应用。辅码格式兼容门槛固定为版本 7，避免协议升至 8 后把 beta.4 DLL 错误降级。
 
-本机 Core 326 项、Server 引擎闭环 74 项通过，TSF GNU 库严格 Clippy 通过。最终全量适用回归 704 项通过（3 项明确忽略）。先前主分支 Windows CI（37286337914）的 6 项新原生候选／搜索 COM 测试通过；WSL 缺少 MinGW C 编译器，不把本机类型检查算作原生执行。beta.6 的 Windows 门禁继续复验。
+本机 Core 326 项、Server 引擎闭环 74 项通过，TSF GNU 库严格 Clippy 通过。最终全量适用回归 704 项通过（3 项明确忽略）。先前主分支 Windows CI（37286337914）的 6 项新原生候选／搜索 COM 测试通过；WSL 缺少 MinGW C 编译器，不把本机类型检查算作原生执行。beta.6 的 Windows 门禁已复验通过。
 
 **Win11 底部搜索栏实际候选显示仍需用户同机验收**；COM 接口测试与编译通过不能证明所有 SearchHost 版本都会接管。Win10、浏览器、VS Code、微信同样待实际输入验收。微软拼音总体准确率尚未做同集对照，不能宣称达到其水平。本地模型仍建议保持关闭，用户电脑异响仍需同机确认。
 
@@ -56,3 +56,13 @@ beta.6 性能门禁改为 `cargo test --release`，与安装包的优化构建�
 开启真实随包模型后另外发现 `diay` 被抄成英文“Diay”，压过完整中文纠错路径。新增保守排序：完整中文路径覆盖按键时，英文片段未同时命中英文词表与原始键串的生成结果排在中文路径之后；没有完整中文路径时仍允许新专名兜底，纯中文生成及已输入的已知英文保留原优先级。六项回归覆盖这些边界；修复前的对应测试先失败，修复后通过。
 
 [真实模型 CLI 修复前](windows-refactor-round3-eval/user-model-before-ranking.log)首选“你觉得这个Diay怎么样”，[修复后](windows-refactor-round3-eval/user-model-after-ranking.log)首选“你觉得这个电影怎么样”，生成的混输保留为第四候选。模型停键探针同时断言用户两个键串的首选，避免只验证任务收敛而遗漏输出正确性。
+
+## beta.6 云端验证
+
+[主分支三平台 CI](https://github.com/Yushi-Xing/Yushi/actions/runs/37293070810) 与依赖审计通过。[beta.6 发布门禁](https://github.com/Yushi-Xing/Yushi/actions/runs/37293127351) 全部通过：Windows 工作区回归加显式原生／真实模型探针累计 715 项通过，3 项常规忽略；通用回归通过，安装包保留 x64 与 x86 TSF。
+
+Windows 随包模型探针：普通输入 184 ms，混输 204 ms，混合错拼 468 ms；尾音简拼 102 ms 观察窗内零模型调用。停键 2 秒零新增调用，进程 CPU 增量分别为 15.625／0／0／0 ms（进程总体计时，含测试轮询，不能等同硬件声学测量）。两个用户键串首选断言通过。逐条数据见 [Windows 模型探针](windows-refactor-round3-eval/model-windows-idle.log)。
+
+[beta.6 下载](https://github.com/Yushi-Xing/Yushi/releases/tag/yushi-windows-v0.1.6-beta.6) 已发布，提交 `526bd4c1b1964fc1e9b8172baa651e4e63427ba2`。安装包 139,788,390 字节，SHA256 `f109f8a53a6efeb79056841d61813b0d2d0925f716bb7678222caa8e32713437`。已从 Release 独立下载校验全部附件的 SHA256／长度、安装包 PE 标记，以及两套评测 ZIP CRC、冻结数量与构建信息一致性，见 [发布核验](windows-refactor-round3-eval/release-verification.json)。
+
+Windows 无模型 1,444 条结果与本机一致：正常首选 84/92、错拼首选 757/1104。原有期刊固定集开启随包模型：正常首选 15/30（50%），错拼首选 82/270（30.370%），错拼 CER 20.581%；此前 beta.4 相同模型集错拼首选 34/270（12.593%），不能与本轮无模型 71/270 交叉混算。候选遮挡和硬件异响的同机验证仍待用户。

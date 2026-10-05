@@ -1,7 +1,7 @@
 {
   "core": 326,
   "server_engine_loop": 74,
-  "native_com": "passed 6 on Windows main CI 37286337914",
+  "native_com": "passed 6 on Windows beta6 main CI 37293070810",
   "gnu_library_clippy": "passed",
   "gui": "pending user Win11 beta6 test",
   "local_gnu_tests": "unavailable: no MinGW C compiler; cloud runs native tests",
@@ -17,5 +17,36 @@
   "preview_version": "0.1.6-beta.6",
   "beta5_release": "blocked by debug mixed typo idle timeout, not published",
   "model_idle_release": "passed: plain 221ms, mixed 261ms, mixed_typo 664ms, last_initial 0 calls; 2s idle no new calls",
-  "generation_priority_tests": 6
+  "generation_priority_tests": 6,
+  "beta6_release": {
+    "status": "success",
+    "commit": "526bd4c1b1964fc1e9b8172baa651e4e63427ba2",
+    "workflow_run": 37293127351,
+    "windows_tests_including_probes": 715
+  },
+  "main_ci": {
+    "workflow_run": 37293070810,
+    "conclusion": "success",
+    "platforms": [
+      "core",
+      "macos",
+      "windows"
+    ]
+  },
+  "audit": "passed main and tag audits",
+  "model_idle_windows": {
+    "plain_ms": 184,
+    "mixed_ms": 204,
+    "mixed_typo_ms": 468,
+    "last_initial_ms": 102,
+    "last_initial_calls": 0,
+    "idle_new_calls": 0,
+    "idle_cpu_ms": [
+      15.625,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "release_asset_verification": "passed all SHA256, lengths, installer MZ, both ZIP CRC and expected frozen case counts"
 }

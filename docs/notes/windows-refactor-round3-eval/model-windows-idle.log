@@ -1,0 +1,4 @@
+model_idle case=plain calls=1 scores=1 generations=0 settled_ms=184 idle_new_calls=0 idle_cpu_ms=Some(15.625) top=Some("由此看来没什么问题")
+model_idle case=mixed calls=2 scores=2 generations=0 settled_ms=204 idle_new_calls=0 idle_cpu_ms=Some(0.0) top=Some("我的database")
+model_idle case=mixed_typo calls=2 scores=1 generations=1 settled_ms=468 idle_new_calls=0 idle_cpu_ms=Some(0.0) top=Some("你觉得这个电影怎么样")
+model_idle case=last_initial calls=0 scores=0 generations=0 settled_ms=102 idle_new_calls=0 idle_cpu_ms=Some(0.0) top=Some("环太平洋")
