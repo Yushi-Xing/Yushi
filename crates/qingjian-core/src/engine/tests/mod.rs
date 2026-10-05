@@ -8,6 +8,7 @@ mod custom;
 mod emoji;
 mod english;
 mod fuzzy_sequences;
+mod generation_priority;
 mod input_quality;
 mod learning;
 mod lookup;

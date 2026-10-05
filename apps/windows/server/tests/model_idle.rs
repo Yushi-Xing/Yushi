@@ -7,7 +7,9 @@ use std::time::{Duration, Instant};
 
 use qingjian_core::sentence::SentenceScorer;
 use qingjian_neural::{CharScorer, P2cScorer};
-use qingjian_platform::protocol::{ClientMessage, KeyEvent, PROTOCOL_VERSION, SessionId};
+use qingjian_platform::protocol::{
+    ClientMessage, KeyEvent, PROTOCOL_VERSION, ServerMessage, SessionId,
+};
 use qingjian_windows_server::{AssemblySpec, LanguageModelFiles, Router, RouterConfig, assembly};
 
 struct Counted {
@@ -108,7 +110,9 @@ fn shipped_model_stays_idle_after_plain_and_mixed_input_settle() {
         ("mixed_typo", "nijuedezhegdiayzenmy"),
         ("last_initial", "huantaipingy"),
     ] {
-        let baseline = scores.load(Ordering::SeqCst) + generations.load(Ordering::SeqCst);
+        let baseline_scores = scores.load(Ordering::SeqCst);
+        let baseline_generations = generations.load(Ordering::SeqCst);
+        let baseline = baseline_scores + baseline_generations;
         for c in keys.chars() {
             router.handle(ClientMessage::Key {
                 session,
@@ -136,6 +140,20 @@ fn shipped_model_stays_idle_after_plain_and_mixed_input_settle() {
             }
         }
         let settled_ms = started.elapsed().as_millis();
+        let top = match router.handle(ClientMessage::Poll { session }) {
+            Some(ServerMessage::Update { frame, .. }) => {
+                frame.candidates.items.first().map(|c| c.text.clone())
+            }
+            _ => None,
+        };
+        let expected = match case {
+            "mixed_typo" => Some("你觉得这个电影怎么样"),
+            "last_initial" => Some("环太平洋"),
+            _ => None,
+        };
+        if let Some(expected) = expected {
+            assert_eq!(top.as_deref(), Some(expected), "实际按键首选错误: {case}");
+        }
         let settled = scores.load(Ordering::SeqCst) + generations.load(Ordering::SeqCst);
         assert_eq!(failures.load(Ordering::SeqCst), 0, "真实模型打分失败");
         // 词库已经唯一解释的简拼允许不调用模型；两项基准输入必须真实走过推理。
@@ -159,8 +177,10 @@ fn shipped_model_stays_idle_after_plain_and_mixed_input_settle() {
             .zip(process_cpu_ms())
             .map(|(before, after)| after - before);
         println!(
-            "model_idle case={case} calls={} settled_ms={settled_ms} idle_new_calls=0 idle_cpu_ms={idle_cpu_ms:?}",
-            settled - baseline
+            "model_idle case={case} calls={} scores={} generations={} settled_ms={settled_ms} idle_new_calls=0 idle_cpu_ms={idle_cpu_ms:?} top={top:?}",
+            settled - baseline,
+            scores.load(Ordering::SeqCst) - baseline_scores,
+            generations.load(Ordering::SeqCst) - baseline_generations
         );
         router.handle(ClientMessage::Commit { session });
     }

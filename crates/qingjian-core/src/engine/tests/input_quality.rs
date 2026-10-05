@@ -59,14 +59,25 @@ fn exact_reading_is_not_replaced_by_a_more_common_prefix_completion() {
 
 #[test]
 fn exploring_long_sentence_corrections_does_not_queue_every_variant_for_the_model() {
-    struct Scorer;
-    impl crate::sentence::SentenceScorer for Scorer {
-        fn score(&self, _context: &str, _keys: &str, texts: &[&str]) -> Vec<f64> {
-            vec![-1.0; texts.len()]
-        }
-    }
     let mut engine = Engine::new(Dictionary::parse("我们今天\two men jin tian\t200000\n下午\txia wu\t200000\n一起\tyi qi\t200000\n讨论\ttao lun\t200000\n输入法\tshu ru fa\t200000\n问题\twen ti\t200000\n").unwrap()).with_async_sentence_scorer(Box::new(Scorer), None, None, None);
     engine.set_input("womenjintianxiawuyiqitaolunshurufaweti");
     assert!(engine.query().unwrap().correction.is_some());
     assert!(engine.neural_cache.borrow_mut().take_wanted().len() <= 1);
+}
+
+struct Scorer;
+impl crate::sentence::SentenceScorer for Scorer {
+    fn score(&self, _context: &str, _keys: &str, texts: &[&str]) -> Vec<f64> {
+        vec![-1.0; texts.len()]
+    }
+}
+
+#[test]
+fn a_complete_word_with_a_last_initial_does_not_request_generation() {
+    let mut engine = Engine::new(Dictionary::parse("环太平洋\thuan tai ping yang\t3000\n太平\ttai ping\t100000\n还\thuan\t900000\n环\thuan\t1000\n").unwrap()).with_async_sentence_scorer(Box::new(Scorer), None, None, None);
+    engine.set_input("huantaipingy");
+    let query = engine.query().unwrap();
+    assert_eq!(query.candidates.items[0].text, "环太平洋");
+    assert!(engine.neural_cache.borrow().wanted_generation().is_none());
+    assert!(!engine.rescoring_pending());
 }

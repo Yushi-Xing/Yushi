@@ -1,0 +1,30 @@
+2026-10-05T09:29:11.102172Z  INFO 加载完成 dict=data/generated/dict.qj entries=92825 glossary=data/generated/glossary-en.qj glosses=232213 english=94568 learned=0 dict_ms=29 glossary_ms=179 english_ms=64
+2026-10-05T09:29:11.160087Z  INFO 英→中释义表已加载 glosses=44924
+2026-10-05T09:29:11.233907Z  INFO emoji 表已加载 words=9587 load_ms=73
+2026-10-05T09:29:11.428145Z  INFO 语言模型已加载 words=138961 bigrams=4865386 load_ms=189
+2026-10-05T09:29:11.788112Z  INFO 神经语言模型已加载 source=data/models/hanzhang-tongbian/hanzhang-tongbian-small.qjm name="含章·通变（Hanzhang Tongbian）" layers=8 hidden=448 vocab=8180
+2026-10-05T09:29:11.790950Z  INFO 神经重打分已启用 load_ms=362 weight=0.5 kind="P2C"
+2026-10-05T09:29:11.802991Z  INFO 输入方案已启用 pinyin="pinyin" wubi=false
+2026-10-05T09:29:11.803015Z  INFO Engine 就绪 total_ms=991
+> nijuedezhegdiayzenmy
+  切分: ni jue de zhe g… dia y… zen m… y… | ni jue de zhe g… di a y… zen m… y… | ni ju e de zhe g… dia y… zen m… y… | ni jue de zhe g… dia y… ze n… m… y… | ni jue de zhe g… dia y… z… en m… y… | ni jue de zh… e g… dia y… zen m… y… | ni jue de z… he g… dia y… zen m… y… | ni jue d… e zhe g… dia y… zen m… y…
+   1. 你觉得这个Diay怎么样  [生成]
+   2. 你觉得这个电影怎么样  [句]
+   3. 你觉得这个电影怎么用  [句]
+   4. 你觉得这个电影怎么有  [句]
+   5. 你觉得                phr. you think
+   6. 你                    pron. you
+   7. 呢
+      … 还有 25 个
+  parse 194µs · lookup 95µs · rank 652µs · translate 27µs (23/32 hit) · total 969µs
+> huantaipingy
+  切分: huan tai ping y… | hu an tai ping y… | huan tai pin g… y… | huan t… ai ping y… | hua n… tai ping y… | hu an tai pin g… y… | hu an t… ai ping y… | hu a n… tai ping y…
+   1. 环太平洋
+   2. 桓台      n. Huantai
+   3. 幻听      n. auditory hallucination
+   4. 欢腾      v. rejoice
+   5. 宦途      n. official career
+   6. 还田      v. return to field
+   7. 欢跳      v. jump for joy
+      … 还有 123 个
+  parse 650µs · lookup 54µs · rank 143µs · translate 59µs (118/130 hit) · total 907µs

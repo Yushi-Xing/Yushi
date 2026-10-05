@@ -1,0 +1,41 @@
+     Locking 379 packages to latest Rust 1.96.0 compatible versions
+   Compiling qingjian-format v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-format)
+   Compiling qingjian-dictionary v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-dictionary)
+   Compiling qingjian-core v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-core)
+   Compiling qingjian-predict v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-predict)
+   Compiling qingjian-windows-server v0.1.6-beta.5 (/mnt/d/code/gitlab/Yushi/apps/windows/server)
+   Compiling qingjian-platform v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-platform)
+   Compiling qingjian-translate v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-translate)
+   Compiling qingjian-learning v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-learning)
+   Compiling qingjian-neural v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-neural)
+   Compiling qingjian-update v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-update)
+   Compiling qingjian-render v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-render)
+   Compiling qingjian-lm v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-lm)
+   Compiling yushi-model-diagnostic v0.0.0 (/tmp/yushi-model-diagnostic)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 40s
+     Running `/mnt/d/code/gitlab/yushi/target/power-debug/debug/yushi-model-diagnostic`
+score start keys=25 texts=6
+progress case=plain sec=1 scores=1 generations=0 active=1 tick=20ms
+progress case=plain sec=2 scores=1 generations=0 active=1 tick=20ms
+score end ms=1972
+model_idle case=plain calls=1 settled_ms=2068 idle_new_calls=0 idle_cpu_ms=None
+score start keys=4 texts=6
+score end ms=516
+score start keys=12 texts=6
+progress case=mixed sec=1 scores=3 generations=0 active=1 tick=20ms
+score end ms=1075
+model_idle case=mixed calls=2 settled_ms=1678 idle_new_calls=0 idle_cpu_ms=None
+score start keys=20 texts=6
+progress case=mixed_typo sec=1 scores=4 generations=0 active=1 tick=20ms
+score end ms=1715
+generate start keys=20 beam=5 max=32
+progress case=mixed_typo sec=2 scores=4 generations=1 active=1 tick=20ms
+progress case=mixed_typo sec=3 scores=4 generations=1 active=1 tick=1s
+progress case=mixed_typo sec=4 scores=4 generations=1 active=1 tick=1s
+progress case=mixed_typo sec=5 scores=4 generations=1 active=1 tick=1s
+generate end ms=3777 count=5
+model_idle case=mixed_typo calls=2 settled_ms=5589 idle_new_calls=0 idle_cpu_ms=None
+generate start keys=12 beam=5 max=32
+progress case=last_initial sec=1 scores=4 generations=2 active=1 tick=20ms
+generate end ms=1504 count=5
+model_idle case=last_initial calls=1 settled_ms=1595 idle_new_calls=0 idle_cpu_ms=None

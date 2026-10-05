@@ -1,5 +1,7 @@
 //! 整句候选：把词图里重排过的前几条路径变成候选，以及整句转换本身。
 
+use qingjian_dictionary::WordList;
+
 use crate::candidate::{Candidate, CandidateKind};
 use crate::engine::query::{EnglishTail, leading_english};
 use crate::engine::{ALTERNATE_MIN_SYLLABLES, Engine, Learner, RESCORE_PATHS, SENTENCE_CANDIDATES};
@@ -47,8 +49,12 @@ impl Engine {
                 // 词图读不通整段时模型直接生成的整句排在词图那几条前面：这时词图给的是把英文段
                 // 硬读成拼音的结果（`yongdockerbushuhenfangbian` → 用的哦乘客仍不熟很方便），排它前面没有可惜的
                 // `typos` 为假就是拼写纠错已经生效（见调用处），那时 `best` 是纠正后的切分
-                let generated: Vec<Candidate> = self
-                    .generated_sentence_candidates(best, keys, !typos)
+                let generated = if completes_last_initial(items, best) {
+                    Vec::new()
+                } else {
+                    self.generated_sentence_candidates(best, keys, !typos)
+                };
+                let generated: Vec<Candidate> = generated
                     .into_iter()
                     .filter(|g| {
                         !items
@@ -57,15 +63,25 @@ impl Engine {
                             .any(|c| c.text == g.text)
                     })
                     .collect();
-                let generated_count = generated.len();
-                for (offset, candidate) in generated.into_iter().enumerate() {
+                // 中文路径已完整解释按键时，模型抄出的陌生英文只留作备选。
+                // 已知且实际输入的英文仍优先；没有完整中文路径时也保留生成兜底。
+                let has_chinese_path = best.letters() == keys.len()
+                    && sentences.iter().any(|c| {
+                        c.syllables.len() == best.syllables.len()
+                            && c.text.chars().all(sentence::is_han)
+                    });
+                let (preferred, deferred): (Vec<_>, Vec<_>) =
+                    generated.into_iter().partition(|c| {
+                        !has_chinese_path
+                            || !has_unconfirmed_english(&c.text, keys, self.english.as_ref())
+                    });
+                for (offset, candidate) in preferred
+                    .into_iter()
+                    .chain(sentences)
+                    .chain(deferred)
+                    .enumerate()
+                {
                     items.insert((position + offset).min(items.len()), candidate);
-                }
-                for (offset, plain) in sentences.into_iter().enumerate() {
-                    items.insert(
-                        (position + generated_count + offset).min(items.len()),
-                        plain,
-                    );
                 }
             }
         }
@@ -89,15 +105,7 @@ impl Engine {
             return Vec::new();
         }
         // 词级已有覆盖全部音节的补全时，不让丢掉末尾单字母的短句挤到它前面。
-        if best.last_is_partial()
-            && best.syllables.last().is_some_and(|s| s.text.len() == 1)
-            && best.syllables[..best.syllables.len() - 1]
-                .iter()
-                .all(|s| s.complete)
-            && items.iter().any(|c| {
-                c.kind == CandidateKind::Chinese && c.syllables.len() == best.syllables.len()
-            })
-        {
+        if completes_last_initial(items, best) {
             return Vec::new();
         }
         let wanted = if alternates && best.syllables.len() >= ALTERNATE_MIN_SYLLABLES {
@@ -263,4 +271,26 @@ impl Engine {
         }
         paths
     }
+}
+
+/// 已有词条补齐最后声母时，保留词级排序并省去整句生成。
+fn completes_last_initial(items: &[Candidate], best: &Segmentation) -> bool {
+    best.last_is_partial()
+        && best.syllables.last().is_some_and(|s| s.text.len() == 1)
+        && best.syllables[..best.syllables.len() - 1]
+            .iter()
+            .all(|s| s.complete)
+        && items
+            .iter()
+            .any(|c| c.kind == CandidateKind::Chinese && c.syllables.len() == best.syllables.len())
+}
+
+/// 模型混输中的英文须由词表和原始按键同时确认，大小写不影响判断。
+fn has_unconfirmed_english(text: &str, keys: &str, english: Option<&WordList>) -> bool {
+    text.split(|c: char| !c.is_ascii_alphabetic())
+        .filter(|token| !token.is_empty())
+        .any(|token| {
+            let code = token.to_ascii_lowercase();
+            !keys.contains(&code) || english.is_none_or(|words| words.get(&code).is_none())
+        })
 }

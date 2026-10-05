@@ -1,0 +1,17 @@
+   Compiling qingjian-predict v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-predict)
+   Compiling qingjian-platform v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-platform)
+   Compiling qingjian-neural v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-neural)
+   Compiling qingjian-update v0.1.1 (/mnt/d/code/gitlab/Yushi/crates/qingjian-update)
+   Compiling qingjian-windows-server v0.1.6-beta.6 (/mnt/d/code/gitlab/Yushi/apps/windows/server)
+    Finished `release` profile [optimized] target(s) in 1m 15s
+     Running tests/model_idle.rs (/mnt/d/code/gitlab/yushi/target/input-quality/release/deps/model_idle-adfd6b30601be1da)
+
+running 1 test
+model_idle case=plain calls=1 scores=1 generations=0 settled_ms=221 idle_new_calls=0 idle_cpu_ms=None top=Some("由此看来没什么问题")
+model_idle case=mixed calls=2 scores=2 generations=0 settled_ms=261 idle_new_calls=0 idle_cpu_ms=None top=Some("我的database")
+model_idle case=mixed_typo calls=2 scores=1 generations=1 settled_ms=664 idle_new_calls=0 idle_cpu_ms=None top=Some("你觉得这个电影怎么样")
+model_idle case=last_initial calls=0 scores=0 generations=0 settled_ms=100 idle_new_calls=0 idle_cpu_ms=None top=Some("环太平洋")
+test shipped_model_stays_idle_after_plain_and_mixed_input_settle ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.97s
+

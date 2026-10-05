@@ -1,17 +1,21 @@
 {
-  "core": 319,
+  "core": 326,
   "server_engine_loop": 74,
-  "native_com": "pending Windows CI",
+  "native_com": "passed 6 on Windows main CI 37286337914",
   "gnu_library_clippy": "passed",
-  "gui": "pending user Win11 beta5 test",
+  "gui": "pending user Win11 beta6 test",
   "local_gnu_tests": "unavailable: no MinGW C compiler; cloud runs native tests",
   "portable_clippy": "passed",
   "candidate_tests_gnu_typecheck": "passed using isolated harness, no native execution",
   "typing_sequences": 94,
   "typing_keys": 1198,
   "typing_maximum_ms": 13.09,
-  "portable_workspace_passed": 696,
+  "portable_workspace_passed": 704,
   "portable_workspace_ignored": 3,
   "local_socket_sandbox": "rerun outside sandbox passed",
-  "server_latest_clippy": "passed"
+  "server_latest_clippy": "passed",
+  "preview_version": "0.1.6-beta.6",
+  "beta5_release": "blocked by debug mixed typo idle timeout, not published",
+  "model_idle_release": "passed: plain 221ms, mixed 261ms, mixed_typo 664ms, last_initial 0 calls; 2s idle no new calls",
+  "generation_priority_tests": 6
 }

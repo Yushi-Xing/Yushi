@@ -3,7 +3,7 @@
   "seed_sha256": "34a2dcca72b460879e1190b218a460e2587a5575d6ed3751995e8fb6de2415d1",
   "dictionary_sha256": "3e33b16a84df555e6f16d52ac8ab3c2c6b6f1f71734e69463861fd5abd9c19dc",
   "model_sha256": null,
-  "binary_sha256": "b720b6936f1d8a880420feaa2c86ce93e89e098aa23308e90e40721a2dd2ac6c",
+  "binary_sha256": "e4abc2abc3c5906cc2cdc0166d49e8725eec7297fff187edfac57fbbe103acbc",
   "builtin_patch_sha256": "2073471029796b927c0f3135e5855c149471bd90864d8f9a35bb9ed72c2a24db",
   "corpus_kind": "original_paraphrases_based_on_journal_topics",
   "groups": {

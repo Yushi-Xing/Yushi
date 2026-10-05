@@ -134,7 +134,7 @@ P2C 自由生成实验：`--eval-text <集> --eval-generate data/models/hanzhang
 
 **模型直接生成的整句**（`engine/query/generating.rs`，候选类型 `CandidateKind::Generated`）：词图只会把整段按键读成拼音，
 中英混输（`yongdockerbushuhenfangbian`）与生词在它那里根本没有路径，出来的只能是把英文段硬读成拼音的废话（用的哦乘客仍不熟很方便）。
-词图读不通整段时改问 `SentenceScorer::generate`（P2C 走 `P2c::convert`，字级模型返回空），生成的整句插在词图那几条前面。
+词图读不通整段时改问 `SentenceScorer::generate`（P2C 走 `P2c::convert`，字级模型返回空），生成的整句通常插在词图那几条前面；已有完整中文路径时，未同时获英文词表与原始键串确认的英文片段改放在中文路径之后。
 「读不通」三条：最优切分里有不完整音节、切分没覆盖到末尾（`woyongvscodexiedaima` 的 `v` 起不了音节）、拼写纠错生效
 （`womaileyigeiphone` 的 `phone` 被当成敲错的 `paone`）。拼音干净的输入一条都不触发，常态零成本；
 异步打分器下走同一次 `request_rescoring`（`Job.generate`），按键回调不等它。
@@ -365,3 +365,9 @@ Unix socket 用共享长度前缀与 Frame（当前公共版本 7，与 `PROTOCO
 - 辅码段兼容门槛固定在版本 7，不随当前协议递增。协议版本 8 增加 `CandidateUi` 与 `Frame.typed_keys`（旧帧默认为空）。宿主回调先排队，再由 TSF 消息泵送 Server；仅在同一聚焦会话、原始键串、页码、候选下标与文本都吻合时选择／确认，过期取消或原样上屏同样拒绝。
 - TSF 实现 `ITfTextInputProcessorEx`、候选 UIElement／Behavior／Integratable 接口，`ITfUIElementMgr` 协商宿主接管，Server 隐藏自己的窗口并保持输入状态；未变化帧不通知宿主，失败协商回退自绘且不在每次轮询重试。停用反注册 FunctionProvider 与 UIElement。
 - `ITfFnSearchCandidateProvider` 只返回当前输入的本地转换快照，不从 COM 回调请求网络／模型，不把选词反馈写学习。候选过滤与重叠消除属于 Core 的 `candidate::search_conversions`；快照与枚举通过共享租约保留 DLL 生命周期。Win11 搜索栏实际显示仍待用户真机验收。
+
+### 第三轮真实模型性能门禁
+
+完整词条能够补齐最后单声母时，`completes_last_initial` 同时保护词级排序并跳过生成请求；保留中英混输／真正无路径输入的生成兜底。真实模型停键探针以 `--release` 执行，与安装器二进制一致，仍要求 15 秒内收敛及之后 2 秒内零新增调用，分别记录打分和生成次数；调试构建仅用于诊断，不作为部署性能依据。beta.5 调试门禁失败未发布，记录保留于第三轮报告。
+
+`engine/tests/generation_priority.rs` 覆盖陌生英文、已输入且已知的大小写英文、未输入的已知英文、多段英文、纯中文生成和没有完整中文路径的专名兜底；真实模型停键探针还断言两个用户输入的首选内容，避免只测收敛遗漏准确性。
