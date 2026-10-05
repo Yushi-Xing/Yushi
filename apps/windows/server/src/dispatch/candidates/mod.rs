@@ -1,5 +1,6 @@
 //! 候选窗口输出：Router 只产出 [`Frame`] 与光标矩形，交给 [`CandidateSink`] 去画；帧没变就不重画。
 
+mod actions;
 mod sink;
 
 use qingjian_platform::protocol::{Frame, ScreenRect, SessionId};
@@ -10,6 +11,16 @@ use super::Router;
 impl Router {
     /// 空帧收窗口；非空且已知光标矩形就重绘；还没收到矩形（组句刚起）先不显示，免得在旧位置闪一下。
     pub(super) fn reconcile_candidates(&mut self, frame: &Frame) {
+        if self
+            .focused
+            .and_then(|id| self.sessions.get(&id))
+            .is_some_and(|s| !s.own_candidates)
+        {
+            if self.last_shown.take().is_some() {
+                self.candidates.hide();
+            }
+            return;
+        }
         if frame.is_empty() {
             self.engine.note_displayed(std::iter::empty());
             self.hide_candidate_window();

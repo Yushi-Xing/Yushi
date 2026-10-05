@@ -1,0 +1,1486 @@
+2026-10-05T08:41:04.838994Z  INFO 加载完成 dict=data/generated/dict.qj entries=92825 glossary=data/generated/glossary-en.qj glosses=232213 english=94568 learned=0 dict_ms=52 glossary_ms=152 english_ms=78
+2026-10-05T08:41:04.890713Z  INFO 英→中释义表已加载 glosses=44924
+2026-10-05T08:41:04.953811Z  INFO emoji 表已加载 words=9587 load_ms=63
+2026-10-05T08:41:05.339381Z  INFO 语言模型已加载 words=138961 bigrams=4865386 load_ms=385
+2026-10-05T08:41:05.345833Z  INFO 输入方案已启用 pinyin="pinyin" wubi=false
+2026-10-05T08:41:05.350699Z  INFO Engine 就绪 total_ms=816
+> huantaipingyang
+  输入                   parse    lookup      rank translate     total  首候选
+  h                   1.79ms    4.33ms    6.79ms     183µs   13.09ms  好
+  hu                     5µs     100µs     378µs     154µs     639µs  和
+  hua                    4µs      48µs     309µs     114µs     476µs  花
+  huan                   9µs      33µs     168µs     127µs     339µs  还
+  huant               2.97ms      19µs      53µs      31µs    3.08ms  幻听
+  huanta                13µs      34µs     167µs      20µs     236µs  还他
+  huantai               19µs      30µs     125µs      15µs     190µs  还太
+  huantaip             273µs      38µs      78µs      17µs     408µs  还太
+  huantaipi             23µs      35µs     423µs      35µs     517µs  还太皮
+  huantaipin            46µs      62µs     226µs      23µs     359µs  还太拼
+  huantaiping          153µs      43µs     116µs      27µs     341µs  还太平
+  huantaipingy         421µs      53µs     103µs      27µs     606µs  环太平洋
+  huantaipingya         47µs      51µs     224µs      27µs     349µs  还太平呀
+  huantaipingyan        84µs      54µs     244µs      25µs     408µs  环太平洋
+  huantaipingyang      306µs      51µs     131µs      21µs     510µs  环太平洋
+  15 键 · 最慢 13.09ms · 平均 1.44ms
+> taipingyang
+  输入                   parse    lookup      rank translate     total  首候选
+  t                      1µs     121µs     457µs     186µs     768µs  他
+  ta                     4µs      67µs     490µs     139µs     702µs  他
+  tai                    4µs      36µs     190µs     141µs     374µs  太
+  taip                  63µs      49µs     143µs      98µs     354µs  Taipei
+  taipi                  8µs      40µs     156µs     534µs     740µs  太皮
+  taipin                16µs      63µs     208µs      59µs     348µs  太拼
+  taiping                9µs      89µs     262µs      55µs     416µs  太平
+  taipingy             119µs     116µs     251µs      51µs     539µs  太平洋
+  taipingya             23µs      96µs     256µs      49µs     426µs  太平呀
+  taipingyan            34µs      56µs     155µs      49µs     295µs  太平洋
+  taipingyang          102µs      76µs     138µs      49µs     367µs  太平洋
+  11 键 · 最慢 768µs · 平均 484µs
+> daxiyang
+  输入                   parse    lookup      rank translate     total  首候选
+  d                      1µs     303µs     792µs     161µs    1.26ms  的
+  da                     4µs      99µs     302µs     127µs     533µs  大
+  dax                    3µs      45µs     157µs      94µs     301µs  大学
+  daxi                   7µs      41µs     274µs      85µs     408µs  大溪
+  daxiy                 52µs      52µs     117µs      64µs     287µs  大西洋
+  daxiya                10µs      74µs     299µs      57µs     441µs  大西亚
+  daxiyan               16µs     161µs     445µs      59µs     682µs  大西洋
+  daxiyang             143µs     119µs     335µs      58µs     657µs  大西洋
+  8 键 · 最慢 1.26ms · 平均 571µs
+> liulangdiqiu
+  输入                   parse    lookup      rank translate     total  首候选
+  l                      1µs     124µs     383µs     163µs     673µs  了
+  li                     1µs      74µs     311µs     141µs     529µs  李
+  liu                    1µs      14µs     223µs     128µs     368µs  刘
+  liul                 210µs       8µs      19µs      15µs     253µs  榴莲
+  liula                 18µs      16µs      74µs       8µs     118µs  留啦
+  liulan                 9µs      20µs      84µs       6µs     122µs  浏览
+  liulang               71µs      22µs      48µs      14µs     156µs  流浪
+  liulangd             259µs      53µs      56µs       9µs     378µs  流浪地球
+  liulangdi             21µs      29µs     145µs       7µs     203µs  流浪的
+  liulangdiq           159µs      37µs      44µs       6µs     247µs  流浪地球
+  liulangdiqi           22µs      50µs     197µs      19µs     289µs  流浪地球
+  liulangdiqiu          27µs      41µs     169µs       7µs     245µs  流浪地球
+  12 键 · 最慢 673µs · 平均 298µs
+> xingjichuanyue
+  输入                   parse    lookup      rank translate     total  首候选
+  x                      1µs     170µs     619µs     183µs     974µs  想
+  xi                     3µs     144µs     426µs     141µs     715µs  嘻
+  xin                    5µs      41µs     365µs     204µs     616µs  新
+  xing                  11µs      26µs     160µs     136µs     334µs  行
+  xingj                 89µs      22µs      68µs      50µs     230µs  星际
+  xingji                 9µs      27µs     153µs      49µs     239µs  星际
+  xingjic               81µs      27µs      75µs      34µs     218µs  星际穿越
+  xingjich              14µs      42µs     271µs      29µs     358µs  型机车
+  xingjichu             18µs      32µs     222µs      33µs     306µs  型基础
+  xingjichua            28µs      51µs     220µs      43µs     343µs  星计划
+  xingjichuan           50µs      49µs     259µs      21µs     381µs  星际穿
+  xingjichuany         798µs      48µs     271µs      45µs    1.16ms  星际穿越
+  xingjichuanyu        102µs      64µs     462µs      47µs     676µs  星际穿越
+  xingjichuanyue        64µs      57µs     186µs      17µs     326µs  星际穿越
+  14 键 · 最慢 1.16ms · 平均 491µs
+> daomengkongjian
+  输入                   parse    lookup      rank translate     total  首候选
+  d                      2µs     142µs     464µs     180µs     790µs  的
+  da                     3µs      99µs     369µs     169µs     641µs  大
+  dao                    6µs      80µs     403µs     147µs     637µs  到
+  daom                 152µs     182µs     224µs     115µs     675µs  倒霉
+  daome                 16µs     136µs     464µs     156µs     774µs  到么
+  daomen               126µs     117µs     263µs      86µs     594µs  澳门
+  daomeng               39µs      95µs     301µs      70µs     506µs  盗梦
+  daomengk             587µs     164µs     460µs     196µs    1.41ms  盗梦空间
+  daomengko            230µs      92µs     269µs     117µs     709µs  到门口
+  daomengkon            58µs      92µs     258µs      95µs     504µs  盗梦空
+  daomengkong          181µs     148µs     278µs      82µs     690µs  盗梦空
+  daomengkongj         417µs     143µs     231µs      78µs     871µs  盗梦空间
+  daomengkongji         48µs     142µs     294µs      67µs     552µs  盗梦控几
+  daomengkongjia        94µs     120µs     292µs      78µs     585µs  盗梦空间
+  daomengkongjian       96µs     111µs     330µs      75µs     615µs  盗梦空间
+  15 键 · 最慢 1.41ms · 平均 703µs
+> touhaowanjia
+  输入                   parse    lookup      rank translate     total  首候选
+  t                      1µs     126µs     499µs     181µs     809µs  他
+  to                     4µs      50µs     361µs     153µs     570µs  同
+  tou                    6µs      40µs     187µs     116µs     351µs  头
+  touh                  94µs      38µs     143µs      98µs     374µs  头号
+  touha                 13µs      68µs     433µs      99µs     615µs  头哈
+  touhao                24µs     131µs     530µs      88µs     775µs  头号
+  touhaow              170µs     141µs     445µs      86µs     843µs  头号玩家
+  touhaowa              31µs     109µs     337µs      72µs     551µs  头好哇
+  touhaowan             52µs      74µs     226µs      60µs     412µs  头好玩
+  touhaowanj           740µs      79µs     123µs      85µs    1.03ms  头号玩家
+  touhaowanji           46µs      76µs     268µs      58µs     450µs  头号玩家
+  touhaowanjia          59µs      80µs     238µs      58µs     437µs  头号玩家
+  12 键 · 最慢 1.03ms · 平均 601µs
+> bawangbieji
+  输入                   parse    lookup      rank translate     total  首候选
+  b                      1µs     131µs     760µs     209µs    1.10ms  不
+  ba                     5µs      81µs     320µs     124µs     531µs  把
+  baw                    4µs      40µs     149µs      94µs     288µs  bawling
+  bawa                   9µs      56µs     274µs      84µs     425µs  把娃
+  bawan                 16µs      95µs     386µs      63µs     562µs  拔完
+  bawang                99µs      92µs     290µs      95µs     578µs  霸王
+  bawangb              306µs     128µs     308µs      69µs     814µs  霸王鞭
+  bawangbi              29µs     110µs     398µs      76µs     615µs  霸王比
+  bawangbie             39µs      87µs     286µs      61µs     475µs  霸王别
+  bawangbiej           271µs     103µs     228µs      63µs     667µs  霸王别姬
+  bawangbieji           40µs     103µs     313µs      62µs     519µs  霸王别姬
+  11 键 · 最慢 1.10ms · 平均 598µs
+> santi
+  输入                   parse    lookup      rank translate     total  首候选
+  s                      1µs     190µs     752µs     166µs    1.11ms  是
+  sa                     3µs      80µs     369µs     116µs     569µs  萨
+  san                   29µs     100µs     371µs     117µs     618µs  三
+  sant                  86µs     110µs     281µs     109µs     588µs  Santa
+  santi                 13µs     106µs     345µs      81µs     548µs  三体
+  5 键 · 最慢 1.11ms · 平均 687µs
+> dianyingyuan
+  输入                   parse    lookup      rank translate     total  首候选
+  d                      1µs     129µs     411µs     179µs     722µs  的
+  di                     3µs      48µs     442µs     132µs     626µs  的
+  dia                    4µs      26µs     170µs     121µs     322µs  嗲
+  dian                   8µs      22µs     139µs      82µs     253µs  点
+  diany                191µs      20µs      43µs      35µs     290µs  电影
+  dianyi                10µs      22µs      93µs      16µs     143µs  点一
+  dianyin               15µs      31µs      97µs      22µs     167µs  电音
+  dianying              23µs      38µs      90µs      12µs     165µs  电影
+  dianyingy            159µs      34µs      50µs      11µs     255µs  电影院
+  dianyingyu            22µs      35µs     103µs      11µs     174µs  电影于
+  dianyingyua           31µs      33µs     105µs      11µs     181µs  电影院
+  dianyingyuan         149µs      33µs      69µs      11µs     264µs  电影院
+  12 键 · 最慢 722µs · 平均 297µs
+> jilupian
+  输入                   parse    lookup      rank translate     total  首候选
+  j                      0µs     147µs     497µs     233µs     878µs  就
+  ji                     2µs     172µs     412µs     133µs     721µs  给
+  jil                    5µs      55µs     126µs     104µs     291µs  Jill
+  jilu                   8µs      12µs     219µs      29µs     270µs  记录
+  jilup                 82µs      11µs      44µs      24µs     162µs  纪录片
+  jilupi                 6µs      13µs     146µs      21µs     188µs  记录皮
+  jilupia                8µs      17µs     143µs      19µs     189µs  纪录片
+  jilupian              10µs      21µs     167µs      18µs     217µs  纪录片
+  8 键 · 最慢 878µs · 平均 365µs
+> kehuandianying
+  输入                   parse    lookup      rank translate     total  首候选
+  k                      1µs      68µs     368µs     155µs     592µs  看
+  ke                     3µs      48µs     245µs     108µs     406µs  呵
+  keh                    4µs      36µs      89µs      52µs     182µs  客户
+  kehu                   7µs      32µs     212µs      44µs     296µs  客户
+  kehua                  9µs      63µs     195µs      40µs     308µs  刻画
+  kehuan                14µs      92µs     280µs      44µs     432µs  科幻
+  kehuand              265µs     125µs     245µs      41µs     677µs  科幻电影
+  kehuandi              21µs     152µs     338µs      41µs     553µs  科幻的
+  kehuandia             33µs      64µs     235µs      51µs     384µs  可还带
+  kehuandian            48µs      58µs     197µs      37µs     342µs  可换点
+  kehuandiany          538µs      75µs     115µs      39µs     769µs  科幻电影
+  kehuandianyi          50µs      67µs     201µs      39µs     359µs  可换点一
+  kehuandianyin         71µs      74µs     217µs      37µs     401µs  科幻电影
+  kehuandianying        67µs      75µs     198µs      37µs     379µs  科幻电影
+  14 键 · 最慢 769µs · 平均 434µs
+> dianyingpiao
+  输入                   parse    lookup      rank translate     total  首候选
+  d                      1µs     136µs     389µs     167µs     694µs  的
+  di                     1µs      65µs     394µs     126µs     588µs  的
+  dia                    4µs      38µs     174µs     120µs     337µs  嗲
+  dian                   8µs      23µs     136µs      71µs     239µs  点
+  diany                101µs      19µs      42µs      17µs     180µs  电影
+  dianyi                 9µs      20µs      46µs      54µs     130µs  点一
+  dianyin               19µs      29µs      70µs      13µs     133µs  电音
+  dianying              22µs      28µs      62µs      11µs     125µs  电影
+  dianyingp            259µs      36µs      52µs      14µs     362µs  电影片
+  dianyingpi            37µs      37µs     104µs      13µs     193µs  电影皮
+  dianyingpia           39µs      30µs      91µs      11µs     172µs  电影片
+  dianyingpiao          44µs      31µs      90µs      11µs     177µs  电影票
+  12 键 · 最慢 694µs · 平均 277µs
+> shurufa
+  输入                   parse    lookup      rank translate     total  首候选
+  s                      0µs     185µs     521µs     163µs     870µs  是
+  sh                     4µs     205µs     849µs     280µs    1.34ms  是
+  shu                    8µs     125µs     449µs     151µs     733µs  属
+  shur                  87µs      73µs     230µs     132µs     524µs  输入
+  shuru                  8µs      68µs     290µs      98µs     466µs  输入
+  shuruf                60µs      85µs     173µs      81µs     400µs  输入法
+  shurufa               30µs     125µs     416µs     127µs     699µs  输入法
+  7 键 · 最慢 1.34ms · 平均 719µs
+> houxuanci
+  输入                   parse    lookup      rank translate     total  首候选
+  h                      2µs     136µs     409µs     170µs     718µs  好
+  ho                     4µs      49µs     282µs     135µs     472µs  后
+  hou                    4µs      42µs     187µs      99µs     334µs  后
+  houx                  93µs      38µs     129µs      79µs     341µs  后续
+  houxu                  7µs      38µs     232µs      61µs     340µs  后续
+  houxua                10µs      64µs     262µs      62µs     399µs  候选
+  houxuan               15µs     100µs     363µs      63µs     543µs  候选
+  houxuanc             350µs     142µs     287µs      62µs     843µs  候选词
+  houxuanci             19µs     122µs     405µs      71µs     618µs  候选词
+  9 键 · 最慢 843µs · 平均 512µs
+> pinyin
+  输入                   parse    lookup      rank translate     total  首候选
+  p                      2µs      61µs     329µs     150µs     543µs  怕
+  pi                     2µs      30µs     235µs     113µs     381µs  皮
+  pin                    3µs      19µs     119µs      80µs     222µs  拼
+  piny                  31µs      11µs      22µs      10µs      76µs  pinyin
+  pinyi                  6µs      12µs      64µs      10µs      92µs  拼一
+  pinyin                 6µs      18µs      53µs       8µs      86µs  拼音
+  6 键 · 最慢 543µs · 平均 233µs
+> zidongjiucuo
+  输入                   parse    lookup      rank translate     total  首候选
+  z                      0µs     183µs     439µs     162µs     786µs  在
+  zi                     1µs      21µs     197µs     132µs     353µs  字
+  zid                    3µs       7µs      29µs      12µs      52µs  自动
+  zido                   5µs      14µs     139µs      12µs     172µs  自动
+  zidon                 67µs      13µs      42µs       9µs     132µs  自动
+  zidong                59µs      14µs      34µs       7µs     115µs  自动
+  zidongj               53µs      15µs      32µs       6µs     107µs  自动纠错
+  zidongji               8µs      15µs     125µs      14µs     163µs  自动机
+  zidongjiu             13µs      22µs     142µs      16µs     194µs  自动就
+  zidongjiuc           196µs      24µs      27µs      14µs     262µs  自动纠错
+  zidongjiucu           12µs      19µs     162µs       9µs     203µs  自动纠错
+  zidongjiucuo          17µs      32µs     144µs       6µs     201µs  自动纠错
+  12 键 · 最慢 786µs · 平均 228µs
+> jianrongxing
+  输入                   parse    lookup      rank translate     total  首候选
+  j                      0µs     147µs     429µs     161µs     739µs  就
+  ji                     2µs     253µs     363µs     124µs     744µs  给
+  jia                    4µs      69µs     305µs     114µs     493µs  加
+  jian                   9µs      48µs     328µs     147µs     534µs  见
+  jianr                167µs      26µs      98µs      59µs     351µs  兼任
+  jianro                14µs      39µs     193µs      43µs     292µs  兼容
+  jianron               61µs      43µs     165µs      39µs     309µs  兼容
+  jianrong              17µs      53µs     186µs      37µs     293µs  兼容
+  jianrongx            150µs      55µs     151µs      52µs     409µs  兼容性
+  jianrongxi            26µs      65µs     222µs      40µs     355µs  金融系
+  jianrongxin           36µs      42µs     232µs      42µs     354µs  兼容性
+  jianrongxing          50µs      51µs     195µs      36µs     333µs  兼容性
+  12 键 · 最慢 744µs · 平均 434µs
+> renwulan
+  输入                   parse    lookup      rank translate     total  首候选
+  r                      1µs      36µs     374µs     135µs     547µs  日
+  re                     2µs      35µs     202µs     132µs     373µs  若
+  ren                    5µs      48µs     175µs      68µs     297µs  人
+  renw                 139µs      44µs      65µs      23µs     272µs  认为
+  renwu                  9µs      43µs      93µs      16µs     162µs  人物
+  renwul                65µs      52µs      58µs      15µs     192µs  任务栏
+  renwula               16µs      87µs     158µs      16µs     279µs  任乌拉
+  renwulan              25µs      48µs      98µs      15µs     188µs  任务栏
+  8 键 · 最慢 547µs · 平均 289µs
+> liulanqi
+  输入                   parse    lookup      rank translate     total  首候选
+  l                      0µs     138µs     374µs     150µs     664µs  了
+  li                     2µs      79µs     310µs     118µs     510µs  李
+  liu                    3µs      13µs     120µs      81µs     218µs  刘
+  liul                  96µs       8µs      18µs       8µs     132µs  榴莲
+  liula                  5µs      12µs      34µs       7µs      60µs  留啦
+  liulan                 7µs      18µs      41µs       6µs      74µs  浏览
+  liulanq               76µs      20µs      29µs       6µs     133µs  浏览器
+  liulanqi              10µs      20µs     108µs       7µs     146µs  浏览器
+  8 键 · 最慢 664µs · 平均 242µs
+> caozuoxitong
+  输入                   parse    lookup      rank translate     total  首候选
+  c                      1µs     126µs     396µs     162µs     686µs  吃
+  ca                     2µs      67µs     316µs     128µs     515µs  拆
+  cao                    4µs      79µs     367µs     139µs     590µs  曹
+  caoz                 225µs     112µs     263µs     102µs     704µs  操作
+  caozu                 10µs     108µs     325µs      82µs     527µs  操作
+  caozuo                17µs     167µs     261µs      42µs     488µs  操作
+  caozuox              144µs     218µs     257µs      41µs     662µs  操作系统
+  caozuoxi              25µs     220µs     318µs      40µs     605µs  操作系
+  caozuoxit            185µs     293µs     289µs      41µs     809µs  操作系统
+  caozuoxito            38µs     106µs     319µs      84µs     548µs  操作系统
+  caozuoxiton          209µs     223µs     425µs      76µs     935µs  操作系统
+  caozuoxitong         234µs     289µs     276µs      41µs     841µs  操作系统
+  12 键 · 最慢 935µs · 平均 659µs
+> ziyuanguanliqi
+  输入                   parse    lookup      rank translate     total  首候选
+  z                      1µs     197µs     445µs     159µs     804µs  在
+  zi                     2µs      20µs     201µs     132µs     357µs  字
+  ziy                    3µs       8µs      38µs      18µs      67µs  自由
+  ziyu                   4µs      11µs      83µs       7µs     106µs  自愈
+  ziyua                  5µs      10µs      68µs       6µs      92µs  资源
+  ziyuan                57µs      11µs      38µs       6µs     114µs  资源
+  ziyuang                9µs      17µs     228µs      10µs     265µs  字与昂
+  ziyuangu              12µs      17µs     166µs       8µs     205µs  自远古
+  ziyuangua             15µs      23µs     151µs       8µs     199µs  资源挂
+  ziyuanguan            21µs      29µs     152µs       7µs     212µs  资源管
+  ziyuanguanl          274µs      35µs      65µs       7µs     383µs  资源管理
+  ziyuanguanli          25µs      36µs     206µs       6µs     274µs  资源管理
+  ziyuanguanliq        313µs      44µs      65µs       7µs     431µs  资源管理器
+  ziyuanguanliqi        33µs      42µs     214µs       8µs     299µs  资源管理器
+  14 键 · 最慢 804µs · 平均 272µs
+> shujuku
+  输入                   parse    lookup      rank translate     total  首候选
+  s                      1µs     206µs     429µs     153µs     791µs  是
+  sh                     3µs     186µs     603µs     139µs     933µs  是
+  shu                    4µs      96µs     298µs     121µs     521µs  属
+  shuj                  35µs      70µs     190µs      99µs     395µs  暑假
+  shuju                  7µs      64µs     277µs      90µs     440µs  数据
+  shujuk                58µs      87µs     165µs      80µs     390µs  数据库
+  shujuku               10µs      79µs     345µs      79µs     514µs  数据库
+  7 键 · 最慢 933µs · 平均 569µs
+> fuwuqi
+  输入                   parse    lookup      rank translate     total  首候选
+  f                      1µs      77µs     327µs     150µs     557µs  分
+  fu                     2µs      25µs     244µs     104µs     376µs  副
+  fuw                    2µs       7µs      39µs      20µs      71µs  服务
+  fuwu                   5µs       6µs      81µs      14µs     108µs  服务
+  fuwuq                 35µs       7µs      25µs      24µs      92µs  服务器
+  fuwuqi                 6µs       7µs      83µs      13µs     110µs  服务器
+  6 键 · 最慢 557µs · 平均 219µs
+> jiqixuexi
+  输入                   parse    lookup      rank translate     total  首候选
+  j                      1µs     140µs     404µs     156µs     702µs  就
+  ji                     1µs     159µs     337µs     109µs     608µs  给
+  jiq                    3µs      10µs      51µs      37µs     101µs  及其
+  jiqi                   4µs       8µs      97µs      21µs     131µs  及其
+  jiqix                 49µs      11µs      97µs      37µs     195µs  机器学习
+  jiqixu                 8µs      12µs     209µs      36µs     267µs  及其许
+  jiqixue               12µs      18µs     247µs      34µs     312µs  及其学
+  jiqixuex              89µs      18µs      61µs      24µs     195µs  机器学习
+  jiqixuexi             14µs      16µs     226µs      33µs     289µs  机器学习
+  9 键 · 最慢 702µs · 平均 311µs
+> rengongzhineng
+  输入                   parse    lookup      rank translate     total  首候选
+  r                      1µs      53µs     517µs     166µs     739µs  日
+  re                     3µs      42µs     206µs      99µs     352µs  若
+  ren                    5µs      45µs     186µs      91µs     328µs  人
+  reng                  12µs      57µs      87µs      22µs     180µs  仍
+  rengo                112µs      53µs      93µs      18µs     278µs  仍哦
+  rengon                16µs      70µs     132µs      17µs     236µs  人工
+  rengong               80µs      79µs     116µs      20µs     297µs  人工
+  rengongz             120µs      88µs      94µs      16µs     320µs  人工智能
+  rengongzh             31µs      73µs     227µs      51µs     383µs  任公职
+  rengongzhi            38µs      98µs     205µs      21µs     363µs  任公职
+  rengongzhin          249µs     124µs      99µs      19µs     493µs  人工智能
+  rengongzhine          44µs     103µs     236µs      23µs     408µs  任公职那
+  rengongzhinen         65µs      62µs     210µs      26µs     364µs  人工智能
+  rengongzhineng        75µs      65µs     173µs      19µs     333µs  人工智能
+  14 键 · 最慢 739µs · 平均 363µs
+> shenduxuexi
+  输入                   parse    lookup      rank translate     total  首候选
+  s                      1µs     228µs    1.15ms     299µs    1.68ms  是
+  sh                     7µs     313µs     573µs     163µs    1.06ms  是
+  she                    7µs     179µs     353µs     135µs     676µs  设
+  shen                  14µs     285µs     325µs     119µs     744µs  神
+  shend                177µs     308µs     302µs     100µs     888µs  深度
+  shendu                18µs     324µs     389µs      87µs     819µs  深度
+  shendux              107µs     422µs     271µs      80µs     882µs  深度学习
+  shenduxu              27µs     427µs     466µs      75µs     996µs  深度许
+  shenduxue             37µs     192µs     339µs      63µs     631µs  深度学
+  shenduxuex           203µs     232µs     249µs      61µs     746µs  深度学习
+  shenduxuexi           41µs     235µs     379µs      60µs     716µs  深度学习
+  11 键 · 最慢 1.68ms · 平均 894µs
+> jisuanji
+  输入                   parse    lookup      rank translate     total  首候选
+  j                      1µs     153µs     444µs     172µs     772µs  就
+  ji                     2µs     163µs     375µs     122µs     663µs  给
+  jis                    2µs      13µs      92µs      69µs     177µs  即使
+  jisu                   5µs       9µs     179µs      35µs     229µs  极速
+  jisua                  8µs      25µs     109µs      23µs     167µs  计算
+  jisuan                 9µs      17µs     154µs      22µs     203µs  计算
+  jisuanj              352µs      30µs     133µs      40µs     557µs  计算机
+  jisuanji              14µs      29µs     244µs      38µs     328µs  计算机
+  8 键 · 最慢 772µs · 平均 387µs
+> shenjingwangluo
+  输入                   parse    lookup      rank translate     total  首候选
+  s                      1µs     195µs     460µs     129µs     786µs  是
+  sh                     4µs     182µs     354µs     110µs     651µs  是
+  she                    5µs     161µs     313µs     118µs     599µs  设
+  shen                  14µs     264µs     307µs     121µs     708µs  神
+  shenj                132µs     346µs     288µs      85µs     853µs  神经
+  shenji                20µs     338µs     330µs      75µs     766µs  审计
+  shenjin               29µs     155µs     459µs      83µs     727µs  伸进
+  shenjing              36µs     143µs     364µs      74µs     619µs  神经
+  shenjingw            193µs     171µs     322µs      73µs     760µs  神经外科
+  shenjingwa            45µs     146µs     318µs      97µs     608µs  神经哇
+  shenjingwan           64µs     136µs     309µs     206µs     715µs  神经玩
+  shenjingwang         195µs     138µs     261µs      81µs     676µs  神经网
+  shenjingwangl        507µs     163µs     256µs      67µs     994µs  神经网络
+  shenjingwanglu        69µs     161µs     325µs      67µs     623µs  神经网路
+  shenjingwangluo       84µs     157µs     323µs      88µs     654µs  神经网络
+  15 键 · 最慢 994µs · 平均 716µs
+> gaotie
+  输入                   parse    lookup      rank translate     total  首候选
+  g                      1µs      98µs     507µs     191µs     798µs  该
+  ga                     3µs     105µs     384µs     134µs     628µs  嘎
+  gao                    5µs      57µs     256µs     123µs     443µs  高
+  gaot                 166µs      67µs     180µs      89µs     504µs  高铁
+  gaoti                 10µs      67µs     238µs      67µs     383µs  高铁
+  gaotie                17µs     109µs     335µs      62µs     524µs  高铁
+  6 键 · 最慢 798µs · 平均 547µs
+> huochezhan
+  输入                   parse    lookup      rank translate     total  首候选
+  h                      1µs     123µs     371µs     147µs     643µs  好
+  hu                     1µs      68µs     287µs     128µs     485µs  和
+  huo                    3µs      17µs     163µs      92µs     277µs  和
+  huoc                 102µs      10µs      32µs      16µs     162µs  火车
+  huoch                 76µs      18µs      61µs      11µs     167µs  火车
+  huoche                12µs      31µs     116µs      12µs     173µs  火车
+  huochez              191µs      37µs      64µs      13µs     306µs  火车站
+  huochezh              22µs      36µs     124µs      10µs     194µs  火车站
+  huochezha             37µs      33µs     124µs      11µs     206µs  火车站
+  huochezhan            50µs      31µs     122µs      10µs     215µs  火车站
+  10 键 · 最慢 643µs · 平均 283µs
+> jichang
+  输入                   parse    lookup      rank translate     total  首候选
+  j                      0µs     166µs     375µs     144µs     686µs  就
+  ji                     1µs     147µs     334µs     110µs     595µs  给
+  jic                    3µs      11µs      59µs      39µs     114µs  jicama
+  jich                   5µs      22µs     112µs      21µs     162µs  机场
+  jicha                 10µs      33µs     226µs      32µs     303µs  冀察
+  jichan               100µs      48µs     274µs      32µs     456µs  机场
+  jichang               87µs      43µs     216µs      24µs     371µs  机场
+  7 键 · 最慢 686µs · 平均 384µs
+> tushuguan
+  输入                   parse    lookup      rank translate     total  首候选
+  t                      1µs      86µs     325µs     153µs     567µs  他
+  tu                     1µs      24µs     203µs     117µs     346µs  图
+  tus                    3µs       6µs      25µs      10µs      45µs  Tuscany
+  tush                   3µs      10µs     153µs       6µs     173µs  图书
+  tushu                  6µs      11µs      77µs       5µs     100µs  图书
+  tushug                47µs      11µs      15µs       4µs      79µs  图书馆
+  tushugu                7µs      11µs     128µs       5µs     152µs  图书古
+  tushugua               9µs      16µs     107µs       5µs     139µs  图书馆
+  tushuguan             13µs      26µs     269µs      15µs     325µs  图书馆
+  9 键 · 最慢 567µs · 平均 214µs
+> bowuguan
+  输入                   parse    lookup      rank translate     total  首候选
+  b                      1µs     158µs     379µs     174µs     714µs  不
+  bo                     3µs      42µs     204µs     115µs     365µs  波
+  bow                    3µs      36µs     132µs      81µs     254µs  bow
+  bowu                  11µs      47µs     179µs      73µs     310µs  博物
+  bowug                 49µs      39µs     116µs      65µs     270µs  博物馆
+  bowugu                 8µs      37µs     172µs      68µs     288µs  博物不
+  bowugua               13µs      62µs     266µs      61µs     403µs  博物馆
+  bowuguan              17µs      99µs     385µs      60µs     562µs  博物馆
+  8 键 · 最慢 714µs · 平均 396µs
+> tiyuguan
+  输入                   parse    lookup      rank translate     total  首候选
+  t                      1µs      93µs     317µs     127µs     538µs  他
+  ti                     2µs      34µs     273µs     110µs     420µs  提
+  tiy                    3µs       6µs      21µs       9µs      40µs  体育
+  tiyu                   3µs       6µs      67µs       5µs      82µs  体育
+  tiyug                 33µs       4µs       9µs       4µs      52µs  体育馆
+  tiyugu                 4µs       5µs     115µs       4µs     129µs  体育不
+  tiyugua                6µs       9µs      86µs       4µs     106µs  体育馆
+  tiyuguan               9µs      13µs      94µs       4µs     122µs  体育馆
+  8 键 · 最慢 538µs · 平均 186µs
+> zixingche
+  输入                   parse    lookup      rank translate     total  首候选
+  z                      0µs     175µs     459µs     156µs     791µs  在
+  zi                     1µs      20µs     186µs     121µs     330µs  字
+  zix                    2µs       7µs      28µs      12µs      51µs  仔细
+  zixi                   3µs      20µs      91µs       9µs     124µs  仔细
+  zixin                  6µs      11µs      60µs       6µs      85µs  自信
+  zixing                 7µs      14µs      61µs       6µs      90µs  自行
+  zixingc               51µs      14µs      25µs       6µs      98µs  自行车
+  zixingch              11µs      23µs     130µs       6µs     172µs  自行车
+  zixingche             19µs      29µs     112µs       6µs     167µs  自行车
+  9 键 · 最慢 791µs · 平均 212µs
+> gongjiaoche
+  输入                   parse    lookup      rank translate     total  首候选
+  g                      0µs      94µs     345µs     140µs     581µs  该
+  go                     3µs      47µs     268µs     104µs     424µs  狗
+  gon                    3µs      57µs     208µs      76µs     346µs  红
+  gong                   4µs      53µs     197µs      51µs     306µs  红
+  gongj                 37µs      49µs     113µs      85µs     285µs  公斤
+  gongji                 8µs      50µs     173µs      54µs     287µs  攻击
+  gongjia               12µs      84µs     211µs      52µs     362µs  公家
+  gongjiao              17µs     111µs     340µs      51µs     521µs  公交
+  gongjiaoc            189µs     145µs     310µs      53µs     697µs  公交车
+  gongjiaoch           132µs      29µs      71µs       6µs     240µs  公交车
+  gongjiaoche           40µs      46µs      76µs       5µs     170µs  公交车
+  11 键 · 最慢 697µs · 平均 383µs
+> ditie
+  输入                   parse    lookup      rank translate     total  首候选
+  d                      0µs     116µs     346µs     144µs     608µs  的
+  di                     1µs      43µs     360µs     113µs     518µs  的
+  dit                    3µs       8µs      31µs      13µs      56µs  ditch
+  diti                   4µs       8µs      82µs       8µs     103µs  第一
+  ditie                  6µs      10µs      57µs       5µs      80µs  地铁
+  5 键 · 最慢 608µs · 平均 273µs
+> shenfenzheng
+  输入                   parse    lookup      rank translate     total  首候选
+  s                      0µs     166µs     417µs     141µs     726µs  是
+  sh                     3µs     176µs     703µs     233µs    1.12ms  是
+  she                   10µs     247µs     343µs     131µs     731µs  设
+  shen                  14µs     258µs     337µs     122µs     733µs  神
+  shenf                160µs     292µs     320µs     156µs     930µs  身份
+  shenfe                95µs     143µs     269µs      87µs     597µs  身份
+  shenfen               34µs     125µs     402µs      86µs     649µs  身份
+  shenfenz             164µs     151µs     307µs      95µs     718µs  身份证
+  shenfenzh             41µs     124µs     332µs      68µs     567µs  身份证
+  shenfenzhe            60µs     122µs     337µs      67µs     587µs  身份者
+  shenfenzhen           72µs     124µs     329µs      98µs     624µs  身份证
+  shenfenzheng          94µs     126µs     302µs      67µs     591µs  身份证
+  12 键 · 最慢 1.12ms · 平均 714µs
+> yinhangka
+  输入                   parse    lookup      rank translate     total  首候选
+  y                      1µs     163µs     443µs     164µs     772µs  有
+  yi                     1µs      69µs     279µs     149µs     500µs  一
+  yin                    4µs      34µs     265µs     122µs     426µs  因
+  yinh                 137µs      15µs      67µs      44µs     265µs  银行
+  yinha                 11µs      33µs     138µs      36µs     219µs  因哈
+  yinhan                15µs      40µs     241µs      34µs     332µs  隐含
+  yinhang              105µs      38µs     152µs      37µs     334µs  银行
+  yinhangk             115µs      51µs     168µs      35µs     371µs  银行卡
+  yinhangka             35µs      49µs     216µs      32µs     333µs  银行卡
+  9 键 · 最慢 772µs · 平均 395µs
+> chongdianqi
+  输入                   parse    lookup      rank translate     total  首候选
+  c                      1µs     113µs     365µs     176µs     656µs  吃
+  ch                     3µs     128µs     306µs     120µs     559µs  吃
+  cho                    4µs     110µs     274µs     107µs     496µs  种
+  chon                   9µs     136µs     358µs      87µs     590µs  种
+  chong                  9µs     278µs     577µs     170µs    1.04ms  种
+  chongd                85µs     224µs     446µs     134µs     892µs  充电
+  chongdi               25µs     221µs     397µs     115µs     759µs  重的
+  chongdia              20µs     307µs     310µs      93µs     731µs  充电
+  chongdian             31µs     178µs     341µs      56µs     607µs  充电
+  chongdianq           224µs     212µs     237µs      51µs     726µs  充电器
+  chongdianqi           53µs     227µs     314µs      40µs     635µs  充电器
+  11 键 · 最慢 1.04ms · 平均 699µs
+> bijiben
+  输入                   parse    lookup      rank translate     total  首候选
+  b                      1µs     130µs     406µs     247µs     787µs  不
+  bi                     2µs      46µs     373µs     132µs     554µs  比
+  bij                    3µs       8µs      41µs      19µs      73µs  bijou
+  biji                   4µs      11µs     101µs      14µs     132µs  笔记
+  bijib                194µs       9µs      25µs      13µs     243µs  笔记本
+  bijibe               120µs      12µs      70µs      10µs     214µs  笔记本
+  bijiben                9µs      19µs     139µs      11µs     179µs  笔记本
+  7 键 · 最慢 787µs · 平均 312µs
+> xianshiqi
+  输入                   parse    lookup      rank translate     total  首候选
+  x                      0µs     140µs     428µs     196µs     765µs  想
+  xi                     3µs     173µs     403µs     190µs     770µs  嘻
+  xia                    7µs      84µs     300µs     115µs     508µs  下
+  xian                   5µs      52µs     363µs     183µs     604µs  先
+  xians                302µs      27µs      99µs      79µs     509µs  现时
+  xiansh                16µs      51µs     286µs      56µs     411µs  现时
+  xianshi               14µs      31µs     158µs      39µs     243µs  现时
+  xianshiq             138µs      29µs      77µs      34µs     279µs  显示器
+  xianshiqi             18µs      25µs     182µs      33µs     261µs  显示器
+  9 键 · 最慢 770µs · 平均 483µs
+> erji
+  输入                   parse    lookup      rank translate     total  首候选
+  e                      1µs      21µs     205µs     153µs     382µs  哦
+  er                     3µs      21µs     137µs      65µs     228µs  而
+  erj                    4µs       9µs      30µs      10µs      54µs  二级
+  erji                   6µs      12µs      62µs       9µs      90µs  二级
+  4 键 · 最慢 382µs · 平均 189µs
+> dianyuan
+  输入                   parse    lookup      rank translate     total  首候选
+  d                      1µs     132µs     395µs     238µs     768µs  的
+  di                    12µs      75µs     418µs     137µs     643µs  的
+  dia                    3µs      26µs     168µs     125µs     323µs  嗲
+  dian                   7µs      22µs     133µs      81µs     245µs  点
+  diany                126µs      19µs      42µs      17µs     206µs  电影
+  dianyu                 9µs      20µs      69µs      11µs     110µs  点与
+  dianyua               14µs      30µs      86µs      10µs     142µs  店员
+  dianyuan              60µs      42µs      62µs      12µs     178µs  店员
+  8 键 · 最慢 768µs · 平均 327µs
+> kafei
+  输入                   parse    lookup      rank translate     total  首候选
+  k                      1µs      62µs     356µs     206µs     627µs  看
+  ka                     3µs      52µs     286µs     115µs     458µs  卡
+  kaf                    4µs      34µs      85µs      55µs     180µs  Kafka
+  kafe                  87µs      48µs     134µs      40µs     311µs  咖啡
+  kafei                  9µs      59µs     156µs      41µs     268µs  咖啡
+  5 键 · 最慢 627µs · 平均 369µs
+> niunai
+  输入                   parse    lookup      rank translate     total  首候选
+  n                      1µs      60µs     324µs     143µs     530µs  你
+  ni                     1µs      35µs     275µs      77µs     389µs  你
+  niu                    1µs       7µs      49µs      72µs     131µs  牛
+  niun                 162µs       5µs       8µs       3µs     179µs  牛奶
+  niuna                  5µs       6µs      63µs       2µs      78µs  你那
+  niunai                 6µs       7µs      58µs       2µs      75µs  牛奶
+  6 键 · 最慢 530µs · 平均 230µs
+> mianbao
+  输入                   parse    lookup      rank translate     total  首候选
+  m                      1µs      78µs     368µs     169µs     618µs  没
+  mi                     2µs      35µs     283µs     132µs     454µs  米
+  mia                    3µs      14µs     102µs      70µs     191µs  秒
+  mian                   6µs      13µs      69µs      33µs     123µs  面
+  mianb                154µs      14µs      25µs       9µs     203µs  面包
+  mianba                56µs      22µs      48µs       7µs     135µs  面吧
+  mianbao               17µs      25µs     115µs       8µs     167µs  面包
+  7 键 · 最慢 618µs · 平均 270µs
+> qiaokeli
+  输入                   parse    lookup      rank translate     total  首候选
+  q                      2µs     138µs     346µs     154µs     641µs  去
+  qi                     1µs      82µs     300µs     104µs     488µs  其
+  qia                    2µs      37µs     386µs     113µs     539µs  卡
+  qiao                   9µs      23µs     113µs      51µs     198µs  巧
+  qiaok                195µs      20µs      61µs      25µs     302µs  乔科
+  qiaoke                14µs      38µs     113µs      21µs     187µs  乔科
+  qiaokel              146µs      65µs     103µs      24µs     340µs  巧克力
+  qiaokeli              22µs      37µs     202µs      23µs     287µs  巧克力
+  8 键 · 最慢 641µs · 平均 373µs
+> xihongshi
+  输入                   parse    lookup      rank translate     total  首候选
+  x                      1µs     138µs     410µs     152µs     703µs  想
+  xi                     2µs     138µs     331µs     105µs     578µs  嘻
+  xih                    2µs       9µs      49µs      26µs      89µs  喜欢
+  xiho                   6µs      18µs     117µs      16µs     158µs  此后
+  xihon                 52µs      15µs      66µs      14µs     149µs  希洪
+  xihong                82µs      15µs      58µs      14µs     171µs  希洪
+  xihongs               54µs      17µs      45µs      12µs     130µs  西红柿
+  xihongsh              13µs      40µs     251µs      23µs     328µs  西红柿
+  xihongshi             13µs      23µs     136µs      18µs     191µs  西红柿
+  9 键 · 最慢 703µs · 平均 277µs
+> tudou
+  输入                   parse    lookup      rank translate     total  首候选
+  t                      1µs      97µs     350µs     152µs     602µs  他
+  tu                     1µs      25µs     222µs     129µs     378µs  图
+  tud                    3µs       6µs      21µs       7µs      38µs  Tudor
+  tudo                  86µs      22µs     340µs      19µs     468µs  土豆
+  tudou                 11µs      14µs     191µs      28µs     246µs  土豆
+  5 键 · 最慢 602µs · 平均 347µs
+> pingguo
+  输入                   parse    lookup      rank translate     total  首候选
+  p                      2µs      88µs     710µs     308µs    1.11ms  怕
+  pi                     6µs      41µs     358µs     161µs     568µs  皮
+  pin                    6µs      29µs     168µs     121µs     326µs  拼
+  ping                   6µs      20µs     132µs      61µs     221µs  平
+  pingg                 47µs      21µs      40µs      20µs     129µs  苹果
+  pinggu                11µs      21µs      79µs      31µs     144µs  评估
+  pingguo               15µs      32µs     114µs      15µs     177µs  苹果
+  7 键 · 最慢 1.11ms · 平均 382µs
+> xiangjiao
+  输入                   parse    lookup      rank translate     total  首候选
+  x                      1µs     233µs     584µs     197µs    1.02ms  想
+  xi                     3µs     163µs     466µs     156µs     789µs  嘻
+  xia                    5µs      85µs     365µs     112µs     568µs  下
+  xian                   8µs      62µs     468µs     168µs     707µs  先
+  xiang                 19µs      53µs     407µs     164µs     644µs  想
+  xiangj                96µs      43µs     140µs     123µs     404µs  相机
+  xiangji               21µs      44µs     178µs      65µs     309µs  相机
+  xiangjia              26µs      44µs     174µs      53µs     299µs  想家
+  xiangjiao             32µs      38µs     167µs      38µs     276µs  相较
+  9 键 · 最慢 1.02ms · 平均 557µs
+> putao
+  输入                   parse    lookup      rank translate     total  首候选
+  p                      1µs      90µs     430µs     177µs     700µs  怕
+  pu                     2µs      12µs      89µs      68µs     173µs  普
+  put                    3µs       9µs      29µs      10µs      53µs  put
+  puta                   6µs      14µs      84µs       9µs     115µs  普塔
+  putao                  8µs      22µs      98µs       7µs     137µs  葡萄
+  5 键 · 最慢 700µs · 平均 235µs
+> caomei
+  输入                   parse    lookup      rank translate     total  首候选
+  c                      1µs     142µs     452µs     195µs     791µs  吃
+  ca                     3µs      77µs     378µs     171µs     630µs  拆
+  cao                    6µs      96µs     339µs     123µs     566µs  曹
+  caom                  60µs     116µs     289µs      96µs     562µs  草莓
+  caome                 18µs     179µs     298µs      44µs     540µs  草莓
+  caomei                23µs     190µs     300µs      47µs     561µs  草莓
+  6 键 · 最慢 791µs · 平均 608µs
+> mingtian
+  输入                   parse    lookup      rank translate     total  首候选
+  m                      1µs      93µs     631µs     236µs     962µs  没
+  mi                     3µs      42µs     338µs     162µs     545µs  米
+  min                    5µs      24µs     194µs     126µs     352µs  民
+  ming                   6µs      23µs     108µs      60µs     199µs  名
+  mingt                 63µs      16µs      33µs      13µs     125µs  明天
+  mingti                 9µs      18µs      78µs      11µs     117µs  命题
+  mingtia               17µs      29µs      80µs      10µs     138µs  明天
+  mingtian              17µs      34µs      75µs      11µs     138µs  明天
+  8 键 · 最慢 962µs · 平均 322µs
+> jintian
+  输入                   parse    lookup      rank translate     total  首候选
+  j                      1µs     249µs     476µs     172µs     900µs  就
+  ji                     3µs     165µs     376µs     130µs     676µs  给
+  jin                    4µs      51µs     381µs     133µs     571µs  今
+  jint                 120µs      23µs     143µs      81µs     368µs  今天
+  jinti                 17µs      34µs     197µs      82µs     331µs  今日
+  jintia                21µs      37µs     190µs      46µs     295µs  今天
+  jintian               22µs      47µs     218µs      44µs     332µs  今天
+  7 键 · 最慢 900µs · 平均 496µs
+> wanshang
+  输入                   parse    lookup      rank translate     total  首候选
+  w                      2µs     134µs     443µs     152µs     732µs  我
+  wa                     4µs      55µs     472µs     133µs     666µs  哇
+  wan                    5µs      58µs     300µs     138µs     503µs  万
+  wans                 124µs      46µs     146µs      66µs     384µs  晚上
+  wansh                 15µs      88µs     295µs      55µs     456µs  晚上
+  wansha                25µs      52µs     178µs      66µs     323µs  玩啥
+  wanshan               62µs      55µs     195µs      48µs     361µs  完善
+  wanshang              49µs      48µs     169µs      45µs     313µs  晚上
+  8 键 · 最慢 732µs · 平均 467µs
+> xiawu
+  输入                   parse    lookup      rank translate     total  首候选
+  x                      1µs     142µs     436µs     166µs     746µs  想
+  xi                     2µs     143µs     392µs     193µs     731µs  嘻
+  xia                    4µs      77µs     312µs     104µs     499µs  下
+  xiaw                  89µs      12µs      46µs      29µs     177µs  下午
+  xiawu                  7µs      15µs      66µs      17µs     106µs  下午
+  5 键 · 最慢 746µs · 平均 452µs
+> shijian
+  输入                   parse    lookup      rank translate     total  首候选
+  s                      0µs     186µs     705µs     164µs    1.06ms  是
+  sh                     3µs     191µs     657µs     142µs     995µs  是
+  shi                    3µs      41µs     401µs     121µs     567µs  是
+  shij                  37µs      11µs      80µs      54µs     184µs  Shijiazhuang
+  shiji                  6µs      13µs     139µs      31µs     191µs  世纪
+  shijia                 9µs      23µs     109µs      21µs     163µs  是假
+  shijian               11µs      20µs     144µs      21µs     197µs  时间
+  7 键 · 最慢 1.06ms · 平均 479µs
+> tianqi
+  输入                   parse    lookup      rank translate     total  首候选
+  t                      1µs      93µs     351µs     157µs     604µs  他
+  ti                     1µs      42µs     399µs     160µs     603µs  提
+  tia                    4µs      25µs     211µs     123µs     365µs  天
+  tian                   7µs      21µs     141µs      79µs     250µs  天
+  tianq                 68µs      15µs      31µs      13µs     128µs  天气
+  tianqi                 8µs      15µs      62µs       9µs      94µs  天气
+  6 键 · 最慢 604µs · 平均 341µs
+> wenti
+  输入                   parse    lookup      rank translate     total  首候选
+  w                      0µs     113µs     369µs     208µs     692µs  我
+  we                     4µs      54µs     382µs     139µs     581µs  为
+  wen                    3µs      46µs     231µs     134µs     416µs  问
+  went                   7µs      43µs     136µs      58µs     245µs  went
+  wenti                 13µs      43µs     166µs      45µs     268µs  问题
+  5 键 · 最慢 692µs · 平均 440µs
+> kaifa
+  输入                   parse    lookup      rank translate     total  首候选
+  k                      1µs      75µs     338µs     152µs     567µs  看
+  ka                     3µs      50µs     297µs     109µs     461µs  卡
+  kai                    3µs      32µs     149µs     108µs     294µs  开
+  kaif                  76µs      33µs      91µs      66µs     268µs  Kaifeng
+  kaifa                 10µs      48µs     183µs      51µs     293µs  开发
+  5 键 · 最慢 567µs · 平均 377µs
+> kaifang
+  输入                   parse    lookup      rank translate     total  首候选
+  k                      1µs      65µs     275µs      92µs     435µs  看
+  ka                     2µs      44µs     241µs      79µs     367µs  卡
+  kai                    4µs      28µs     136µs      74µs     243µs  开
+  kaif                   8µs      28µs      77µs      35µs     149µs  Kaifeng
+  kaifa                  8µs      48µs     137µs      33µs     227µs  开发
+  kaifan                14µs     101µs     286µs      37µs     439µs  开饭
+  kaifang              106µs      81µs     190µs      40µs     420µs  开放
+  7 键 · 最慢 439µs · 平均 326µs
+> zhishi
+  输入                   parse    lookup      rank translate     total  首候选
+  z                      1µs     200µs     483µs     177µs     862µs  在
+  zh                     4µs     256µs     400µs     134µs     796µs  这
+  zhi                    3µs      29µs     313µs     131µs     478µs  只
+  zhis                  38µs      11µs      75µs      44µs     169µs  只是
+  zhish                  6µs      31µs     177µs      35µs     250µs  只是
+  zhishi                15µs       8µs      97µs      19µs     140µs  只是
+  6 键 · 最慢 862µs · 平均 449µs
+> jineng
+  输入                   parse    lookup      rank translate     total  首候选
+  j                      0µs     333µs     494µs     183µs    1.01ms  就
+  ji                     3µs     185µs     410µs     186µs     785µs  给
+  jin                    5µs      60µs     414µs     137µs     618µs  今
+  jine                 115µs      19µs     105µs      46µs     286µs  金额
+  jinen                 11µs      41µs     256µs      35µs     344µs  金恩
+  jineng                17µs      45µs     328µs      55µs     447µs  技能
+  6 键 · 最慢 1.01ms · 平均 582µs
+> xinan
+  输入                   parse    lookup      rank translate     total  首候选
+  x                      2µs     152µs     448µs     194µs     797µs  想
+  xi                     2µs     151µs     417µs     138µs     709µs  嘻
+  xin                    5µs      43µs     325µs     125µs     499µs  新
+  xina                  75µs      17µs      89µs      47µs     230µs  心啊
+  xinan                 13µs      33µs     277µs      30µs     353µs  新安
+  5 键 · 最慢 797µs · 平均 518µs
+> xian
+  输入                   parse    lookup      rank translate     total  首候选
+  x                      1µs     133µs     383µs     103µs     621µs  想
+  xi                     1µs     145µs     332µs     123µs     602µs  嘻
+  xia                    4µs      78µs     302µs     103µs     488µs  下
+  xian                   5µs      55µs     389µs     129µs     579µs  先
+  4 键 · 最慢 621µs · 平均 573µs
+> diasheng
+  输入                   parse    lookup      rank translate     total  首候选
+  d                      1µs     159µs     393µs     183µs     738µs  的
+  di                     2µs      47µs     403µs     126µs     580µs  的
+  dia                    3µs      29µs     180µs     128µs     342µs  嗲
+  dias                   5µs       8µs      35µs      15µs      64µs  Dias
+  diash                102µs      14µs      55µs       8µs     181µs  电视
+  diashe                82µs      22µs      55µs       7µs     169µs  下设
+  diashen               86µs      22µs      59µs       8µs     177µs  大神
+  diasheng              25µs      25µs      88µs       8µs     147µs  大声
+  8 键 · 最慢 738µs · 平均 300µs
+> shuoming
+  输入                   parse    lookup      rank translate     total  首候选
+  s                      0µs     210µs     440µs     156µs     808µs  是
+  sh                     2µs     196µs     405µs     157µs     760µs  是
+  shu                    4µs     101µs     304µs     129µs     539µs  属
+  shuo                   8µs     106µs     723µs     185µs    1.02ms  说
+  shuom                134µs     137µs     312µs     120µs     705µs  说明
+  shuomi                14µs     124µs     486µs     100µs     726µs  说你
+  shuomin               20µs     202µs     330µs      48µs     601µs  说明
+  shuoming              89µs     183µs     423µs      86µs     783µs  说明
+  8 键 · 最慢 1.02ms · 平均 743µs
+> denglu
+  输入                   parse    lookup      rank translate     total  首候选
+  d                      1µs     133µs     399µs     153µs     687µs  的
+  de                     3µs      56µs     243µs     121µs     425µs  的
+  den                    4µs      70µs     235µs      94µs     405µs  扽
+  deng                   8µs     100µs     313µs      74µs     496µs  等
+  dengl                 76µs     132µs     271µs      68µs     549µs  等了
+  denglu                16µs     128µs     311µs      89µs     546µs  登陆
+  6 键 · 最慢 687µs · 平均 518µs
+> tuichu
+  输入                   parse    lookup      rank translate     total  首候选
+  t                      1µs     105µs     367µs     152µs     626µs  他
+  tu                     2µs      26µs     223µs     113µs     365µs  图
+  tui                    1µs       8µs      45µs      31µs      87µs  腿
+  tuic                  70µs       4µs       8µs       3µs      86µs  推出
+  tuich                  5µs       7µs      57µs       3µs      73µs  推出
+  tuichu                 6µs       9µs      39µs       3µs      58µs  推出
+  6 键 · 最慢 626µs · 平均 216µs
+> nijuedezhegedianyingzenmeyang
+  输入                   parse    lookup      rank translate     total  首候选
+  n                      0µs      63µs     315µs     134µs     514µs  你
+  ni                     1µs      35µs     282µs      81µs     402µs  你
+  nij                    3µs       7µs      23µs       8µs      43µs  Nijinsky
+  niju                   3µs       7µs     109µs       3µs     124µs  你就
+  nijue                  5µs       8µs      64µs       3µs      81µs  你觉
+  nijued               167µs      11µs      13µs       3µs     195µs  你觉得
+  nijuede               11µs      18µs     102µs       5µs     137µs  你觉得
+  nijuedez             114µs      20µs      42µs       3µs     180µs  你觉得
+  nijuedezh             16µs      29µs     161µs       3µs     211µs  你觉得这
+  nijuedezhe            26µs      29µs     113µs       3µs     173µs  你觉得这
+  nijuedezheg          242µs      63µs      79µs       5µs     391µs  你觉得这
+  nijuedezhege          39µs      36µs     185µs       4µs     266µs  你觉得这个
+  nijuedezheged        617µs      45µs      88µs       4µs     755µs  你觉得这个
+  nijuedezhegedi        46µs      44µs     198µs       4µs     294µs  你觉得这个的
+  nijuedezhegedia       54µs      42µs     201µs       5µs     303µs  你觉得这个点
+  nijuedezhegedian      88µs      46µs     194µs       5µs     334µs  你觉得这个点
+  nijuedezhegediany    1.41ms      66µs     221µs      10µs    1.71ms  你觉得这个点
+  nijuedezhegedianyi      87µs      59µs     286µs       8µs     442µs  你觉得这个点一
+  nijuedezhegedianyin      99µs      52µs     204µs       5µs     361µs  你觉得这个电影
+  nijuedezhegedianying     100µs      48µs     215µs       6µs     371µs  你觉得这个电影
+  nijuedezhegedianyingz    1.41ms      62µs     121µs       6µs    1.61ms  你觉得这个电影
+  nijuedezhegedianyingze     120µs      57µs     256µs       5µs     439µs  你觉得这个电影则
+  nijuedezhegedianyingzen     133µs      51µs     266µs       5µs     458µs  你觉得这个电影真
+  nijuedezhegedianyingzenm    2.55ms      65µs     134µs       6µs    2.76ms  你觉得这个电影真
+  nijuedezhegedianyingzenme     155µs      59µs     233µs       5µs     455µs  你觉得这个电影怎么
+  nijuedezhegedianyingzenmey    2.53ms      71µs     145µs       6µs    2.75ms  你觉得这个电影怎么
+  nijuedezhegedianyingzenmeya     181µs      61µs     272µs       6µs     521µs  你觉得这个电影怎么呀
+  nijuedezhegedianyingzenmeyan     260µs      73µs     373µs      10µs     717µs  你觉得这个电影怎么样
+  nijuedezhegedianyingzenmeyang     771µs      67µs     173µs       6µs    1.02ms  你觉得这个电影怎么样
+  29 键 · 最慢 2.76ms · 平均 621µs
+> wojuedezhegedianyinghenhaokan
+  输入                   parse    lookup      rank translate     total  首候选
+  w                      1µs     110µs     409µs     167µs     689µs  我
+  wo                     4µs      37µs     261µs      93µs     397µs  我
+  woj                    4µs      27µs      96µs      68µs     197µs  我就
+  woju                   8µs      23µs     128µs      43µs     203µs  我局
+  wojue                 10µs      36µs     207µs      81µs     336µs  我觉
+  wojued               218µs      68µs     171µs      52µs     509µs  我觉得
+  wojuede               23µs      81µs     272µs      61µs     438µs  我觉得
+  wojuedez             152µs      96µs     283µs      48µs     581µs  我觉得
+  wojuedezh             33µs      74µs     247µs      48µs     403µs  我觉得这
+  wojuedezhe            87µs      58µs     154µs      42µs     342µs  我觉得这
+  wojuedezheg          311µs      67µs     138µs      41µs     559µs  我觉得这
+  wojuedezhege          59µs      69µs     163µs      54µs     347µs  我觉得这个
+  wojuedezheged        665µs      79µs     156µs      41µs     943µs  我觉得这个
+  wojuedezhegedi        67µs      77µs     177µs      39µs     362µs  我觉得这个的
+  wojuedezhegedia       75µs      72µs     200µs      39µs     387µs  我觉得这个点
+  wojuedezhegedian     107µs      46µs     114µs       5µs     273µs  我觉得这个点
+  wojuedezhegediany    1.26ms      53µs      92µs       5µs    1.41ms  我觉得这个点
+  wojuedezhegedianyi      93µs      50µs     120µs       6µs     270µs  我觉得这个点一
+  wojuedezhegedianyin     113µs      52µs     111µs       4µs     280µs  我觉得这个电影
+  wojuedezhegedianying     118µs      48µs     105µs       3µs     276µs  我觉得这个电影
+  wojuedezhegedianyingh    1.70ms      62µs     114µs       7µs    1.88ms  我觉得这个电影
+  wojuedezhegedianyinghe     155µs      56µs     385µs       7µs     605µs  我觉得这个电影和
+  wojuedezhegedianyinghen     179µs      58µs     311µs       7µs     556µs  我觉得这个电影很
+  wojuedezhegedianyinghenh    2.91ms      65µs     133µs       6µs    3.12ms  我觉得这个电影很
+  wojuedezhegedianyinghenha     199µs      68µs     425µs       9µs     702µs  我觉得这个电影很哈
+  wojuedezhegedianyinghenhao     217µs      71µs     278µs       6µs     573µs  我觉得这个电影很好
+  wojuedezhegedianyinghenhaok    4.04ms      69µs     146µs       7µs    4.26ms  我觉得这个电影很好
+  wojuedezhegedianyinghenhaoka     230µs      66µs     314µs       6µs     617µs  我觉得这个电影很好看
+  wojuedezhegedianyinghenhaokan     252µs      54µs     334µs       5µs     646µs  我觉得这个电影很好看
+  29 键 · 最慢 4.26ms · 平均 764µs
+> jintianwanshangyiqikandianying
+  输入                   parse    lookup      rank translate     total  首候选
+  j                      1µs     171µs     562µs     379µs    1.11ms  就
+  ji                     8µs     251µs     589µs     177µs    1.03ms  给
+  jin                    7µs      54µs     384µs     139µs     586µs  今
+  jint                  77µs      17µs      68µs      53µs     216µs  今天
+  jinti                  8µs      29µs      84µs      39µs     162µs  今日
+  jintia                12µs      24µs     107µs      30µs     175µs  今天
+  jintian               14µs      32µs     122µs      27µs     196µs  今天
+  jintianw             253µs      38µs     110µs      30µs     432µs  今天我
+  jintianwa             20µs      48µs     172µs      28µs     269µs  今天哇
+  jintianwan            34µs      38µs     133µs      26µs     231µs  今天玩
+  jintianwans          440µs      61µs     101µs      57µs     661µs  今天晚上
+  jintianwansh          37µs      55µs     203µs      30µs     327µs  今天晚上
+  jintianwansha         60µs      48µs     155µs      31µs     296µs  今天玩啥
+  jintianwanshan        74µs      46µs     153µs      26µs     300µs  今天晚上
+  jintianwanshang       92µs      52µs     148µs      26µs     320µs  今天晚上
+  jintianwanshangy     848µs      63µs     131µs      30µs    1.07ms  今天晚上
+  jintianwanshangyi      94µs      60µs     419µs      43µs     617µs  今天晚上一
+  jintianwanshangyiq    1.15ms      78µs     178µs      40µs    1.45ms  今天晚上一
+  jintianwanshangyiqi     118µs      75µs     266µs      34µs     495µs  今天晚上一起
+  jintianwanshangyiqik    1.27ms     100µs     175µs      36µs    1.58ms  今天晚上一起
+  jintianwanshangyiqika     133µs      78µs     265µs       9µs     486µs  今天晚上一起咯
+  jintianwanshangyiqikan     146µs      71µs     238µs       8µs     465µs  今天晚上一起看
+  jintianwanshangyiqikand    2.64ms      83µs     159µs      13µs    2.89ms  今天晚上一起看
+  jintianwanshangyiqikandi     150µs      77µs     280µs       9µs     518µs  今天晚上一起看的
+  jintianwanshangyiqikandia     176µs      73µs     258µs      10µs     519µs  今天晚上一起看下
+  jintianwanshangyiqikandian     205µs      71µs     276µs       9µs     562µs  今天晚上一起看点
+  jintianwanshangyiqikandiany    3.43ms      71µs     160µs       9µs    3.67ms  今天晚上一起看点
+  jintianwanshangyiqikandianyi     226µs      77µs     241µs      10µs     555µs  今天晚上一起看点一
+  jintianwanshangyiqikandianyin     206µs      82µs     258µs      10µs     557µs  今天晚上一起看电影
+  jintianwanshangyiqikandianying     225µs      77µs     285µs      13µs     600µs  今天晚上一起看电影
+  30 键 · 最慢 3.67ms · 平均 745µs
+> mingtianshangwuwomenqukaihui
+  输入                   parse    lookup      rank translate     total  首候选
+  m                      2µs     116µs     405µs     182µs     706µs  没
+  mi                     2µs      35µs     297µs     132µs     467µs  米
+  min                    4µs      22µs     147µs      98µs     272µs  民
+  ming                   5µs      23µs     103µs      54µs     186µs  名
+  mingt                 43µs      16µs      27µs      17µs     103µs  明天
+  mingti                 8µs      17µs      41µs      10µs      77µs  命题
+  mingtia               23µs      30µs      61µs      14µs     129µs  明天
+  mingtian              16µs      30µs      51µs       9µs     107µs  明天
+  mingtians            245µs      34µs      51µs      15µs     346µs  明天
+  mingtiansh            25µs      30µs      88µs       5µs     150µs  明天是
+  mingtiansha           42µs      29µs     115µs      10µs     197µs  明天啥
+  mingtianshan         181µs      39µs      61µs      10µs     293µs  明天山
+  mingtianshang         85µs      27µs      69µs       6µs     188µs  明天上
+  mingtianshangw       514µs      42µs      52µs       8µs     616µs  明天上
+  mingtianshangwu       80µs      37µs     100µs       6µs     225µs  明天上午
+  mingtianshangwuw     626µs      47µs      58µs       7µs     741µs  明天上午
+  mingtianshangwuwo      89µs      44µs     108µs       6µs     247µs  明天上午我
+  mingtianshangwuwom     881µs      54µs      90µs       7µs    1.03ms  明天上午我
+  mingtianshangwuwome     146µs      51µs     141µs       7µs     347µs  明天上午我么
+  mingtianshangwuwomen     354µs      45µs      72µs       3µs     475µs  明天上午我们
+  mingtianshangwuwomenq    1.40ms      57µs      77µs       3µs    1.54ms  明天上午我们
+  mingtianshangwuwomenqu     133µs      56µs     182µs       4µs     376µs  明天上午我们去
+  mingtianshangwuwomenquk    1.74ms      69µs      94µs       4µs    1.90ms  明天上午我们去
+  mingtianshangwuwomenquka     167µs      58µs     204µs       5µs     436µs  明天上午我们去咯
+  mingtianshangwuwomenqukai     170µs      70µs     187µs       3µs     433µs  明天上午我们去开
+  mingtianshangwuwomenqukaih    2.37ms      70µs     110µs       4µs    2.55ms  明天上午我们去开
+  mingtianshangwuwomenqukaihu     177µs      82µs     313µs       5µs     579µs  明天上午我们去开会
+  mingtianshangwuwomenqukaihui     206µs      71µs     334µs       5µs     618µs  明天上午我们去开会
+  28 键 · 最慢 2.55ms · 平均 548µs
+> womenjintianxiawuyiqitaolunshurufawenti
+  输入                   parse    lookup      rank translate     total  首候选
+  w                      1µs      92µs     405µs     163µs     662µs  我
+  wo                     3µs      38µs     262µs      95µs     400µs  我
+  wom                    5µs      26µs     112µs      74µs     217µs  women
+  wome                  10µs      44µs     157µs      60µs     273µs  我么
+  women                  7µs      80µs     242µs      46µs     377µs  我们
+  womenj               171µs      92µs     242µs      45µs     551µs  我们家
+  womenji               21µs     103µs     279µs      43µs     447µs  我们几
+  womenjin              29µs      54µs     163µs      41µs     288µs  我们进
+  womenjint            317µs      72µs     127µs      43µs     560µs  我们进
+  womenjinti            35µs      64µs     168µs      38µs     306µs  我们集体
+  womenjintia           44µs      63µs     172µs      38µs     318µs  我们今天
+  womenjintian          51µs      65µs     152µs      42µs     312µs  我们今天
+  womenjintianx        532µs      78µs     134µs      43µs     788µs  我们今天
+  womenjintianxi        60µs      74µs     210µs      40µs     385µs  我们今天洗
+  womenjintianxia       77µs      82µs     238µs      43µs     441µs  我们今天下
+  womenjintianxiaw     747µs      93µs     151µs      44µs    1.04ms  我们今天下
+  womenjintianxiawu      79µs      93µs     219µs      43µs     436µs  我们今天下午
+  womenjintianxiawuy    1.04ms     104µs     167µs      40µs    1.35ms  我们今天下午
+  womenjintianxiawuyi      92µs     106µs     251µs      44µs     495µs  我们今天下午一
+  womenjintianxiawuyiq    1.22ms     119µs     180µs      45µs    1.57ms  我们今天下午一
+  womenjintianxiawuyiqi     106µs     112µs     293µs      45µs     557µs  我们今天下午一起
+  womenjintianxiawuyiqit    1.54ms     177µs     320µs      93µs    2.13ms  我们今天下午一起
+  womenjintianxiawuyiqita     187µs     149µs     403µs      57µs     798µs  我们今天下午一起他
+  womenjintianxiawuyiqitao     165µs      88µs     275µs       9µs     537µs  我们今天下午一起逃
+  womenjintianxiawuyiqitaol    2.08ms      97µs     138µs      12µs    2.33ms  我们今天下午一起逃
+  womenjintianxiawuyiqitaolu     167µs     166µs     304µs       6µs     646µs  我们今天下午一起套路
+  womenjintianxiawuyiqitaolun     169µs      87µs     281µs       4µs     543µs  我们今天下午一起讨论
+  womenjintianxiawuyiqitaoluns    3.37ms      86µs     148µs       5µs    3.61ms  我们今天下午一起讨论
+  womenjintianxiawuyiqitaolunsh     199µs      74µs     299µs       5µs     577µs  我们今天下午一起讨论是
+  womenjintianxiawuyiqitaolunshu     223µs      78µs     254µs       6µs     563µs  我们今天下午一起讨论书
+  womenjintianxiawuyiqitaolunshur    3.60ms      98µs     167µs      10µs    3.88ms  我们今天下午一起讨论书
+  womenjintianxiawuyiqitaolunshuru     227µs      96µs     551µs      11µs     886µs  我们今天下午一起讨论输入
+  womenjintianxiawuyiqitaolunshuruf    3.71ms     108µs     165µs       7µs    3.99ms  我们今天下午一起讨论输入
+  womenjintianxiawuyiqitaolunshurufa     218µs      96µs     259µs       5µs     579µs  我们今天下午一起讨论输入法
+  womenjintianxiawuyiqitaolunshurufaw    4.33ms     107µs     182µs       6µs    4.63ms  我们今天下午一起讨论输入法
+  womenjintianxiawuyiqitaolunshurufawe     266µs     103µs     403µs       6µs     781µs  我们今天下午一起讨论输入法为
+  womenjintianxiawuyiqitaolunshurufawen     265µs     111µs     342µs       5µs     725µs  我们今天下午一起讨论输入法问
+  womenjintianxiawuyiqitaolunshurufawent    6.89ms     141µs     237µs      11µs    7.28ms  我们今天下午一起讨论输入法问
+  womenjintianxiawuyiqitaolunshurufawenti     325µs     100µs     355µs       6µs     788µs  我们今天下午一起讨论输入法问题
+  39 键 · 最慢 7.28ms · 平均 1.21ms
+> woxiangtigaodazidezhunquelv
+  输入                   parse    lookup      rank translate     total  首候选
+  w                      1µs      99µs     418µs     173µs     692µs  我
+  wo                     6µs      38µs     259µs      96µs     400µs  我
+  wox                    5µs      27µs     100µs      70µs     203µs  我想
+  woxi                   8µs      25µs     120µs      55µs     210µs  我洗
+  woxia                 11µs      39µs     154µs      51µs     256µs  我下
+  woxian                51µs     171µs     354µs      89µs     667µs  我先
+  woxiang               25µs      74µs     210µs      47µs     358µs  我想
+  woxiangt             106µs      77µs     184µs      42µs     410µs  我想
+  woxiangti             27µs      69µs     226µs      38µs     360µs  我想提
+  woxiangtig           152µs      83µs     192µs      37µs     466µs  我想提
+  woxiangtiga           38µs      88µs     269µs      40µs     436µs  我想提高
+  woxiangtigao          52µs      54µs     178µs      41µs     327µs  我想提高
+  woxiangtigaod        581µs      68µs     128µs      39µs     817µs  我想提高
+  woxiangtigaoda        67µs      69µs     230µs      42µs     410µs  我想提高大
+  woxiangtigaodaz      507µs      86µs     143µs      42µs     779µs  我想提高大
+  woxiangtigaodazi      67µs      76µs     281µs      42µs     468µs  我想提高大字
+  woxiangtigaodazid     637µs      93µs     163µs      39µs     933µs  我想提高大字
+  woxiangtigaodazide      93µs      96µs     501µs      79µs     769µs  我想提高打字的
+  woxiangtigaodazidez    1.15ms     111µs     247µs      80µs    1.59ms  我想提高打字的
+  woxiangtigaodazidezh     103µs      62µs     355µs       7µs     529µs  我想提高打字的真
+  woxiangtigaodazidezhu     120µs      64µs     303µs       5µs     494µs  我想提高打字的主
+  woxiangtigaodazidezhun     134µs      58µs     256µs       4µs     454µs  我想提高打字的准
+  woxiangtigaodazidezhunq    1.52ms      70µs     119µs       5µs    1.71ms  我想提高打字的准
+  woxiangtigaodazidezhunqu     157µs     195µs     472µs       8µs     833µs  我想提高打字的准去
+  woxiangtigaodazidezhunque     187µs      67µs     320µs       8µs     584µs  我想提高打字的准确
+  woxiangtigaodazidezhunquel    2.88ms      73µs     146µs       7µs    3.11ms  我想提高打字的准确
+  woxiangtigaodazidezhunquelv     170µs      72µs     268µs       8µs     519µs  我想提高打字的准确率
+  27 键 · 最慢 3.11ms · 平均 696µs
+> qingbangwodakailiulanqi
+  输入                   parse    lookup      rank translate     total  首候选
+  q                      1µs      95µs     427µs     184µs     709µs  去
+  qi                     3µs      88µs     347µs     153µs     593µs  其
+  qin                    4µs      31µs     241µs     128µs     405µs  亲
+  qing                   8µs      29µs     181µs     111µs     330µs  请
+  qingb                115µs      17µs      46µs      31µs     211µs  情报
+  qingba                12µs      27µs      93µs      22µs     156µs  请把
+  qingban               19µs      28µs     131µs      30µs     210µs  清版
+  qingbang              85µs      27µs      54µs       9µs     176µs  请帮
+  qingbangw            159µs      33µs      52µs       8µs     254µs  请帮
+  qingbangwo            32µs      30µs      85µs      11µs     159µs  请帮我
+  qingbangwod          229µs     221µs     129µs      20µs     601µs  请帮我
+  qingbangwoda          78µs      45µs     168µs      14µs     307µs  请帮我大
+  qingbangwodak        425µs      52µs      88µs      11µs     578µs  请帮我大
+  qingbangwodaka        57µs      47µs     175µs      11µs     291µs  请帮我打卡
+  qingbangwodakai       73µs      50µs     170µs      13µs     307µs  请帮我打开
+  qingbangwodakail    1.09ms      58µs     107µs      13µs    1.26ms  请帮我打开
+  qingbangwodakaili      78µs      58µs     244µs      13µs     395µs  请帮我打开里
+  qingbangwodakailiu      77µs      58µs     237µs      17µs     390µs  请帮我打开六
+  qingbangwodakailiul    1.28ms      70µs     113µs      14µs    1.48ms  请帮我打开六
+  qingbangwodakailiula      87µs      59µs     175µs      11µs     333µs  请帮我打开留啦
+  qingbangwodakailiulan     104µs      51µs     158µs       6µs     319µs  请帮我打开浏览
+  qingbangwodakailiulanq    1.29ms      59µs     109µs       7µs    1.47ms  请帮我打开浏览
+  qingbangwodakailiulanqi     114µs      55µs     179µs       6µs     355µs  请帮我打开浏览器
+  23 键 · 最慢 1.48ms · 平均 491µs
+> zhegeruanjianyongqilaizenmeyang
+  输入                   parse    lookup      rank translate     total  首候选
+  z                      1µs     199µs     773µs     173µs    1.15ms  在
+  zh                     4µs     175µs     459µs     130µs     769µs  这
+  zhe                    5µs     153µs     310µs     133µs     603µs  这
+  zheg                  40µs     175µs     265µs     109µs     591µs  这个
+  zhege                 15µs     348µs     298µs      85µs     748µs  这个
+  zheger                94µs     213µs     234µs      51µs     594µs  这个人
+  zhegeru               22µs     371µs     375µs      74µs     843µs  这个入
+  zhegerua              33µs     196µs     324µs     297µs     851µs  这个入
+  zhegeruan             68µs     182µs     551µs     153µs     955µs  这个软
+  zhegeruanj           434µs     170µs     342µs     119µs    1.07ms  这个软
+  zhegeruanji           66µs     225µs     496µs      83µs     873µs  这个软及
+  zhegeruanjia          66µs     169µs     389µs      78µs     703µs  这个软件
+  zhegeruanjian         77µs     169µs     382µs      73µs     702µs  这个软件
+  zhegeruanjiany       886µs     194µs     318µs      93µs    1.49ms  这个软件
+  zhegeruanjianyo       97µs      99µs     315µs      71µs     584µs  这个软件哟
+  zhegeruanjianyon     322µs     103µs     220µs      71µs     718µs  这个软件用
+  zhegeruanjianyong     332µs     210µs     332µs      71µs     947µs  这个软件用
+  zhegeruanjianyongq    1.02ms     232µs     331µs      80µs    1.66ms  这个软件用
+  zhegeruanjianyongqi     111µs     211µs     425µs      72µs     819µs  这个软件勇气
+  zhegeruanjianyongqil    1.19ms     259µs     350µs      95µs    1.90ms  这个软件勇气
+  zhegeruanjianyongqila     130µs     129µs     439µs     100µs     800µs  这个软件用起来
+  zhegeruanjianyongqilai     143µs     126µs     377µs      79µs     727µs  这个软件用起来
+  zhegeruanjianyongqilaiz    1.87ms     155µs     326µs     109µs    2.46ms  这个软件用起来
+  zhegeruanjianyongqilaize     159µs      72µs     279µs       7µs     519µs  这个软件用起来咋
+  zhegeruanjianyongqilaizen     166µs      65µs     231µs       4µs     468µs  这个软件用起来真
+  zhegeruanjianyongqilaizenm    3.11ms      75µs     123µs       8µs    3.32ms  这个软件用起来真
+  zhegeruanjianyongqilaizenme     178µs      63µs     212µs       4µs     459µs  这个软件用起来怎么
+  zhegeruanjianyongqilaizenmey    2.87ms      76µs     151µs       5µs    3.10ms  这个软件用起来怎么
+  zhegeruanjianyongqilaizenmeya     201µs      72µs     228µs       4µs     507µs  这个软件用起来怎么呀
+  zhegeruanjianyongqilaizenmeyan     218µs      68µs     212µs       4µs     504µs  这个软件用起来怎么样
+  zhegeruanjianyongqilaizenmeyang     722µs      70µs     134µs       4µs     932µs  这个软件用起来怎么样
+  31 键 · 最慢 3.32ms · 平均 1.04ms
+> youcikanlaimeishenmewenti
+  输入                   parse    lookup      rank translate     total  首候选
+  y                      1µs     165µs     612µs     206µs     985µs  有
+  yo                     5µs      77µs    1.05ms     193µs    1.33ms  哟
+  you                    7µs      82µs     455µs     121µs     666µs  有
+  youc                  82µs      44µs     206µs     149µs     482µs  由此
+  youci                  8µs      36µs     231µs     134µs     410µs  由此
+  youcik               106µs      42µs     194µs      99µs     442µs  由此可见
+  youcika               13µs      67µs     402µs      88µs     572µs  由此卡
+  youcikan              19µs     115µs     306µs      48µs     490µs  由此看
+  youcikanl            210µs     142µs     216µs      40µs     609µs  由此看来
+  youcikanla            31µs      85µs     357µs      85µs     560µs  由此看来
+  youcikanlai           38µs      70µs     333µs      83µs     525µs  由此看来
+  youcikanlaim         316µs      89µs     269µs      78µs     753µs  由此看来
+  youcikanlaime         63µs      86µs     378µs      85µs     613µs  由此看来么
+  youcikanlaimei        57µs      86µs     362µs      75µs     581µs  由此看来没
+  youcikanlaimeis      566µs      98µs     283µs      73µs    1.02ms  由此看来没
+  youcikanlaimeish      69µs      95µs     421µs      72µs     659µs  由此看来没事
+  youcikanlaimeishe      84µs      91µs     400µs      71µs     647µs  由此看来没设
+  youcikanlaimeishen     111µs      45µs     219µs      10µs     386µs  由此看来梅什
+  youcikanlaimeishenm    1.81ms      51µs     129µs      12µs    2.00ms  由此看来梅什
+  youcikanlaimeishenme     113µs      44µs     231µs       9µs     398µs  由此看来没什么
+  youcikanlaimeishenmew    2.34ms      57µs     157µs      21µs    2.58ms  由此看来没什么
+  youcikanlaimeishenmewe     149µs      50µs     331µs      15µs     547µs  由此看来没什么为
+  youcikanlaimeishenmewen     142µs      54µs     268µs      11µs     476µs  由此看来没什么问
+  youcikanlaimeishenmewent    2.59ms      60µs     155µs      12µs    2.82ms  由此看来没什么问
+  youcikanlaimeishenmewenti     155µs      60µs     260µs      11µs     488µs  由此看来没什么问题
+  25 键 · 最慢 2.82ms · 平均 841µs
+> woxiangmaiyibeirekafei
+  输入                   parse    lookup      rank translate     total  首候选
+  w                      1µs     127µs     379µs     158µs     666µs  我
+  wo                     4µs      35µs     251µs      90µs     382µs  我
+  wox                    5µs      27µs      97µs      60µs     191µs  我想
+  woxi                   8µs      23µs     100µs      43µs     176µs  我洗
+  woxia                 10µs      35µs     136µs      40µs     223µs  我下
+  woxian                38µs      61µs     215µs      39µs     354µs  我先
+  woxiang               18µs      52µs     180µs      36µs     287µs  我想
+  woxiangm             221µs      71µs     179µs      43µs     516µs  我想
+  woxiangma             29µs      56µs     188µs      38µs     312µs  我想骂
+  woxiangmai            35µs      57µs     355µs      69µs     519µs  我想买
+  woxiangmaiy          420µs      97µs     214µs      55µs     788µs  我想买
+  woxiangmaiyi          54µs      85µs     221µs      42µs     403µs  我想买一
+  woxiangmaiyib        406µs      90µs     163µs      40µs     700µs  我想买一
+  woxiangmaiyibe        54µs      58µs     215µs      38µs     367µs  我想买一杯
+  woxiangmaiyibei       73µs      72µs     217µs      38µs     402µs  我想买一杯
+  woxiangmaiyibeir     588µs      81µs     137µs      38µs     845µs  我想买一杯
+  woxiangmaiyibeire      74µs      77µs     250µs      52µs     454µs  我想买一杯热
+  woxiangmaiyibeirek    1.03ms      88µs     158µs      46µs    1.32ms  我想买一杯热
+  woxiangmaiyibeireka     101µs     100µs     261µs      41µs     504µs  我想买一杯热咯
+  woxiangmaiyibeirekaf    1.13ms      97µs     164µs      40µs    1.43ms  我想买一杯热咯
+  woxiangmaiyibeirekafe     455µs      63µs     166µs       5µs     691µs  我想买一杯热咖啡
+  woxiangmaiyibeirekafei      99µs      63µs     182µs       4µs     348µs  我想买一杯热咖啡
+  22 键 · 最慢 1.43ms · 平均 540µs
+> mingtiandetianqiyinggaihenhao
+  输入                   parse    lookup      rank translate     total  首候选
+  m                      1µs      81µs     354µs     160µs     598µs  没
+  mi                     2µs      33µs     279µs     132µs     447µs  米
+  min                    3µs      20µs     134µs      87µs     245µs  民
+  ming                   6µs      20µs     103µs      49µs     179µs  名
+  mingt                 39µs      13µs      38µs      14µs     106µs  明天
+  mingti                10µs      13µs      41µs      11µs      77µs  命题
+  mingtia               12µs      19µs      53µs       9µs      94µs  明天
+  mingtian              15µs      24µs      45µs       9µs      94µs  明天
+  mingtiand            199µs      34µs      36µs      12µs     283µs  明天的
+  mingtiande            27µs      26µs      65µs       5µs     123µs  明天的
+  mingtiandet          198µs      34µs      44µs       6µs     283µs  明天的
+  mingtiandeti          28µs      34µs     106µs       6µs     175µs  明天的题
+  mingtiandetia         40µs      32µs     107µs       5µs     186µs  明天的天
+  mingtiandetian        52µs      35µs      95µs       6µs     190µs  明天的天
+  mingtiandetianq      641µs      48µs      71µs      10µs     771µs  明天的天
+  mingtiandetianqi      61µs      41µs     103µs       6µs     213µs  明天的天气
+  mingtiandetianqiy     677µs      48µs      69µs       6µs     802µs  明天的天气
+  mingtiandetianqiyi      62µs      47µs     139µs       6µs     256µs  明天的天气一
+  mingtiandetianqiyin      91µs      48µs     137µs       6µs     283µs  明天的天气因
+  mingtiandetianqiying      85µs      45µs     123µs       6µs     259µs  明天的天气英
+  mingtiandetianqiyingg    1.04ms      56µs      79µs       7µs    1.18ms  明天的天气英
+  mingtiandetianqiyingga     101µs      59µs     205µs       8µs     374µs  明天的天气应该
+  mingtiandetianqiyinggai     124µs      58µs     194µs       7µs     385µs  明天的天气应该
+  mingtiandetianqiyinggaih    1.47ms      63µs      94µs       8µs    1.64ms  明天的天气应该
+  mingtiandetianqiyinggaihe     128µs      56µs     206µs       7µs     398µs  明天的天气应该和
+  mingtiandetianqiyinggaihen     152µs     352µs     258µs       5µs     769µs  明天的天气应该很
+  mingtiandetianqiyinggaihenh    2.83ms      69µs     112µs       6µs    3.02ms  明天的天气应该很
+  mingtiandetianqiyinggaihenha     169µs      58µs     211µs       4µs     443µs  明天的天气应该很哈
+  mingtiandetianqiyinggaihenhao     178µs      56µs     194µs       3µs     432µs  明天的天气应该很好
+  29 键 · 最慢 3.02ms · 平均 493µs
+> womenzuoditiequtushuguan
+  输入                   parse    lookup      rank translate     total  首候选
+  w                      1µs      93µs     401µs     164µs     661µs  我
+  wo                     5µs      65µs     346µs     133µs     551µs  我
+  wom                    7µs      34µs     163µs     145µs     351µs  women
+  wome                  15µs      57µs     290µs      98µs     461µs  我么
+  women                 14µs      88µs     265µs      60µs     427µs  我们
+  womenz               205µs      98µs     230µs      67µs     602µs  我们这
+  womenzu               23µs      84µs     274µs      48µs     430µs  我们组
+  womenzuo              30µs      60µs     186µs      40µs     317µs  我们做
+  womenzuod            369µs      79µs     164µs      93µs     708µs  我们做
+  womenzuodi            37µs      73µs     230µs      41µs     383µs  我们做的
+  womenzuodit          279µs      94µs     202µs      43µs     619µs  我们做的
+  womenzuoditi          41µs      94µs     240µs      42µs     418µs  我们坐地铁
+  womenzuoditie         55µs      75µs     196µs      39µs     367µs  我们坐地铁
+  womenzuoditieq       459µs      89µs     146µs      41µs     737µs  我们坐地铁
+  womenzuoditiequ       70µs      88µs     249µs      42µs     451µs  我们坐地铁去
+  womenzuoditiequt     582µs     100µs     195µs      45µs     924µs  我们坐地铁去
+  womenzuoditiequtu      83µs     108µs     298µs      40µs     531µs  我们坐地铁区域
+  womenzuoditiequtus     693µs     117µs     378µs      41µs    1.23ms  我们坐地铁区域
+  womenzuoditiequtush     583µs     143µs     264µs      52µs    1.04ms  我们坐地铁去图书
+  womenzuoditiequtushu     101µs     112µs     282µs      42µs     539µs  我们坐地铁去图书
+  womenzuoditiequtushug    1.03ms     128µs     187µs      41µs    1.39ms  我们坐地铁去图书
+  womenzuoditiequtushugu     112µs     169µs     344µs      60µs     687µs  我们坐地铁区域属于
+  womenzuoditiequtushugua     139µs     125µs     296µs      43µs     604µs  我们坐地铁去图书馆
+  womenzuoditiequtushuguan     131µs      82µs     214µs       5µs     433µs  我们坐地铁去图书馆
+  24 键 · 最慢 1.39ms · 平均 619µs
+> zhetaidiannaoxuyaochongdian
+  输入                   parse    lookup      rank translate     total  首候选
+  z                      1µs     183µs     757µs     217µs    1.16ms  在
+  zh                     4µs     175µs     441µs     140µs     762µs  这
+  zhe                    6µs     156µs     310µs     138µs     610µs  这
+  zhet                  41µs     194µs     274µs     126µs     636µs  这条
+  zheta                 15µs     280µs     333µs      84µs     713µs  这他
+  zhetai                19µs     272µs     343µs      73µs     709µs  这太
+  zhetaid              267µs     370µs     296µs      68µs    1.00ms  这太
+  zhetaidi              26µs     343µs     369µs      77µs     816µs  这台的
+  zhetaidia             34µs     192µs     318µs      63µs     608µs  这太大
+  zhetaidian            55µs     133µs     359µs      74µs     622µs  这太点
+  zhetaidiann          471µs     168µs     321µs      72µs    1.03ms  这太点
+  zhetaidianna         199µs     159µs     411µs     118µs     889µs  这台电脑
+  zhetaidiannao        114µs     269µs     915µs     185µs    1.48ms  这台电脑
+  zhetaidiannaox      1.02ms     197µs     392µs     126µs    1.74ms  这台电脑
+  zhetaidiannaoxu       80µs     196µs     430µs      90µs     798µs  这台电脑许
+  zhetaidiannaoxuy     789µs     205µs     342µs      80µs    1.42ms  这台电脑许
+  zhetaidiannaoxuya      91µs     104µs     345µs      74µs     616µs  这台电脑需要
+  zhetaidiannaoxuyao     106µs      42µs     215µs       5µs     370µs  这台电脑需要
+  zhetaidiannaoxuyaoc    1.38ms      58µs      96µs       6µs    1.54ms  这台电脑需要
+  zhetaidiannaoxuyaoch     468µs      47µs     125µs       4µs     645µs  这台电脑需要穿
+  zhetaidiannaoxuyaocho     137µs      42µs     240µs       7µs     427µs  这台电脑需要重
+  zhetaidiannaoxuyaochon     157µs      48µs     234µs       5µs     445µs  这台电脑需要重
+  zhetaidiannaoxuyaochong     146µs      44µs     196µs       4µs     392µs  这台电脑需要重
+  zhetaidiannaoxuyaochongd    2.10ms      53µs     104µs       5µs    2.26ms  这台电脑需要重
+  zhetaidiannaoxuyaochongdi     152µs      65µs     207µs       4µs     430µs  这台电脑需要重的
+  zhetaidiannaoxuyaochongdia     167µs      49µs     193µs       4µs     416µs  这台电脑需要充电
+  zhetaidiannaoxuyaochongdian     278µs      88µs     310µs       8µs     686µs  这台电脑需要充电
+  27 键 · 最慢 2.26ms · 平均 860µs
+> wozhengzaixuexirengongzhineng
+  输入                   parse    lookup      rank translate     total  首候选
+  w                      1µs     122µs     377µs     165µs     667µs  我
+  wo                     4µs      37µs     264µs      91µs     398µs  我
+  woz                    5µs      26µs     102µs      70µs     204µs  Wozniak
+  wozh                   8µs      46µs     173µs      55µs     284µs  我这
+  wozhe                 14µs      78µs     240µs      53µs     386µs  我这
+  wozhen                23µs      57µs     122µs      37µs     240µs  我真
+  wozheng               28µs      65µs     115µs      39µs     249µs  我正
+  wozhengz             142µs      72µs      98µs      37µs     351µs  我正在
+  wozhengza             35µs      56µs     159µs      38µs     289µs  我正在
+  wozhengzai            41µs      58µs     155µs      38µs     293µs  我正在
+  wozhengzaix          338µs      74µs     115µs      38µs     567µs  我正在
+  wozhengzaixu          48µs      84µs     179µs      44µs     357µs  我正在许
+  wozhengzaixue         69µs      83µs     174µs      75µs     402µs  我正在学
+  wozhengzaixuex       612µs      84µs     137µs      42µs     876µs  我正在学
+  wozhengzaixuexi       66µs      78µs     187µs      40µs     373µs  我正在学习
+  wozhengzaixuexir     741µs      99µs     147µs      42µs    1.03ms  我正在学习
+  wozhengzaixuexire      81µs      91µs     253µs      42µs     469µs  我正在学习的
+  wozhengzaixuexiren      98µs      68µs     171µs       7µs     346µs  我正在学习人
+  wozhengzaixuexireng     100µs      62µs     157µs       6µs     327µs  我正在学习仍
+  wozhengzaixuexirengo    1.48ms      16µs      45µs       5µs    1.55ms  我正在学习人哦
+  wozhengzaixuexirengon     110µs      53µs     171µs       5µs     341µs  我正在学习人工
+  wozhengzaixuexirengong     394µs      75µs      96µs       6µs     572µs  我正在学习人工
+  wozhengzaixuexirengongz    1.81ms     110µs     113µs       8µs    2.04ms  我正在学习人工
+  wozhengzaixuexirengongzh     138µs      65µs     205µs       6µs     415µs  我正在学习人攻占
+  wozhengzaixuexirengongzhi     381µs     128µs     278µs      12µs     800µs  我正在学习任公职
+  wozhengzaixuexirengongzhin    2.34ms      99µs     130µs      12µs    2.58ms  我正在学习任公职
+  wozhengzaixuexirengongzhine     165µs      71µs     202µs       6µs     446µs  我正在学习任公职那
+  wozhengzaixuexirengongzhinen     188µs      58µs     198µs       5µs     450µs  我正在学习人工智能
+  wozhengzaixuexirengongzhineng     214µs      48µs     181µs       4µs     448µs  我正在学习人工智能
+  29 键 · 最慢 2.58ms · 平均 612µs
+> womenyinggaibaohugerenxinxi
+  输入                   parse    lookup      rank translate     total  首候选
+  w                      1µs      82µs     329µs     126µs     539µs  我
+  wo                     4µs      33µs     226µs      80µs     345µs  我
+  wom                    4µs      23µs      96µs      60µs     185µs  women
+  wome                  11µs      54µs     156µs      42µs     264µs  我么
+  women                  9µs      65µs     231µs      40µs     347µs  我们
+  womeny               179µs      83µs     214µs      51µs     528µs  我们要
+  womenyi               20µs      83µs     277µs      40µs     421µs  我们一
+  womenyin              29µs      50µs     137µs      37µs     255µs  我们因
+  womenying             34µs      52µs     147µs      38µs     272µs  我们应
+  womenyingg           194µs      63µs     112µs      36µs     406µs  我们应
+  womenyingga           43µs      61µs     151µs      36µs     293µs  我们应该
+  womenyinggai          68µs      64µs     146µs      37µs     317µs  我们应该
+  womenyinggaib        426µs      78µs     126µs      53µs     684µs  我们应该
+  womenyinggaiba        68µs      73µs     216µs      38µs     396µs  我们应该把
+  womenyinggaibao       81µs      72µs     206µs      38µs     397µs  我们应该抱
+  womenyinggaibaoh     867µs      86µs     158µs      40µs    1.15ms  我们应该抱
+  womenyinggaibaohu      82µs      85µs     279µs      39µs     487µs  我们应该保护
+  womenyinggaibaohug    1.67ms     100µs     162µs      44µs    1.98ms  我们应该保护
+  womenyinggaibaohuge    1.33ms      88µs     195µs      18µs    1.63ms  我们应该保护个
+  womenyinggaibaohuger    1.94ms      57µs     118µs      10µs    2.12ms  我们应该保护个
+  womenyinggaibaohugere     516µs      61µs     111µs       5µs     695µs  我们应该保护个人
+  womenyinggaibaohugeren     163µs      45µs     288µs       5µs     503µs  我们应该保护个人
+  womenyinggaibaohugerenx    2.01ms      67µs     126µs       5µs    2.21ms  我们应该保护个人
+  womenyinggaibaohugerenxi     152µs      67µs     281µs       5µs     507µs  我们应该保护个人嘻
+  womenyinggaibaohugerenxin     162µs      61µs     269µs       4µs     498µs  我们应该保护个人新
+  womenyinggaibaohugerenxinx    2.88ms      76µs     146µs      10µs    3.11ms  我们应该保护个人新
+  womenyinggaibaohugerenxinxi     184µs      71µs     418µs      12µs     687µs  我们应该保护个人信息
+  27 键 · 最慢 3.11ms · 平均 786µs
+> zhegewentiyijingjiejuele
+  输入                   parse    lookup      rank translate     total  首候选
+  z                      1µs     206µs     765µs     183µs    1.16ms  在
+  zh                     4µs     170µs     439µs     137µs     753µs  这
+  zhe                    6µs     158µs     404µs     154µs     724µs  这
+  zheg                  41µs     170µs     263µs     157µs     632µs  这个
+  zhege                 16µs     283µs     298µs      90µs     687µs  这个
+  zhegew               100µs     355µs     321µs      74µs     852µs  这个我
+  zhegewe               28µs     194µs     348µs      65µs     636µs  这个为
+  zhegewen              37µs     153µs     450µs      77µs     719µs  这个问
+  zhegewent            311µs     183µs     360µs      72µs     928µs  这个问题
+  zhegewenti            39µs     184µs     439µs      71µs     734µs  这个问题
+  zhegewentiy          296µs     265µs     395µs      71µs    1.03ms  这个问题
+  zhegewentiyi          52µs     469µs     686µs     138µs    1.35ms  这个问题一
+  zhegewentiyij        491µs     319µs     483µs     113µs    1.41ms  这个问题一
+  zhegewentiyiji        75µs     295µs     660µs      83µs    1.11ms  这个问题以及
+  zhegewentiyijin       89µs     265µs     519µs      83µs     958µs  这个问题已经
+  zhegewentiyijing      99µs     254µs     494µs      94µs     943µs  这个问题已经
+  zhegewentiyijingj     873µs     295µs     543µs      97µs    1.81ms  这个问题已经
+  zhegewentiyijingji      96µs     304µs     584µs     100µs    1.09ms  这个问题已经几
+  zhegewentiyijingjie     128µs     331µs     569µs     121µs    1.15ms  这个问题已经接
+  zhegewentiyijingjiej    1.31ms     343µs     449µs     105µs    2.21ms  这个问题已经接
+  zhegewentiyijingjieju     270µs     433µs     783µs     206µs    1.69ms  这个问题已经结局
+  zhegewentiyijingjiejue     159µs     335µs     682µs     139µs    1.32ms  这个问题已经解决
+  zhegewentiyijingjiejuel    2.32ms     347µs     449µs     129µs    3.25ms  这个问题已经解决
+  zhegewentiyijingjiejuele     173µs     188µs     465µs     103µs     931µs  这个问题已经解决了
+  24 键 · 最慢 3.25ms · 平均 1.17ms
+> qingbawenjianbaocunzaizheli
+  输入                   parse    lookup      rank translate     total  首候选
+  q                      1µs     103µs     425µs     193µs     724µs  去
+  qi                     9µs      91µs     357µs     150µs     609µs  其
+  qin                   13µs      30µs     262µs     289µs     594µs  亲
+  qing                  10µs      32µs     211µs     119µs     373µs  请
+  qingb                 93µs      19µs      56µs      46µs     216µs  情报
+  qingba                13µs      41µs     125µs      36µs     216µs  请把
+  qingbaw               83µs      33µs      77µs      25µs     220µs  请把
+  qingbawe              29µs      35µs     156µs      50µs     272µs  请把为
+  qingbawen             30µs      29µs     107µs      13µs     181µs  请把文
+  qingbawenj           168µs      36µs      64µs       9µs     278µs  请把文
+  qingbawenji           29µs      34µs     126µs       9µs     199µs  请把文集
+  qingbawenjia          39µs      32µs     112µs       9µs     193µs  请把文件
+  qingbawenjian         50µs      31µs     105µs       8µs     196µs  请把文件
+  qingbawenjianb       696µs      59µs     127µs      17µs     900µs  请把文件
+  qingbawenjianba      367µs      55µs     157µs      17µs     598µs  请把文件把
+  qingbawenjianbao     112µs      56µs     220µs      17µs     405µs  请把文件包
+  qingbawenjianbaoc    1.22ms      61µs     142µs      14µs    1.44ms  请把文件包
+  qingbawenjianbaocu     127µs      65µs     263µs      13µs     469µs  请把文件爆粗
+  qingbawenjianbaocun     147µs      60µs     256µs      11µs     474µs  请把文件保存
+  qingbawenjianbaocunz    2.13ms      67µs     128µs       9µs    2.34ms  请把文件保存
+  qingbawenjianbaocunza     194µs      62µs     264µs       9µs     530µs  请把文件保存在
+  qingbawenjianbaocunzai     163µs      58µs     258µs       8µs     489µs  请把文件保存在
+  qingbawenjianbaocunzaiz    2.36ms      68µs     151µs       6µs    2.59ms  请把文件保存在
+  qingbawenjianbaocunzaizh     203µs      64µs     314µs       6µs     589µs  请把文件保存在这
+  qingbawenjianbaocunzaizhe     186µs      52µs     231µs       6µs     477µs  请把文件保存在这
+  qingbawenjianbaocunzaizhel    4.12ms      57µs     146µs      14µs    4.34ms  请把文件保存在这
+  qingbawenjianbaocunzaizheli     174µs      54µs     303µs       8µs     540µs  请把文件保存在这里
+  27 键 · 最慢 4.34ms · 平均 758µs
+> jintianhaiyoushenmeanpai
+  输入                   parse    lookup      rank translate     total  首候选
+  j                      1µs     151µs     499µs     189µs     841µs  就
+  ji                     2µs     151µs     390µs     141µs     685µs  给
+  jin                    4µs      49µs     393µs     134µs     582µs  今
+  jint                  96µs      19µs      82µs      86µs     284µs  今天
+  jinti                 10µs      17µs      84µs      34µs     147µs  今日
+  jintia                11µs      23µs     107µs      29µs     171µs  今天
+  jintian               13µs      31µs     123µs      27µs     196µs  今天
+  jintianh             268µs      39µs     117µs      31µs     456µs  今天好
+  jintianha             23µs      44µs     184µs      28µs     281µs  今天哈
+  jintianhai            26µs      41µs     210µs      29µs     308µs  今天还
+  jintianhaiy          206µs      56µs     150µs      28µs     441µs  今天还
+  jintianhaiyo          37µs      46µs     229µs      35µs     347µs  今天还有
+  jintianhaiyou         89µs      58µs     209µs      33µs     390µs  今天还有
+  jintianhaiyous       398µs      58µs     197µs      42µs     696µs  今天还有
+  jintianhaiyoush       71µs      59µs     361µs      32µs     525µs  今天还有谁
+  jintianhaiyoushe      74µs      69µs     256µs      32µs     433µs  今天还有蛇
+  jintianhaiyoushen     102µs      57µs     234µs      32µs     426µs  今天还有神
+  jintianhaiyoushenm    1.47ms      69µs     162µs      44µs    1.74ms  今天还有神
+  jintianhaiyoushenme     144µs      64µs     669µs      21µs     899µs  今天还有什么
+  jintianhaiyoushenmea    2.58ms      82µs     243µs      23µs    2.93ms  今天还有什么啊
+  jintianhaiyoushenmean     596µs      62µs     153µs      21µs     834µs  今天还有什么安
+  jintianhaiyoushenmeanp    2.33ms      73µs     148µs      14µs    2.57ms  今天还有什么安
+  jintianhaiyoushenmeanpa     129µs      64µs     368µs      12µs     574µs  今天还有什么安排
+  jintianhaiyoushenmeanpai     144µs      70µs     345µs      11µs     571µs  今天还有什么安排
+  24 键 · 最慢 2.93ms · 平均 722µs
+> nengbunengzaijieshiqingchuyidian
+  输入                   parse    lookup      rank translate     total  首候选
+  n                      1µs      62µs     367µs     158µs     588µs  你
+  ne                     4µs      36µs     174µs      91µs     306µs  那
+  nen                    5µs      48µs     115µs      42µs     211µs  嫩
+  neng                   9µs      77µs     129µs      30µs     247µs  能
+  nengb                107µs      97µs     128µs      27µs     361µs  能帮
+  nengbu                15µs      86µs     163µs      29µs     295µs  能不
+  nengbun              199µs     120µs     119µs      26µs     465µs  能不能
+  nengbune              24µs     107µs     186µs      27µs     345µs  能不那
+  nengbunen             35µs      46µs     106µs      23µs     211µs  能不能
+  nengbuneng            40µs      51µs      95µs      23µs     211µs  能不能
+  nengbunengz          281µs      68µs      74µs      24µs     449µs  能不能
+  nengbunengza          72µs      96µs     212µs      32µs     414µs  能不能咋
+  nengbunengzai         67µs      97µs     177µs      35µs     377µs  能不能在
+  nengbunengzaij       572µs      84µs      94µs      42µs     793µs  能不能在
+  nengbunengzaiji       63µs      76µs     181µs      26µs     348µs  能不能自己
+  nengbunengzaijie      71µs      76µs     155µs      25µs     328µs  能不能再接
+  nengbunengzaijies    1.53ms     110µs     139µs      57µs    1.84ms  能不能再接
+  nengbunengzaijiesh      99µs      95µs     301µs      40µs     536µs  能不能在接受
+  nengbunengzaijieshi      96µs      97µs     190µs      32µs     416µs  能不能再解释
+  nengbunengzaijieshiq    1.11ms     113µs     115µs      30µs    1.37ms  能不能再解释
+  nengbunengzaijieshiqi      94µs     109µs     200µs      27µs     431µs  能不能再解释其
+  nengbunengzaijieshiqin      99µs     102µs     254µs      31µs     488µs  能不能再解释亲
+  nengbunengzaijieshiqing     143µs     105µs     233µs      29µs     512µs  能不能再解释清
+  nengbunengzaijieshiqingc    1.55ms     127µs     139µs      29µs    1.84ms  能不能再解释清
+  nengbunengzaijieshiqingch     129µs      56µs     215µs       1µs     401µs  能不能再解释清楚
+  nengbunengzaijieshiqingchu     134µs      49µs     170µs       1µs     355µs  能不能再解释清楚
+  nengbunengzaijieshiqingchuy    2.25ms      71µs     114µs       2µs    2.44ms  能不能再解释清楚
+  nengbunengzaijieshiqingchuyi     202µs      78µs     257µs       2µs     541µs  能不能再解释清楚一
+  nengbunengzaijieshiqingchuyid    3.04ms      71µs     126µs       3µs    3.24ms  能不能再解释清楚一
+  nengbunengzaijieshiqingchuyidi     196µs      77µs     308µs       3µs     585µs  能不能再解释清楚一的
+  nengbunengzaijieshiqingchuyidia     220µs      65µs     273µs       1µs     561µs  能不能再解释清楚一下
+  nengbunengzaijieshiqingchuyidian     221µs      53µs     248µs       1µs     524µs  能不能再解释清楚一点
+  32 键 · 最慢 3.24ms · 平均 689µs
+> xiazhouwomenyiqiqubowuguan
+  输入                   parse    lookup      rank translate     total  首候选
+  x                      1µs     145µs     500µs     193µs     840µs  想
+  xi                     3µs     149µs     411µs     138µs     701µs  嘻
+  xia                    4µs      73µs     343µs     118µs     540µs  下
+  xiaz                 128µs      13µs      48µs      34µs     226µs  下周
+  xiazh                  8µs      19µs     116µs      23µs     168µs  下周
+  xiazho                14µs      38µs     152µs      25µs     230µs  下周
+  xiazhou               14µs      39µs     154µs      24µs     233µs  下周
+  xiazhouw             141µs      41µs     111µs      24µs     317µs  下周
+  xiazhouwo             28µs      40µs     162µs      23µs     255µs  下周我
+  xiazhouwom           248µs      51µs     136µs      26µs     463µs  下周我
+  xiazhouwome           40µs      44µs     155µs      23µs     263µs  下周我么
+  xiazhouwomen         156µs      42µs     115µs      26µs     340µs  下周我们
+  xiazhouwomeny        630µs      58µs     123µs      26µs     837µs  下周我们
+  xiazhouwomenyi        73µs      50µs     171µs      30µs     325µs  下周我们一
+  xiazhouwomenyiq      725µs      64µs     143µs      31µs     966µs  下周我们一
+  xiazhouwomenyiqi      75µs      59µs     205µs      26µs     368µs  下周我们一起
+  xiazhouwomenyiqiq     788µs      73µs     149µs      26µs    1.04ms  下周我们一起
+  xiazhouwomenyiqiqu      85µs      70µs     280µs      25µs     462µs  下周我们一起去
+  xiazhouwomenyiqiqub    1.03ms      81µs     164µs      26µs    1.30ms  下周我们一起去
+  xiazhouwomenyiqiqubo     106µs      74µs     262µs      26µs     470µs  下周我们一起去博
+  xiazhouwomenyiqiqubow    1.84ms      71µs     359µs      32µs    2.30ms  下周我们一起去bow
+  xiazhouwomenyiqiqubowu     112µs      81µs     269µs      29µs     493µs  下周我们一起去博物
+  xiazhouwomenyiqiqubowug    1.57ms      89µs     161µs      26µs    1.85ms  下周我们一起去博物
+  xiazhouwomenyiqiqubowugu     122µs      89µs     257µs      26µs     495µs  下周我们一起去博无辜
+  xiazhouwomenyiqiqubowugua     134µs      78µs     233µs      23µs     469µs  下周我们一起去博物馆
+  xiazhouwomenyiqiqubowuguan     162µs      55µs     225µs      21µs     464µs  下周我们一起去博物馆
+  26 键 · 最慢 2.30ms · 平均 631µs
+> huantaipingy
+  输入                   parse    lookup      rank translate     total  首候选
+  h                      1µs     121µs     400µs     165µs     688µs  好
+  hu                     2µs      73µs     311µs     125µs     512µs  和
+  hua                    4µs      38µs     284µs     118µs     445µs  花
+  huan                   8µs      29µs     183µs     151µs     373µs  还
+  huant                106µs      22µs      47µs      26µs     203µs  幻听
+  huanta                13µs      28µs      82µs      16µs     141µs  还他
+  huantai               16µs      26µs      95µs      17µs     155µs  还太
+  huantaip             196µs      37µs      78µs      17µs     330µs  还太
+  huantaipi             22µs      38µs      86µs      16µs     163µs  还太皮
+  huantaipin            31µs      34µs      90µs      15µs     170µs  还太拼
+  huantaiping           78µs      33µs      80µs      14µs     206µs  还太平
+  huantaipingy         286µs      44µs      68µs      17µs     416µs  环太平洋
+  12 键 · 最慢 688µs · 平均 317µs
+> nijuedezhegdiayzenmy
+  输入                   parse    lookup      rank translate     total  首候选
+  n                      0µs      58µs     326µs     157µs     542µs  你
+  ni                     2µs      50µs     281µs      87µs     420µs  你
+  nij                    3µs       7µs      21µs       7µs      40µs  Nijinsky
+  niju                   4µs       3µs      32µs       2µs      43µs  你就
+  nijue                  4µs       7µs      27µs       2µs      41µs  你觉
+  nijued               117µs       9µs      11µs       2µs     141µs  你觉得
+  nijuede                8µs      14µs      39µs       2µs      64µs  你觉得
+  nijuedez              94µs      18µs      39µs       2µs     154µs  你觉得
+  nijuedezh             13µs      26µs     111µs       2µs     154µs  你觉得这
+  nijuedezhe            22µs      26µs      67µs       2µs     119µs  你觉得这
+  nijuedezheg          197µs      33µs      63µs       2µs     297µs  你觉得这
+  nijuedezhegd         847µs      46µs     136µs       7µs    1.04ms  你觉得这个的
+  nijuedezhegdi       1.19ms      49µs     144µs       7µs    1.39ms  你觉得这个的
+  nijuedezhegdia      1.19ms      42µs     172µs       9µs    1.41ms  你觉得这个点
+  nijuedezhegdiay      928µs      52µs     199µs       7µs    1.19ms  你觉得这个电影
+  nijuedezhegdiayz     954µs      60µs     299µs       7µs    1.32ms  你觉得这个电影中
+  nijuedezhegdiayze    1.01ms      58µs     199µs       6µs    1.27ms  你觉得这个电影则
+  nijuedezhegdiayzen    1.47ms      76µs     361µs      17µs    1.93ms  你觉得这个电影真
+  nijuedezhegdiayzenm    1.54ms      66µs     271µs      11µs    1.89ms  你觉得这个电影怎么
+  nijuedezhegdiayzenmy    1.46ms      84µs     274µs       8µs    1.82ms  你觉得这个电影怎么样
+  20 键 · 最慢 1.93ms · 平均 764µs

@@ -21,9 +21,24 @@ use crate::com::profile;
 impl ITfTextInputProcessor_Impl for TextService_Impl {
     fn Activate(&self, ptim: Ref<ITfThreadMgr>, tid: u32) -> Result<()> {
         let thread_mgr = ptim.ok()?.clone();
+        self.shared.candidates.activate(&thread_mgr);
         let keystroke: ITfKeystrokeMgr = thread_mgr.cast()?;
         let sink: ITfKeyEventSink = self.to_interface();
         unsafe { keystroke.AdviseKeyEventSink(tid, &sink, true)? };
+        if let Ok(source) = thread_mgr.cast::<windows::Win32::UI::TextServices::ITfSourceSingle>() {
+            let provider: windows::Win32::UI::TextServices::ITfFunctionProvider =
+                self.to_interface();
+            let unknown: windows::core::IUnknown = provider.into();
+            if let Err(error) = unsafe {
+                source.AdviseSingleSink(
+                    tid,
+                    &windows::Win32::UI::TextServices::ITfFunctionProvider::IID,
+                    &unknown,
+                )
+            } {
+                log(&format!("登记搜索候选提供器失败: {error}"));
+            }
+        }
         let combo = preserved::load_combo();
         match preserved::register(&keystroke, tid, combo) {
             Ok(()) => {
@@ -96,6 +111,16 @@ impl ITfTextInputProcessor_Impl for TextService_Impl {
         self.poll_timer.borrow_mut().take();
         // 切走输入法时敲了一半的拼音原样落定，再关会话。
         self.commit_pending();
+        if let Some(manager) = self.thread_mgr.borrow().as_ref()
+            && let Ok(source) = manager.cast::<windows::Win32::UI::TextServices::ITfSourceSingle>()
+        {
+            let _ = unsafe {
+                source.UnadviseSingleSink(
+                    self.client_id.get(),
+                    &windows::Win32::UI::TextServices::ITfFunctionProvider::IID,
+                )
+            };
+        }
         if let Some(thread_mgr) = self.thread_mgr.borrow_mut().take()
             && let Ok(keystroke) = thread_mgr.cast::<ITfKeystrokeMgr>()
         {
@@ -108,10 +133,17 @@ impl ITfTextInputProcessor_Impl for TextService_Impl {
         if let Some(client) = self.engine.borrow_mut().take() {
             let _ = client.close();
         }
+        self.shared.candidates.deactivate();
         self.shared.reset();
         self.shared.take_server_stale();
         self.shared.set_foreground(false);
         log("青简 TSF 已停用");
         Ok(())
+    }
+}
+
+impl windows::Win32::UI::TextServices::ITfTextInputProcessorEx_Impl for TextService_Impl {
+    fn ActivateEx(&self, manager: Ref<ITfThreadMgr>, tid: u32, _flags: u32) -> Result<()> {
+        self.Activate(manager, tid)
     }
 }

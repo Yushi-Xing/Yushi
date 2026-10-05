@@ -126,6 +126,7 @@ impl Router {
         match &self.composed {
             None => Frame::default(),
             Some(Composed::Raw { text, cursor }) => Frame {
+                typed_keys: String::new(),
                 preedit: vec![PreeditSegment {
                     text: text.clone(),
                     kind: PreeditKind::Typed,
@@ -168,6 +169,7 @@ impl Router {
                 let mut candidates = CandidateList { items };
                 self.engine.annotate(&mut candidates);
                 Frame {
+                    typed_keys: String::new(),
                     preedit: preedit.clone(),
                     cursor: *cursor,
                     preedit_mode: self.config.preedit,

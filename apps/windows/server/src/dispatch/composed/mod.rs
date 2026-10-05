@@ -3,10 +3,13 @@
 mod state;
 
 use qingjian_core::{Candidate, CandidateLayout, CandidateList, CloudWord, Query};
-use qingjian_platform::protocol::{Frame, PROTOCOL_VERSION, PreeditKind, PreeditSegment};
+use qingjian_platform::protocol::{Frame, PreeditKind, PreeditSegment};
 
 pub(super) use self::state::{Composed, TypedKeys};
 use super::Router;
+
+/// 新协议不能把已认识辅码的旧 DLL 再降级；辅码段从版本 7 起存在。
+const AUX_CODE_SINCE: u32 = 7;
 
 impl Router {
     /// 缓冲变化后：按 Engine 状态重建 [`Composed`]，发一次云联想请求，归零高亮与整句补全。
@@ -143,6 +146,7 @@ impl Router {
     /// 焦点会话的 DLL 比 Server 老时按老协议降级（见 [`Self::downgrade_for_old_dll`]）。
     pub(super) fn current_frame(&self) -> Frame {
         let mut frame = self.raw_frame();
+        frame.typed_keys = self.engine.composition().text().to_owned();
         self.show_typed_keys(&mut frame);
         self.downgrade_for_old_dll(&mut frame);
         frame
@@ -174,7 +178,7 @@ impl Router {
 
     /// 协议比 Server 老的 DLL 不认识 `AuxCode` 段，收到会整条消息解析失败；给它的码段降级成普通拼音段。
     fn downgrade_for_old_dll(&self, frame: &mut Frame) {
-        if self.focused_dll_protocol() >= PROTOCOL_VERSION {
+        if self.focused_dll_protocol() >= AUX_CODE_SINCE {
             return;
         }
         for segment in &mut frame.preedit {
@@ -188,7 +192,7 @@ impl Router {
     fn focused_dll_protocol(&self) -> u32 {
         self.focused
             .and_then(|session| self.sessions.get(&session))
-            .map_or(PROTOCOL_VERSION, |info| info.protocol)
+            .map_or(AUX_CODE_SINCE, |info| info.protocol)
     }
 
     fn raw_frame(&self) -> Frame {
@@ -198,6 +202,7 @@ impl Router {
         match &self.composed {
             None => Frame::default(),
             Some(Composed::Raw { text, cursor }) => Frame {
+                typed_keys: String::new(),
                 preedit: vec![PreeditSegment {
                     text: text.clone(),
                     kind: PreeditKind::Typed,
@@ -231,6 +236,7 @@ impl Router {
                 let mut candidates = CandidateList { items };
                 self.engine.annotate(&mut candidates);
                 Frame {
+                    typed_keys: String::new(),
                     preedit: preedit.clone(),
                     preedit_mode: self.config.preedit,
                     cursor: *cursor,

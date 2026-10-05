@@ -355,3 +355,13 @@ Unix socket 用共享长度前缀与 Frame（当前公共版本 7，与 `PROTOCO
 - CLI 冻结集按 `(text,pinyin,context)` 去重；解析失败计入总分母和字符错误。字准确率按实际首选的 Unicode 编辑距离计算，整句候选不按标准答案长度筛选。自由生成的失败样本也计入字符分母。
 - `tools/eval/journal.py` 固定人工读音、确定性生成 336 个输入，分别导出来源与错拼类别统计、CER 和完整失败列表，校验二进制在评测期间没有变化。
 - `windows-preview.yml` 只接受 `yushi-windows-vX.Y.Z-beta.N` 等显式预发布标签；Linux/Windows 测试通过、产品数据哈希验证和原生 MSVC 构建完成后发布本 fork 附件，不写上游官网索引。
+
+## 2026-10-05 第三轮输入质量与搜索候选集成
+
+- 全拼整串纠错字母上限由 24 增至 64；短于 4 音节的内含简拼保守保留，较长混输只对完整音节扩展敲错读法。不完整位置继续按前缀查询。
+- 最后一个音节只有声母、前面的音节完整且词级已有全覆盖候选时，不让丢掉尾声母的短句先于完整词。专名权重不会强制覆盖所有同声母简拼。
+- 纠错变体用 `convert_sentence_static` 的单路径静态分比较，最终候选才进异步重排，避免为每个拼写变体启动模型任务。
+- `assets/lexicon/patches.tsv` 新增 15 个人工读音词条。`tools/eval/input_quality.py` 冻结 92 种子／1,444 组合，分开记录词库完整词形覆盖与候选成功率；CLI 的 `dictionary_entry` 仅审计词形，不参与候选查询。解析失败同样纳入总分母。
+- 辅码段兼容门槛固定在版本 7，不随当前协议递增。协议版本 8 增加 `CandidateUi` 与 `Frame.typed_keys`（旧帧默认为空）。宿主回调先排队，再由 TSF 消息泵送 Server；仅在同一聚焦会话、原始键串、页码、候选下标与文本都吻合时选择／确认，过期取消或原样上屏同样拒绝。
+- TSF 实现 `ITfTextInputProcessorEx`、候选 UIElement／Behavior／Integratable 接口，`ITfUIElementMgr` 协商宿主接管，Server 隐藏自己的窗口并保持输入状态；未变化帧不通知宿主，失败协商回退自绘且不在每次轮询重试。停用反注册 FunctionProvider 与 UIElement。
+- `ITfFnSearchCandidateProvider` 只返回当前输入的本地转换快照，不从 COM 回调请求网络／模型，不把选词反馈写学习。候选过滤与重叠消除属于 Core 的 `candidate::search_conversions`；快照与枚举通过共享租约保留 DLL 生命周期。Win11 搜索栏实际显示仍待用户真机验收。

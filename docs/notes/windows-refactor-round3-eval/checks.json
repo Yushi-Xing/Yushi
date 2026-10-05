@@ -1,0 +1,17 @@
+{
+  "core": 319,
+  "server_engine_loop": 74,
+  "native_com": "pending Windows CI",
+  "gnu_library_clippy": "passed",
+  "gui": "pending user Win11 beta5 test",
+  "local_gnu_tests": "unavailable: no MinGW C compiler; cloud runs native tests",
+  "portable_clippy": "passed",
+  "candidate_tests_gnu_typecheck": "passed using isolated harness, no native execution",
+  "typing_sequences": 94,
+  "typing_keys": 1198,
+  "typing_maximum_ms": 13.09,
+  "portable_workspace_passed": 696,
+  "portable_workspace_ignored": 3,
+  "local_socket_sandbox": "rerun outside sandbox passed",
+  "server_latest_clippy": "passed"
+}

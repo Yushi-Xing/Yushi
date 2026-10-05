@@ -1,0 +1,103 @@
+2026-10-05T08:28:35.226838Z  INFO 加载完成 dict=data/generated/dict.qj entries=92825 glossary=data/generated/glossary-en.qj glosses=232213 english=94568 learned=0 dict_ms=20 glossary_ms=68 english_ms=46
+2026-10-05T08:28:35.239993Z  INFO 英→中释义表已加载 glosses=44924
+2026-10-05T08:28:35.250674Z  INFO emoji 表已加载 words=9587 load_ms=10
+2026-10-05T08:28:35.402848Z  INFO 语言模型已加载 words=138961 bigrams=4865386 load_ms=151
+2026-10-05T08:28:35.410856Z  INFO 输入方案已启用 pinyin="pinyin" wubi=false
+2026-10-05T08:28:35.411068Z  INFO Engine 就绪 total_ms=323
+> huantaipingyang
+  输入                   parse    lookup      rank translate     total  首候选
+  h                    525µs     830µs    3.10ms     214µs    4.67ms  好
+  hu                     6µs      99µs     417µs     179µs     702µs  和
+  hua                    4µs      54µs     348µs     135µs     542µs  花
+  huan                   9µs      36µs     183µs     171µs     401µs  还
+  huant               3.04ms      25µs      67µs      40µs    3.17ms  幻听
+  huanta                20µs      33µs     190µs      27µs     271µs  还他
+  huantai               20µs      32µs     167µs      22µs     242µs  还太
+  huantaip             347µs      45µs      98µs      22µs     514µs  还太
+  huantaipi             25µs      42µs     179µs      22µs     269µs  还太皮
+  huantaipin            38µs      38µs     168µs      19µs     264µs  还太拼
+  huantaiping          137µs      41µs      99µs      19µs     297µs  还太平
+  huantaipingy         379µs      84µs     134µs      41µs     640µs  环太平洋
+  huantaipingya         62µs      68µs     276µs      28µs     436µs  还太平呀
+  huantaipingyan        71µs      49µs     213µs      20µs     355µs  环太平洋
+  huantaipingyang      281µs      83µs     114µs      22µs     501µs  环太平洋
+  15 键 · 最慢 4.67ms · 平均 885µs
+> huantaipingy
+  输入                   parse    lookup      rank translate     total  首候选
+  h                      1µs     139µs     554µs     192µs     888µs  好
+  hu                     2µs      81µs     357µs     126µs     568µs  和
+  hua                    4µs      44µs     328µs     125µs     503µs  花
+  huan                   9µs      31µs     201µs     147µs     389µs  还
+  huant                123µs      23µs      49µs      23µs     220µs  幻听
+  huanta                14µs      33µs     313µs      40µs     401µs  还他
+  huantai               27µs      43µs     137µs      48µs     257µs  还太
+  huantaip             241µs      42µs     131µs      22µs     436µs  还太
+  huantaipi             23µs      39µs      97µs      16µs     177µs  还太皮
+  huantaipin            32µs      33µs      96µs      14µs     177µs  还太拼
+  huantaiping           88µs      38µs      86µs      14µs     227µs  还太平
+  huantaipingy         290µs      44µs      67µs      16µs     418µs  环太平洋
+  12 键 · 最慢 888µs · 平均 388µs
+> nijuedezhegdiayzenmy
+  输入                   parse    lookup      rank translate     total  首候选
+  n                      0µs      76µs     376µs     155µs     609µs  你
+  ni                     2µs      38µs     302µs      92µs     436µs  你
+  nij                    3µs       7µs      22µs       9µs      41µs  Nijinsky
+  niju                   3µs       5µs     160µs       3µs     173µs  你就
+  nijue                  5µs       8µs      67µs       3µs      84µs  你觉
+  nijued               223µs      11µs      13µs       3µs     251µs  你觉得
+  nijuede                9µs      14µs      93µs       3µs     120µs  你觉得
+  nijuedez             109µs      18µs      40µs       2µs     170µs  你觉得
+  nijuedezh             16µs      27µs     213µs       3µs     261µs  你觉得这
+  nijuedezhe            42µs      29µs     161µs       4µs     237µs  你觉得这
+  nijuedezheg          236µs      41µs      97µs       4µs     379µs  你觉得这
+  nijuedezhegd         969µs      49µs     139µs       7µs    1.17ms  你觉得这个的
+  nijuedezhegdi       1.91ms      49µs     272µs      16µs    2.25ms  你觉得这个的
+  nijuedezhegdia      1.37ms      44µs     139µs       7µs    1.56ms  你觉得这个点
+  nijuedezhegdiay      856µs      55µs     191µs       6µs    1.11ms  你觉得这个电影
+  nijuedezhegdiayz     974µs      60µs     255µs       7µs    1.30ms  你觉得这个电影中
+  nijuedezhegdiayze     978µs      58µs     216µs       7µs    1.26ms  你觉得这个电影则
+  nijuedezhegdiayzen    1.64ms      66µs     302µs      16µs    2.03ms  你觉得这个电影真
+  nijuedezhegdiayzenm    1.41ms      68µs     254µs      13µs    1.74ms  你觉得这个电影怎么
+  nijuedezhegdiayzenmy    1.38ms      73µs     303µs      13µs    1.77ms  你觉得这个电影怎么样
+  20 键 · 最慢 2.25ms · 平均 847µs
+> womenjintianxiawuyiqitaolunshurufaweti
+  输入                   parse    lookup      rank translate     total  首候选
+  w                      1µs     106µs     437µs     209µs     754µs  我
+  wo                     5µs      46µs     288µs     103µs     444µs  我
+  wom                    5µs      28µs     127µs     128µs     290µs  women
+  wome                  17µs      61µs     365µs     110µs     554µs  我么
+  women                 15µs      98µs     408µs      89µs     611µs  我们
+  womenj               381µs     120µs     355µs      91µs     949µs  我们家
+  womenji               33µs     121µs     491µs      80µs     727µs  我们几
+  womenjin              46µs      81µs     270µs      67µs     467µs  我们进
+  womenjint            549µs      78µs     138µs      59µs     825µs  我们进
+  womenjinti            47µs      74µs     249µs      49µs     420µs  我们集体
+  womenjintia           46µs      75µs     237µs      55µs     414µs  我们今天
+  womenjintian          57µs      81µs     251µs      50µs     440µs  我们今天
+  womenjintianx        586µs      80µs     143µs      44µs     855µs  我们今天
+  womenjintianxi        59µs      78µs     270µs      46µs     455µs  我们今天洗
+  womenjintianxia       70µs      76µs     251µs      44µs     443µs  我们今天下
+  womenjintianxiaw     785µs     272µs     206µs      74µs    1.34ms  我们今天下
+  womenjintianxiawu      91µs     103µs     320µs      66µs     582µs  我们今天下午
+  womenjintianxiawuy    1.09ms     125µs     197µs      52µs    1.47ms  我们今天下午
+  womenjintianxiawuyi     111µs     108µs     351µs      50µs     623µs  我们今天下午一
+  womenjintianxiawuyiq    1.49ms     159µs     218µs      60µs    1.93ms  我们今天下午一
+  womenjintianxiawuyiqi     111µs     118µs     368µs      52µs     650µs  我们今天下午一起
+  womenjintianxiawuyiqit    1.58ms     140µs     209µs      51µs    1.98ms  我们今天下午一起
+  womenjintianxiawuyiqita     134µs     123µs     353µs      47µs     659µs  我们今天下午一起他
+  womenjintianxiawuyiqitao     157µs      92µs     277µs       6µs     533µs  我们今天下午一起逃
+  womenjintianxiawuyiqitaol    2.30ms     112µs     162µs       8µs    2.58ms  我们今天下午一起逃
+  womenjintianxiawuyiqitaolu     161µs      98µs     384µs       7µs     651µs  我们今天下午一起套路
+  womenjintianxiawuyiqitaolun     190µs      94µs     287µs       5µs     578µs  我们今天下午一起讨论
+  womenjintianxiawuyiqitaoluns    4.26ms     135µs     305µs      29µs    4.73ms  我们今天下午一起讨论
+  womenjintianxiawuyiqitaolunsh     277µs     134µs     632µs      16µs    1.06ms  我们今天下午一起讨论是
+  womenjintianxiawuyiqitaolunshu     306µs     138µs     602µs      18µs    1.07ms  我们今天下午一起讨论书
+  womenjintianxiawuyiqitaolunshur    5.76ms     149µs     294µs      19µs    6.22ms  我们今天下午一起讨论书
+  womenjintianxiawuyiqitaolunshuru     363µs     154µs     595µs      17µs    1.13ms  我们今天下午一起讨论输入
+  womenjintianxiawuyiqitaolunshuruf    6.49ms     174µs     330µs      20µs    7.01ms  我们今天下午一起讨论输入
+  womenjintianxiawuyiqitaolunshurufa     390µs     136µs     642µs      19µs    1.19ms  我们今天下午一起讨论输入法
+  womenjintianxiawuyiqitaolunshurufaw    7.16ms     119µs     235µs      19µs    7.53ms  我们今天下午一起讨论输入法
+  womenjintianxiawuyiqitaolunshurufawe     332µs     140µs     727µs      19µs    1.22ms  我们今天下午一起讨论输入法为
+  womenjintianxiawuyiqitaolunshurufawet    9.90ms      71µs     193µs      20µs   10.18ms  我们今天下午一起讨论输入法为
+  womenjintianxiawuyiqitaolunshurufaweti   13.79ms      45µs     149µs      19µs   14.00ms  我们今天下午一起讨论输入法问题
+  38 键 · 最慢 14.00ms · 平均 2.04ms

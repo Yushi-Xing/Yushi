@@ -38,6 +38,7 @@ impl Router {
                         app,
                         private: false,
                         protocol,
+                        own_candidates: true,
                     },
                 );
                 // 按键行为设置回一次，让 DLL 不必自己读配置文件。**只回给会读这条回包的 DLL**：
@@ -50,6 +51,9 @@ impl Router {
                 })
             }
             ClientMessage::Key { session, event } => Some(self.handle_key(session, event)),
+            ClientMessage::CandidateUi { session, action } => {
+                Some(self.handle_candidate_ui(session, action))
+            }
             ClientMessage::Poll { session } => Some(self.handle_poll(session)),
             ClientMessage::Commit { session } => {
                 let text = self.commit_raw_for(session);
@@ -121,7 +125,7 @@ impl Router {
         }
     }
 
-    fn handle_key(&mut self, session: SessionId, event: KeyEvent) -> ServerMessage {
+    pub(super) fn handle_key(&mut self, session: SessionId, event: KeyEvent) -> ServerMessage {
         self.ensure_focus(session);
         self.notice = None;
         if self.translation.is_some() {

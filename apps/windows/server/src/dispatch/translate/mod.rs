@@ -98,6 +98,7 @@ impl Router {
             .clone()
             .unwrap_or_else(|| "翻译中…".to_owned());
         Frame {
+            typed_keys: String::new(),
             preedit: Vec::new(),
             preedit_mode: self.config.preedit,
             cursor: 0,

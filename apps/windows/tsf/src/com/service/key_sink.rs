@@ -183,6 +183,14 @@ impl TextService_Impl {
                     } else {
                         String::new()
                     };
+                    let context = self.shared.last_context();
+                    if let Err(error) = self
+                        .shared
+                        .candidates
+                        .update(&response.frame, context.as_ref())
+                    {
+                        log(&format!("发布宿主候选列表失败: {error}"));
+                    }
                     self.shared.set_composing(!response.frame.is_empty());
                     // 翻译评审的任何键都结束评审（Server 侧已同步结束）。
                     self.shared.set_translating(false);

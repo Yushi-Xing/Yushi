@@ -64,11 +64,23 @@ def stage():
         for path in sorted((ROOT / 'docs/notes/windows-refactor-round2-eval').glob('*')):
             if path.suffix in ['.json', '.jsonl']:
                 archive.write(path, f'local/{path.name}')
+    quality = ROOT / 'target/input-quality-ci'
+    quality_summary = json.loads((quality / 'summary.json').read_text(encoding='utf-8'))
+    if quality_summary['count'] != 1444 or quality_summary['clean']['count'] != 92 or quality_summary['mutations']['count'] != 1104:
+        raise ValueError('pinyin combination evaluation is incomplete')
+    with zipfile.ZipFile(output / 'input-quality-evaluation.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+        for name in ['cases.json', 'inputs.tsv', 'details.jsonl', 'summary.json', 'results.jsonl', 'eval.log', 'build-info.json', 'config.toml']:
+            archive.write(quality / name, f'ci/{name}')
+        archive.write(ROOT / 'assets/eval/input-quality/seeds.json', 'seeds.json')
+        archive.write(ROOT / 'assets/eval/input-quality/README.md', 'README.md')
+        for path in sorted((ROOT / 'docs/notes/windows-refactor-round3-eval').glob('*')):
+            if path.suffix in ['.json', '.jsonl']:
+                archive.write(path, f'local/{path.name}')
     info = dict(version=release, tag=os.environ['PREVIEW_TAG'], commit=os.environ['GITHUB_SHA'],
                 workflow_run=os.environ['GITHUB_RUN_ID'], rust=subprocess.check_output(['rustc', '--version'], text=True).strip(),
                 architectures=['x86_64-server-settings-tsf', 'i686-tsf'], uiaccess=False, code_signed=False,
                 data_lock=(ROOT / 'tools/release/data.lock').read_text(encoding='utf-8'),
-                evaluation=summary, gui_acceptance='pending user tests on Win10 and Win11')
+                evaluation=summary, input_quality=quality_summary, gui_acceptance='pending user tests on Win10 and Win11')
     (output / 'build-info.json').write_text(json.dumps(info, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     files = sorted(output.iterdir())
     (output / 'SHA256SUMS').write_text(''.join(f'{sha(path)}  {path.name}\n' for path in files), encoding='utf-8')

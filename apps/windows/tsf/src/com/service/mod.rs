@@ -2,6 +2,7 @@
 //! `ITfKeyEventSink`（收键，[`key_sink`]）与显示属性提供者（[`display`]）。
 //! 连 Server 在 [`connection`]，中英模式在 [`mode`]，往文档写字在 [`document`]。
 
+mod candidates;
 mod connection;
 mod display;
 mod document;
@@ -18,8 +19,8 @@ use std::time::{Duration, Instant};
 
 use windows::Win32::Foundation::POINT;
 use windows::Win32::UI::TextServices::{
-    ITfDisplayAttributeProvider, ITfKeyEventSink, ITfLangBarItemButton, ITfSource,
-    ITfTextInputProcessor, ITfThreadMgr,
+    ITfDisplayAttributeProvider, ITfFunctionProvider, ITfKeyEventSink, ITfLangBarItemButton,
+    ITfSource, ITfTextInputProcessor, ITfTextInputProcessorEx, ITfThreadMgr,
 };
 use windows::core::{ComObject, implement};
 
@@ -41,7 +42,13 @@ pub(crate) type SharedClient = Rc<RefCell<Option<EngineClient<PipeStream>>>>;
 const RECONNECT_INTERVAL: Duration = Duration::from_secs(2);
 
 /// 一个 TSF 文本服务实例（每线程一个）。
-#[implement(ITfTextInputProcessor, ITfKeyEventSink, ITfDisplayAttributeProvider)]
+#[implement(
+    ITfTextInputProcessor,
+    ITfTextInputProcessorEx,
+    ITfKeyEventSink,
+    ITfDisplayAttributeProvider,
+    ITfFunctionProvider
+)]
 pub struct TextService {
     /// 激活时拿到的线程管理器，停用时用它反注册。
     thread_mgr: RefCell<Option<ITfThreadMgr>>,
@@ -153,6 +160,11 @@ pub(super) fn on_input_settings(input: InputSettings) {
 /// 轮询取回了右键菜单打勾用的开关状态。
 pub(super) fn on_indicator_state(state: IndicatorState) {
     with_active(|service| service.indicator_state.set(state));
+}
+
+/// 在轮询消息中处理宿主候选回调，避免 COM 回调重入管道传输。
+pub(crate) fn on_candidate_actions() {
+    with_active(TextService_Impl::apply_candidate_actions);
 }
 
 impl TextService {

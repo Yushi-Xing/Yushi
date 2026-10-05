@@ -1,3 +1,20 @@
 # 本项目手工维护的基础读音补丁，按仓库许可证分发；权重为候选排序权重，非语料频次。
 # en 作为常见键盘写法补充口语「嗯」，修复上游 #300。与 data-v3 原始词库分开，便于审计和更新。
 嗯	en	350000
+# 常见影视专名补充；人工核对读音，排序权重为保守初值，不代表语料频次。
+环太平洋	huan tai ping yang	3000
+流浪地球	liu lang di qiu	3000
+星际穿越	xing ji chuan yue	3000
+盗梦空间	dao meng kong jian	3000
+头号玩家	tou hao wan jia	2000
+霸王别姬	ba wang bie ji	2000
+三体	san ti	3000
+# Windows 输入及日常影视词，不加入评测标准整句。
+候选词	hou xuan ci	3000
+自动纠错	zi dong jiu cuo	3000
+兼容性	jian rong xing	3000
+任务栏	ren wu lan	3000
+操作系统	cao zuo xi tong	3000
+资源管理器	zi yuan guan li qi	3000
+电影票	dian ying piao	3000
+科幻电影	ke huan dian ying	3000

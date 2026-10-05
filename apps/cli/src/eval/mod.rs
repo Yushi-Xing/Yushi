@@ -155,6 +155,9 @@ fn evaluate(
     engine.history_mut().clear();
     engine.history_mut().record(&pair.context);
     engine.set_input(&pair.pinyin);
+    let dictionary_entry = std::iter::once(engine.dictionary())
+        .chain(engine.extra_dictionaries())
+        .any(|d| d.entries().any(|hit| hit.text == pair.text));
     let started = Instant::now();
     let query = match engine.query() {
         Ok(query) => query,
@@ -165,7 +168,7 @@ fn evaluate(
             report.query_time += elapsed;
             report.slowest_query = report.slowest_query.max(elapsed);
             engine.clear();
-            return serde_json::json!({"text": pair.text, "pinyin": pair.pinyin, "context": pair.context, "top": null, "candidates": [], "char_errors": length, "query_ms": elapsed.as_secs_f64() * 1000.0, "error": error.to_string()});
+            return serde_json::json!({"text": pair.text, "pinyin": pair.pinyin, "context": pair.context, "dictionary_entry": dictionary_entry, "top": null, "candidates": [], "char_errors": length, "query_ms": elapsed.as_secs_f64() * 1000.0, "error": error.to_string()});
         }
     };
     // 异步重打分：像壳一样停顿后请求、等结果、再查一次；等的时间也算进查询耗时
@@ -211,7 +214,7 @@ fn evaluate(
         ));
     }
     let row = serde_json::json!({
-        "text": pair.text, "pinyin": pair.pinyin, "context": pair.context,
+        "text": pair.text, "pinyin": pair.pinyin, "context": pair.context, "dictionary_entry": dictionary_entry,
         "top": items.first().map(|c| c.text.as_str()),
         "sentence": sentence.map(|c| c.text.as_str()),
         "position": position,

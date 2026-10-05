@@ -21,6 +21,29 @@ pub struct EngineClient<S> {
 }
 
 impl<S: Read + Write> EngineClient<S> {
+    /// 宿主候选 UI 的显示与选择操作，返回最新帧和上屏文本。
+    pub fn candidate_ui(
+        &mut self,
+        action: qingjian_platform::protocol::CandidateAction,
+    ) -> Result<KeyResponse, ClientError> {
+        match self.call(&ClientMessage::CandidateUi {
+            session: self.session,
+            action,
+        })? {
+            ServerMessage::KeyResult {
+                outcome,
+                commit,
+                frame,
+                ..
+            } => Ok(KeyResponse {
+                outcome,
+                commit,
+                frame,
+            }),
+            _ => Err(ClientError::Unexpected("expected candidate UI result")),
+        }
+    }
+
     /// 开一个会话；Server 随即回一次按键行为设置（切换键、内置英文模式），带出来交给调用方。
     /// `app` 是宿主应用的 exe 文件名，Server 据此查按应用的设置。
     pub fn open(

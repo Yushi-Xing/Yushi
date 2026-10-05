@@ -105,6 +105,8 @@ fn shipped_model_stays_idle_after_plain_and_mixed_input_settle() {
     for (case, keys) in [
         ("plain", "youcikanlaimeishenmewenti"),
         ("mixed", "wodedatabase"),
+        ("mixed_typo", "nijuedezhegdiayzenmy"),
+        ("last_initial", "huantaipingy"),
     ] {
         let baseline = scores.load(Ordering::SeqCst) + generations.load(Ordering::SeqCst);
         for c in keys.chars() {
@@ -136,7 +138,10 @@ fn shipped_model_stays_idle_after_plain_and_mixed_input_settle() {
         let settled_ms = started.elapsed().as_millis();
         let settled = scores.load(Ordering::SeqCst) + generations.load(Ordering::SeqCst);
         assert_eq!(failures.load(Ordering::SeqCst), 0, "真实模型打分失败");
-        assert!(settled > baseline, "未实际触发模型: {case}");
+        // 词库已经唯一解释的简拼允许不调用模型；两项基准输入必须真实走过推理。
+        if matches!(case, "plain" | "mixed") {
+            assert!(settled > baseline, "未实际触发模型: {case}");
+        }
         let cpu = process_cpu_ms();
         let idle = Instant::now();
         while idle.elapsed() < Duration::from_secs(2) {

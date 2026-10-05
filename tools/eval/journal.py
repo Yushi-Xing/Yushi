@@ -65,8 +65,8 @@ def summarize(rows):
     errors = sum(r['char_errors'] for r in rows)
     chars = sum(len(r['text']) for r in rows)
     return dict(count=count, top1=sum(r['top'] == r['text'] for r in rows),
-                top3=sum(r['position'] is not None and r['position'] < 3 for r in rows),
-                top5=sum(r['position'] is not None and r['position'] < 5 for r in rows),
+                top3=sum(r.get('position') is not None and r['position'] < 3 for r in rows),
+                top5=sum(r.get('position') is not None and r['position'] < 5 for r in rows),
                 parse_failures=sum('error' in r for r in rows),
                 corrected=sum(r.get('corrected') is not None for r in rows),
                 char_errors=errors, chars=chars,

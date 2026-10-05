@@ -7,6 +7,7 @@
 //! - [`composition`]：组句 preedit；[`display_attribute`]：组句内联下划线；[`poll`]：轮询定时器。
 #![allow(non_snake_case)] // 导出的 Dll* 入口按 COM 约定命名
 
+pub(crate) mod candidates;
 pub(crate) mod composition;
 pub(crate) mod context;
 pub(crate) mod display_attribute;

@@ -113,6 +113,7 @@ unsafe extern "system" fn wndproc(hwnd: HWND, msg: u32, wparam: WPARAM, lparam: 
 
 /// 组句中或翻译评审中拉云结果；否则前台时隔几拍问一次切模式（顺路取回按键行为设置）。引擎正被按键处理借用时跳过这一拍；连接坏了断开。
 fn poll_once(context: &PollContext) {
+    super::service::on_candidate_actions();
     let tick = context.ticks.get().wrapping_add(1);
     context.ticks.set(tick);
     let translating = context.shared.translating();
@@ -130,9 +131,13 @@ fn poll_once(context: &PollContext) {
     };
     match client.poll() {
         Ok(frame) => {
+            drop(guard);
+            let document = context.shared.last_context();
+            if let Err(error) = context.shared.candidates.update(&frame, document.as_ref()) {
+                log(&format!("更新宿主候选列表失败: {error}"));
+            }
             // 翻译评审时回空帧 = 翻译已在 Server 侧结束（云端没给译文）。
             if translating && frame.is_empty() {
-                drop(guard);
                 context.shared.set_translating(false);
                 context.shared.hide_candidates();
             }

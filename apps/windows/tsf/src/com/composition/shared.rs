@@ -31,6 +31,9 @@ pub(crate) struct Shared {
 
     /// 与 `TextService` 共用的引擎客户端；DLL 侧结束组句时要通知 Server 收候选窗口（它无从知晓）。
     client: SharedClient,
+
+    /// 与宿主协商显示的标准 TSF 候选列表。
+    pub(crate) candidates: crate::com::candidates::Candidates,
 }
 
 impl Shared {
@@ -44,6 +47,7 @@ impl Shared {
             server_stale: Cell::new(false),
             foreground: Cell::new(false),
             client,
+            candidates: crate::com::candidates::Candidates::new(),
         })
     }
 
@@ -125,6 +129,7 @@ impl Shared {
     pub(crate) fn end_composing(&self) {
         self.composing.set(false);
         self.translating.set(false);
+        self.candidates.end();
         self.hide_candidates();
     }
 

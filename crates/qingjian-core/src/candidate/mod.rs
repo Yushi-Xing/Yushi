@@ -9,6 +9,7 @@ mod language;
 mod layout;
 mod list;
 mod part_of_speech;
+mod search;
 mod sense;
 mod translation;
 
@@ -20,6 +21,7 @@ pub use language::{Language, UnknownLanguage};
 pub use layout::{CandidateLayout, Cell, GRID_ROWS, Grid, MAX_CELL_EMS};
 pub use list::CandidateList;
 pub use part_of_speech::{PartOfSpeech, UnknownPartOfSpeech};
+pub use search::search_conversions;
 pub use sense::Sense;
 pub use translation::Translation;
 

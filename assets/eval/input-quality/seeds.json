@@ -1,0 +1,942 @@
+[
+  {
+    "category": "word",
+    "text": "环太平洋",
+    "syllables": [
+      "huan",
+      "tai",
+      "ping",
+      "yang"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "太平洋",
+    "syllables": [
+      "tai",
+      "ping",
+      "yang"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "大西洋",
+    "syllables": [
+      "da",
+      "xi",
+      "yang"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "流浪地球",
+    "syllables": [
+      "liu",
+      "lang",
+      "di",
+      "qiu"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "星际穿越",
+    "syllables": [
+      "xing",
+      "ji",
+      "chuan",
+      "yue"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "盗梦空间",
+    "syllables": [
+      "dao",
+      "meng",
+      "kong",
+      "jian"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "头号玩家",
+    "syllables": [
+      "tou",
+      "hao",
+      "wan",
+      "jia"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "霸王别姬",
+    "syllables": [
+      "ba",
+      "wang",
+      "bie",
+      "ji"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "三体",
+    "syllables": [
+      "san",
+      "ti"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "电影院",
+    "syllables": [
+      "dian",
+      "ying",
+      "yuan"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "纪录片",
+    "syllables": [
+      "ji",
+      "lu",
+      "pian"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "科幻电影",
+    "syllables": [
+      "ke",
+      "huan",
+      "dian",
+      "ying"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "电影票",
+    "syllables": [
+      "dian",
+      "ying",
+      "piao"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "输入法",
+    "syllables": [
+      "shu",
+      "ru",
+      "fa"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "候选词",
+    "syllables": [
+      "hou",
+      "xuan",
+      "ci"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "拼音",
+    "syllables": [
+      "pin",
+      "yin"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "自动纠错",
+    "syllables": [
+      "zi",
+      "dong",
+      "jiu",
+      "cuo"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "兼容性",
+    "syllables": [
+      "jian",
+      "rong",
+      "xing"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "任务栏",
+    "syllables": [
+      "ren",
+      "wu",
+      "lan"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "浏览器",
+    "syllables": [
+      "liu",
+      "lan",
+      "qi"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "操作系统",
+    "syllables": [
+      "cao",
+      "zuo",
+      "xi",
+      "tong"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "资源管理器",
+    "syllables": [
+      "zi",
+      "yuan",
+      "guan",
+      "li",
+      "qi"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "数据库",
+    "syllables": [
+      "shu",
+      "ju",
+      "ku"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "服务器",
+    "syllables": [
+      "fu",
+      "wu",
+      "qi"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "机器学习",
+    "syllables": [
+      "ji",
+      "qi",
+      "xue",
+      "xi"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "人工智能",
+    "syllables": [
+      "ren",
+      "gong",
+      "zhi",
+      "neng"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "深度学习",
+    "syllables": [
+      "shen",
+      "du",
+      "xue",
+      "xi"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "计算机",
+    "syllables": [
+      "ji",
+      "suan",
+      "ji"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "神经网络",
+    "syllables": [
+      "shen",
+      "jing",
+      "wang",
+      "luo"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "高铁",
+    "syllables": [
+      "gao",
+      "tie"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "火车站",
+    "syllables": [
+      "huo",
+      "che",
+      "zhan"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "机场",
+    "syllables": [
+      "ji",
+      "chang"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "图书馆",
+    "syllables": [
+      "tu",
+      "shu",
+      "guan"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "博物馆",
+    "syllables": [
+      "bo",
+      "wu",
+      "guan"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "体育馆",
+    "syllables": [
+      "ti",
+      "yu",
+      "guan"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "自行车",
+    "syllables": [
+      "zi",
+      "xing",
+      "che"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "公交车",
+    "syllables": [
+      "gong",
+      "jiao",
+      "che"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "地铁",
+    "syllables": [
+      "di",
+      "tie"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "身份证",
+    "syllables": [
+      "shen",
+      "fen",
+      "zheng"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "银行卡",
+    "syllables": [
+      "yin",
+      "hang",
+      "ka"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "充电器",
+    "syllables": [
+      "chong",
+      "dian",
+      "qi"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "笔记本",
+    "syllables": [
+      "bi",
+      "ji",
+      "ben"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "显示器",
+    "syllables": [
+      "xian",
+      "shi",
+      "qi"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "耳机",
+    "syllables": [
+      "er",
+      "ji"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "电源",
+    "syllables": [
+      "dian",
+      "yuan"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "咖啡",
+    "syllables": [
+      "ka",
+      "fei"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "牛奶",
+    "syllables": [
+      "niu",
+      "nai"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "面包",
+    "syllables": [
+      "mian",
+      "bao"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "巧克力",
+    "syllables": [
+      "qiao",
+      "ke",
+      "li"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "西红柿",
+    "syllables": [
+      "xi",
+      "hong",
+      "shi"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "土豆",
+    "syllables": [
+      "tu",
+      "dou"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "苹果",
+    "syllables": [
+      "ping",
+      "guo"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "香蕉",
+    "syllables": [
+      "xiang",
+      "jiao"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "葡萄",
+    "syllables": [
+      "pu",
+      "tao"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "草莓",
+    "syllables": [
+      "cao",
+      "mei"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "明天",
+    "syllables": [
+      "ming",
+      "tian"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "今天",
+    "syllables": [
+      "jin",
+      "tian"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "晚上",
+    "syllables": [
+      "wan",
+      "shang"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "下午",
+    "syllables": [
+      "xia",
+      "wu"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "时间",
+    "syllables": [
+      "shi",
+      "jian"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "天气",
+    "syllables": [
+      "tian",
+      "qi"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "问题",
+    "syllables": [
+      "wen",
+      "ti"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "开发",
+    "syllables": [
+      "kai",
+      "fa"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "开放",
+    "syllables": [
+      "kai",
+      "fang"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "知识",
+    "syllables": [
+      "zhi",
+      "shi"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "技能",
+    "syllables": [
+      "ji",
+      "neng"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "新安",
+    "syllables": [
+      "xin",
+      "an"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "西安",
+    "syllables": [
+      "xi",
+      "an"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "嗲声",
+    "syllables": [
+      "dia",
+      "sheng"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "说明",
+    "syllables": [
+      "shuo",
+      "ming"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "登录",
+    "syllables": [
+      "deng",
+      "lu"
+    ]
+  },
+  {
+    "category": "word",
+    "text": "退出",
+    "syllables": [
+      "tui",
+      "chu"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "你觉得这个电影怎么样",
+    "syllables": [
+      "ni",
+      "jue",
+      "de",
+      "zhe",
+      "ge",
+      "dian",
+      "ying",
+      "zen",
+      "me",
+      "yang"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "我觉得这个电影很好看",
+    "syllables": [
+      "wo",
+      "jue",
+      "de",
+      "zhe",
+      "ge",
+      "dian",
+      "ying",
+      "hen",
+      "hao",
+      "kan"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "今天晚上一起看电影",
+    "syllables": [
+      "jin",
+      "tian",
+      "wan",
+      "shang",
+      "yi",
+      "qi",
+      "kan",
+      "dian",
+      "ying"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "明天上午我们去开会",
+    "syllables": [
+      "ming",
+      "tian",
+      "shang",
+      "wu",
+      "wo",
+      "men",
+      "qu",
+      "kai",
+      "hui"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "我们今天下午一起讨论输入法问题",
+    "syllables": [
+      "wo",
+      "men",
+      "jin",
+      "tian",
+      "xia",
+      "wu",
+      "yi",
+      "qi",
+      "tao",
+      "lun",
+      "shu",
+      "ru",
+      "fa",
+      "wen",
+      "ti"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "我想提高打字的准确率",
+    "syllables": [
+      "wo",
+      "xiang",
+      "ti",
+      "gao",
+      "da",
+      "zi",
+      "de",
+      "zhun",
+      "que",
+      "lv"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "请帮我打开浏览器",
+    "syllables": [
+      "qing",
+      "bang",
+      "wo",
+      "da",
+      "kai",
+      "liu",
+      "lan",
+      "qi"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "这个软件用起来怎么样",
+    "syllables": [
+      "zhe",
+      "ge",
+      "ruan",
+      "jian",
+      "yong",
+      "qi",
+      "lai",
+      "zen",
+      "me",
+      "yang"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "由此看来没什么问题",
+    "syllables": [
+      "you",
+      "ci",
+      "kan",
+      "lai",
+      "mei",
+      "shen",
+      "me",
+      "wen",
+      "ti"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "我想买一杯热咖啡",
+    "syllables": [
+      "wo",
+      "xiang",
+      "mai",
+      "yi",
+      "bei",
+      "re",
+      "ka",
+      "fei"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "明天的天气应该很好",
+    "syllables": [
+      "ming",
+      "tian",
+      "de",
+      "tian",
+      "qi",
+      "ying",
+      "gai",
+      "hen",
+      "hao"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "我们坐地铁去图书馆",
+    "syllables": [
+      "wo",
+      "men",
+      "zuo",
+      "di",
+      "tie",
+      "qu",
+      "tu",
+      "shu",
+      "guan"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "这台电脑需要充电",
+    "syllables": [
+      "zhe",
+      "tai",
+      "dian",
+      "nao",
+      "xu",
+      "yao",
+      "chong",
+      "dian"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "我正在学习人工智能",
+    "syllables": [
+      "wo",
+      "zheng",
+      "zai",
+      "xue",
+      "xi",
+      "ren",
+      "gong",
+      "zhi",
+      "neng"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "我们应该保护个人信息",
+    "syllables": [
+      "wo",
+      "men",
+      "ying",
+      "gai",
+      "bao",
+      "hu",
+      "ge",
+      "ren",
+      "xin",
+      "xi"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "这个问题已经解决了",
+    "syllables": [
+      "zhe",
+      "ge",
+      "wen",
+      "ti",
+      "yi",
+      "jing",
+      "jie",
+      "jue",
+      "le"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "请把文件保存在这里",
+    "syllables": [
+      "qing",
+      "ba",
+      "wen",
+      "jian",
+      "bao",
+      "cun",
+      "zai",
+      "zhe",
+      "li"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "今天还有什么安排",
+    "syllables": [
+      "jin",
+      "tian",
+      "hai",
+      "you",
+      "shen",
+      "me",
+      "an",
+      "pai"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "能不能再解释清楚一点",
+    "syllables": [
+      "neng",
+      "bu",
+      "neng",
+      "zai",
+      "jie",
+      "shi",
+      "qing",
+      "chu",
+      "yi",
+      "dian"
+    ]
+  },
+  {
+    "category": "sentence",
+    "text": "下周我们一起去博物馆",
+    "syllables": [
+      "xia",
+      "zhou",
+      "wo",
+      "men",
+      "yi",
+      "qi",
+      "qu",
+      "bo",
+      "wu",
+      "guan"
+    ]
+  }
+]

@@ -1,10 +1,14 @@
 //! 词级查找：每个位置展开成多种写法，再按这些写法查主词库与用户词。
 
-use super::*;
+use crate::correction::{self, typo};
+use crate::engine::{Engine, Learner};
+use crate::fuzzy::Expanded;
+use crate::parser::Segmentation;
+use qingjian_dictionary::Match;
 
 impl Engine {
     /// 每个位置的写法：敲的原样、模糊音，再加音节级敲错变体（`correction::typo`）当带代价的边，
-    /// 代价按类别定、按个人敲错表打折。太短的输入（不到 [`correction::MIN_LETTERS`]）、双拼、非末尾带简拼的切分不加敲错变体：
+    /// 代价按类别定、按个人敲错表打折。太短的输入（不到 [`correction::MIN_LETTERS`]）、双拼、较短的混合简拼不加敲错变体：
     /// 短串一处编辑几乎总能凑出别的词，双拼敲错一键换掉的是整个声母 / 韵母。不完整的位置（简拼、前缀）本来就按前缀查，不加。
     pub(in crate::engine) fn expand_positions(
         &self,
@@ -16,12 +20,13 @@ impl Engine {
             return expanded;
         }
         let letters: usize = patterns.iter().map(|p| p.text.len()).sum();
-        // 非末尾有简拼 / 残缺音节的切分（`kai f a`）本来就不是用户敲的原话，不在它上面再猜敲错
+        // 短串的混合简拼保持保守；较长输入允许在完整音节上修复漏键，简拼位置仍不展开。
         let inner_abbreviated = patterns
             .iter()
             .take(patterns.len().saturating_sub(1))
             .any(|p| !p.complete);
-        if self.shuangpin.is_some() || letters < correction::MIN_LETTERS || inner_abbreviated {
+        let short_mixed = inner_abbreviated && patterns.len() < 4;
+        if self.shuangpin.is_some() || letters < correction::MIN_LETTERS || short_mixed {
             return expanded;
         }
         for (index, pattern) in patterns.iter().enumerate() {

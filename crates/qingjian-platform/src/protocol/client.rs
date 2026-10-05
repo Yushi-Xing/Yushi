@@ -2,6 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
+use super::CandidateAction;
 use super::indicator::IndicatorCommand;
 use super::key::KeyEvent;
 use super::screen_rect::ScreenRect;
@@ -10,6 +11,13 @@ use super::session::SessionId;
 /// DLL（客户端，每个应用进程里一个）发给 Server 的消息。
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ClientMessage {
+    /// TSF 宿主接管候选列表后的显示与选词操作。
+    CandidateUi {
+        session: SessionId,
+
+        action: CandidateAction,
+    },
+
     /// 进入一个 TSF 文档，开一个会话。
     OpenSession {
         /// 会话标识。
@@ -149,7 +157,8 @@ impl ClientMessage {
     /// 会话编号；传输层在连接边界映射，业务层只接触内部编号。
     pub fn session(&self) -> SessionId {
         match self {
-            Self::OpenSession { session, .. }
+            Self::CandidateUi { session, .. }
+            | Self::OpenSession { session, .. }
             | Self::Key { session, .. }
             | Self::Commit { session, .. }
             | Self::Poll { session, .. }
@@ -169,7 +178,8 @@ impl ClientMessage {
     /// 修改传输层使用的会话编号，不改变消息正文。
     pub fn session_mut(&mut self) -> &mut SessionId {
         match self {
-            Self::OpenSession { session, .. }
+            Self::CandidateUi { session, .. }
+            | Self::OpenSession { session, .. }
             | Self::Key { session, .. }
             | Self::Commit { session, .. }
             | Self::Poll { session, .. }

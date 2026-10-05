@@ -14,6 +14,10 @@ use crate::{LayoutMode, PreeditMode, ThemeMode};
 /// 空 [`Frame`]（`preedit` 与 `candidates` 都空）表示没有在组句，DLL 收起候选窗口。
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Frame {
+    /// 当前组句原始键串：校验宿主回调属于同一输入，并供本地搜索集成查询。
+    #[serde(default)]
+    pub typed_keys: String,
+
     /// 组句拼音行的分段，按顺序拼成整行。
     pub preedit: Vec<PreeditSegment>,
 

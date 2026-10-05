@@ -51,7 +51,7 @@ impl Engine {
         let raw_score = if tail.is_empty() {
             segmentations
                 .first()
-                .and_then(|best| self.convert_sentence(&best.patterns(), true))
+                .and_then(|best| self.convert_sentence_static(&best.patterns(), true))
                 .filter(|conversion| !conversion.has_placeholder())
                 .map(|conversion| conversion.score)
         } else {
@@ -68,7 +68,8 @@ impl Engine {
                 continue;
             }
             // 纠正后的拼音上不再猜第二处敲错：变体本来就是一处编辑之外的读法，再叠一层既慢又几乎不会赢
-            let Some(conversion) = self.convert_sentence(&candidate.segmentation.patterns(), false)
+            let Some(conversion) =
+                self.convert_sentence_static(&candidate.segmentation.patterns(), false)
             else {
                 continue;
             };

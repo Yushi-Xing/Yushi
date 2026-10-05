@@ -1,6 +1,10 @@
 //! 整句候选：把词图里重排过的前几条路径变成候选，以及整句转换本身。
 
-use super::*;
+use crate::candidate::{Candidate, CandidateKind};
+use crate::engine::query::{EnglishTail, leading_english};
+use crate::engine::{ALTERNATE_MIN_SYLLABLES, Engine, Learner, RESCORE_PATHS, SENTENCE_CANDIDATES};
+use crate::parser::{self, Segmentation};
+use crate::sentence::{self, Conversion};
 
 impl Engine {
     /// 整句候选。没有英文尾段时是整段拼音的转换（[`Self::plain_sentence`]），排在开头的英文候选之后。
@@ -82,6 +86,18 @@ impl Engine {
         alternates: bool,
     ) -> Vec<Candidate> {
         if best.syllables.len() < 2 {
+            return Vec::new();
+        }
+        // 词级已有覆盖全部音节的补全时，不让丢掉末尾单字母的短句挤到它前面。
+        if best.last_is_partial()
+            && best.syllables.last().is_some_and(|s| s.text.len() == 1)
+            && best.syllables[..best.syllables.len() - 1]
+                .iter()
+                .all(|s| s.complete)
+            && items.iter().any(|c| {
+                c.kind == CandidateKind::Chinese && c.syllables.len() == best.syllables.len()
+            })
+        {
             return Vec::new();
         }
         let wanted = if alternates && best.syllables.len() >= ALTERNATE_MIN_SYLLABLES {
@@ -169,6 +185,29 @@ impl Engine {
         typos: bool,
     ) -> Option<Conversion> {
         self.convert_sentence_with(patterns, typos, false)
+    }
+
+    /// 纠错比较只用静态分，不给每一种拼写变体排模型任务；最终候选才参加重排。
+    pub(in crate::engine) fn convert_sentence_static(
+        &self,
+        patterns: &[qingjian_dictionary::SyllablePattern<'_>],
+        typos: bool,
+    ) -> Option<Conversion> {
+        let dictionaries = self.all_dictionaries();
+        let expanded = self.expand_positions(patterns, typos);
+        sentence::convert_paths(
+            &dictionaries,
+            &expanded.positions(),
+            false,
+            1,
+            &*self.language_model,
+            self.personal(),
+            |text| self.learner.weight(text),
+            |index, syllable| expanded.cost(index, syllable),
+            &mut self.span_cache.borrow_mut(),
+        )
+        .into_iter()
+        .next()
     }
 
     /// 同 [`Self::convert_sentence`]，`whole` 为真时末尾单字母也读（[`sentence::convert_whole`]），只给比分用。

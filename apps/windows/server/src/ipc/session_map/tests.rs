@@ -2,7 +2,7 @@
 
 use super::{MAX_SESSIONS, SessionMap};
 use qingjian_platform::protocol::{
-    ClientMessage, IndicatorCommand, KeyEvent, ScreenRect, SessionId,
+    CandidateAction, ClientMessage, IndicatorCommand, KeyEvent, ScreenRect, SessionId,
 };
 
 fn open(session: SessionId) -> ClientMessage {
@@ -26,6 +26,19 @@ fn requests(session: SessionId) -> Vec<ClientMessage> {
             event: KeyEvent::new(65, Some('a'), Default::default()),
         },
         ClientMessage::Poll { session },
+        ClientMessage::CandidateUi {
+            session,
+            action: CandidateAction::Visibility { own_window: false },
+        },
+        ClientMessage::CandidateUi {
+            session,
+            action: CandidateAction::Finalize {
+                typed_keys: "nihao".into(),
+                page: 0,
+                index: 0,
+                text: "你好".into(),
+            },
+        },
         ClientMessage::Commit { session },
         ClientMessage::Surrounding {
             session,

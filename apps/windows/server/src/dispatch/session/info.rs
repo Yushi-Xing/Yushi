@@ -12,4 +12,7 @@ pub(crate) struct SessionInfo {
     /// DLL 报来的协议版本。比 Server 低的（应用还没重启、加载着旧 DLL）要按老协议发帧，
     /// 见 composed 里的 downgrade_for_old_dll。
     pub(crate) protocol: u32,
+
+    /// 本会话的候选是否由 Server 自绘；宿主接管时为 false。
+    pub(crate) own_candidates: bool,
 }

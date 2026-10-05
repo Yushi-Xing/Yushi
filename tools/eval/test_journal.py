@@ -21,7 +21,7 @@ class JournalTests(unittest.TestCase):
     def test_metrics_include_failures_insertions_and_missing_gold(self):
         rows = [dict(text='你好', top='你好', position=0, char_errors=0),
                 dict(text='你好', top='你好吗', position=2, char_errors=1),
-                dict(text='你好', top=None, position=None, char_errors=2, error='parse')]
+                dict(text='你好', top=None, char_errors=2, error='parse')]
         report = journal.summarize(rows)
         self.assertEqual((report['count'], report['top1'], report['top3'], report['top5']), (3, 1, 2, 2))
         self.assertEqual((report['char_errors'], report['chars'], report['parse_failures']), (3, 6, 1))
