@@ -73,7 +73,13 @@ fn child_belongs_to_host_and_mouse_activation_does_not_take_focus() {
     unsafe {
         assert_eq!(GetParent(window.hwnd).unwrap(), host.0);
         assert_eq!(
-            SendMessageW(window.hwnd, WM_MOUSEACTIVATE, WPARAM(0), LPARAM(0)).0,
+            SendMessageW(
+                window.hwnd,
+                WM_MOUSEACTIVATE,
+                Some(WPARAM(0)),
+                Some(LPARAM(0))
+            )
+            .0,
             3
         );
         assert_eq!(GetForegroundWindow(), before);
@@ -97,8 +103,8 @@ fn clicks_use_the_displayed_frame_and_skip_pending_or_stale_content() {
         SendMessageW(
             window.hwnd,
             WM_LBUTTONUP,
-            WPARAM(0),
-            LPARAM((x | y << 16) as isize),
+            Some(WPARAM(0)),
+            Some(LPARAM((x | y << 16) as isize)),
         );
     };
     click();

@@ -24,6 +24,8 @@
 
 本机提交前验证：Linux workspace 705 通过、0 失败、3 个显式忽略项；6 个 Python 测试脚本合计 14 通过；fmt、全 workspace 严格 clippy 和 Windows GNU DLL 严格 clippy 通过。新增 Windows 专属用例 10 项，原生运行结果以本版本 CI 为准。
 
+首轮 CI `37643478437` 在 Windows lib-test 编译阶段拦截了两处 `SendMessageW` 参数类型错误；已按 windows 0.62.2 的 `Option<WPARAM>` / `Option<LPARAM>` 签名修正。Linux 全量与 macOS 壳成功，此次失败没有触发标签发布。
+
 子窗口与分层显示使用公开 Win32 API，参考 [Windows 窗口特性](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features) 和 [微软分层子窗口示例](https://github.com/microsoft/Windows-classic-samples/blob/main/Samples/DirectCompositionLayeredChildWindow/cpp/DirectComposition_LayeredChildWindow.cpp)。协商遵守 [TSF UI-less 模式](https://learn.microsoft.com/en-us/windows/win32/tsf/uiless-mode-overview) 的 `pbShow`。
 
 ## 安装验收
