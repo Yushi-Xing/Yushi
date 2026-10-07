@@ -143,7 +143,11 @@ impl ITfTextInputProcessor_Impl for TextService_Impl {
 }
 
 impl windows::Win32::UI::TextServices::ITfTextInputProcessorEx_Impl for TextService_Impl {
-    fn ActivateEx(&self, manager: Ref<ITfThreadMgr>, tid: u32, _flags: u32) -> Result<()> {
-        self.Activate(manager, tid)
+    fn ActivateEx(&self, manager: Ref<ITfThreadMgr>, tid: u32, flags: u32) -> Result<()> {
+        self.Activate(manager, tid)?;
+        self.shared.candidates.set_uiless(
+            flags & windows::Win32::UI::TextServices::TF_TMAE_UIELEMENTENABLEDONLY != 0,
+        );
+        Ok(())
     }
 }

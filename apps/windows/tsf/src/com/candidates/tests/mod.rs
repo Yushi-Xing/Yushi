@@ -10,7 +10,7 @@ use windows::Win32::UI::TextServices::{
 };
 use windows::core::{ComObject, Interface};
 
-fn frame() -> Frame {
+pub(in crate::com::candidates) fn frame() -> Frame {
     Frame {
         typed_keys: "kaifa".into(),
         candidates: qingjian_core::CandidateList {
@@ -117,3 +117,58 @@ fn ended_candidate_ui_cannot_keep_a_stale_finalize_callback() {
 
 mod manager;
 mod search;
+
+#[test]
+fn uiless_without_a_ui_manager_does_not_show_an_independent_window() {
+    let candidates = Candidates::new();
+    candidates.set_uiless(true);
+    candidates.update(&frame(), None).unwrap();
+    assert!(!candidates.state.shown.get());
+    assert_eq!(
+        candidates.take_visibility(),
+        Some(CandidateAction::Visibility { own_window: false })
+    );
+    for _ in 0..50 {
+        candidates.update(&frame(), None).unwrap();
+    }
+    assert!(candidates.take_actions().is_empty());
+}
+
+#[test]
+fn hosted_visibility_never_reopens_the_server_window() {
+    let state = State::default();
+    state.hosted.set(true);
+    state.queue(CandidateAction::Visibility { own_window: true });
+    assert_eq!(
+        *state.actions.borrow(),
+        [CandidateAction::Visibility { own_window: false }]
+    );
+    state.hosted.set(false);
+    state.queue(CandidateAction::Visibility { own_window: true });
+    assert_eq!(
+        *state.actions.borrow(),
+        [CandidateAction::Visibility { own_window: true }]
+    );
+}
+
+#[test]
+fn early_visibility_flush_preserves_a_pending_selection() {
+    let candidates = Candidates::new();
+    candidates
+        .state
+        .queue(CandidateAction::Visibility { own_window: false });
+    candidates.state.queue(CandidateAction::Finalize {
+        page: 0,
+        index: 0,
+        text: "环太平洋".into(),
+        typed_keys: "kaifa".into(),
+    });
+    assert_eq!(
+        candidates.take_visibility(),
+        Some(CandidateAction::Visibility { own_window: false })
+    );
+    assert!(matches!(
+        candidates.take_actions().as_slice(),
+        [CandidateAction::Finalize { .. }]
+    ));
+}

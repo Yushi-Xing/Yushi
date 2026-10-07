@@ -102,12 +102,19 @@ fn report_caret(shared: &Shared, engine: &SharedClient, context: &ITfContext, ec
         None if shared.composing() => caret_rect(context, ec),
         None => return,
     };
+    shared.candidates.position(context, rect);
     // 引擎正被别处借着（罕见）就跳过这拍，Server 保持上次位置。
     if let Ok(mut guard) = engine.try_borrow_mut()
         && let Some(client) = guard.as_mut()
-        && let Err(error) = client.position_candidates(rect)
     {
-        super::log::log(&format!("上报候选窗口位置失败: {error}"));
+        if let Some(action) = shared.candidates.take_visibility()
+            && let Err(error) = client.candidate_ui(action)
+        {
+            super::log::log(&format!("上报候选显隐失败: {error}"));
+        }
+        if let Err(error) = client.position_candidates(rect) {
+            super::log::log(&format!("上报候选窗口位置失败: {error}"));
+        }
     }
 }
 

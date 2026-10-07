@@ -377,3 +377,11 @@ Unix socket 用共享长度前缀与 Frame（当前公共版本 7，与 `PROTOCO
 `Dictionary::builtin_patch` 合并原 `patches.tsv` 与 `assets/lexicon/supplement/dict.tsv`，经 Windows 装配／热加载与 CLI 原有入口默认接入。补充库 19,662 词形，492 KiB；不改 `data.lock`。`tools/lexicon/supplement.py` 以固定 SHA256 的结巴词表和 Unihan 17.0.0，以及已有 THUOCL 与整词读音离线复现；跳过未知多音字和未核验专名，去重基础词形，保留逐条来源与排序权重说明。Windows 安装器同时安装三个来源的版权许可证、说明与生成清单。
 
 `tools/eval/daily_reading.py` 冻结 64 个词句种子、1,123 个组合，包含 16 个留出种子、跨音节互换和多处错误；`tools/eval/lexicon.py` 对新增词稳定抽样 192 条、全部人工核验词与 14 个对照输入，能力抽测与独立文章准确率分开报告。三个原评测和新文章评测均保存补充库哈希。整句标准答案不进入词库。
+
+## Windows 搜索宿主内候选回退
+
+`tsf/com/candidates/hosted/` 只在 `SearchHost.exe` / `SearchApp.exe` 进程内启用。优先遵守 `ITfUIElementMgr` 的显隐协商；允许 TIP 自绘时创建当前进程宿主 HWND 内的 `WS_CHILD | WS_EX_LAYERED | WS_EX_NOACTIVATE` 窗口，使用 GDI 显示已有 `Frame`，不访问词库、排序或模型。窗口约束在父客户区内、优先在输入行上方，固定紧凑竖排；支持主题、DPI、译词与显示帧校验后的鼠标确认。
+
+成功建立子窗口后通过现有 `CandidateUi::Visibility` 隐藏 Server 的独立窗；编辑会话先发送显隐再发送锚点，协议版本保持 8。宿主接管、失焦、取消、结束组句或停用均销毁本地窗。窗口消息采用线程局部上下文表和 DLL 租约，父窗口销毁后不碰复用 HWND；回调只排队，FFI 边界保护 panic。相同帧与位置不重绘；失败在本段不重复创建，下一段可再试。新增诊断只记录显示路径和错误码，不记录拼音、候选或上屏内容。
+
+仅有 `TF_TMAE_UIELEMENTENABLEDONLY` 激活标志不代表禁止 TIP 绘制，成功协商后的 `pbShow` 仍是准则；没有 UI 管理器或协商失败时，UI-less 线程不会自行显示窗口。真实搜索的验收状态见 [本轮记录](windows-search-hosted-2026-10-07.md)。

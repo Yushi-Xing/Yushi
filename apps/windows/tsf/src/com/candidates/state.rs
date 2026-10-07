@@ -12,6 +12,9 @@ pub(super) struct State {
 
     pub shown: Cell<bool>,
 
+    /// 候选已由本 DLL 的宿主子窗口显示，Server 的独立窗应隐藏。
+    pub hosted: Cell<bool>,
+
     pub pages: RefCell<Vec<u32>>,
 
     pub actions: RefCell<Vec<CandidateAction>>,
@@ -19,6 +22,12 @@ pub(super) struct State {
 
 impl State {
     pub fn queue(&self, action: CandidateAction) {
+        let action = match action {
+            CandidateAction::Visibility { own_window } => CandidateAction::Visibility {
+                own_window: own_window && !self.hosted.get(),
+            },
+            action => action,
+        };
         let mut actions = self.actions.borrow_mut();
         match &action {
             CandidateAction::Visibility { .. } => {
