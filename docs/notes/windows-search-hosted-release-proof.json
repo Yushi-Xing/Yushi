@@ -1,0 +1,157 @@
+{
+  "tag": "yushi-windows-v0.1.6-beta.11",
+  "commit": "f0d1c3970f5afe7c3a76f68a2e7dc32d2753a8bd",
+  "release": "https://github.com/Yushi-Xing/Yushi/releases/tag/yushi-windows-v0.1.6-beta.11",
+  "build": {
+    "version": "0.1.6-beta.11",
+    "commit": "f0d1c3970f5afe7c3a76f68a2e7dc32d2753a8bd",
+    "workflow_run": "37646309100",
+    "rust": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "architectures": [
+      "x86_64-server-settings-tsf",
+      "i686-tsf"
+    ],
+    "uiaccess": false,
+    "code_signed": false,
+    "gui_acceptance": "pending user tests on Win10 and Win11"
+  },
+  "verified_date": "2026-10-08 Asia/Shanghai",
+  "main_ci": {
+    "run": 37645463953,
+    "conclusion": "success",
+    "platforms": [
+      "Linux",
+      "macOS",
+      "Windows"
+    ],
+    "tsf_passed": 30,
+    "new_cases": 10,
+    "x86_dll_check": "passed"
+  },
+  "release_ci": {
+    "run": 37646309100,
+    "conclusion": "success",
+    "windows_job_rust": {
+      "passed": 726,
+      "failed": 0,
+      "ignored_by_default": 3
+    },
+    "portable_rust": {
+      "passed": 705,
+      "failed": 0,
+      "ignored_by_default": 3
+    },
+    "python_tests": 14,
+    "idle_new_calls": 0,
+    "idle_cpu_ms": 0.0
+  },
+  "verification": {
+    "all_asset_sha256": "matched published SHA256SUMS",
+    "installer_header": "MZ",
+    "all_zip_crc": "passed",
+    "build_commit": "matched tag source",
+    "gui_acceptance": "pending user installation tests"
+  },
+  "assets": {
+    "build-info.json": {
+      "sha256": "e26907577fefbb6929acacf24feea487644610f528d55722ad584d4c9474d1aa",
+      "bytes": 34512
+    },
+    "daily-reading-evaluation.zip": {
+      "sha256": "c63107bada9c82fae3a95cd95c7040f05e724acfe30e10b0d2f5fef83a1d02ad",
+      "bytes": 1857880,
+      "members": 39
+    },
+    "input-quality-evaluation.zip": {
+      "sha256": "0b5176cb74a14b661d531d1acde12c58e00169e3dc29d297d1d3654c98b9d435",
+      "bytes": 1260536,
+      "members": 20
+    },
+    "journal-evaluation.zip": {
+      "sha256": "8ac078cf91159de2c749b16b3d4cdf711dfa56db2b2ea8a5214d17a2b5dc5eda",
+      "bytes": 243641,
+      "members": 19
+    },
+    "qingjian-0.1.6-beta.11-windows-x86_64-setup.exe": {
+      "sha256": "55c91d60e677d86eede3024ce88cc309eab2f3e3d89cd8a666e1ee4f9fefb6f5",
+      "bytes": 139983059
+    }
+  },
+  "evaluations": {
+    "ci/static/summary.json": {
+      "count": 1123,
+      "profile": "full",
+      "clean": {
+        "count": 64,
+        "top1": 43,
+        "top3": 48,
+        "top5": 48,
+        "parse_failures": 0,
+        "corrected": 0,
+        "char_errors": 44,
+        "chars": 409,
+        "top1_percent": 67.188,
+        "cer_percent": 10.758
+      }
+    },
+    "ci/model/summary.json": {
+      "count": 1123,
+      "profile": "full",
+      "clean": {
+        "count": 64,
+        "top1": 42,
+        "top3": 48,
+        "top5": 48,
+        "parse_failures": 0,
+        "corrected": 0,
+        "char_errors": 42,
+        "chars": 409,
+        "top1_percent": 65.625,
+        "cer_percent": 10.269
+      }
+    },
+    "ci/lexicon/summary.json": {
+      "count": 237,
+      "coverage": {
+        "count": 220,
+        "entries": 220
+      }
+    },
+    "ci/summary.json": {
+      "clean": {
+        "count": 30,
+        "top1": 15,
+        "top3": 16,
+        "top5": 16,
+        "parse_failures": 0,
+        "corrected": 0,
+        "char_errors": 41,
+        "chars": 386,
+        "top1_percent": 50.0,
+        "cer_percent": 10.622
+      },
+      "mutations": {
+        "count": 270,
+        "top1": 82,
+        "top3": 88,
+        "top5": 88,
+        "parse_failures": 0,
+        "corrected": 148,
+        "char_errors": 667,
+        "chars": 3474,
+        "top1_percent": 30.37,
+        "cer_percent": 19.2
+      }
+    }
+  },
+  "installer_comparison": {
+    "baseline": {
+      "tag": "yushi-windows-v0.1.6-beta.10",
+      "name": "qingjian-0.1.6-beta.10-windows-x86_64-setup.exe",
+      "bytes": 139947945
+    },
+    "new_bytes": 139983059,
+    "delta_bytes": 35114,
+    "schemes": "all retained"
+  }
+}

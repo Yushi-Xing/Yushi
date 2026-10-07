@@ -28,6 +28,12 @@
 
 第二轮 CI `37644120955` 严格 clippy 成功，但 3 个分层子窗口原生测试创建失败（27 通过、3 失败）。本机同一份 C# 诊断程序对照：缺少支持版本清单时普通子窗口成功、分层子窗口失败；加入 Windows 8 / 10 `supportedOS` 后两种均成功；只激活线程级清单仍然失败。这与 [公开 Win32 使用要求](https://learn.microsoft.com/en-us/windows/win32/winmsg/using-windows) 一致。新增 TSF MSVC 构建脚本给测试 exe 嵌入 ID 1 兼容清单，保持分层测试原样；ID 1 在产品 DLL 中不会覆盖搜索宿主的应用清单，不包含提权、uiAccess 或 DPI 设置。
 
+第三轮 [CI 37645463953](https://github.com/Yushi-Xing/Yushi/actions/runs/37645463953) 三平台全部成功，TSF 原生 30 通过、0 失败，包含新增 10 项；32 位 DLL 检查成功。随后 [发布流水线 37646309100](https://github.com/Yushi-Xing/Yushi/actions/runs/37646309100) 全部门禁成功，Windows job Rust 汇总 726 通过、0 失败、3 个默认忽略项。模型停键检查四个输入样例的 `idle_new_calls=0`、`idle_cpu_ms=0`；这不代替用户笔记本的异响验收。
+
+2026-10-08 独立核对 [beta.11 发布产物](https://github.com/Yushi-Xing/Yushi/releases/tag/yushi-windows-v0.1.6-beta.11)：提交为 `f0d1c3970f5afe7c3a76f68a2e7dc32d2753a8bd`，安装包 139,983,059 字节（133.50 MiB），比 beta.10 增加 35,114 字节（34.3 KiB）。完整流式 SHA256 与发布清单一致，MZ 头正确；三个评测 ZIP 哈希与 CRC 全部通过，构建指纹一致。安装包 SHA256 为 `55c91d60e677d86eede3024ce88cc309eab2f3e3d89cd8a666e1ee4f9fefb6f5`。核验记录见 [release-proof](windows-search-hosted-release-proof.json)。
+
+重新评测：日常文章无模型首选 43/64、有模型 42/64；原组合正常首选 84/92、错拼首选 757/1104；补库覆盖 220/220，保持上一版结果。搜索栏、Win10/Win11 与常用应用的实际安装验收仍待用户执行，任务状态保持进行中。
+
 子窗口与分层显示使用公开 Win32 API，参考 [Windows 窗口特性](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features) 和 [微软分层子窗口示例](https://github.com/microsoft/Windows-classic-samples/blob/main/Samples/DirectCompositionLayeredChildWindow/cpp/DirectComposition_LayeredChildWindow.cpp)。协商遵守 [TSF UI-less 模式](https://learn.microsoft.com/en-us/windows/win32/tsf/uiless-mode-overview) 的 `pbShow`。
 
 ## 安装验收
