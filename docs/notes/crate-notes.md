@@ -385,3 +385,5 @@ Unix socket 用共享长度前缀与 Frame（当前公共版本 7，与 `PROTOCO
 成功建立子窗口后通过现有 `CandidateUi::Visibility` 隐藏 Server 的独立窗；编辑会话先发送显隐再发送锚点，协议版本保持 8。宿主接管、失焦、取消、结束组句或停用均销毁本地窗。窗口消息采用线程局部上下文表和 DLL 租约，父窗口销毁后不碰复用 HWND；回调只排队，FFI 边界保护 panic。相同帧与位置不重绘；失败在本段不重复创建，下一段可再试。新增诊断只记录显示路径和错误码，不记录拼音、候选或上屏内容。
 
 仅有 `TF_TMAE_UIELEMENTENABLEDONLY` 激活标志不代表禁止 TIP 绘制，成功协商后的 `pbShow` 仍是准则；没有 UI 管理器或协商失败时，UI-less 线程不会自行显示窗口。真实搜索的验收状态见 [本轮记录](windows-search-hosted-2026-10-07.md)。
+
+TSF MSVC 测试 exe 由 `build.rs` 嵌入 ID 1 Windows 8 / 10 兼容清单，提供分层子窗口所需的进程声明；DLL 不用此 exe 清单替换宿主权限或 DPI。Windows GNU 在 WSL 仅检查代码，不嵌入此 MSVC 测试清单。

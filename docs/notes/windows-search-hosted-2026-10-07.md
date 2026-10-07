@@ -26,6 +26,8 @@
 
 首轮 CI `37643478437` 在 Windows lib-test 编译阶段拦截了两处 `SendMessageW` 参数类型错误；已按 windows 0.62.2 的 `Option<WPARAM>` / `Option<LPARAM>` 签名修正。Linux 全量与 macOS 壳成功，此次失败没有触发标签发布。
 
+第二轮 CI `37644120955` 严格 clippy 成功，但 3 个分层子窗口原生测试创建失败（27 通过、3 失败）。本机同一份 C# 诊断程序对照：缺少支持版本清单时普通子窗口成功、分层子窗口失败；加入 Windows 8 / 10 `supportedOS` 后两种均成功；只激活线程级清单仍然失败。这与 [公开 Win32 使用要求](https://learn.microsoft.com/en-us/windows/win32/winmsg/using-windows) 一致。新增 TSF MSVC 构建脚本给测试 exe 嵌入 ID 1 兼容清单，保持分层测试原样；ID 1 在产品 DLL 中不会覆盖搜索宿主的应用清单，不包含提权、uiAccess 或 DPI 设置。
+
 子窗口与分层显示使用公开 Win32 API，参考 [Windows 窗口特性](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features) 和 [微软分层子窗口示例](https://github.com/microsoft/Windows-classic-samples/blob/main/Samples/DirectCompositionLayeredChildWindow/cpp/DirectComposition_LayeredChildWindow.cpp)。协商遵守 [TSF UI-less 模式](https://learn.microsoft.com/en-us/windows/win32/tsf/uiless-mode-overview) 的 `pbShow`。
 
 ## 安装验收
