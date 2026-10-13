@@ -80,6 +80,8 @@ jobs:
         run: cargo test --release -p qingjian-windows-server --test model_idle --locked -- --ignored --nocapture
       - name: Build evaluation CLI
         run: cargo build --release -p qingjian-cli --locked
+      - name: Verify CLI evaluation uses the product unknown-character fallback
+        run: cargo test --release -p qingjian-cli eval::p2c --locked -- --ignored --nocapture
       - name: Evaluate fixed journal corpus with shipped model
         run: python tools/eval/journal.py --binary target/release/qingjian-cli.exe --output target/journal-ci --model data/models/hanzhang-tongbian/hanzhang-tongbian-small.qjm
       - name: Evaluate 1444 pinyin combinations without model or network

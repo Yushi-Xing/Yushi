@@ -178,7 +178,7 @@
       "corpus_kind": "four_short_article_excerpts_and_original_daily_paraphrases",
       "seed_sha256": "7b819100a735ed8309eda64c40fad01f72e9e6dd167bfb4fd1c6dc26b2a0e532",
       "source_sha256": "c14acefd4a6bede4747ec6b61ddbf3542a78eb4aaf93e8d75c5cded997c4ca28",
-      "binary_sha256": "df3f891e3f8f69a7085a65197c44e5d59a8f49a5b2893d352f59c3e81d0ea19c",
+      "binary_sha256": "716f3b89d689ce251f564cdb0fcf6ead3a7182deddf8c5b1f2ffaa049b94ba8f",
       "dictionary_sha256": "3e33b16a84df555e6f16d52ac8ab3c2c6b6f1f71734e69463861fd5abd9c19dc",
       "builtin_patch_sha256": "2073471029796b927c0f3135e5855c149471bd90864d8f9a35bb9ed72c2a24db",
       "builtin_supplement_sha256": "ec24f3948566ca613fa3c42150de8f87606e3676d1f9b72bf9ca62628c30072b",
@@ -524,7 +524,7 @@
       "corpus_kind": "four_short_article_excerpts_and_original_daily_paraphrases",
       "seed_sha256": "7b819100a735ed8309eda64c40fad01f72e9e6dd167bfb4fd1c6dc26b2a0e532",
       "source_sha256": "c14acefd4a6bede4747ec6b61ddbf3542a78eb4aaf93e8d75c5cded997c4ca28",
-      "binary_sha256": "df3f891e3f8f69a7085a65197c44e5d59a8f49a5b2893d352f59c3e81d0ea19c",
+      "binary_sha256": "716f3b89d689ce251f564cdb0fcf6ead3a7182deddf8c5b1f2ffaa049b94ba8f",
       "dictionary_sha256": "3e33b16a84df555e6f16d52ac8ab3c2c6b6f1f71734e69463861fd5abd9c19dc",
       "builtin_patch_sha256": "2073471029796b927c0f3135e5855c149471bd90864d8f9a35bb9ed72c2a24db",
       "builtin_supplement_sha256": "ec24f3948566ca613fa3c42150de8f87606e3676d1f9b72bf9ca62628c30072b",
@@ -694,12 +694,13 @@
   "validation": {
     "portable_test_passed": 713,
     "portable_test_failed": 0,
-    "portable_test_ignored": 3,
+    "portable_test_ignored": 4,
     "platform": "Linux portable workspace excluding qingjian-macos",
     "windows_host_acceptance": "pending",
     "clippy": "passed -D warnings",
     "python_tests": 14,
     "build_jobs": 2,
+    "cli_product_policy_test": "passed with shipped model",
     "rust": "1.96.0",
     "base_commit": "1ef14cb37dad2ffa4e5c1264468c7d831292e7cc"
   }
