@@ -1,0 +1,1002 @@
+[
+  {
+    "id": "reading-00/clean",
+    "source": "reading",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "书房",
+    "pinyin": "shufang",
+    "context": ""
+  },
+  {
+    "id": "reading-01/clean",
+    "source": "reading",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "书架",
+    "pinyin": "shujia",
+    "context": ""
+  },
+  {
+    "id": "reading-02/clean",
+    "source": "reading",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "阅读",
+    "pinyin": "yuedu",
+    "context": ""
+  },
+  {
+    "id": "reading-03/clean",
+    "source": "reading",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "藏书",
+    "pinyin": "cangshu",
+    "context": ""
+  },
+  {
+    "id": "reading-04/clean",
+    "source": "reading",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "笔记本",
+    "pinyin": "bijiben",
+    "context": ""
+  },
+  {
+    "id": "reading-05/clean",
+    "source": "reading",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "键盘",
+    "pinyin": "jianpan",
+    "context": ""
+  },
+  {
+    "id": "reading-06/clean",
+    "source": "reading",
+    "kind": "word",
+    "split": "holdout",
+    "group": "clean",
+    "text": "文件",
+    "pinyin": "wenjian",
+    "context": ""
+  },
+  {
+    "id": "reading-07/clean",
+    "source": "reading",
+    "kind": "word",
+    "split": "holdout",
+    "group": "clean",
+    "text": "纸页",
+    "pinyin": "zhiye",
+    "context": ""
+  },
+  {
+    "id": "reading-08/clean",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "我打开笔记本电脑",
+    "pinyin": "wodakaibijibendiannao",
+    "context": ""
+  },
+  {
+    "id": "reading-08/double_delete",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "我打开笔记本电脑",
+    "pinyin": "wdakaibijibendianno",
+    "context": ""
+  },
+  {
+    "id": "reading-09/clean",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "把旧书放回书架上",
+    "pinyin": "bajiushufanghuishujiashang",
+    "context": ""
+  },
+  {
+    "id": "reading-09/double_delete",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "把旧书放回书架上",
+    "pinyin": "bjiushufanghuishujiashag",
+    "context": ""
+  },
+  {
+    "id": "reading-10/clean",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "我想在书房安静地看书",
+    "pinyin": "woxiangzaishufanganjingdekanshu",
+    "context": ""
+  },
+  {
+    "id": "reading-10/double_delete",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "我想在书房安静地看书",
+    "pinyin": "wxiangzaishufanganjingdekansu",
+    "context": ""
+  },
+  {
+    "id": "reading-11/clean",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "这个文件里面有很多图片",
+    "pinyin": "zhegewenjianlimianyouhenduotupian",
+    "context": ""
+  },
+  {
+    "id": "reading-11/double_delete",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "这个文件里面有很多图片",
+    "pinyin": "zegewenjianlimianyouhenduotupin",
+    "context": ""
+  },
+  {
+    "id": "reading-12/clean",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "先看目录再找需要的内容",
+    "pinyin": "xiankanmuluzaizhaoxuyaodeneirong",
+    "context": ""
+  },
+  {
+    "id": "reading-12/double_delete",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "先看目录再找需要的内容",
+    "pinyin": "xankanmuluzaizhaoxuyaodeneirog",
+    "context": ""
+  },
+  {
+    "id": "reading-13/clean",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "你今天准备读哪本书",
+    "pinyin": "nijintianzhunbeidunabenshu",
+    "context": ""
+  },
+  {
+    "id": "reading-13/double_delete",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "你今天准备读哪本书",
+    "pinyin": "njintianzhunbeidunabensu",
+    "context": ""
+  },
+  {
+    "id": "reading-14/clean",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "clean",
+    "text": "我把读书笔记保存到电脑里",
+    "pinyin": "wobadushubijibaocundaodiannaoli",
+    "context": ""
+  },
+  {
+    "id": "reading-14/double_delete",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "double_delete",
+    "text": "我把读书笔记保存到电脑里",
+    "pinyin": "wbadushubijibaocundaodiannaoi",
+    "context": ""
+  },
+  {
+    "id": "reading-15/clean",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "clean",
+    "text": "朋友借走的那本书还没有归还",
+    "pinyin": "pengyoujiezoudenabenshuhaimeiyouguihuan",
+    "context": ""
+  },
+  {
+    "id": "reading-15/double_delete",
+    "source": "reading",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "double_delete",
+    "text": "朋友借走的那本书还没有归还",
+    "pinyin": "pngyoujiezoudenabenshuhaimeiyouguihun",
+    "context": ""
+  },
+  {
+    "id": "tidying-00/clean",
+    "source": "tidying",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "桌面",
+    "pinyin": "zhuomian",
+    "context": ""
+  },
+  {
+    "id": "tidying-01/clean",
+    "source": "tidying",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "整理",
+    "pinyin": "zhengli",
+    "context": ""
+  },
+  {
+    "id": "tidying-02/clean",
+    "source": "tidying",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "文具",
+    "pinyin": "wenju",
+    "context": ""
+  },
+  {
+    "id": "tidying-03/clean",
+    "source": "tidying",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "笔筒",
+    "pinyin": "bitong",
+    "context": ""
+  },
+  {
+    "id": "tidying-04/clean",
+    "source": "tidying",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "文件夹",
+    "pinyin": "wenjianjia",
+    "context": ""
+  },
+  {
+    "id": "tidying-05/clean",
+    "source": "tidying",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "抽屉",
+    "pinyin": "chouti",
+    "context": ""
+  },
+  {
+    "id": "tidying-06/clean",
+    "source": "tidying",
+    "kind": "word",
+    "split": "holdout",
+    "group": "clean",
+    "text": "鼠标",
+    "pinyin": "shubiao",
+    "context": ""
+  },
+  {
+    "id": "tidying-07/clean",
+    "source": "tidying",
+    "kind": "word",
+    "split": "holdout",
+    "group": "clean",
+    "text": "分类",
+    "pinyin": "fenlei",
+    "context": ""
+  },
+  {
+    "id": "tidying-08/clean",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "文具放在笔筒里",
+    "pinyin": "wenjufangzaibitongli",
+    "context": ""
+  },
+  {
+    "id": "tidying-08/double_delete",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "文具放在笔筒里",
+    "pinyin": "wnjufangzaibitongi",
+    "context": ""
+  },
+  {
+    "id": "tidying-09/clean",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "暂时不用的文件放进抽屉",
+    "pinyin": "zanshibuyongdewenjianfangjinchouti",
+    "context": ""
+  },
+  {
+    "id": "tidying-09/double_delete",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "暂时不用的文件放进抽屉",
+    "pinyin": "znshibuyongdewenjianfangjinchoui",
+    "context": ""
+  },
+  {
+    "id": "tidying-10/clean",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "先把桌面上的东西整理好",
+    "pinyin": "xianbazhuomianshangdedongxizhenglihao",
+    "context": ""
+  },
+  {
+    "id": "tidying-10/double_delete",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "先把桌面上的东西整理好",
+    "pinyin": "xanbazhuomianshangdedongxizhengliho",
+    "context": ""
+  },
+  {
+    "id": "tidying-11/clean",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "请把水杯放到鼠标旁边",
+    "pinyin": "qingbashuibeifangdaoshubiaopangbian",
+    "context": ""
+  },
+  {
+    "id": "tidying-11/double_delete",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "请把水杯放到鼠标旁边",
+    "pinyin": "qngbashuibeifangdaoshubiaopangbin",
+    "context": ""
+  },
+  {
+    "id": "tidying-12/clean",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "这个文件夹里面放了什么",
+    "pinyin": "zhegewenjianjialimianfangleshenme",
+    "context": ""
+  },
+  {
+    "id": "tidying-12/double_delete",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "这个文件夹里面放了什么",
+    "pinyin": "zegewenjianjialimianfangleshene",
+    "context": ""
+  },
+  {
+    "id": "tidying-13/clean",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "把需要修改的文件发给我",
+    "pinyin": "baxuyaoxiugaidewenjianfageiwo",
+    "context": ""
+  },
+  {
+    "id": "tidying-13/double_delete",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "把需要修改的文件发给我",
+    "pinyin": "bxuyaoxiugaidewenjianfageio",
+    "context": ""
+  },
+  {
+    "id": "tidying-14/clean",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "clean",
+    "text": "整理完桌子再开始工作",
+    "pinyin": "zhengliwanzhuozizaikaishigongzuo",
+    "context": ""
+  },
+  {
+    "id": "tidying-14/double_delete",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "double_delete",
+    "text": "整理完桌子再开始工作",
+    "pinyin": "zengliwanzhuozizaikaishigongzo",
+    "context": ""
+  },
+  {
+    "id": "tidying-15/clean",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "clean",
+    "text": "我找不到昨天保存的那份资料",
+    "pinyin": "wozhaobudaozuotianbaocundenafenziliao",
+    "context": ""
+  },
+  {
+    "id": "tidying-15/double_delete",
+    "source": "tidying",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "double_delete",
+    "text": "我找不到昨天保存的那份资料",
+    "pinyin": "wzhaobudaozuotianbaocundenafenzilio",
+    "context": ""
+  },
+  {
+    "id": "travel-00/clean",
+    "source": "travel",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "地铁",
+    "pinyin": "ditie",
+    "context": ""
+  },
+  {
+    "id": "travel-01/clean",
+    "source": "travel",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "公交",
+    "pinyin": "gongjiao",
+    "context": ""
+  },
+  {
+    "id": "travel-02/clean",
+    "source": "travel",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "出行",
+    "pinyin": "chuxing",
+    "context": ""
+  },
+  {
+    "id": "travel-03/clean",
+    "source": "travel",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "车站",
+    "pinyin": "chezhan",
+    "context": ""
+  },
+  {
+    "id": "travel-04/clean",
+    "source": "travel",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "换乘",
+    "pinyin": "huancheng",
+    "context": ""
+  },
+  {
+    "id": "travel-05/clean",
+    "source": "travel",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "电梯",
+    "pinyin": "dianti",
+    "context": ""
+  },
+  {
+    "id": "travel-06/clean",
+    "source": "travel",
+    "kind": "word",
+    "split": "holdout",
+    "group": "clean",
+    "text": "座椅",
+    "pinyin": "zuoyi",
+    "context": ""
+  },
+  {
+    "id": "travel-07/clean",
+    "source": "travel",
+    "kind": "word",
+    "split": "holdout",
+    "group": "clean",
+    "text": "扶手",
+    "pinyin": "fushou",
+    "context": ""
+  },
+  {
+    "id": "travel-08/clean",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "站内导向标识清晰",
+    "pinyin": "zhanneidaoxiangbiaoshiqingxi",
+    "context": ""
+  },
+  {
+    "id": "travel-08/double_delete",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "站内导向标识清晰",
+    "pinyin": "zanneidaoxiangbiaoshiqingi",
+    "context": ""
+  },
+  {
+    "id": "travel-09/clean",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "坐地铁去医院比较方便",
+    "pinyin": "zuoditiequyiyuanbijiaofangbian",
+    "context": ""
+  },
+  {
+    "id": "travel-09/double_delete",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "坐地铁去医院比较方便",
+    "pinyin": "zoditiequyiyuanbijiaofangbin",
+    "context": ""
+  },
+  {
+    "id": "travel-10/clean",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "我们在哪一站换乘公交",
+    "pinyin": "womenzainayizhanhuanchenggongjiao",
+    "context": ""
+  },
+  {
+    "id": "travel-10/double_delete",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "我们在哪一站换乘公交",
+    "pinyin": "wmenzainayizhanhuanchenggongjio",
+    "context": ""
+  },
+  {
+    "id": "travel-11/clean",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "我想找附近可以休息的座椅",
+    "pinyin": "woxiangzhaofujinkeyixiuxidezuoyi",
+    "context": ""
+  },
+  {
+    "id": "travel-11/double_delete",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "我想找附近可以休息的座椅",
+    "pinyin": "wxiangzhaofujinkeyixiuxidezuoi",
+    "context": ""
+  },
+  {
+    "id": "travel-12/clean",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "这部电梯可以到站台吗",
+    "pinyin": "zhebudiantikeyidaozhantaima",
+    "context": ""
+  },
+  {
+    "id": "travel-12/double_delete",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "这部电梯可以到站台吗",
+    "pinyin": "zebudiantikeyidaozhantaia",
+    "context": ""
+  },
+  {
+    "id": "travel-13/clean",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "请问去医院的公交车在哪里",
+    "pinyin": "qingwenquyiyuandegongjiaochezainali",
+    "context": ""
+  },
+  {
+    "id": "travel-13/double_delete",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "请问去医院的公交车在哪里",
+    "pinyin": "qngwenquyiyuandegongjiaochezainai",
+    "context": ""
+  },
+  {
+    "id": "travel-14/clean",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "clean",
+    "text": "车站里面的标识看得很清楚",
+    "pinyin": "chezhanlimiandebiaoshikandehenqingchu",
+    "context": ""
+  },
+  {
+    "id": "travel-14/double_delete",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "double_delete",
+    "text": "车站里面的标识看得很清楚",
+    "pinyin": "cezhanlimiandebiaoshikandehenqingcu",
+    "context": ""
+  },
+  {
+    "id": "travel-15/clean",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "clean",
+    "text": "今天出门前先查一下路线",
+    "pinyin": "jintianchumenqianxianchayixialuxian",
+    "context": ""
+  },
+  {
+    "id": "travel-15/double_delete",
+    "source": "travel",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "double_delete",
+    "text": "今天出门前先查一下路线",
+    "pinyin": "jntianchumenqianxianchayixialuxin",
+    "context": ""
+  },
+  {
+    "id": "exercise-00/clean",
+    "source": "exercise",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "健身",
+    "pinyin": "jianshen",
+    "context": ""
+  },
+  {
+    "id": "exercise-01/clean",
+    "source": "exercise",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "公园",
+    "pinyin": "gongyuan",
+    "context": ""
+  },
+  {
+    "id": "exercise-02/clean",
+    "source": "exercise",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "骑行",
+    "pinyin": "qixing",
+    "context": ""
+  },
+  {
+    "id": "exercise-03/clean",
+    "source": "exercise",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "篮球",
+    "pinyin": "lanqiu",
+    "context": ""
+  },
+  {
+    "id": "exercise-04/clean",
+    "source": "exercise",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "晨练",
+    "pinyin": "chenlian",
+    "context": ""
+  },
+  {
+    "id": "exercise-05/clean",
+    "source": "exercise",
+    "kind": "word",
+    "split": "development",
+    "group": "clean",
+    "text": "太极剑",
+    "pinyin": "taijijian",
+    "context": ""
+  },
+  {
+    "id": "exercise-06/clean",
+    "source": "exercise",
+    "kind": "word",
+    "split": "holdout",
+    "group": "clean",
+    "text": "运动",
+    "pinyin": "yundong",
+    "context": ""
+  },
+  {
+    "id": "exercise-07/clean",
+    "source": "exercise",
+    "kind": "word",
+    "split": "holdout",
+    "group": "clean",
+    "text": "轮滑",
+    "pinyin": "lunhua",
+    "context": ""
+  },
+  {
+    "id": "exercise-08/clean",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "倡导科学健康生活理念",
+    "pinyin": "changdaokexuejiankangshenghuolinian",
+    "context": ""
+  },
+  {
+    "id": "exercise-08/double_delete",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "倡导科学健康生活理念",
+    "pinyin": "cangdaokexuejiankangshenghuolinin",
+    "context": ""
+  },
+  {
+    "id": "exercise-09/clean",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "我们明天早上去公园运动",
+    "pinyin": "womenmingtianzaoshangqugongyuanyundong",
+    "context": ""
+  },
+  {
+    "id": "exercise-09/double_delete",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "我们明天早上去公园运动",
+    "pinyin": "wmenmingtianzaoshangqugongyuanyundog",
+    "context": ""
+  },
+  {
+    "id": "exercise-10/clean",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "小朋友正在公园里面打篮球",
+    "pinyin": "xiaopengyouzhengzaigongyuanlimiandalanqiu",
+    "context": ""
+  },
+  {
+    "id": "exercise-10/double_delete",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "小朋友正在公园里面打篮球",
+    "pinyin": "xaopengyouzhengzaigongyuanlimiandalanqu",
+    "context": ""
+  },
+  {
+    "id": "exercise-11/clean",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "骑自行车到公园要多久",
+    "pinyin": "qizixingchedaogongyuanyaoduojiu",
+    "context": ""
+  },
+  {
+    "id": "exercise-11/double_delete",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "骑自行车到公园要多久",
+    "pinyin": "qzixingchedaogongyuanyaoduoju",
+    "context": ""
+  },
+  {
+    "id": "exercise-12/clean",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "你今天参加了哪些健身活动",
+    "pinyin": "nijintiancanjialenaxiejianshenhuodong",
+    "context": ""
+  },
+  {
+    "id": "exercise-12/double_delete",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "你今天参加了哪些健身活动",
+    "pinyin": "njintiancanjialenaxiejianshenhuodog",
+    "context": ""
+  },
+  {
+    "id": "exercise-13/clean",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "development",
+    "group": "clean",
+    "text": "我想和朋友一起练习轮滑",
+    "pinyin": "woxianghepengyouyiqilianxilunhua",
+    "context": ""
+  },
+  {
+    "id": "exercise-13/double_delete",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "development",
+    "group": "double_delete",
+    "text": "我想和朋友一起练习轮滑",
+    "pinyin": "wxianghepengyouyiqilianxilunha",
+    "context": ""
+  },
+  {
+    "id": "exercise-14/clean",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "clean",
+    "text": "晚上散步的时候顺便去看球",
+    "pinyin": "wanshangsanbudeshihoushunbianqukanqiu",
+    "context": ""
+  },
+  {
+    "id": "exercise-14/double_delete",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "double_delete",
+    "text": "晚上散步的时候顺便去看球",
+    "pinyin": "wnshangsanbudeshihoushunbianqukanqu",
+    "context": ""
+  },
+  {
+    "id": "exercise-15/clean",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "clean",
+    "text": "每天坚持锻炼可以保持好心情",
+    "pinyin": "meitianjianchiduanliankeyibaochihaoxinqing",
+    "context": ""
+  },
+  {
+    "id": "exercise-15/double_delete",
+    "source": "exercise",
+    "kind": "sentence",
+    "split": "holdout",
+    "group": "double_delete",
+    "text": "每天坚持锻炼可以保持好心情",
+    "pinyin": "mitianjianchiduanliankeyibaochihaoxinqig",
+    "context": ""
+  },
+  {
+    "id": "user-0",
+    "source": "user",
+    "kind": "sentence",
+    "split": "user",
+    "group": "user",
+    "text": "词库收纳了多少词",
+    "pinyin": "cekushounaleduoshaoci",
+    "context": ""
+  },
+  {
+    "id": "user-1",
+    "source": "user",
+    "kind": "sentence",
+    "split": "user",
+    "group": "user",
+    "text": "词库收纳了多少词",
+    "pinyin": "cikushounaleduoshaoci",
+    "context": ""
+  },
+  {
+    "id": "user-2",
+    "source": "user",
+    "kind": "sentence",
+    "split": "user",
+    "group": "user",
+    "text": "你觉得这个电影怎么样",
+    "pinyin": "nijuedezhegdiayzenmy",
+    "context": ""
+  },
+  {
+    "id": "user-3",
+    "source": "user",
+    "kind": "sentence",
+    "split": "user",
+    "group": "user",
+    "text": "环太平洋",
+    "pinyin": "huantaipingy",
+    "context": ""
+  }
+]

@@ -1,10 +1,14 @@
-/// 把键盘输入常用的 `lue` / `nue` 转成词库规范形式。
+/// 把键盘输入的 ü 写法转成词库规范形式。
 ///
-/// 词库用 `v` 表示 ü。其他音节原样返回。
+/// 词库用 `v` 表示 ü；j/q/x/y 后的键盘别名 `v` 归一到正字法 `u`。其他音节原样返回。
 pub fn canonical_syllable(text: &str) -> &str {
     match text {
         "lue" => "lve",
         "nue" => "nve",
+        "jv" => "ju",
+        "qv" => "qu",
+        "xv" => "xu",
+        "yv" => "yu",
         _ => text,
     }
 }
@@ -56,6 +60,11 @@ mod tests {
         assert_eq!(canonical_syllable("lve"), "lve");
         assert_eq!(canonical_syllable("nve"), "nve");
         assert_eq!(canonical_syllable("xue"), "xue");
+        for (alias, canonical) in [("jv", "ju"), ("qv", "qu"), ("xv", "xu"), ("yv", "yu")] {
+            assert_eq!(canonical_syllable(alias), canonical);
+            assert!(SyllablePattern::complete(alias).accepts(canonical));
+            assert!(SyllablePattern::complete(canonical).accepts(alias));
+        }
     }
 
     #[test]

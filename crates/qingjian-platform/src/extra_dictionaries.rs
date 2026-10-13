@@ -30,6 +30,9 @@ pub fn list(dir: &Path) -> Vec<(String, PathBuf)> {
         .filter_map(Result::ok)
         .map(|e| e.path())
         .filter_map(|p| {
+            if p.file_name()?.to_str()?.starts_with('.') {
+                return None;
+            }
             let extension = p.extension()?.to_str()?;
             let rank = EXTENSIONS.iter().position(|e| *e == extension)?;
             let stem = p.file_stem()?.to_str()?.to_owned();
@@ -111,5 +114,38 @@ mod tests {
             .collect();
         assert_eq!(names, [("food", "food.tsv"), ("idioms", "idioms.qj")]);
         let _ = std::fs::remove_dir_all(&dir);
+    }
+}
+
+#[cfg(test)]
+mod hidden_tests {
+    use super::{list, snapshot};
+
+    #[test]
+    fn hidden_dictionaries_never_enter_list_or_reload_snapshot() {
+        let dir =
+            std::env::temp_dir().join(format!("qingjian-hidden-dicts-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        for name in [
+            "._idioms.qj",
+            ".hidden.tsv",
+            "词库.tsv",
+            "词库.qj",
+            "visible.tsv",
+        ] {
+            std::fs::write(dir.join(name), b"not a dictionary").unwrap();
+        }
+        let before = snapshot(&dir);
+        assert_eq!(
+            list(&dir)
+                .iter()
+                .map(|(name, _)| name.as_str())
+                .collect::<Vec<_>>(),
+            ["visible", "词库"]
+        );
+        std::fs::write(dir.join("._idioms.qj"), b"changed metadata").unwrap();
+        std::fs::remove_file(dir.join(".hidden.tsv")).unwrap();
+        assert_eq!(snapshot(&dir), before);
+        std::fs::remove_dir_all(dir).unwrap();
     }
 }

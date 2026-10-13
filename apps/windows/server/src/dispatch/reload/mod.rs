@@ -30,6 +30,16 @@ fn mtime(path: &Path) -> Option<SystemTime> {
         .ok()
 }
 
+/// 启动与热加载共享短语装配；非法规则不覆盖上一份有效配置。
+pub fn attach_custom_phrases(engine: &mut Engine, config: &Config) {
+    if engine
+        .set_custom_phrases(config.custom_phrases.clone())
+        .is_err()
+    {
+        tracing::warn!("自定义短语配置无效，保持原规则");
+    }
+}
+
 /// 按 `[predict]` 接云联想与释义兜底；关着或缺密钥就退回本地实现。启动与热加载共用。
 pub fn attach_cloud(engine: &mut Engine, predict: &PredictConfig) {
     if !predict.enabled {
@@ -194,6 +204,7 @@ impl Router {
     /// 应用新配置。学习语言变了换释义表（词汇等级表启动时已全装，不用换）。
     fn apply_config(&mut self, config: &Config) {
         self.engine.set_fuzzy(config.fuzzy);
+        attach_custom_phrases(&mut self.engine, config);
         // 拼音侧与形码侧一起装配（双拼 / 注音 / 混输都在里面）
         self.reload_code_table(config.general.scheme(), config.general.wubi());
         self.engine.set_traditional_mode(config.general.traditional);

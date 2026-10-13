@@ -1,6 +1,6 @@
 //! 同一输入下按读法保存模型分数；切换读法不互相作废，输入或前文变化才换代。
 
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static NEXT_EPOCH: AtomicU64 = AtomicU64::new(1);
@@ -33,6 +33,9 @@ pub(crate) struct NeuralCache {
     /// 按读法分组的待打分文本（不重复）。
     wanted: BTreeMap<String, Vec<String>>,
 
+    /// 已拒绝的读法，本输入代内保留静态排序且不再次请求。
+    rejected: HashSet<String>,
+
     /// 模型不经词图、直接按按键生成的整句，连同生成时用的那段按键。
     ///
     /// 这段按键与打分用的 `keys` 不是一回事：打分的条件是某一批路径覆盖的那段（英文尾巴那条只覆盖头段），
@@ -62,6 +65,7 @@ impl NeuralCache {
         self.epoch = NEXT_EPOCH.fetch_add(1, Ordering::Relaxed);
         self.scores.clear();
         self.wanted.clear();
+        self.rejected.clear();
         self.entries = 0;
     }
 
@@ -79,6 +83,15 @@ impl NeuralCache {
 
     pub fn context(&self) -> &str {
         &self.context
+    }
+
+    pub fn is_rejected(&self, keys: &str) -> bool {
+        self.rejected.contains(keys)
+    }
+
+    pub fn reject(&mut self, keys: &str) {
+        self.rejected.insert(keys.to_owned());
+        self.wanted.remove(keys);
     }
 
     pub fn get(&self, text: &str) -> Option<f64> {
@@ -176,6 +189,7 @@ impl Default for NeuralCache {
             entries: 0,
             scores: HashMap::new(),
             wanted: BTreeMap::new(),
+            rejected: HashSet::new(),
             generated: None,
             generation_wanted: None,
         }

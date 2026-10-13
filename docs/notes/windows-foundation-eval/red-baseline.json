@@ -1,0 +1,33 @@
+{
+  "expected_failures": {
+    "alias": {
+      "failed_test": "test engine::tests::aliases::keyboard_v_aliases_preserve_lookup_preedit_and_commit ... FAILED",
+      "excerpt": "engine::tests::aliases::keyboard_v_aliases_preserve_lookup_preedit_and_commit stdout ----\n\nthread 'engine::tests::aliases::keyboard_v_aliases_preserve_lookup_preedit_and_commit' (7935) panicked at crates/qingjian-core/src/engine/tests/aliases.rs:19:9:\njvzhu"
+    },
+    "custom_phrases": {
+      "failed_test": "test dispatch::reload::tests::phrases::custom_phrases_reload_replace_disable_and_reject_invalid_rules ... FAILED",
+      "excerpt": "dispatch::reload::tests::phrases::custom_phrases_reload_replace_disable_and_reject_invalid_rules stdout ----\n\nthread 'dispatch::reload::tests::phrases::custom_phrases_reload_replace_disable_and_reject_invalid_rules' (288) panicked at apps/windows/server/src/dispatch/reload/tests/phrases.rs:29:43:\ncalled `Result::unwrap()` on an `Err` value: NoSegmentation"
+    },
+    "unknown_character": {
+      "failed_test": "test core_scorer::tests::character_and_p2c_models_skip_unknown_candidate_batches ... FAILED",
+      "excerpt": "core_scorer::tests::character_and_p2c_models_skip_unknown_candidate_batches stdout ----\n\nthread 'core_scorer::tests::character_and_p2c_models_skip_unknown_candidate_batches' (186) panicked at crates/qingjian-neural/src/core_scorer/tests.rs:25:9:\n[\"嗯\", \"恩\"]"
+    },
+    "hidden_dictionary": {
+      "failed_test": "test extra_dictionaries::hidden_tests::hidden_dictionaries_never_enter_list_or_reload_snapshot ... FAILED",
+      "excerpt": "extra_dictionaries::hidden_tests::hidden_dictionaries_never_enter_list_or_reload_snapshot stdout ----\n\nthread 'extra_dictionaries::hidden_tests::hidden_dictionaries_never_enter_list_or_reload_snapshot' (254) panicked at crates/qingjian-platform/src/extra_dictionaries.rs:129:9:\nassertion `left == right` failed\n  left: [\"._idioms\", \".hidden\", \"visible\", \"词库\"]\n right: [\"visible\", \"词库\"]"
+    },
+    "version": {
+      "failed_test": "test version::tests::rejects_malformed_versions ... FAILED",
+      "excerpt": "version::tests::rejects_malformed_versions stdout ----\n\nthread 'version::tests::rejects_malformed_versions' (281) panicked at crates/qingjian-update/src/version.rs:116:13:\n0.1.4-"
+    },
+    "rejected_sync": {
+      "failed_test": "test engine::rescoring::tests::rejected::rejected_sync_batch_keeps_static_order_until_condition_changes ... FAILED",
+      "excerpt": "engine::rescoring::tests::rejected::rejected_sync_batch_keeps_static_order_until_condition_changes stdout ----\n\nthread 'engine::rescoring::tests::rejected::rejected_sync_batch_keeps_static_order_until_condition_changes' (1393) panicked at crates/qingjian-core/src/engine/rescoring/tests/rejected.rs:28:5:\nassertion `left == right` failed\n  left: 20\n right: 1"
+    },
+    "rejected_async": {
+      "failed_test": "test engine::rescoring::tests::rejected::rejected_async_batch_settles_and_new_reading_can_still_run ... FAILED",
+      "excerpt": "engine::rescoring::tests::rejected::rejected_async_batch_settles_and_new_reading_can_still_run stdout ----\n\nthread 'engine::rescoring::tests::rejected::rejected_async_batch_settles_and_new_reading_can_still_run' (1392) panicked at crates/qingjian-core/src/engine/rescoring/tests/rejected.rs:43:13:\nassertion failed: started.elapsed() < Duration::from_secs(3)"
+    }
+  },
+  "excluded_environment_failures": "Seven HTTP tests failed because sandbox denied binding loopback; all passed with local-loopback permission. Not product regressions."
+}

@@ -1,10 +1,20 @@
+//! 将本地模型接入整句评分与补句接口。
+
 use qingjian_core::sentence::SentenceScorer;
 
 use crate::{CharScorer, P2c};
 
+// 未登录字符只能编码成 UNK，概率不可与真实字符比较；整批跳过以保留静态顺序。
+fn all_known(scorer: &CharScorer, texts: &[&str]) -> bool {
+    texts.iter().all(|text| scorer.vocab().knows(text))
+}
+
 /// 字级模型：条件是光标前文，忽略按键。
 impl SentenceScorer for CharScorer {
     fn score(&self, context: &str, _keys: &str, texts: &[&str]) -> Vec<f64> {
+        if !all_known(self, texts) {
+            return Vec::new();
+        }
         match CharScorer::score(self, context, texts) {
             Ok(scores) => scores,
             Err(error) => {
@@ -32,6 +42,9 @@ impl P2cScorer {
 
 impl SentenceScorer for P2cScorer {
     fn score(&self, _context: &str, keys: &str, texts: &[&str]) -> Vec<f64> {
+        if !all_known(&self.0, texts) {
+            return Vec::new();
+        }
         match self.0.score_p2c(keys, texts) {
             Ok(scores) => scores,
             Err(error) => {
@@ -54,3 +67,6 @@ impl SentenceScorer for P2cScorer {
         }
     }
 }
+
+#[cfg(test)]
+mod tests;

@@ -93,6 +93,20 @@ impl CharScorer {
         })
     }
 
+    #[cfg(test)]
+    pub(crate) fn test_fixture(vocab: Vocab) -> Self {
+        let device = Device::Cpu;
+        let config = ModelConfig {
+            vocab_size: vocab.len(),
+            n_layer: 1,
+            n_embd: 4,
+            n_head: 1,
+            context: 32,
+        };
+        let builder = VarBuilder::zeros(DType::F32, &device);
+        Self::assemble(config, vocab, builder, device, None).unwrap()
+    }
+
     /// 加载好的模型本体：逐字生成一类的实验直接用它。
     pub fn model(&self) -> &CharLm {
         &self.model

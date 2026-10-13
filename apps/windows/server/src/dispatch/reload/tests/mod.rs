@@ -161,3 +161,5 @@ fn dictionary_changes_do_not_retry_broken_config() {
     drop(router);
     std::fs::remove_dir_all(&dir).unwrap();
 }
+
+mod phrases;

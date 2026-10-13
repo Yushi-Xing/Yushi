@@ -89,6 +89,12 @@ impl Vocab {
             .collect()
     }
 
+    /// 文本中的每个字符都能按字表评分。
+    pub fn knows(&self, text: &str) -> bool {
+        text.chars()
+            .all(|character| self.index.contains_key(&character))
+    }
+
     /// 逐字符编码，不认识的记 [`UNK`]。
     pub fn encode(&self, text: &str) -> Vec<u32> {
         text.chars()

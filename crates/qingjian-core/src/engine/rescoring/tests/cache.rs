@@ -57,3 +57,21 @@ fn switching_input_and_recreating_a_session_never_reuses_an_old_epoch() {
     assert_ne!(cache.epoch(), old);
     assert_ne!(cache.epoch(), other);
 }
+
+#[test]
+fn rejection_clears_queued_reading_and_resets_with_input_or_context() {
+    let mut cache = NeuralCache::default();
+    cache.prepare("前文", "first");
+    cache.ensure_condition("前文", "en");
+    cache.want("嗯");
+    assert!(cache.has_wanted());
+    cache.reject("en");
+    assert!(!cache.has_wanted());
+    assert!(cache.is_rejected("en"));
+    assert!(!cache.is_rejected("eng"));
+    cache.prepare("前文", "second");
+    assert!(!cache.is_rejected("en"));
+    cache.reject("en");
+    cache.prepare("新前文", "second");
+    assert!(!cache.is_rejected("en"));
+}

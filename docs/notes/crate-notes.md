@@ -7,7 +7,7 @@ CLAUDE.md 只保留目录地图与规则，每个 crate / app / tool 的实现�
 
 词库（TSV 解析或 `.qj` mmap），键按字节序排好，查询逐音节位置二分收窄（简拼位置按音节块跳扫），
 `lookup_pattern`（≥ 模式长度）与 `lookup_exact`（正好等长）同一套实现。词库键以 `v` 表示 ü，
-TSV 解析、查询与生成工具把 `lue` / `nue` 统一成 `lve` / `nve`。
+TSV 解析、查询与生成工具把 `lue` / `nue` 统一成 `lve` / `nve`，把 `jv` / `qv` / `xv` / `yv` 统一成 `ju` / `qu` / `xu` / `yu`。全拼解析接受这些别名，双拼解码也归一后查词。
 旧 `.qj` 含这些键时，加载器建立规范化的内存词库。新 `.qj` 继续使用 mmap。
 辅码码表（`aux_code_table/`，`AuxCodeTable` = `Kind::AuxCodeTable` 的 `.qj`）是另一套存储：`TEXT` 词 arena + `CODE` 码 arena +
 `ENTR` 条目（12 字节，词字节序升序、同词相邻）+ `HASH` 词 → 条目区间起点（`qingjian_format::hash`）。查询只有
@@ -107,6 +107,8 @@ candle 加载 Transformer（GPT-2 风格 decoder，导出成
 
 Core 的 `sentence::SentenceScorer` 有两个实现，同一个 trait 拿到**两种条件**（`context` 光标前文、`keys` 这批路径共同解释的那段按键），各挑自己训练时的那个、忽略另一个：
 
+两个适配器在评分前用 `Vocab::knows` 检查全部候选；任何候选含字表外字符就整批返回空分数，保留静态顺序，不把 UNK 概率用于排序。Core 对拒绝／长度不符的批次记录当前读法，本输入代内不重试；输入或前文变化后才能重试。同步与异步接口都有停键回归，生成接口不受此规则影响。
+
 - `CharScorer`（含章·知微，字级模型）用 `context`：给「前文 + 整句」按字累加 log 概率，前文的每层 K / V 缓存（`PrefixCache`），
   同一段前文只算一次，每个候选只算自己那几个字（64 字前文 × 8 条 28 ms，Metal）。
 - `P2cScorer`（含章·通变，P2C 模型）用 `keys`，不看前文。**产品端整句重排用它**：冻结集 8322 句上 42.49% 对含章·知微字级模型的 41.80%
@@ -176,7 +178,7 @@ P2C 自由生成实验：`--eval-text <集> --eval-generate data/models/hanzhang
 `set_value` 用 toml_edit 原地改键保留注释；`[model] enabled` 本地整句模型开关，`LocalModelConfig`；
 中英模式两项：`[shortcut] switch_mode`（`SwitchKeys`：勾选 shift / control / ctrl+alt+space，可多选，老配置的单个字符串照读）与 `[general] english_mode`（内置英文模式总开关））；
 `extra_dictionaries` 列出 / 加载随包领域词库与用户 `dicts/`
-（mac 壳与 Windows Server 共用，同名 `.qj` 优先于 `.tsv`）；`code_tables` 同构地列出 / 加载随包根 `codes/` 与用户 `codes/` 的码表
+（mac 壳与 Windows Server 共用，同名 `.qj` 优先于 `.tsv`；文件名以点开头的词库不列出、不加载且不触发目录快照热加载）；`code_tables` 同构地列出 / 加载随包根 `codes/` 与用户 `codes/` 的码表
 （`[aux_code] disabled` 是黑名单，`[general] aux_code_key` 缺省 `;` 且校验后退回缺省、`aux_code_show` 是显示码开关）；
 `protocol` 模块是 Windows Server ↔ TSF DLL 的 IPC 协议类型
 （`ClientMessage` / `ServerMessage` / `Frame` / `PreeditSegment`，全 serde，两端共用，见 `docs/design/architecture.md`「Windows：TSF」；
@@ -201,6 +203,7 @@ P2C 自由生成实验：`--eval-text <集> --eval-generate data/models/hanzhang
 检查更新（设计见 `docs/design/update.md`）：`index/` 是索引的类型、下载（`fetch/`，复用 workspace 的 reqwest + 单线程 tokio，20 秒超时；索引 2 MiB、签名 1 KiB 上限，先检查声明长度，再逐块累计限额，未知长度也受限）与验签
 （`signature.rs`，`PUBLIC_KEYS` 列表，`verify_strict`）；`checker/` 是调度（`Checker::poll` 由壳的每秒定时器调，到点起一次性线程）、落盘状态 `UpdateState`（`update.json`，先写临时文件再改名）
 与查到的结果 `Available`。`Version` 自己实现语义化版本比较，不引 semver。`[update]` 配置与 `UpdateChannel` 在 `qingjian-platform`。
+预发布标识的点分段不得为空（含孤立尾横线），损坏版本不参与更新选择；保留开发版与数字预发布标识的原比较方式。
 `examples/check.rs` 手动走一遍；`tools/release-sign` 是发版侧的 keygen / sign / verify。
 
 ## apps/cli
@@ -254,6 +257,8 @@ IMK 输入法，源码按 `app / host / imk / candidates / menubar / preferences
 - 端到端验证可用 `osascript` 的 System Events 往 TextEdit 发按键再读回文本（终端需要辅助功能权限；输入法得在中文模式）。
 
 ## apps/windows
+
+Windows Server 启动与配置热加载共用 `dispatch::attach_custom_phrases`，将 `[custom_phrases]` 注入 Engine；非法规则保留旧值，诊断仅记固定警告，不记录短语正文。
 
 IPC 传输入口用每连接 `SessionMap` 把外部编号换成进程内唯一编号（每连接最多 64 个会话），回包再还原编号；未登记的会话操作拒绝并断开，EOF／坏帧／写失败均回收本连接的会话。重复外部编号不能跨连接访问；非聚焦会话的 Commit 不再清掉前台组句。旧 DLL 的临时 `ImeSwitched` 只允许影响状态条，不注册会话、不能读输入；管道账户／登录身份认证、队列与截止时间仍待后续修复，详见重构清单。TSF 的逐键、preedit、失焦上屏内容运行日志已移除，Server 的 Commit 调试日志也不再写文本。协议 JSON 格式和版本保持兼容。
 

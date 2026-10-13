@@ -90,6 +90,17 @@ fn normalizes_u_umlaut_keys_and_queries() {
     assert_eq!(texts(&dictionary.lookup(&["lve"], false)), ["略"]);
     assert_eq!(texts(&dictionary.lookup(&["nue"], false)), ["虐"]);
     assert_eq!(texts(&dictionary.lookup(&["nve"], false)), ["虐"]);
+    for (alias, canonical, word) in [
+        ("jv", "ju", "居"),
+        ("qv", "qu", "取"),
+        ("xv", "xu", "序"),
+        ("yv", "yu", "语"),
+    ] {
+        let dictionary = Dictionary::parse(&format!("{word}\t{alias}\t100\n")).unwrap();
+        assert_eq!(dictionary.entries().next().unwrap().pinyin, canonical);
+        assert_eq!(texts(&dictionary.lookup(&[alias], false)), [word]);
+        assert_eq!(texts(&dictionary.lookup(&[canonical], false)), [word]);
+    }
 }
 
 #[test]

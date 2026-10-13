@@ -14,18 +14,23 @@ impl Version {
     pub fn parse(text: &str) -> Option<Self> {
         let text = text.trim().split('+').next()?;
         let (core, pre) = match text.split_once('-') {
-            Some((core, pre)) => (core, pre),
-            None => (text, ""),
+            Some((core, pre)) => (core, Some(pre)),
+            None => (text, None),
         };
         let mut numbers = core.split('.').map(|part| part.parse::<u64>().ok());
         let core = [numbers.next()??, numbers.next()??, numbers.next()??];
         if numbers.next().is_some() {
             return None;
         }
-        let pre = if pre.is_empty() {
-            Vec::new()
-        } else {
-            pre.split('.').map(str::to_owned).collect()
+        let pre = match pre {
+            None => Vec::new(),
+            Some(pre) => {
+                let parts: Vec<String> = pre.split('.').map(str::to_owned).collect();
+                if parts.iter().any(|part| part.is_empty()) {
+                    return None;
+                }
+                parts
+            }
         };
         Some(Self { core, pre })
     }
@@ -112,7 +117,19 @@ mod tests {
 
     #[test]
     fn rejects_malformed_versions() {
-        for text in ["", "0.1", "0.1.x", "0.1.2.3", "v0.1.3"] {
+        for text in [
+            "",
+            "0.1",
+            "0.1.x",
+            "0.1.2.3",
+            "v0.1.3",
+            "0.1.4-",
+            "0.1.4-.",
+            "0.1.4-beta.",
+            "0.1.4-.beta",
+            "0.1.4-beta..2",
+            "0.1.4-+build",
+        ] {
             assert!(Version::parse(text).is_none(), "{text}");
         }
     }

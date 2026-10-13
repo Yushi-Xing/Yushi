@@ -1,6 +1,7 @@
 use std::fmt;
 use std::str::FromStr;
 
+use qingjian_dictionary::canonical_syllable;
 use serde::{Deserialize, Serialize};
 
 use super::table::Table;
@@ -129,7 +130,7 @@ impl Scheme {
         let initial = self.initial(first)?;
         self.finals(second).iter().find_map(|final_| {
             let syllable = format!("{initial}{final_}");
-            parser::is_syllable(&syllable).then_some(syllable)
+            parser::is_syllable(&syllable).then(|| canonical_syllable(&syllable).to_owned())
         })
     }
 
@@ -254,6 +255,10 @@ mod tests {
                     "lue" => "lve",
                     "nue" => "nve",
                     "lo" => "luo",
+                    "jv" => "ju",
+                    "qv" => "qu",
+                    "xv" => "xu",
+                    "yv" => "yu",
                     "eng" if scheme == Scheme::Xiaolang => "en",
                     "dia" if scheme == Scheme::Xiaolang => "dai",
                     "lia" if scheme == Scheme::Xiaolang => "lai",

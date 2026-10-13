@@ -26,6 +26,12 @@ struct Counted {
 
 impl SentenceScorer for Counted {
     fn score(&self, context: &str, keys: &str, texts: &[&str]) -> Vec<f64> {
+        // 字表外路径属于显式静态回退；不能算作推理成功，也不能冒充模型故障。
+        if texts.iter().any(|text| !self.inner.0.vocab().knows(text)) {
+            let scores = self.inner.score(context, keys, texts);
+            assert!(scores.is_empty());
+            return scores;
+        }
         self.scores.fetch_add(1, Ordering::SeqCst);
         self.active.fetch_add(1, Ordering::SeqCst);
         let scores = self.inner.score(context, keys, texts);

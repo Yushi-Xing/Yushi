@@ -13,7 +13,7 @@ mod worker;
 #[cfg(test)]
 mod tests;
 
-use super::*;
+use super::{Conversion, Engine, take_last_chars};
 
 use batch::ScoreBatch;
 pub(crate) use cache::NeuralCache;
@@ -64,6 +64,9 @@ impl Engine {
         let context = self.rescoring_context();
         let mut cache = self.neural_cache.borrow_mut();
         cache.ensure_condition(&context, keys);
+        if cache.is_rejected(keys) {
+            return;
+        }
         let mut missing: Vec<String> = Vec::new();
         for path in paths.iter() {
             if cache.get(&path.text).is_none() && !missing.contains(&path.text) {
@@ -79,6 +82,7 @@ impl Engine {
                     let texts: Vec<&str> = missing.iter().map(String::as_str).collect();
                     let scores = scorer.score(&context, keys, &texts);
                     if scores.len() != texts.len() {
+                        cache.reject(keys);
                         return;
                     }
                     for (text, score) in texts.iter().zip(scores) {
@@ -191,6 +195,8 @@ impl Engine {
             }
             for batch in scored.batches {
                 if batch.scores.len() != batch.texts.len() {
+                    cache.reject(&batch.keys);
+                    updated = true;
                     continue;
                 }
                 for (text, score) in batch.texts.iter().zip(batch.scores) {
