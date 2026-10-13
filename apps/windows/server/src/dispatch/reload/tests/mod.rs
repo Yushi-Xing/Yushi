@@ -11,8 +11,18 @@ use super::CONFIG_POLL_INTERVAL;
 use crate::dispatch::{DataDirs, Router, RouterConfig};
 
 fn poll(router: &mut Router) {
+    assert_offline_updates(router);
     router.reload.as_mut().unwrap().last_check = Instant::now() - CONFIG_POLL_INTERVAL;
     router.poll_config_reload();
+    assert_offline_updates(router);
+}
+
+fn assert_offline_updates(router: &Router) {
+    let reload = router.reload.as_ref().unwrap();
+    if let Some(updates) = &reload.updates {
+        assert!(!reload.update.check, "热加载测试不得启动外部更新");
+        assert!(!updates.checking());
+    }
 }
 
 fn modified_at(path: &Path, seconds: u64) {
@@ -29,7 +39,7 @@ fn import_replace_and_remove_without_config_changes() {
     let dir = std::env::temp_dir().join(format!("qingjian-reload-{}", std::process::id()));
     std::fs::create_dir_all(&dir).unwrap();
     let config_path = dir.join("config.toml");
-    std::fs::write(&config_path, "").unwrap();
+    std::fs::write(&config_path, "[update]\ncheck = false\n").unwrap();
     let config = Config::load(&config_path).unwrap();
     let original_config = std::fs::read(&config_path).unwrap();
     let mut router = Router::new(Engine::new(Dictionary::default()), RouterConfig::default());
@@ -111,7 +121,11 @@ fn dictionary_changes_do_not_retry_broken_config() {
     let dir = std::env::temp_dir().join(format!("qingjian-reload-broken-{}", std::process::id()));
     std::fs::create_dir_all(&dir).unwrap();
     let config_path = dir.join("config.toml");
-    std::fs::write(&config_path, "[general]\npage_size = 5\n").unwrap();
+    std::fs::write(
+        &config_path,
+        "[general]\npage_size = 5\n[update]\ncheck = false\n",
+    )
+    .unwrap();
     modified_at(&config_path, 100);
     let config = Config::load(&config_path).unwrap();
     let mut router = Router::new(
@@ -140,7 +154,11 @@ fn dictionary_changes_do_not_retry_broken_config() {
     assert_eq!(router.engine.extra_dictionaries().len(), 2);
 
     // 保持坏配置的 mtime，以可观察的配置值确认后续轮询不会重新读它。
-    std::fs::write(&config_path, "[general]\npage_size = 9\n").unwrap();
+    std::fs::write(
+        &config_path,
+        "[general]\npage_size = 9\n[update]\ncheck = false\n",
+    )
+    .unwrap();
     modified_at(&config_path, 200);
     poll(&mut router);
     assert_eq!(router.config.page_size, 5);

@@ -100,6 +100,14 @@ jobs:
       - name: Test (Server, TSF DLL, Settings)
         run: cargo test -p qingjian-windows-server -p qingjian-windows-tsf -p qingjian-windows-settings --locked
 
+      - name: Repeat offline reload lifecycle regression
+        shell: pwsh
+        run: |
+          1..10 | ForEach-Object {
+            cargo test -p qingjian-windows-server --lib dispatch::reload::tests --locked
+            if ($LASTEXITCODE -ne 0) { throw "Reload regression failed on iteration $_" }
+          }
+
       # 安装包另带一份 32 位 DLL（企业微信 / WPS 这类 32 位应用只能加载它）
       - name: Check (TSF DLL, 32-bit)
         run: cargo check -p qingjian-windows-tsf --target i686-pc-windows-msvc --locked

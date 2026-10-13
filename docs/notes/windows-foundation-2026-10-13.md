@@ -35,3 +35,15 @@
 ## 仍未完成
 
 第二批 TSF 吞键/数字/定位/UIAccess 修复、IPC 身份与资源限额、整句多处纠错和排序、数据-v7 增量、安装包分组测量、轻量设置及按需英语句译均未由本批实现。SearchHost 路径没有改动，仍需实际搜索栏验收；整句首选目标仍需单独优化。
+
+## 发布与交叉核验
+
+[beta.13 Release](https://github.com/Yushi-Xing/Yushi/releases/tag/yushi-windows-v0.1.6-beta.13) 已由 [Windows 发布门禁](https://github.com/Yushi-Xing/Yushi/actions/runs/38413715436) 完成，来源 `e4ed934c5145998d7ad03799a0bc9ed5884a5d0e`。本机下载全部六项附件，核对 GitHub digest、SHA256SUMS、安装器 MZ 文件头、三个 ZIP 的 CRC 和 CI 汇总/提交一致性；[核验记录](windows-foundation-release-proof.json) 保存完整指标。安装器 140,036,116 字节，约 133.55 MiB，SHA256 `7872f5a8662d18867c72c526e2c71735e0b3b53d53092b0c1a9872a0c8dc399c`。
+
+Windows 默认工作区 732 通过、0 失败、4 忽略；原生诊断、真实模型停键、CLI 真实模型规则各显式运行 1 项通过，总计 735 通过。剩余未显式执行的忽略项是神经批量延迟探针。停键四例全部零新增调用；CI CPU 样本不是用户笔记本异响验证。
+
+完整冻结集为期刊 306 条、拼音组合 1,444 条、日常文章静态/模型各 1,123 条、补库能力 237 条。另做本机相同 1,444 条前后对照，正常 84/92、单处错拼 757/1104 保持；一个原失败样本首选变化，旧成功项零回退，见 [组合对照](windows-foundation-eval/quality-comparison.json)。后续整句定位见 [诊断](windows-sentence-diagnosis-2026-10-13.md)。
+
+同一来源提交的常规 CI 中，Linux/macOS 通过，但 Windows 旧热加载测试在末尾删临时目录时返回 Win32 145（DirectoryNotEmpty）；发布门禁的完整 Windows 运行通过。代码检查发现这两项旧测试以缺省配置启动了真实更新 Checker，后台落盘可能与清理竞争。后续只修改测试夹具：所有有效配置显式 `check = false`，每次轮询前后断言不启动更新，保留业务和目录清理断言；不把删目录错误吞掉或靠重试掩盖。常规 Windows CI 额外连续运行热加载测试 10 次，每次必须成功，失败立即拒绝。该改动不改变 beta.13 产品行为，后续常规 CI 验证另记。
+
+两轮本机临时编译缓存（约 14 GiB 与 2 GiB）及冗余调试 CLI 已清理，仅保留对照二进制、报告及发布核验下载；未对 WSL 虚拟磁盘执行压缩或系统清理。
