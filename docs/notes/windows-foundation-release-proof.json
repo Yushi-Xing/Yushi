@@ -1372,5 +1372,16 @@
       "cli_unknown_policy": 1
     },
     "remaining_ignored": "neural batch latency probe"
+  },
+  "main_ci_followup": {
+    "commit": "87399d20aca85be312999e5e9cc6c3b42c458a43",
+    "run": "https://github.com/Yushi-Xing/Yushi/actions/runs/38420602191",
+    "core": "success",
+    "macos": "success",
+    "windows": "success",
+    "offline_reload_iterations": 10,
+    "tests_each_iteration": 4,
+    "failures": 0,
+    "product_runtime_code": "unchanged from released e4ed934"
   }
 }
