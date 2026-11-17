@@ -230,10 +230,11 @@ fn main() -> ExitCode {
             return ExitCode::FAILURE;
         }
     };
-    engine.set_fuzzy(config.fuzzy);
+    engine.set_fuzzy(config.fuzzy.clone());
     dispatch::attach_custom_phrases(&mut engine, &config);
     engine.set_traditional(config.general.traditional());
     engine.set_learning(config.general.learning);
+    engine.set_auto_phrase(config.auto_phrase.enabled, config.auto_phrase.max_chars);
     engine.set_mode_keys(config.shortcut.mode);
     engine.set_aux_code_key(config.general.aux_code_key(), config.general.page_keys());
     engine.set_aux_keep_empty(config.general.aux_code_keep_empty);
@@ -368,6 +369,7 @@ fn grant_appcontainer_log_access() {
 /// 起 UI 线程作为候选窗口 / 状态条的输出端（失败退化为不画），再在命名管道上服务到进程结束。
 #[cfg(windows)]
 fn serve(mut router: Router) -> ExitCode {
+    use qingjian_platform::pipe::{LEGACY_PIPE_NAME, UserSid, pipe_name};
     use qingjian_windows_server::ipc::{Work, pipe};
     use qingjian_windows_server::ui::UiHandle;
     grant_appcontainer_log_access();
@@ -390,10 +392,20 @@ fn serve(mut router: Router) -> ExitCode {
             router.set_candidate_sink(Box::new(ui.clone()));
             router.set_status_sink(Box::new(ui));
         }
-        Err(error) => tracing::error!(%error, "UI 线程启动失败，将不显示候选框 / 状态条"),
+        Err(error) => {
+            tracing::error!(%error, "UI thread failed to start, no candidate window or status bar")
+        }
     }
-    if let Err(error) = pipe::serve_pipe(pipe::DEFAULT_PIPE_NAME, &mut router, work_tx, work_rx) {
-        tracing::error!(%error, "命名管道服务退出");
+    let name = match UserSid::current().and_then(|me| pipe_name(&me)) {
+        Ok(name) => name,
+        Err(error) => {
+            tracing::error!(%error, "Cannot derive the named pipe name from the user token");
+            return ExitCode::FAILURE;
+        }
+    };
+    let legacy = Some(LEGACY_PIPE_NAME);
+    if let Err(error) = pipe::serve_pipe(&name, legacy, &mut router, work_tx, work_rx) {
+        tracing::error!(%error, "Named pipe service stopped");
         return ExitCode::FAILURE;
     }
     ExitCode::SUCCESS

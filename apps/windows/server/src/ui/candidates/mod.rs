@@ -35,6 +35,7 @@ pub use self::click::CandidateClicks;
 use self::key_hint::KeyHintWindow;
 pub(crate) use self::render_data::RenderData;
 use self::theme::Theme;
+use super::layered::backdrop::Backdrop;
 use super::layered::{self, Layered};
 use super::monitor;
 use super::painter::SharedPainter;
@@ -91,6 +92,9 @@ pub(crate) struct CandidateWindow {
     /// 最近一次贴图时窗口左上角的屏幕坐标；动画帧贴在同一处。
     position: Cell<(i32, i32)>,
 
+    /// 主题写了 `material` 时垫在底下的系统亚克力。
+    backdrop: Backdrop,
+
     /// 旁边的键位提示窗口；建不成为 `None`，不显示键位提示。
     key_hint_window: Option<KeyHintWindow>,
 
@@ -144,6 +148,7 @@ impl CandidateWindow {
             logged_dpi: Cell::new(None),
             painter,
             position: Cell::new((0, 0)),
+            backdrop: Backdrop::new(hwnd),
             key_hint_window,
             key_hint: RefCell::new(None),
         })
@@ -223,6 +228,8 @@ impl CandidateWindow {
                 self.position.set(position);
                 self.schedule(rendered.next_frame);
                 click::set_hits(rendered.hits.clone(), (content_x, content_y));
+                // 先垫材质再贴图：反过来的话刚换到玻璃主题那一帧会闪一下没底色的字
+                self.backdrop.update(rendered.material, self.dark.get());
                 layered::present(self.hwnd, &rendered.pixmap, position).map(|()| {
                     Some(RECT {
                         left: content_x,
@@ -234,6 +241,7 @@ impl CandidateWindow {
             }
             None => {
                 click::set_hits(Vec::new(), (0, 0));
+                self.backdrop.update(None, self.dark.get());
                 self.show_gdi(anchor).map(|()| None)
             }
         };
@@ -263,13 +271,10 @@ impl CandidateWindow {
     /// 用当前方向画一帧；方向没变时沿用上一帧，避免高亮动画反复换边。
     fn render(&self) -> Option<Rendered> {
         let data = self.data.borrow();
+        let frame = data.render_frame();
         self.painter.borrow_mut().as_mut().and_then(|painter| {
-            painter.render_frame(
-                &data.render_frame(),
-                data.layout,
-                self.dark.get(),
-                self.dpi.get(),
-            )
+            painter.set_material_support(self.backdrop.supported());
+            painter.render_frame(&frame, data.layout, self.dark.get(), self.dpi.get())
         })
     }
 

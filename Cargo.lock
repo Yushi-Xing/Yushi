@@ -4183,6 +4183,7 @@ dependencies = [
  "toml",
  "toml_edit",
  "tracing",
+ "windows",
 ]
 
 [[package]]

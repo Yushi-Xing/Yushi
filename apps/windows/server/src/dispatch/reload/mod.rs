@@ -265,7 +265,7 @@ impl Router {
     /// 应用新配置。学习语言变了换释义表（词汇等级表启动时已全装，不用换）。
     fn apply_config(&mut self, config: &Config, phrases_valid: bool) {
         crate::clipboard_process::sync(config.clipboard.enabled);
-        self.engine.set_fuzzy(config.fuzzy);
+        self.engine.set_fuzzy(config.fuzzy.clone());
         if phrases_valid {
             attach_custom_phrases(&mut self.engine, config);
         } else {
@@ -275,6 +275,8 @@ impl Router {
         self.reload_schemes(config);
         self.engine.set_traditional(config.general.traditional());
         self.engine.set_learning(config.general.learning);
+        self.engine
+            .set_auto_phrase(config.auto_phrase.enabled, config.auto_phrase.max_chars);
         self.engine.set_mode_keys(config.shortcut.mode);
         self.engine
             .set_aux_code_key(config.general.aux_code_key(), config.general.page_keys());

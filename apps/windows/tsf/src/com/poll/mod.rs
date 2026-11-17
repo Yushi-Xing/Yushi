@@ -215,13 +215,15 @@ fn commit_clicked(context: &PollContext, frame: &Frame, commit: String) {
         String::new()
     };
     context.shared.follow_frame(frame);
-    if let Err(error) = context
+    context
         .shared
-        .candidates
-        .update(frame, context.shared.last_context().as_ref())
-    {
-        log(&format!("更新宿主候选列表失败: {error}"));
-    }
+        .candidate_list()
+        .show(frame, context.shared.last_context().as_ref());
+    log(&format!(
+        "clicked commit: {} chars, preedit_len={}",
+        commit.chars().count(),
+        preedit.chars().count()
+    ));
     if let Err(error) = request_update(
         &document,
         context.client_id,
@@ -231,7 +233,9 @@ fn commit_clicked(context: &PollContext, frame: &Frame, commit: String) {
         preedit,
         None,
     ) {
-        log(&format!("点击上屏的编辑会话没被受理: {error}"));
+        log(&format!(
+            "edit session for the clicked commit was rejected: {error}"
+        ));
     }
 }
 

@@ -54,7 +54,7 @@
 - [ ] 快捷短语（`i` 前缀）：编码 → 短语表，用户可增删
 - [x] 问字模式离线版：拆字表按部件查字（拆字字典 CC BY 3.0，不用 IDS），云端版已有；2026-11-06 加笔画与混输
 - [ ] 双拼收尾：菜单栏增加方案切换
-- [x] 双拼方案数据化：用户在 `schemes/<id>/scheme.toml` 写 `type = "shuangpin"` 就是一套方案，可拿内置方案当底子只改几个键（2026-10-20，Linux 未接）
+- [x] 双拼方案数据化：用户在 `schemes/<id>/scheme.toml` 写 `type = "shuangpin"` 就是一套方案，可拿内置方案当底子只改几个键（2026-10-20；Linux 于 2026-11-05 接入）
 - [ ] 双拼解码支持同码出多个读音——小浪的 `lk`（lai / lia）、`nm`（niang / nen）、`dk`（dai / dia）、`un`（en / eng）现在只解第一个，做完去掉 `every_syllable_round_trips` 里小浪的四个例外（#129）
 - [ ] 辅码（issue #8，设计见 [docs/design/aux-code.md](../design/aux-code.md)）：触发键（缺省 `;`，与「非拼音键进直输段 / 全角标点」排优先级）与逐键即筛、词级过滤、辅码态隐藏无码词；码表走 Rime yaml 导入（`columns` 必须解析、`import_tables` 跨文件合表、「有词无码」行要报警）；码表存**独立码索引**（两段式查询，别复用词库 Slot）；
   原生表只带笔画（CNS11643 笔顺 + 大陆序覆盖表 `dict-convert stroke`，艹 3 / 辶 3 / 阝 2）；设置界面加「辅码」页（macOS 偏好设置 / Windows 设置程序：触发键、显示码、码表列表、导入）；第三方形码表（小鹤形 / 自然码形）不随包，走引导导入
@@ -106,6 +106,7 @@
 ## 三、其他平台
 
 - [~] Windows TSF（Phase 5）：真机自用中，候选窗已覆盖商店 / 任务栏搜索（`uiAccess` + 自签）。
+  - [ ] 去掉 Server 在旧管道名 `\\.\pipe\qingjian` 上的过渡服务（`serve_pipe` 的 `legacy`，#699）：留它只为升级后没重启的应用里的老 DLL，它对 AppContainer 放行建实例，老 DLL 的连接可能被抢；按用户命名的管道发出去一个版本后就删。
   与 mac 功能齐平尚缺（按价值排；工时=开发+真机验证合计，单人；真机来回是大头）：
   - [~] **① 翻译选中文字 `translate_selection`**（★★★ / 中高 / 1.5–2 天）：**代码完成，待真机测**（2026-09-10）。
     新增 `RequestSelection` / `Selection{text,rect}` 两协议消息；DLL 异步只读会话（`com/selection.rs`，`GetSelection`+`GetText`+`GetTextExt`）
@@ -150,7 +151,6 @@
 - [ ] 安卓的自定义短语与设置导入导出（#746）：桌面设置程序已能导入导出短语（与配置文件同一写法的 TOML）与设置（「高级」页），安卓的短语另存在 `PhraseBook`，要在安卓设置里加同样的导入导出、读写同一种文件，两边才能互相搬
 - [ ] 设置项的平台缺口（设置程序 `apps/settings/src/support/` 表里标「待实现」的项，输入法接上之前设置里不显示；测试逐条对照这里）：
   - [ ] 辅码：Linux
-  - [ ] 形码与自定义方案：Linux
   - [ ] 默认英文模式：macOS
   - [ ] 按应用记住中英模式：macOS、Linux
   - [ ] 中文与英文、数字之间自动加空格：Linux
@@ -170,6 +170,7 @@
   - [ ] 小键盘数字：macOS、Linux
   - [ ] 双拼候选窗显示按键：Linux
   - [ ] 组句时切换单字模式：macOS、Linux
+  - [ ] 组句时按词跳：macOS、Linux
   - [ ] 候选字粗细：macOS
   - [ ] 成对符号自动补全：macOS、Linux
   - [ ] 竖排在光标上方时倒着排：macOS
@@ -180,5 +181,5 @@
 - [ ] 五笔（86 版）：方案与分期见 [wubi.md](wubi.md)，第一期 Core + CLI + Windows；
   `[general] scheme` 收敛与配置迁移一起做（顺带解掉〇里的「配置文件版本迁移」）
 - [ ] 自定义形码方案：Core / 平台 / CLI / Windows / macOS / 新版设置程序已做（2026-10-20，见 [wubi.md](wubi.md) 五之三），
-  剩 Windows 与 macOS 真机验顶字和满码自动上屏、Linux 壳接形码
+  Linux 壳已接形码（2026-11-05，见 [验证记录](../notes/linux-wubi.md)）；剩 Windows 与 macOS 真机验顶字和满码自动上屏
 - [ ] 复杂方案收尾（与上一条共用「输入方案」抽象）：注音只在 Core 与 Windows 接了，macOS 侧还没接；双拼的方案切换要等 `[general] scheme`

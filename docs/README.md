@@ -29,6 +29,9 @@ README.md 只介绍项目（各语言译本在 [i18n/](i18n/)），所有技术�
 | [plan/zh_tw_support_plan.md](plan/zh_tw_support_plan.md) | 繁体输出与台湾注音支持的分析与方案（贡献者 pinchiu，#22）：读音标准差异、台湾用语、简转繁一对多；两条路线 |
 | [plan/todo.md](plan/todo.md) | 待办清单，按「从自用到能给别人用」排 |
 | [plan/wubi.md](plan/wubi.md) | 五笔（形码）支持方案（2026-09-15）：为什么不能按双拼的方式接、两条平行管线、码表与词频、`[general] scheme` 收敛、分期 |
+| [design/linux-wubi.md](design/linux-wubi.md) | Linux 五笔、自制方案、热更新与会话清理设计 |
+| [plan/linux-wubi-implementation.md](plan/linux-wubi-implementation.md) | Linux 五笔接入的实现与验证清单 |
+| [notes/linux-wubi.md](notes/linux-wubi.md) | Linux 五笔验证命令、实际环境与未验证范围 |
 | [notes/crate-notes.md](notes/crate-notes.md) | 各 crate / app / tool 的实现要点：入口类型、数据文件、常数、生成命令 |
 | [notes/yushi-xing-comparison-2026-11-05.md](notes/yushi-xing-comparison-2026-11-05.md) | Yushi-Xing fork 相对青简的实际改动、继承关系、未完成项与本轮安装包验证 |
 | [notes/windows-refactor-round1-2026-10-04.md](notes/windows-refactor-round1-2026-10-04.md) | Windows 重构第一轮：会话隔离、诊断导出、日志与下载限额修复，自动与原生 ZIP 测试结果及未验项目 |

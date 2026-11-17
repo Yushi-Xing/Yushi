@@ -133,6 +133,7 @@ impl Router {
             notice: None,
             symbol_panel: false,
             panel_text_box: false,
+            differs: Vec::new(),
         }
     }
 }

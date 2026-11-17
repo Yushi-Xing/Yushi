@@ -11,7 +11,7 @@ For keys you can change, see [Changing keys](../personalize/keys-settings.md); A
 
 | Action | macOS | Windows | Linux |
 |---|---|---|---|
-| Switch Chinese / English | `Caps Lock`; after ticking 单击 Shift (Tap Shift) under 切换键 (Switch key) in 设置 → 中英文 (Settings → Chinese/English), also a tap of `Shift` (`Caps Lock` then only controls capitals). A 中 / 英 hint flashes in the top-right corner of the screen when you switch | Tap `Shift`; the system's `Ctrl + Space`; click 中 / 英 on the taskbar or the floating status bar | Tap `Shift` |
+| Switch Chinese / English | `Caps Lock`; after ticking 单击 Shift (Tap Shift) under 切换键 (Switch key) in 设置 → 中英文 (Settings → Chinese/English), also a tap of `Shift` (`Caps Lock` then only controls capitals). A 中 / 英 (or 越 when a third input method is enabled) hint flashes in the top-right corner of the screen when you switch | Tap `Shift`; the system's `Ctrl + Space`; click 中 / 英 on the taskbar or the floating status bar | Tap `Shift` |
 | Type uppercase English directly | Hold `⇧` in English mode; with Tap Shift ticked or 中英文切换 (Chinese/English switching) turned off, `Caps Lock` on also types capitals | `Caps Lock` on (in either mode) | `Caps Lock` on |
 | Type one capital letter while typing pinyin | `⇧ + letter` | `Shift + letter` | `Shift + letter` |
 | Switch full-width / half-width punctuation | `⌃ + .` can be enabled (off by default) | Click the ，。 cell on the floating status bar; `Ctrl + .` can be enabled (off by default) | — |
@@ -36,6 +36,7 @@ On Windows and Linux, the Chinese / English switch can also be a tap of `Ctrl` o
 | Delete all pinyin before the cursor | `⌘ + Backspace` | — | — |
 | Clear | `Esc` | `Esc` | `Esc` |
 | List only single characters (press again to go back; normal candidates return after you commit; can be changed or turned off in Settings) | — | `Ctrl + D` | — |
+| Next word: keep the first word of the top sentence and list choices for the next word (can be changed or turned off in Settings) | — | `Ctrl + V` | — |
 | Move the highlight (pages automatically at the edge) | `↑` / `↓` | `↑` / `↓` | `↑` / `↓` |
 | Page | `[` `]`, `PageUp` / `PageDown`, `⇧ + Tab` (previous page); click the arrows beside the page number | `[` `]`, `PageUp` / `PageDown`, `Shift + Tab` (previous page); click the arrows beside the page number, or scroll the mouse wheel over the candidates | `[` `]`, `PageUp` / `PageDown`, `Shift + Tab` (previous page) |
 | Accept the AI sentence completion (next page if there is none) | `Tab` | `Tab` | `Tab` |
@@ -51,6 +52,17 @@ On Windows, numpad digits also pick candidates by default. Set 小键盘数字 (
 
 When the cursor is in the middle of the pinyin, candidates are based only on the pinyin before the cursor (`ni|hao` gives 你); after committing, the rest of the pinyin stays and the cursor moves to the end.
 A few keys differ with Dachen Zhuyin and Wubi; see [Pinyin schemes and fuzzy pinyin](../input/fuzzy-and-shuangpin.md#Dachen-Zhuyin) and [Wubi and mixed input](../input/wubi.md).
+
+## Pure Wubi
+
+| Action | macOS, Windows, Linux |
+|---|---|
+| Commit highlighted candidate / candidate N | `Space` / `1` to `9` |
+| Auto-commit a unique full code | On by default; can be disabled in Settings |
+| Type another letter after a full code | Commit the highlight and start the next code; commit-on-next-code can be disabled |
+| Clear an unmatched code / keep raw letters | `Space` or punctuation clears it; `Enter` commits raw letters |
+
+Automatic commits apply only to pure shape-based input, not mixed input. See [Wubi and mixed input](../input/wubi.md).
 
 ## In the symbol panel
 

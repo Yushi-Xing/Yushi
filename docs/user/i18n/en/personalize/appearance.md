@@ -14,7 +14,7 @@ Linux uses Fcitx's own candidate panel, whose look is set in Fcitx; for Android 
 | 青简绿 (Qingjian green, default) | Light green background, text colour unchanged |
 | 系统蓝 (System blue) | System blue background, white text |
 | 微信绿 (WeChat green) | WeChat green background, white text; AI candidates in blue |
-| 玻璃 (Glass) | Blue capsule, white text; the horizontal layout is a single capsule. On macOS the window is clear glass that shows what's behind it, and the text turns darker or lighter with the background; on Windows it has a near-white opaque background |
+| 玻璃 (Glass) | Blue capsule, white text; the horizontal layout is a single capsule. On macOS the window is clear glass that shows what's behind it, and the text turns darker or lighter with the background; on Windows 11 the window is translucent frosted glass, the text follows the system's light or dark mode, and the corners are a little less round than on macOS; on Windows 10, or with the system's Transparency effects turned off, it has a near-white opaque background |
 | 樱花 (Sakura) | Pink-purple glass background, pink highlight block, serif candidates, part of speech and gloss on two lines; a character lying on the top left, with a cherry-blossom charm and ribbons |
 | 大肥鱼 (Big fat fish) | Blue-edged glass background with ripples, light-blue highlight block, gloss on its own line below the word; a whale maid lying on the top edge of the window, clinging to the right side in vertical layout |
 | 初音未来 (Hatsune Miku) | Cyan chamfered border and equalizer bars, cyan highlight block, gloss on its own line below the word; Hatsune Miku lying on the top edge of the window, clinging to the right side in vertical layout |
@@ -54,7 +54,7 @@ For candidates whose reading doesn't match the input (fuzzy pinyin, corrections,
 ## Text
 
 - **渲染引擎 (Rendering engine)**: 青简渲染器 (Qingjian renderer, default) or system drawing. Themes, fonts, key hints and so on only apply with the Qingjian renderer.
-- **Font**: the system font by default.
+- **Font**: the system font by default. Once you pick a font, every theme uses it for candidates, annotations, indexes and pinyin, in place of the theme's own font (such as 樱花's Songti); fonts a theme sets on its own for decorative text (such as the Georgia italic in 樱花's tagline) stay as they are.
 - **Rare characters on Windows**: when the system's extended SimSun fonts are installed, the candidate window uses them automatically for rare characters. There is no need to change your theme or font. Characters not covered by the installed fonts may still appear as missing glyphs.
 - **Candidate size, gloss size**: the theme's sizes by default; 恢复主题字号与粗细 (Restore theme sizes and weight) goes back to them, and they then follow the new theme when you switch themes.
 - **Candidate text weight**: how bold candidates are, 100 thinnest, 400 regular, 500 medium, 700 bold, one step at a time; follows the theme by default and is restored together with the sizes. Only the candidate text changes; numbers, pinyin and glosses stay as they are. Windows only for now.

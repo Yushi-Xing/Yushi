@@ -65,6 +65,8 @@ impl Engine {
     pub fn swap_session(&mut self, session: &mut EngineSession) {
         self.candidate_view = self.default_candidate_view;
         self.cancel_rescoring();
+        self.chain.clear_code_words();
+        session.chain.clear_code_words();
         self.cancel_prediction();
         self.set_rescoring_context(None);
         std::mem::swap(&mut self.composition, &mut session.composition);

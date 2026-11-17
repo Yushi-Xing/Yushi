@@ -16,6 +16,8 @@ pub enum Feature {
     AuxCode,
     /// 形码，以及用户目录 `schemes/` 里的形码与双拼方案。
     Schemes,
+    /// 五笔连续上屏的自动组词开关与最大词长。
+    AutoPhrase,
     /// 中英文切换键。
     SwitchKeys,
     /// 切换键里的单击 Ctrl 与 Ctrl + Alt + Space：macOS 只认单击 Shift。
@@ -67,6 +69,8 @@ pub enum Feature {
 
     /// 组句时切换单字模式的快捷键（#848）。
     SingleChars,
+    /// 组句时按词跳的快捷键。
+    NextWord,
     /// 候选字字重。
     CandidateFontWeight,
     /// 成对符号（中文与英文两个开关）。
@@ -77,9 +81,10 @@ pub enum Feature {
 
 impl Feature {
     #[cfg(test)]
-    pub const ALL: [Self; 34] = [
+    pub const ALL: [Self; 36] = [
         Self::AuxCode,
         Self::Schemes,
+        Self::AutoPhrase,
         Self::SwitchKeys,
         Self::SwitchKeyCombos,
         Self::SystemCtrlSpace,
@@ -109,6 +114,7 @@ impl Feature {
         Self::ShuangpinRawWindow,
         Self::TranslatePanel,
         Self::SingleChars,
+        Self::NextWord,
         Self::CandidateFontWeight,
         Self::PairPunctuation,
         Self::VerticalReverseAbove,
@@ -133,7 +139,8 @@ impl Feature {
         use Status::{NotApplicable as No, Planned as Todo, Supported as Yes};
         match self {
             Self::AuxCode => [Yes, Yes, Todo],
-            Self::Schemes => [Yes, Yes, Todo],
+            Self::Schemes => [Yes, Yes, Yes],
+            Self::AutoPhrase => [Yes, Yes, Yes],
             Self::SwitchKeys => [Yes, Yes, Yes],
             // macOS 只做了单击 Shift，Caps Lock 仍是系统那一套
             Self::SwitchKeyCombos => [No, Yes, Yes],
@@ -173,6 +180,7 @@ impl Feature {
             // Fcitx 面板与应用里的行内拼音共用一串，还没分开
             Self::ShuangpinRawWindow => [Yes, Yes, Todo],
             Self::SingleChars => [Todo, Yes, Todo],
+            Self::NextWord => [Todo, Yes, Todo],
             // Linux 用 Fcitx 自己的候选面板
             Self::CandidateFontWeight => [Todo, Yes, No],
             // macOS 自绘窗待接入；Linux 的面板排布由 Fcitx 决定。
@@ -187,6 +195,7 @@ impl Feature {
         match self {
             Self::AuxCode => "辅码",
             Self::Schemes => "形码与自定义方案",
+            Self::AutoPhrase => "五笔自动组词",
             Self::SwitchKeys => "中英文切换键",
             Self::SwitchKeyCombos => "单击 Ctrl 与 Ctrl + Alt + Space 切换",
             Self::SystemCtrlSpace => "系统的 Ctrl + Space",
@@ -216,6 +225,7 @@ impl Feature {
             Self::ShuangpinRawWindow => "双拼候选窗显示按键",
             Self::TranslatePanel => "打开符号面板的翻译组",
             Self::SingleChars => "组句时切换单字模式",
+            Self::NextWord => "组句时按词跳",
             Self::CandidateFontWeight => "候选字粗细",
             Self::VerticalReverseAbove => "竖排在光标上方时倒着排",
             Self::PairPunctuation => "成对符号自动补全",
@@ -232,6 +242,10 @@ impl Feature {
                 (PageId::Input, "input.import_code_table"),
             ],
             Self::Schemes => &[(PageId::Input, "input.code")],
+            Self::AutoPhrase => &[
+                (PageId::Input, "input.auto_phrase"),
+                (PageId::Input, "input.auto_phrase_length"),
+            ],
             Self::SwitchKeys => &[(PageId::Language, "language.switch_keys")],
             Self::DefaultEnglish => &[(PageId::Language, "language.default_english")],
             Self::RememberModePerApp => &[(PageId::Language, "language.remember_per_app")],
@@ -265,6 +279,10 @@ impl Feature {
                 (PageId::Shortcuts, "shortcuts.single_chars"),
                 (PageId::Shortcuts, "shortcut.single_chars"),
             ],
+            Self::NextWord => &[
+                (PageId::Shortcuts, "shortcuts.next_word"),
+                (PageId::Shortcuts, "shortcut.next_word"),
+            ],
             Self::CandidateFontWeight => &[(PageId::Appearance, "appearance.candidate_weight")],
             Self::VerticalReverseAbove => &[(PageId::Appearance, "appearance.reverse_above")],
             Self::PairPunctuation => &[
@@ -295,6 +313,27 @@ pub fn elsewhere(page: PageId, row: &str) -> bool {
 #[cfg(test)]
 mod tests {
     use super::{Feature, Platform, Status};
+
+    #[test]
+    fn auto_phrase_support_follows_shape_schemes() {
+        assert_eq!(
+            Feature::AutoPhrase.status(Platform::Linux),
+            Status::Supported
+        );
+        for platform in Platform::ALL {
+            assert_eq!(
+                Feature::AutoPhrase.status(platform),
+                Feature::Schemes.status(platform)
+            );
+        }
+    }
+
+    #[test]
+    fn linux_supports_schemes_without_enabling_aux_codes_or_key_hints() {
+        assert_eq!(Feature::Schemes.status(Platform::Linux), Status::Supported);
+        assert_eq!(Feature::AuxCode.status(Platform::Linux), Status::Planned);
+        assert_eq!(Feature::KeyHint.status(Platform::Linux), Status::Planned);
+    }
 
     /// `docs/plan/todo.md` 里「设置项的平台缺口」下的条目与表里的「待实现」一一对应。
     #[test]

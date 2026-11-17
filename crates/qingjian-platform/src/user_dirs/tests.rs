@@ -23,6 +23,8 @@ fn flat_layout_is_sorted_into_folders() {
         "user-words.tsv",
         "user-preferences.tsv",
         "user-preferences.tsv.bak",
+        "user-code-words.tsv",
+        "user-code-words.tsv.bak",
         "user-english.tsv.bak",
         "user-glossary-ja.tsv",
         "user-vocab.tsv",
@@ -55,6 +57,11 @@ fn flat_layout_is_sorted_into_folders() {
         (
             "user-preferences.tsv.bak",
             "learning/user-preferences.tsv.bak",
+        ),
+        ("user-code-words.tsv", "learning/user-code-words.tsv"),
+        (
+            "user-code-words.tsv.bak",
+            "learning/user-code-words.tsv.bak",
         ),
         ("user-english.tsv.bak", "learning/user-english.tsv.bak"),
         ("user-glossary-ja.tsv", "learning/user-glossary-ja.tsv"),

@@ -123,6 +123,7 @@ impl RenderData {
                     self.show_pos,
                     self.english_reading_ipa,
                 );
+                row.diff = frame.differs.get(i).cloned().unwrap_or_default();
                 if grid {
                     let labelled =
                         Some(i / frame.columns) == highlight_row && !candidate.text.is_empty();
