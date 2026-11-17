@@ -8,6 +8,7 @@
 //! 命中只看布局给的矩形：过渡、循环动画中途的位置不算。
 
 mod builder;
+mod cursor;
 mod element;
 mod elements;
 mod event;
@@ -15,17 +16,19 @@ mod interact;
 mod interaction;
 mod key;
 mod response;
-mod scroll_extent;
+mod scroll;
 mod searchable;
 mod state;
 
 pub use builder::Ui;
+pub use cursor::Cursor;
 pub use elements::Elements;
 pub use event::{Event, KeyCode, KeyPress, Modifiers, TextInput};
 pub use interact::Interact;
 pub use interaction::Interaction;
 pub use key::Key;
 pub use response::Response;
-pub use scroll_extent::ScrollExtent;
+pub use scroll::ScrollExtent;
+pub(crate) use scroll::ScrollbarTrack;
 pub use searchable::Searchable;
 pub use state::ElementState;

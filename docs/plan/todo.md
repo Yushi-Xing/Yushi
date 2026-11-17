@@ -9,7 +9,7 @@
 ## 〇、上线前必须做（不做就不能给别人）
 
 - [ ] 词库质量（产品词库已自建，见 roadmap）：常用词表只有 5.6 万，语料挖出的 1.57 万高频词已并入（蚌埠 / 台州 / 高铁 / 吐槽 这类补上了），
-  网络用语目录还空着（`assets/lexicon/04_internet_slang`）；LLM 标注的多音字读音抽查；挖词过滤已进 `dict-convert mine`（2026-09-07，`oov_filter.rs`，与原脚本输出逐行一致）；
+  网络用语目录还空着（词库仓库 `official/upstream/04_internet_slang`）；LLM 标注的多音字读音抽查；挖词过滤已进 `dict-convert mine`（2026-09-07，`oov_filter.rs`，与原脚本输出逐行一致）；
   LM 表（TSV 48 MB / `lm.qj` 29 MB）不进 git，先按发布附件对待
 - [ ] ★ 首次运行体验：没有 `data/generated/` 时打进包里的样例词库只有几十条，等于不能用；随包数据（词库、LM 表、释义表、emoji）
   要有一套发布版并定好体积（现在 `dict.qj` 3 MB + 领域词库 7 MB + `lm.qj` 29 MB + 释义表 `.qj` 39 MB + 英文词表 2 MB，pkg 34 MB；可再考虑变长编码）；
@@ -17,8 +17,8 @@
 - [ ] 仓库瘦身（2026-09-07 决定：主仓库继续单库、官网独立仓库，不拆代码；要处理的是数据）。
   已做：LLM 中间产物 `gloss-llm.jsonl`（30 MB）/ `gloss-en-llm.jsonl` / `pinyin-llm.jsonl` 移到 `data/generated/`（gitignore），仓库只留导出的 `glossary-*.tsv` 与词库源；
   历史在同日压成 `v0.1.0` 单提交（完整开发历史在本地分支 `archive/dev-history`，不推），所以公开仓库里从没出现过这些文件。
-  还差：仓库推到 GitHub 后跑一次 `tools/release/data-bundle.sh`，把这三个 JSONL 与 `data/generated/*.qj` 传到 `data` 预发布 Release（现在只在本机与归档分支里有）；
-  正式开源后若 clone 太慢，再考虑把 `assets/lexicon` + `assets/glossary` 拆成数据仓库，现在不做
+  还差：这三个 JSONL 现在只在本机与归档分支里有，要找个地方发；
+  词库与释义表已拆到词库仓库 qingjian-dicts，语言模型与含章·通变在模型仓库 qingjian-models（2026-11）
 - [ ] ★ 签名与公证：pkg 安装器、自动注册输入源、版本号 / 构建号已做（2026-09-06，`bundle.sh --pkg`）；
   CI 已搭（2026-09-07，`docs/notes/release.md`）：推标签在 macOS runner 打 arm64 + x86_64 两个 pkg、建 Release、生成 `releases.json`，产品数据从 `data` 预发布 Release 下载。
   还差：Apple Developer 账号的 Developer ID 证书（配齐 `release.yml` 头部的七个 Secrets 就自动签名公证）、仓库推上 GitHub 后第一次真跑验证（本机没跑过 workflow）、
@@ -52,9 +52,9 @@
 - [ ] 全角 / 半角切换，`。` 与 `．`（`-` `=` 非组句时的行为 2026-09-15 已定：仍是半角，但改由壳自己插入，
   不再靠放行——放行在部分宿主里到不了应用，见 `candidate-ui.md` 的标点一节）
 - [ ] 快捷短语（`i` 前缀）：编码 → 短语表，用户可增删
-- [ ] 问字模式离线版：拆字表（IDS 数据）按部件查字，云端版已有
+- [x] 问字模式离线版：拆字表按部件查字（拆字字典 CC BY 3.0，不用 IDS），云端版已有；2026-11-06 加笔画与混输
 - [ ] 双拼收尾：菜单栏增加方案切换
-- [x] 双拼方案数据化：用户在 `schemes/<id>/scheme.toml` 写 `type = "shuangpin"` 就是一套方案，可拿内置方案当底子只改几个键（2026-10-20，Linux 未接）
+- [x] 双拼方案数据化：用户在 `schemes/<id>/scheme.toml` 写 `type = "shuangpin"` 就是一套方案，可拿内置方案当底子只改几个键（2026-10-20；Linux 于 2026-11-05 接入）
 - [ ] 双拼解码支持同码出多个读音——小浪的 `lk`（lai / lia）、`nm`（niang / nen）、`dk`（dai / dia）、`un`（en / eng）现在只解第一个，做完去掉 `every_syllable_round_trips` 里小浪的四个例外（#129）
 - [ ] 辅码（issue #8，设计见 [docs/design/aux-code.md](../design/aux-code.md)）：触发键（缺省 `;`，与「非拼音键进直输段 / 全角标点」排优先级）与逐键即筛、词级过滤、辅码态隐藏无码词；码表走 Rime yaml 导入（`columns` 必须解析、`import_tables` 跨文件合表、「有词无码」行要报警）；码表存**独立码索引**（两段式查询，别复用词库 Slot）；
   原生表只带笔画（CNS11643 笔顺 + 大陆序覆盖表 `dict-convert stroke`，艹 3 / 辶 3 / 阝 2）；设置界面加「辅码」页（macOS 偏好设置 / Windows 设置程序：触发键、显示码、码表列表、导入）；第三方形码表（小鹤形 / 自然码形）不随包，走引导导入
@@ -70,11 +70,11 @@
 - [x] 语料里少的领域词（对齐 / 后端 / 词库 / 候选框）：2026-09-12 从日志人工挑 48 条进 `assets/lexicon/domain_words.tsv`，语言模型走合成计数（`docs/notes/domain-words.md`）；
   语料 0 次的（微软拼音 / 悬浮条）按规矩没进，要进得另立白名单
 - [x] 中英混杂词与英文专名（2026-09-15）：`assets/lexicon/mixed_words.tsv`（C盘 / B站 / U盘 / T恤 / A股…，`cpan`→C盘，`youpan`→U盘，
-  可进整句 `wozaibzhan`→我在B站）；`dict-convert english` 同编码优先大写专名（Windows ≠ windows），`07_display_forms.tsv` 补 VSCode / Bilibili 等；
+  可进整句 `wozaibzhan`→我在B站）；`dict-convert english` 同编码优先全小写（or 不出 OR），`07_display_forms.tsv` 补 I / China / VSCode / Bilibili 等；
   产品 `dict.tsv` / `english.tsv` 已更新。句中英文仍只支持句末尾段，见「中英混输」。
 - [x] 按输入串记的选择只认字面：已按「候选全拼记一份、查询取两者最大」做了（`user-choices.tsv` 字面键 + 读音键各一份；读音键只在当前输入是读音前缀且不少于两个字母时参与，简拼不带全拼的选择；英文词位置的仲裁只按字面键）
 - [ ] 已经学进用户词的错读音云端词（`我的 wo di`、`我的哦 wo di e` 这类）没有清理入口：偏好设置词库页给「按读音核对用户词」，或一次性脚本
-- [ ] 正式版前的发布可信性（2026-09-12 外部 CI 检查，测试版先不做）：产品数据改不可变 tag 并在仓库锁版本 + SHA（2026-09-16 已做：`data-vN` Release + `tools/release/data.lock` + `data-fetch.sh`）；
+- [ ] 正式版前的发布可信性（2026-09-12 外部 CI 检查，测试版先不做）：产品数据改不可变 tag 并在仓库锁版本 + SHA（2026-09-16 已做，2026-11 起数据在词库仓库与模型仓库，`tools/release/dicts.lock` / `models.lock` 钉住，`data-fetch.sh` 取）；
   安装包内容验证（pkg / Setup.exe 里词库、模型、许可齐不齐，`codesign --verify` / `signtool verify`）；`cargo deny`（许可证 + 来源）；`.qj` 读取器越界 fuzz、`qingjian-format` 跑 Miri
 - [ ] 本地整句模型（已进壳并随包发出，见 `docs/notes/neural-rescoring.md`；加载 12 秒是早期首次 Metal 编译的记录，2026-09-12 装机实测 102 ms，划掉）：
   重排改了切分时应用里的行内拼音要到下一键才更新；日语
@@ -106,6 +106,7 @@
 ## 三、其他平台
 
 - [~] Windows TSF（Phase 5）：真机自用中，候选窗已覆盖商店 / 任务栏搜索（`uiAccess` + 自签）。
+  - [ ] 去掉 Server 在旧管道名 `\\.\pipe\qingjian` 上的过渡服务（`serve_pipe` 的 `legacy`，#699）：留它只为升级后没重启的应用里的老 DLL，它对 AppContainer 放行建实例，老 DLL 的连接可能被抢；按用户命名的管道发出去一个版本后就删。
   与 mac 功能齐平尚缺（按价值排；工时=开发+真机验证合计，单人；真机来回是大头）：
   - [~] **① 翻译选中文字 `translate_selection`**（★★★ / 中高 / 1.5–2 天）：**代码完成，待真机测**（2026-09-10）。
     新增 `RequestSelection` / `Selection{text,rect}` 两协议消息；DLL 异步只读会话（`com/selection.rs`，`GetSelection`+`GetText`+`GetTextExt`）
@@ -126,8 +127,10 @@
   - [~] **⑤ 任务栏点中/英反同步**（★☆☆ / 低 / 0.5 天）：**代码完成，待真机测**（2026-09-11）。
     激活时对转换模式 compartment 挂 `ITfCompartmentEventSink`（`com/conversion.rs`），`OnChange` 读回 `NATIVE` 位、与当前模式不同才翻转
     （防回环），顺带刷指示器 + 上报 Server 让悬浮状态条也同步。纯 DLL 改动、无新协议。
-  - [~] **符号面板**：代码完成，待真机测（2026-10-13）。这一版原生画（Direct2D，彩色 emoji），下一版换 qingjian-render；
+  - [~] **符号面板**：代码完成，待真机测（2026-10-13）。2026-11-04 起两端都由 qingjian-render 画（主题 `panel` 一节），待真机验；
     按键与鼠标同 macOS，入口在悬浮状态条「符」格与托盘中 / 英图标的右键菜单。
+    2026-11-04 加「翻译」组（两端，Core `panel/translate`）：框里打一句、停键后译文进 preedit、回车上屏，`[shortcut] translate_panel` 快捷键，
+    同时删掉 Windows 的整句候选翻译（`[predict] sentence_translation` 不再认）；待真机验，Windows 上还要看轮询补写 preedit 在各应用里稳不稳。
   - [ ] 发版：换 **Certum 开源代码签名证书**重签（开发全程自签 + 本机受信任根，见 `installer/sign-local.ps1`）、
     `windows-v<版本>` 标签与 CI。
   - [ ] **本地整句模型上 Windows**：Server 已接（`dispatch/rescore/`，CPU 推理，设置「云服务」页有开关，安装包带 `data\model`），待真机验：每次重排的耗时（前文 + 几条路径一次前向，CPU 上可能几十到一百多毫秒，超了就缩前文长度）、模型加载时间；
@@ -148,27 +151,35 @@
 - [ ] 安卓的自定义短语与设置导入导出（#746）：桌面设置程序已能导入导出短语（与配置文件同一写法的 TOML）与设置（「高级」页），安卓的短语另存在 `PhraseBook`，要在安卓设置里加同样的导入导出、读写同一种文件，两边才能互相搬
 - [ ] 设置项的平台缺口（设置程序 `apps/settings/src/support/` 表里标「待实现」的项，输入法接上之前设置里不显示；测试逐条对照这里）：
   - [ ] 辅码：Linux
-  - [ ] 形码与自定义方案：Linux
   - [ ] 默认英文模式：macOS
   - [ ] 按应用记住中英模式：macOS、Linux
   - [ ] 中文与英文、数字之间自动加空格：Linux
   - [ ] 横排时 ↑ / ↓ 展开成多行：Linux
   - [ ] 横排时翻页键展开成多行：Linux
   - [ ] 上屏键自定义：macOS
+  - [ ] 回车优先上屏译词：Windows、Linux
   - [ ] 额外翻页键：Linux
   - [ ] 高亮移动键：Linux
+  - [ ] Emacs 风格候选键：Windows、Linux
   - [ ] Ctrl + . 切换全半角标点：Linux
   - [ ] Ctrl + Shift + F 切换简繁输出：macOS、Linux
   - [ ] 双拼键位提示：Linux
   - [ ] 拼音行显示声调：Linux
   - [ ] 实验功能（知意、含章·通变）：Linux
+  - [ ] 青简剪贴板：Linux
   - [ ] 小键盘数字：macOS、Linux
   - [ ] 双拼候选窗显示按键：Linux
+  - [ ] 组句时切换单字模式：macOS、Linux
+  - [ ] 组句时按词跳：macOS、Linux
+  - [ ] 候选字粗细：macOS
+  - [ ] 成对符号自动补全：macOS、Linux
+  - [ ] 竖排在光标上方时倒着排：macOS
+- [ ] 剪贴板局域网同步：Linux；扫码配对、Android 全屏霓虹灯、蓝牙兜底
 
 ## 四、其他输入方案
 
 - [ ] 五笔（86 版）：方案与分期见 [wubi.md](wubi.md)，第一期 Core + CLI + Windows；
   `[general] scheme` 收敛与配置迁移一起做（顺带解掉〇里的「配置文件版本迁移」）
 - [ ] 自定义形码方案：Core / 平台 / CLI / Windows / macOS / 新版设置程序已做（2026-10-20，见 [wubi.md](wubi.md) 五之三），
-  剩 Windows 与 macOS 真机验顶字和满码自动上屏、Linux 壳接形码
+  Linux 壳已接形码（2026-11-05，见 [验证记录](../notes/linux-wubi.md)）；剩 Windows 与 macOS 真机验顶字和满码自动上屏
 - [ ] 复杂方案收尾（与上一条共用「输入方案」抽象）：注音只在 Core 与 Windows 接了，macOS 侧还没接；双拼的方案切换要等 `[general] scheme`

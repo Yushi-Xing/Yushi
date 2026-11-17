@@ -4,10 +4,11 @@ use bamboo_slip::taffy::NodeId;
 use bamboo_slip::{Menu, RenderError, Ui};
 use qingjian_core::{TraditionalVariant, learning_languages};
 use qingjian_platform::{
-    EmojiCount, GeneralConfig, KeyHintMode, Scheme, UI_LANGUAGE_DEFAULT, UI_LANGUAGE_SYSTEM,
+    EmojiCount, GeneralConfig, KeyHintMode, Scheme, ThirdInputMethod, UI_LANGUAGE_DEFAULT,
+    UI_LANGUAGE_SYSTEM,
 };
 
-use crate::i18n::{CATALOG, tr};
+use crate::i18n::{CATALOG, tr, tr_args};
 use crate::message::{Message, Popup};
 use crate::support::Feature;
 use crate::view::Page;
@@ -20,6 +21,7 @@ pub fn anchor(popup: Popup) -> &'static str {
         Popup::Font => "font",
         Popup::Scheme => "scheme",
         Popup::Code => "code",
+        Popup::AutoPhraseLength => "auto-phrase-length",
         Popup::LearningLanguage => "learning-language",
         Popup::Traditional => "traditional",
         Popup::Emoji => "emoji",
@@ -28,6 +30,7 @@ pub fn anchor(popup: Popup) -> &'static str {
         Popup::KeyHint => "key-hint",
         Popup::AuxScheme => "aux-scheme",
         Popup::UiLanguage => "ui-language",
+        Popup::ThirdInput => "third-input",
     }
 }
 
@@ -88,6 +91,14 @@ pub fn ui_language_options() -> Vec<(&'static str, &'static str)> {
         .collect()
 }
 
+/// 第三输入法下拉框里的名字。
+pub fn third_input_label(method: ThirdInputMethod) -> &'static str {
+    match method {
+        ThirdInputMethod::Off => tr("third_input.off"),
+        ThirdInputMethod::Vietnamese => tr("third_input.vietnamese"),
+    }
+}
+
 pub fn menu(
     ui: &mut Ui<Message>,
     page: &Page,
@@ -103,6 +114,17 @@ pub fn menu(
     };
     let (key, labels, values, selected): (&str, Vec<String>, Vec<toml_edit::Value>, Option<usize>) =
         match popup {
+            Popup::AutoPhraseLength => {
+                let count = page.settings.config.auto_phrase.max_chars.clamp(2, 10);
+                (
+                    "max_chars",
+                    (2..=10)
+                        .map(|n| tr_args("input.phrase_chars", &[("n", &n)]))
+                        .collect(),
+                    (2..=10).map(toml_edit::Value::from).collect(),
+                    Some(count - 2),
+                )
+            }
             Popup::Font => {
                 let families = page.settings.fonts.as_deref().unwrap_or_default();
                 let labels = std::iter::once(tr("common.system_font").to_owned())
@@ -207,6 +229,22 @@ pub fn menu(
                 let selected = values.iter().position(|tag| *tag == ui_language(general));
                 ("ui_language", labels, strings(values), selected)
             }
+            Popup::ThirdInput => (
+                "double_shift_input",
+                ThirdInputMethod::ALL
+                    .iter()
+                    .map(|method| third_input_label(*method).to_owned())
+                    .collect(),
+                strings(
+                    ThirdInputMethod::ALL
+                        .iter()
+                        .map(|method| method.key().to_owned())
+                        .collect(),
+                ),
+                ThirdInputMethod::ALL
+                    .iter()
+                    .position(|method| *method == general.double_shift_input),
+            ),
             Popup::Emoji | Popup::Kaomoji | Popup::Symbols => {
                 let (key, count) = match popup {
                     Popup::Emoji => ("emoji", general.emoji),
@@ -224,6 +262,7 @@ pub fn menu(
             }
         };
     let section = match popup {
+        Popup::AutoPhraseLength => "auto_phrase",
         Popup::AuxScheme => "aux_code",
         _ => "general",
     };

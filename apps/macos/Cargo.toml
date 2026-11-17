@@ -1,12 +1,12 @@
 [package]
 name = "qingjian-macos"
 description = "macOS 输入法：Input Method Kit 外壳、候选窗口、菜单与偏好设置"
-version = "0.3.2-dev"
+version = "0.3.4-dev"
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
 
-[dependencies]
+[target.'cfg(target_os = "macos")'.dependencies]
 objc2.workspace = true
 objc2-app-kit.workspace = true
 objc2-foundation.workspace = true

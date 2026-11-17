@@ -7,7 +7,7 @@ use bamboo_slip::{
     paragraph, section_title,
 };
 use qingjian_core::ModeKeys;
-use qingjian_platform::{HighlightKeys, PAGE_KEY_OPTIONS};
+use qingjian_platform::{HighlightKeys, KeyCombo, PAGE_KEY_OPTIONS};
 
 use crate::i18n::tr;
 use crate::message::Message;
@@ -67,6 +67,17 @@ pub fn shortcuts(ui: &mut Ui<Message>, page: &Page) -> Result<Vec<NodeId>, Rende
     out.push(group(ui, theme, &rows)?);
 
     let mut rows = Vec::new();
+    if Feature::EnterTranslation.here() {
+        rows.push(toggle_info(
+            ui,
+            page,
+            tr("shortcuts.enter_translation"),
+            Some(tr("shortcuts.enter_translation_info")),
+            ("shortcut", "enter_translation"),
+            config.shortcut.enter_translation,
+            false,
+        )?);
+    }
     if Feature::CommitKeys.here() {
         rows.push(recorder(
             ui,
@@ -115,6 +126,79 @@ pub fn shortcuts(ui: &mut Ui<Message>, page: &Page) -> Result<Vec<NodeId>, Rende
             false,
         )?);
     }
+    if Feature::TranslatePanel.here() {
+        rows.push(recorder(
+            ui,
+            page,
+            Shortcut::TranslatePanel,
+            tr("shortcuts.translate_panel_info"),
+            false,
+        )?);
+    }
+    if Feature::SingleChars.here() {
+        let enabled = config.shortcut.single_chars.is_some();
+        let switch = bamboo_slip::Switch::new(enabled).build(
+            ui,
+            theme,
+            "single-chars",
+            Message::set(
+                "shortcut",
+                "single_chars",
+                if enabled {
+                    String::new()
+                } else {
+                    KeyCombo::SINGLE_CHARS_DEFAULT.key_string()
+                },
+            ),
+        )?;
+        rows.push(
+            SettingRow::new(tr("shortcuts.single_chars"))
+                .info(tr("shortcuts.single_chars_info"))
+                .control(switch)
+                .build(ui, theme)?,
+        );
+        if enabled {
+            rows.push(recorder(
+                ui,
+                page,
+                Shortcut::SingleChars,
+                tr("shortcuts.single_chars_key_info"),
+                false,
+            )?);
+        }
+    }
+    if Feature::NextWord.here() {
+        let enabled = config.shortcut.next_word.is_some();
+        let switch = bamboo_slip::Switch::new(enabled).build(
+            ui,
+            theme,
+            "next-word",
+            Message::set(
+                "shortcut",
+                "next_word",
+                if enabled {
+                    String::new()
+                } else {
+                    KeyCombo::NEXT_WORD_DEFAULT.key_string()
+                },
+            ),
+        )?;
+        rows.push(
+            SettingRow::new(tr("shortcuts.next_word"))
+                .info(tr("shortcuts.next_word_info"))
+                .control(switch)
+                .build(ui, theme)?,
+        );
+        if enabled {
+            rows.push(recorder(
+                ui,
+                page,
+                Shortcut::NextWord,
+                tr("shortcuts.next_word_key_info"),
+                false,
+            )?);
+        }
+    }
     out.push(section_title(
         ui,
         theme,
@@ -131,7 +215,9 @@ pub fn shortcuts(ui: &mut Ui<Message>, page: &Page) -> Result<Vec<NodeId>, Rende
     let reset = SettingRow::new(tr("shortcuts.shortcuts"))
         .control(reset)
         .build(ui, theme)?;
-    let fixed = if Feature::CommitKeys.here() {
+    let fixed = if Feature::EnterTranslation.here() && config.shortcut.enter_translation {
+        tr("shortcuts.fixed_enter_translation")
+    } else if Feature::CommitKeys.here() {
         tr("shortcuts.fixed_without_commit")
     } else {
         tr("shortcuts.fixed")
@@ -188,6 +274,21 @@ fn extra_keys(
             SettingRow::new(tr("shortcuts.highlight_keys"))
                 .info(tr("shortcuts.highlight_keys_info"))
                 .control(highlight)
+                .build(ui, theme)?,
+        );
+    }
+    if Feature::ExtraCandidateNavigation.here() {
+        let enabled = shortcut.extra_candidate_navigation;
+        let checkbox = Checkbox::new(enabled, "Ctrl + F/B/N/P/A/E").build(
+            ui,
+            theme,
+            "extra-candidate-navigation",
+            Message::set("shortcut", "extra_candidate_navigation", !enabled),
+        )?;
+        rows.push(
+            SettingRow::new(tr("shortcuts.extra_candidate_navigation"))
+                .info(tr("shortcuts.extra_candidate_navigation_info"))
+                .control(checkbox)
                 .build(ui, theme)?,
         );
     }

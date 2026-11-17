@@ -9,7 +9,7 @@ pub(super) use watch::ConfigWatch;
 use qingjian_platform::Config;
 use qingjian_render::TextSizes;
 
-use super::init::load_glossary;
+use super::init::{glossary_files, glossary_path, load_english_glossary, load_glossary};
 use super::*;
 
 impl Host {
@@ -17,7 +17,7 @@ impl Host {
     /// `[predict]` 变了（或 `force`）才重建 Predictor；最后刷新云朵标识、菜单勾选与设置窗口。
     pub fn apply_config(&mut self, force: bool) {
         let config = self.settings.config().clone();
-        self.engine.set_fuzzy(config.fuzzy);
+        self.engine.set_fuzzy(config.fuzzy.clone());
         self.engine.set_traditional(config.general.traditional());
         self.engine
             .set_full_width_punctuation(config.general.full_width_punctuation);
@@ -40,6 +40,8 @@ impl Host {
             .set_english_min_position(config.general.english_min_position());
         self.engine.set_auto_space(config.general.auto_space);
         self.engine
+            .set_half_width_symbols(&config.general.half_width_symbols);
+        self.engine
             .set_shift_letter_compose(config.general.shift_letter.compose());
         self.apply_scheme(&config);
         self.engine
@@ -58,16 +60,26 @@ impl Host {
         self.engine
             .set_shuangpin_raw_window(config.general.shuangpin_raw_window);
         self.engine
+            .set_shuangpin_full_pinyin(config.general.shuangpin_full_pinyin);
+        self.engine
             .set_hold_selections(config.general.hold_selections);
         self.engine
             .set_context_memory(config.model.context_memory_seconds);
         self.engine.set_learning(config.general.learning);
+        self.engine
+            .set_auto_phrase(config.auto_phrase.enabled, config.auto_phrase.max_chars);
         logging::set_level(config.general.log_level);
         self.translation_keys = config.shortcut.translation_keys();
         self.translate_keys = config.shortcut.translate_selection;
-        // 中英切换键：macOS 只认单击 Shift（勾上后 Caps Lock 退化成只管大小写），其余勾选项不用但要说一声
+        // 中英切换键：macOS 只认单击 Shift（勾上后 Caps Lock 退化成只管大小写），其余勾选项不用但要说一声。
+        // 关掉英文模式时 Shift 与 Caps Lock 两条路都不切
         self.mode_switch
-            .set_enabled(config.shortcut.switch_mode.shift);
+            .set_enabled(config.general.english_mode && config.shortcut.switch_mode.shift);
+        self.mode_switch
+            .set_english_off(!config.general.english_mode);
+        self.mode_switch.set_third_enabled(
+            config.general.double_shift_input == qingjian_platform::ThirdInputMethod::Vietnamese,
+        );
         if config.shortcut.switch_mode.control || config.shortcut.switch_mode.ctrl_alt_space {
             tracing::warn!(
                 "macOS 只支持单击 Shift 作为中英切换键，配置文件里写的 control / ctrl+alt+space 已忽略"
@@ -75,14 +87,17 @@ impl Host {
         }
         self.punctuation_keys = config.shortcut.toggle_punctuation;
         self.predict_keys = config.shortcut.predict;
+        self.translate_panel_keys = config.shortcut.translate_panel;
         self.page_size = config.general.page_size();
         self.cloud_slots = config.predict.slots;
         self.page_keys = config.general.page_keys();
         self.extra_page_keys = config.shortcut.extra_page_keys;
         self.highlight_keys = config.shortcut.highlight_keys;
+        self.extra_candidate_navigation = config.shortcut.extra_candidate_navigation;
         self.punct_commits = config.general.punct_commits;
         self.preedit_mode = config.general.preedit;
         self.translation_pos = config.general.translation_pos;
+        self.show_english_pronunciation = config.general.show_english_pronunciation;
         self.english_candidates = config.general.english_candidates;
         self.apps = config.apps.clone();
         self.window.set_appearance(config.general.appearance());
@@ -114,7 +129,7 @@ impl Host {
         if force || config.predict != self.applied_predict {
             if config.predict.enabled {
                 // 请求与 Token 记进统计页的云服务用量
-                let usage = paths::user_data_dir().map(|dir| dir.join(API_USAGE_FILE));
+                let usage = paths::user_dirs().map(|dirs| dirs.records().join(API_USAGE_FILE));
                 // 没密钥等失败只记日志、退回不联想：输入优先于一切附加功能
                 match CloudPredictor::new_with_usage(&config.predict, usage.clone()) {
                     Ok(predictor) => self.engine.set_predictor(Box::new(predictor)),
@@ -176,6 +191,7 @@ impl Host {
             &self.update_status,
         );
         self.sync_update();
+        super::clipboard_process::sync(config.clipboard.enabled);
     }
 
     /// 配置里的自定义短语，`[general] system_text_replacements` 开着时再并上系统的文本替换，一起推给 Engine。
@@ -253,6 +269,27 @@ impl Host {
         if super::dictionaries::dictionary_files() != self.dictionary_files {
             self.reload_dictionaries();
         }
+        let glossaries = glossary_files();
+        if glossaries != self.glossary_files {
+            self.glossary_files = glossaries;
+            self.reload_glossaries();
+        }
+    }
+
+    /// 下载装上（或更新了）释义表：重算有表的学习语言，英→中表与当前学习语言的表都重装。
+    fn reload_glossaries(&mut self) {
+        self.languages = GLOSSARY_LANGUAGES
+            .into_iter()
+            .filter(|language| glossary_path(*language).is_ok())
+            .collect();
+        // 下载的删了、又没随包的：英文候选右侧留空
+        match load_english_glossary() {
+            Some(glossary) => self.engine.set_english_translator(Box::new(glossary)),
+            None => self.engine.set_english_translator(Box::new(NoTranslator)),
+        }
+        self.learning_language = None;
+        let general = self.settings.config().general.clone();
+        self.apply_learning_language(&general);
     }
 
     /// 激活期间的定时器每秒调一次：看配置文件，再看学习数据要不要落盘。
@@ -266,6 +303,7 @@ impl Host {
         self.themes
             .resolve(general.theme_id(), false)
             .with_text_sizes(sizes)
+            .with_user_font(!general.font.trim().is_empty())
             .with_animations(general.animations)
     }
 
@@ -317,16 +355,16 @@ impl Host {
         self.scheme_slot.apply(
             &mut self.engine,
             config,
-            paths::user_data_dir().as_deref(),
+            paths::custom_dir().as_deref(),
             paths::bundled_schemes_dir().as_deref(),
         );
         self.code_word_files = code_word_files();
     }
 }
 
-/// 用户 `code_dicts/` 的快照，只 stat。
+/// 用户 `custom/code_dicts/` 的快照，只 stat。
 fn code_word_files() -> Vec<(std::path::PathBuf, Option<std::time::SystemTime>, u64)> {
-    paths::user_data_dir()
+    paths::custom_dir()
         .map(|dir| {
             let dir = qingjian_platform::code_schemes::user_words_dir(&dir);
             qingjian_platform::code_schemes::words_snapshot(&dir)

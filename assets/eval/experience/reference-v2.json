@@ -1,0 +1,946 @@
+{
+  "seed_sha256": "0c47c948ef2c1976030272ad84aa0016a29bc8a2e0cfb77bb13b2078cc65e0f9",
+  "dictionary_sha256": "5d452eba356ce756acf41927558f39a38261fec9a74a6fa257ac280643dc52a4",
+  "supplement_sha256": "8652e5022ef6836c804822d9d1c772e34c6255aeb597edd09ff516d67dffb887",
+  "total_actions": 1801,
+  "results": [
+    {
+      "id": "common_name-01",
+      "text": "张伟",
+      "keys": "zhangwei",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "common_name-07",
+      "text": "刘洋",
+      "keys": "liuyang",
+      "position": 15,
+      "completed": true
+    },
+    {
+      "id": "common_name-18",
+      "text": "李明",
+      "keys": "liming",
+      "position": 2,
+      "completed": true
+    },
+    {
+      "id": "public_name-14",
+      "text": "袁隆平",
+      "keys": "yuanlongping",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "public_name-15",
+      "text": "屠呦呦",
+      "keys": "tuyouyou",
+      "position": 1,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-01",
+      "text": "你好",
+      "keys": "nihao",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-02",
+      "text": "谢谢你",
+      "keys": "xiexieni",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-03",
+      "text": "不好意思",
+      "keys": "buhaoyisi",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-04",
+      "text": "没关系",
+      "keys": "meiguanxi",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-05",
+      "text": "请稍等一下",
+      "keys": "qingshaodengyixia",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-06",
+      "text": "我马上就到",
+      "keys": "womashangjiudao",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-07",
+      "text": "你现在方便吗",
+      "keys": "nixianzaifangbianma",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-08",
+      "text": "我们明天见",
+      "keys": "womenmingtianjian",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-09",
+      "text": "今天晚上吃什么",
+      "keys": "jintianwanshangchishenme",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-10",
+      "text": "我想喝一杯咖啡",
+      "keys": "woxiangheyibeikafei",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-11",
+      "text": "记得早点休息",
+      "keys": "jidezaodianxiuxi",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-12",
+      "text": "路上注意安全",
+      "keys": "lushangzhuyianquan",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-13",
+      "text": "周末一起出去玩",
+      "keys": "zhoumoyiqichuquwan",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-14",
+      "text": "生日快乐",
+      "keys": "shengrikuaile",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-15",
+      "text": "祝你工作顺利",
+      "keys": "zhunigongzuoshunli",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-16",
+      "text": "最近天气有点冷",
+      "keys": "zuijintianqiyoudianleng",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-17",
+      "text": "请把文件发给我",
+      "keys": "qingbawenjianfageiwo",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-18",
+      "text": "这个问题已经解决了",
+      "keys": "zhegewentiyijingjiejuele",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-19",
+      "text": "明天下午三点开会",
+      "keys": "mingtianxiawusandiankaihui",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-20",
+      "text": "我正在整理会议记录",
+      "keys": "wozhengzaizhenglihuiyijilu",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-21",
+      "text": "麻烦确认一下时间",
+      "keys": "mafanquerenyixiashijian",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-22",
+      "text": "我们需要办理手续",
+      "keys": "womenxuyaobanlishouxu",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-23",
+      "text": "请问地铁站怎么走",
+      "keys": "qingwenditiezhanzenmezou",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-24",
+      "text": "我想买一张火车票",
+      "keys": "woxiangmaiyizhanghuochepiao",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-25",
+      "text": "请帮我查一下订单",
+      "keys": "qingbangwochayixiadingdan",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-26",
+      "text": "这个地址可以送货吗",
+      "keys": "zhegedizhikeyisonghuoma",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-27",
+      "text": "今天的工作已经完成了",
+      "keys": "jintiandegongzuoyijingwanchengle",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-28",
+      "text": "我觉得这个办法不错",
+      "keys": "wojuedezhegebanfabucuo",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-29",
+      "text": "有时间给我打电话",
+      "keys": "youshijiangeiwodadianhua",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-30",
+      "text": "我们一起去图书馆",
+      "keys": "womenyiqiqutushuguan",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-31",
+      "text": "请问附近有超市吗",
+      "keys": "qingwenfujinyouchaoshima",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-32",
+      "text": "我会尽快回复你的消息",
+      "keys": "wohuijinkuaihuifunidexiaoxi",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "name_sentence-01",
+      "text": "请联系张伟",
+      "keys": "qinglianxizhangwei",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "name_sentence-04",
+      "text": "请把资料发给刘洋",
+      "keys": "qingbaziliaofageiliuyang",
+      "position": 2,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-08-initials",
+      "text": "我们明天见",
+      "keys": "wmmtj",
+      "position": 1,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-17-initials",
+      "text": "请把文件发给我",
+      "keys": "qbwjfgw",
+      "position": null,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-21-initials",
+      "text": "麻烦确认一下时间",
+      "keys": "mfqryxsj",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "daily_sentence-23-initials",
+      "text": "请问地铁站怎么走",
+      "keys": "qwdtzzmz",
+      "position": null,
+      "completed": true
+    },
+    {
+      "id": "typo-meeting",
+      "text": "明天",
+      "keys": "mingtain",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "rare-name",
+      "text": "珺玥",
+      "keys": "junyue",
+      "position": null,
+      "completed": true
+    },
+    {
+      "id": "mixed",
+      "text": "我的database",
+      "keys": "wodedatabase",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "edit-backspace",
+      "text": "你好",
+      "keys": "nihaoa",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "english",
+      "text": "database",
+      "keys": "database",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "punctuation-comma",
+      "text": "你好，",
+      "keys": "nihao",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "punctuation-question",
+      "text": "你好吗？",
+      "keys": "nihaoma",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-01-full",
+      "text": "等一下",
+      "keys": "dengyixia",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-01-initials",
+      "text": "等一下",
+      "keys": "dyx",
+      "position": 1,
+      "completed": true
+    },
+    {
+      "id": "phrase-01-repair",
+      "text": "等一下",
+      "keys": "dengyixia",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-02-full",
+      "text": "没问题",
+      "keys": "meiwenti",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-02-initials",
+      "text": "没问题",
+      "keys": "mwt",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-02-repair",
+      "text": "没问题",
+      "keys": "meiwenti",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-03-full",
+      "text": "辛苦了",
+      "keys": "xinkule",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-03-initials",
+      "text": "辛苦了",
+      "keys": "xkl",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-03-repair",
+      "text": "辛苦了",
+      "keys": "xinkule",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-04-full",
+      "text": "对不起",
+      "keys": "duibuqi",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-04-initials",
+      "text": "对不起",
+      "keys": "dbq",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-04-repair",
+      "text": "对不起",
+      "keys": "duibuqi",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-05-full",
+      "text": "不客气",
+      "keys": "bukeqi",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-05-initials",
+      "text": "不客气",
+      "keys": "bkq",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-05-repair",
+      "text": "不客气",
+      "keys": "bukeqi",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-06-full",
+      "text": "马上到",
+      "keys": "mashangdao",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-06-initials",
+      "text": "马上到",
+      "keys": "msd",
+      "position": null,
+      "completed": true
+    },
+    {
+      "id": "phrase-06-repair",
+      "text": "马上到",
+      "keys": "mashangdao",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-07-full",
+      "text": "知道了",
+      "keys": "zhidaole",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-07-initials",
+      "text": "知道了",
+      "keys": "zdl",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-07-repair",
+      "text": "知道了",
+      "keys": "zhidaole",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-08-full",
+      "text": "收到了",
+      "keys": "shoudaole",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-08-initials",
+      "text": "收到了",
+      "keys": "sdl",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-08-repair",
+      "text": "收到了",
+      "keys": "shoudaole",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-09-full",
+      "text": "怎么样",
+      "keys": "zenmeyang",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-09-initials",
+      "text": "怎么样",
+      "keys": "zmy",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-09-repair",
+      "text": "怎么样",
+      "keys": "zenmeyang",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-10-full",
+      "text": "为什么",
+      "keys": "weishenme",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-10-initials",
+      "text": "为什么",
+      "keys": "wsm",
+      "position": 1,
+      "completed": true
+    },
+    {
+      "id": "phrase-10-repair",
+      "text": "为什么",
+      "keys": "weishenme",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-11-full",
+      "text": "办公室",
+      "keys": "bangongshi",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-11-initials",
+      "text": "办公室",
+      "keys": "bgs",
+      "position": 1,
+      "completed": true
+    },
+    {
+      "id": "phrase-11-repair",
+      "text": "办公室",
+      "keys": "bangongshi",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-12-full",
+      "text": "手机号",
+      "keys": "shoujihao",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-12-initials",
+      "text": "手机号",
+      "keys": "sjh",
+      "position": 14,
+      "completed": true
+    },
+    {
+      "id": "phrase-12-repair",
+      "text": "手机号",
+      "keys": "shoujihao",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-13-full",
+      "text": "稍等一下",
+      "keys": "shaodengyixia",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-13-initials",
+      "text": "稍等一下",
+      "keys": "sdyx",
+      "position": 3,
+      "completed": true
+    },
+    {
+      "id": "phrase-13-repair",
+      "text": "稍等一下",
+      "keys": "shaodengyixia",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-14-full",
+      "text": "注意安全",
+      "keys": "zhuyianquan",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-14-initials",
+      "text": "注意安全",
+      "keys": "zyaq",
+      "position": null,
+      "completed": false
+    },
+    {
+      "id": "phrase-14-repair",
+      "text": "注意安全",
+      "keys": "zhuyianquan",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-15-full",
+      "text": "一路顺风",
+      "keys": "yilushunfeng",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-15-initials",
+      "text": "一路顺风",
+      "keys": "ylsf",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-15-repair",
+      "text": "一路顺风",
+      "keys": "yilushunfeng",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-16-full",
+      "text": "工作顺利",
+      "keys": "gongzuoshunli",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-16-initials",
+      "text": "工作顺利",
+      "keys": "gzsl",
+      "position": 24,
+      "completed": true
+    },
+    {
+      "id": "phrase-16-repair",
+      "text": "工作顺利",
+      "keys": "gongzuoshunli",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-17-full",
+      "text": "周末愉快",
+      "keys": "zhoumoyukuai",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-17-initials",
+      "text": "周末愉快",
+      "keys": "zmyk",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-17-repair",
+      "text": "周末愉快",
+      "keys": "zhoumoyukuai",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-18-full",
+      "text": "早点休息",
+      "keys": "zaodianxiuxi",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-18-initials",
+      "text": "早点休息",
+      "keys": "zdxx",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-18-repair",
+      "text": "早点休息",
+      "keys": "zaodianxiuxi",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-19-full",
+      "text": "收到谢谢",
+      "keys": "shoudaoxiexie",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-19-initials",
+      "text": "收到谢谢",
+      "keys": "sdxx",
+      "position": null,
+      "completed": true
+    },
+    {
+      "id": "phrase-19-repair",
+      "text": "收到谢谢",
+      "keys": "shoudaoxiexie",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-20-full",
+      "text": "马上回来",
+      "keys": "mashanghuilai",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-20-initials",
+      "text": "马上回来",
+      "keys": "mshl",
+      "position": 16,
+      "completed": true
+    },
+    {
+      "id": "phrase-20-repair",
+      "text": "马上回来",
+      "keys": "mashanghuilai",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-21-full",
+      "text": "下班了吗",
+      "keys": "xiabanlema",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-21-initials",
+      "text": "下班了吗",
+      "keys": "xblm",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-21-repair",
+      "text": "下班了吗",
+      "keys": "xiabanlema",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-22-full",
+      "text": "会议记录",
+      "keys": "huiyijilu",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-22-initials",
+      "text": "会议记录",
+      "keys": "hyjl",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-22-repair",
+      "text": "会议记录",
+      "keys": "huiyijilu",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-23-full",
+      "text": "重新启动",
+      "keys": "chongxinqidong",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-23-initials",
+      "text": "重新启动",
+      "keys": "cxqd",
+      "position": 1,
+      "completed": true
+    },
+    {
+      "id": "phrase-23-repair",
+      "text": "重新启动",
+      "keys": "chongxinqidong",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-24-full",
+      "text": "网络连接",
+      "keys": "wangluolianjie",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-24-initials",
+      "text": "网络连接",
+      "keys": "wllj",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "phrase-24-repair",
+      "text": "网络连接",
+      "keys": "wangluolianjie",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "session-chat-1",
+      "text": "你好",
+      "keys": "nihao",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "session-chat-2",
+      "text": "你现在方便吗？",
+      "keys": "nixianzaifangbianma",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "session-chat-3",
+      "text": "我马上就到",
+      "keys": "womashangjiudao",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "session-office-1",
+      "text": "请把文件发给我",
+      "keys": "qingbawenjianfageiwo",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "session-office-2",
+      "text": "收到谢谢",
+      "keys": "shoudaoxiexie",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "session-office-3",
+      "text": "会议记录",
+      "keys": "huiyijilu",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "session-mixed-1",
+      "text": "数据库",
+      "keys": "shujuku",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "session-mixed-2",
+      "text": "database",
+      "keys": "database",
+      "position": 0,
+      "completed": true
+    },
+    {
+      "id": "session-mixed-3",
+      "text": "重新启动",
+      "keys": "chongxinqidong",
+      "position": 0,
+      "completed": true
+    }
+  ],
+  "product_data_sha256": {
+    "data/generated/dict.qj": "5d452eba356ce756acf41927558f39a38261fec9a74a6fa257ac280643dc52a4",
+    "data/generated/dicts/idioms.qj": "78d56912d3b9dd49f5a16768cb1c1e36f53cf7f5d3609860309812b9baccbd28",
+    "data/generated/lm.qj": "2a864979f8b43535b510413531c2b20e7a0fd2933f41ac22cf14dcb0597a050d",
+    "data/generated/english.qj": "897ef48154cd21c1683a7e621149da92f1f90727b10e379026e7ed3dc91656c9",
+    "assets/lexicon/patches.tsv": "2073471029796b927c0f3135e5855c149471bd90864d8f9a35bb9ed72c2a24db",
+    "assets/lexicon/supplement/dict.tsv": "8652e5022ef6836c804822d9d1c772e34c6255aeb597edd09ff516d67dffb887",
+    "data/generated/dicts/general.qj": "d075a32a3aa33d404caca1235f0e6640d80d12cc9b62207db703f316c06d73d6"
+  },
+  "extended_sha256": "13270b90084f22ad9a524b034f78ed61ba60b5bfd0f4ade6ed7612a04ba15cfc",
+  "provenance": {
+    "engine_commit": "2a714bddefcdbf5a8f075631b8d17c9891667835",
+    "original_results": "reference.json: unchanged 50 rows, all-candidates mode",
+    "extended_results": "81 rows frozen before first-use word learning; compact mode; before bounded full-spelling rescue",
+    "harness": "v2 worktree; source and targets reviewed together"
+  },
+  "data_locks_sha256": {
+    "dicts.lock": "fe209ee2d440596ebda31e7d6e56f446d592a4f7a2292c8491c5fe7bebbc8000",
+    "models.lock": "7e46f7f9cc0ab675eec6fb58bc44b414329daab5c761a3d38e80b13954152b56",
+    "dicts-extra.lock": "ab965e76d2c8cb119c8c1a5620d114cffb8e2efe477039e9aa2f4ef743aa2a5b"
+  }
+}

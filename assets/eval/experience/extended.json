@@ -1,0 +1,636 @@
+[
+  {
+    "id": "phrase-01-full",
+    "scene": "phrase_3_full",
+    "text": "等一下",
+    "keys": "dengyixia",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-01-initials",
+    "scene": "phrase_3_initials",
+    "text": "等一下",
+    "keys": "dyx",
+    "interval_ms": 50,
+    "retry_keys": "dengyixia"
+  },
+  {
+    "id": "phrase-01-repair",
+    "scene": "phrase_3_repair",
+    "text": "等一下",
+    "keys": "dengyixia",
+    "interval_ms": 80,
+    "keystrokes": "dengyx\bixia"
+  },
+  {
+    "id": "phrase-02-full",
+    "scene": "phrase_3_full",
+    "text": "没问题",
+    "keys": "meiwenti",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-02-initials",
+    "scene": "phrase_3_initials",
+    "text": "没问题",
+    "keys": "mwt",
+    "interval_ms": 50,
+    "retry_keys": "meiwenti"
+  },
+  {
+    "id": "phrase-02-repair",
+    "scene": "phrase_3_repair",
+    "text": "没问题",
+    "keys": "meiwenti",
+    "interval_ms": 80,
+    "keystrokes": "meiwx\benti"
+  },
+  {
+    "id": "phrase-03-full",
+    "scene": "phrase_3_full",
+    "text": "辛苦了",
+    "keys": "xinkule",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-03-initials",
+    "scene": "phrase_3_initials",
+    "text": "辛苦了",
+    "keys": "xkl",
+    "interval_ms": 50,
+    "retry_keys": "xinkule"
+  },
+  {
+    "id": "phrase-03-repair",
+    "scene": "phrase_3_repair",
+    "text": "辛苦了",
+    "keys": "xinkule",
+    "interval_ms": 80,
+    "keystrokes": "xinkx\bule"
+  },
+  {
+    "id": "phrase-04-full",
+    "scene": "phrase_3_full",
+    "text": "对不起",
+    "keys": "duibuqi",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-04-initials",
+    "scene": "phrase_3_initials",
+    "text": "对不起",
+    "keys": "dbq",
+    "interval_ms": 50,
+    "retry_keys": "duibuqi"
+  },
+  {
+    "id": "phrase-04-repair",
+    "scene": "phrase_3_repair",
+    "text": "对不起",
+    "keys": "duibuqi",
+    "interval_ms": 80,
+    "keystrokes": "duibx\buqi"
+  },
+  {
+    "id": "phrase-05-full",
+    "scene": "phrase_3_full",
+    "text": "不客气",
+    "keys": "bukeqi",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-05-initials",
+    "scene": "phrase_3_initials",
+    "text": "不客气",
+    "keys": "bkq",
+    "interval_ms": 50,
+    "retry_keys": "bukeqi"
+  },
+  {
+    "id": "phrase-05-repair",
+    "scene": "phrase_3_repair",
+    "text": "不客气",
+    "keys": "bukeqi",
+    "interval_ms": 80,
+    "keystrokes": "bukx\beqi"
+  },
+  {
+    "id": "phrase-06-full",
+    "scene": "phrase_3_full",
+    "text": "马上到",
+    "keys": "mashangdao",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-06-initials",
+    "scene": "phrase_3_initials",
+    "text": "马上到",
+    "keys": "msd",
+    "interval_ms": 50,
+    "retry_keys": "mashangdao"
+  },
+  {
+    "id": "phrase-06-repair",
+    "scene": "phrase_3_repair",
+    "text": "马上到",
+    "keys": "mashangdao",
+    "interval_ms": 80,
+    "keystrokes": "masx\bhangdao"
+  },
+  {
+    "id": "phrase-07-full",
+    "scene": "phrase_3_full",
+    "text": "知道了",
+    "keys": "zhidaole",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-07-initials",
+    "scene": "phrase_3_initials",
+    "text": "知道了",
+    "keys": "zdl",
+    "interval_ms": 50,
+    "retry_keys": "zhidaole"
+  },
+  {
+    "id": "phrase-07-repair",
+    "scene": "phrase_3_repair",
+    "text": "知道了",
+    "keys": "zhidaole",
+    "interval_ms": 80,
+    "keystrokes": "zhidx\baole"
+  },
+  {
+    "id": "phrase-08-full",
+    "scene": "phrase_3_full",
+    "text": "收到了",
+    "keys": "shoudaole",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-08-initials",
+    "scene": "phrase_3_initials",
+    "text": "收到了",
+    "keys": "sdl",
+    "interval_ms": 50,
+    "retry_keys": "shoudaole"
+  },
+  {
+    "id": "phrase-08-repair",
+    "scene": "phrase_3_repair",
+    "text": "收到了",
+    "keys": "shoudaole",
+    "interval_ms": 80,
+    "keystrokes": "shoudx\baole"
+  },
+  {
+    "id": "phrase-09-full",
+    "scene": "phrase_3_full",
+    "text": "怎么样",
+    "keys": "zenmeyang",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-09-initials",
+    "scene": "phrase_3_initials",
+    "text": "怎么样",
+    "keys": "zmy",
+    "interval_ms": 50,
+    "retry_keys": "zenmeyang"
+  },
+  {
+    "id": "phrase-09-repair",
+    "scene": "phrase_3_repair",
+    "text": "怎么样",
+    "keys": "zenmeyang",
+    "interval_ms": 80,
+    "keystrokes": "zenmx\beyang"
+  },
+  {
+    "id": "phrase-10-full",
+    "scene": "phrase_3_full",
+    "text": "为什么",
+    "keys": "weishenme",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-10-initials",
+    "scene": "phrase_3_initials",
+    "text": "为什么",
+    "keys": "wsm",
+    "interval_ms": 50,
+    "retry_keys": "weishenme"
+  },
+  {
+    "id": "phrase-10-repair",
+    "scene": "phrase_3_repair",
+    "text": "为什么",
+    "keys": "weishenme",
+    "interval_ms": 80,
+    "keystrokes": "weisx\bhenme"
+  },
+  {
+    "id": "phrase-11-full",
+    "scene": "phrase_3_full",
+    "text": "办公室",
+    "keys": "bangongshi",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-11-initials",
+    "scene": "phrase_3_initials",
+    "text": "办公室",
+    "keys": "bgs",
+    "interval_ms": 50,
+    "retry_keys": "bangongshi"
+  },
+  {
+    "id": "phrase-11-repair",
+    "scene": "phrase_3_repair",
+    "text": "办公室",
+    "keys": "bangongshi",
+    "interval_ms": 80,
+    "keystrokes": "bangx\bongshi"
+  },
+  {
+    "id": "phrase-12-full",
+    "scene": "phrase_3_full",
+    "text": "手机号",
+    "keys": "shoujihao",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-12-initials",
+    "scene": "phrase_3_initials",
+    "text": "手机号",
+    "keys": "sjh",
+    "interval_ms": 50,
+    "retry_keys": "shoujihao"
+  },
+  {
+    "id": "phrase-12-repair",
+    "scene": "phrase_3_repair",
+    "text": "手机号",
+    "keys": "shoujihao",
+    "interval_ms": 80,
+    "keystrokes": "shoujx\bihao"
+  },
+  {
+    "id": "phrase-13-full",
+    "scene": "phrase_4_full",
+    "text": "稍等一下",
+    "keys": "shaodengyixia",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-13-initials",
+    "scene": "phrase_4_initials",
+    "text": "稍等一下",
+    "keys": "sdyx",
+    "interval_ms": 50,
+    "retry_keys": "shaodengyixia"
+  },
+  {
+    "id": "phrase-13-repair",
+    "scene": "phrase_4_repair",
+    "text": "稍等一下",
+    "keys": "shaodengyixia",
+    "interval_ms": 80,
+    "keystrokes": "shaodx\bengyixia"
+  },
+  {
+    "id": "phrase-14-full",
+    "scene": "phrase_4_full",
+    "text": "注意安全",
+    "keys": "zhuyianquan",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-14-initials",
+    "scene": "phrase_4_initials",
+    "text": "注意安全",
+    "keys": "zyaq",
+    "interval_ms": 50,
+    "retry_keys": "zhuyianquan"
+  },
+  {
+    "id": "phrase-14-repair",
+    "scene": "phrase_4_repair",
+    "text": "注意安全",
+    "keys": "zhuyianquan",
+    "interval_ms": 80,
+    "keystrokes": "zhuyx\bianquan"
+  },
+  {
+    "id": "phrase-15-full",
+    "scene": "phrase_4_full",
+    "text": "一路顺风",
+    "keys": "yilushunfeng",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-15-initials",
+    "scene": "phrase_4_initials",
+    "text": "一路顺风",
+    "keys": "ylsf",
+    "interval_ms": 50,
+    "retry_keys": "yilushunfeng"
+  },
+  {
+    "id": "phrase-15-repair",
+    "scene": "phrase_4_repair",
+    "text": "一路顺风",
+    "keys": "yilushunfeng",
+    "interval_ms": 80,
+    "keystrokes": "yilx\bushunfeng"
+  },
+  {
+    "id": "phrase-16-full",
+    "scene": "phrase_4_full",
+    "text": "工作顺利",
+    "keys": "gongzuoshunli",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-16-initials",
+    "scene": "phrase_4_initials",
+    "text": "工作顺利",
+    "keys": "gzsl",
+    "interval_ms": 50,
+    "retry_keys": "gongzuoshunli"
+  },
+  {
+    "id": "phrase-16-repair",
+    "scene": "phrase_4_repair",
+    "text": "工作顺利",
+    "keys": "gongzuoshunli",
+    "interval_ms": 80,
+    "keystrokes": "gongzx\buoshunli"
+  },
+  {
+    "id": "phrase-17-full",
+    "scene": "phrase_4_full",
+    "text": "周末愉快",
+    "keys": "zhoumoyukuai",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-17-initials",
+    "scene": "phrase_4_initials",
+    "text": "周末愉快",
+    "keys": "zmyk",
+    "interval_ms": 50,
+    "retry_keys": "zhoumoyukuai"
+  },
+  {
+    "id": "phrase-17-repair",
+    "scene": "phrase_4_repair",
+    "text": "周末愉快",
+    "keys": "zhoumoyukuai",
+    "interval_ms": 80,
+    "keystrokes": "zhoumx\boyukuai"
+  },
+  {
+    "id": "phrase-18-full",
+    "scene": "phrase_4_full",
+    "text": "早点休息",
+    "keys": "zaodianxiuxi",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-18-initials",
+    "scene": "phrase_4_initials",
+    "text": "早点休息",
+    "keys": "zdxx",
+    "interval_ms": 50,
+    "retry_keys": "zaodianxiuxi"
+  },
+  {
+    "id": "phrase-18-repair",
+    "scene": "phrase_4_repair",
+    "text": "早点休息",
+    "keys": "zaodianxiuxi",
+    "interval_ms": 80,
+    "keystrokes": "zaodx\bianxiuxi"
+  },
+  {
+    "id": "phrase-19-full",
+    "scene": "phrase_4_full",
+    "text": "收到谢谢",
+    "keys": "shoudaoxiexie",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-19-initials",
+    "scene": "phrase_4_initials",
+    "text": "收到谢谢",
+    "keys": "sdxx",
+    "interval_ms": 50,
+    "retry_keys": "shoudaoxiexie"
+  },
+  {
+    "id": "phrase-19-repair",
+    "scene": "phrase_4_repair",
+    "text": "收到谢谢",
+    "keys": "shoudaoxiexie",
+    "interval_ms": 80,
+    "keystrokes": "shoudx\baoxiexie"
+  },
+  {
+    "id": "phrase-20-full",
+    "scene": "phrase_4_full",
+    "text": "马上回来",
+    "keys": "mashanghuilai",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-20-initials",
+    "scene": "phrase_4_initials",
+    "text": "马上回来",
+    "keys": "mshl",
+    "interval_ms": 50,
+    "retry_keys": "mashanghuilai"
+  },
+  {
+    "id": "phrase-20-repair",
+    "scene": "phrase_4_repair",
+    "text": "马上回来",
+    "keys": "mashanghuilai",
+    "interval_ms": 80,
+    "keystrokes": "masx\bhanghuilai"
+  },
+  {
+    "id": "phrase-21-full",
+    "scene": "phrase_4_full",
+    "text": "下班了吗",
+    "keys": "xiabanlema",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-21-initials",
+    "scene": "phrase_4_initials",
+    "text": "下班了吗",
+    "keys": "xblm",
+    "interval_ms": 50,
+    "retry_keys": "xiabanlema"
+  },
+  {
+    "id": "phrase-21-repair",
+    "scene": "phrase_4_repair",
+    "text": "下班了吗",
+    "keys": "xiabanlema",
+    "interval_ms": 80,
+    "keystrokes": "xiabx\banlema"
+  },
+  {
+    "id": "phrase-22-full",
+    "scene": "phrase_4_full",
+    "text": "会议记录",
+    "keys": "huiyijilu",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-22-initials",
+    "scene": "phrase_4_initials",
+    "text": "会议记录",
+    "keys": "hyjl",
+    "interval_ms": 50,
+    "retry_keys": "huiyijilu"
+  },
+  {
+    "id": "phrase-22-repair",
+    "scene": "phrase_4_repair",
+    "text": "会议记录",
+    "keys": "huiyijilu",
+    "interval_ms": 80,
+    "keystrokes": "huiyx\bijilu"
+  },
+  {
+    "id": "phrase-23-full",
+    "scene": "phrase_4_full",
+    "text": "重新启动",
+    "keys": "chongxinqidong",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-23-initials",
+    "scene": "phrase_4_initials",
+    "text": "重新启动",
+    "keys": "cxqd",
+    "interval_ms": 50,
+    "retry_keys": "chongxinqidong"
+  },
+  {
+    "id": "phrase-23-repair",
+    "scene": "phrase_4_repair",
+    "text": "重新启动",
+    "keys": "chongxinqidong",
+    "interval_ms": 80,
+    "keystrokes": "chongxx\binqidong"
+  },
+  {
+    "id": "phrase-24-full",
+    "scene": "phrase_4_full",
+    "text": "网络连接",
+    "keys": "wangluolianjie",
+    "interval_ms": 80
+  },
+  {
+    "id": "phrase-24-initials",
+    "scene": "phrase_4_initials",
+    "text": "网络连接",
+    "keys": "wllj",
+    "interval_ms": 50,
+    "retry_keys": "wangluolianjie"
+  },
+  {
+    "id": "phrase-24-repair",
+    "scene": "phrase_4_repair",
+    "text": "网络连接",
+    "keys": "wangluolianjie",
+    "interval_ms": 80,
+    "keystrokes": "wanglx\buolianjie"
+  },
+  {
+    "id": "session-chat-1",
+    "scene": "continuous_chat",
+    "session": "chat",
+    "text": "你好",
+    "keys": "nihao",
+    "english": false,
+    "interval_ms": 50
+  },
+  {
+    "id": "session-chat-2",
+    "scene": "continuous_chat",
+    "session": "chat",
+    "text": "你现在方便吗？",
+    "keys": "nixianzaifangbianma",
+    "english": false,
+    "interval_ms": 50,
+    "punctuation": "?"
+  },
+  {
+    "id": "session-chat-3",
+    "scene": "continuous_chat",
+    "session": "chat",
+    "text": "我马上就到",
+    "keys": "womashangjiudao",
+    "english": false,
+    "interval_ms": 50
+  },
+  {
+    "id": "session-office-1",
+    "scene": "continuous_office",
+    "session": "office",
+    "text": "请把文件发给我",
+    "keys": "qingbawenjianfageiwo",
+    "english": false,
+    "interval_ms": 50
+  },
+  {
+    "id": "session-office-2",
+    "scene": "continuous_office",
+    "session": "office",
+    "text": "收到谢谢",
+    "keys": "shoudaoxiexie",
+    "english": false,
+    "interval_ms": 50
+  },
+  {
+    "id": "session-office-3",
+    "scene": "continuous_office",
+    "session": "office",
+    "text": "会议记录",
+    "keys": "huiyijilu",
+    "english": false,
+    "interval_ms": 50
+  },
+  {
+    "id": "session-mixed-1",
+    "scene": "continuous_mixed",
+    "session": "mixed",
+    "text": "数据库",
+    "keys": "shujuku",
+    "english": false,
+    "interval_ms": 50
+  },
+  {
+    "id": "session-mixed-2",
+    "scene": "continuous_mixed",
+    "session": "mixed",
+    "text": "database",
+    "keys": "database",
+    "english": true,
+    "interval_ms": 50
+  },
+  {
+    "id": "session-mixed-3",
+    "scene": "continuous_mixed",
+    "session": "mixed",
+    "text": "重新启动",
+    "keys": "chongxinqidong",
+    "english": false,
+    "interval_ms": 50
+  }
+]

@@ -11,6 +11,10 @@ use super::theme::Theme;
 
 /// 一次绘制要用的全部内容。
 pub(crate) struct RenderData {
+    pub(super) upward: bool,
+
+    pub(super) typed_keys: String,
+
     /// 配色与字体（随 DPI / 深浅重建）。
     pub(super) theme: Rc<Theme>,
 
@@ -56,6 +60,9 @@ pub(crate) struct RenderData {
     /// 译词旁是否显示词性标注（随帧下发的 `[general] translation_pos`）。
     pub(super) show_pos: bool,
 
+    /// 英文候选的 `reading` 是音标、用淡色画（随帧下发的 `[general] show_english_pronunciation`）。
+    pub(super) english_reading_ipa: bool,
+
     /// 输入状态，给主题显示中 / 英、简 / 繁等。
     pub(super) mode: Mode,
 }
@@ -63,6 +70,8 @@ pub(crate) struct RenderData {
 impl RenderData {
     pub(super) fn empty(theme: Rc<Theme>) -> Self {
         Self {
+            upward: false,
+            typed_keys: String::new(),
             theme,
             preedit: Vec::new(),
             cursor: 0,
@@ -78,16 +87,19 @@ impl RenderData {
             appearance: Appearance::default(),
             show_code: false,
             show_pos: true,
+            english_reading_ipa: false,
             mode: Mode::default(),
         }
     }
 
     pub(super) fn set(&mut self, frame: &Frame, mode: Mode) {
         self.mode = mode;
+        self.typed_keys.clone_from(&frame.typed_keys);
         self.layout = frame.layout;
         self.appearance = frame.appearance;
         self.show_code = frame.aux_code_show;
         self.show_pos = frame.translation_pos;
+        self.english_reading_ipa = frame.english_reading_ipa;
         self.preedit = window_preedit(frame);
         self.cursor = frame
             .window_preedit
@@ -109,7 +121,9 @@ impl RenderData {
                     candidate,
                     self.show_code,
                     self.show_pos,
+                    self.english_reading_ipa,
                 );
+                row.diff = frame.differs.get(i).cloned().unwrap_or_default();
                 if grid {
                     let labelled =
                         Some(i / frame.columns) == highlight_row && !candidate.text.is_empty();
@@ -147,6 +161,7 @@ impl RenderData {
             cursor: self.cursor,
         });
         qingjian_render::Frame {
+            upward: self.upward,
             preedit,
             rows: self.rows.clone(),
             // 协议里 usize::MAX 表示不高亮。
@@ -159,6 +174,7 @@ impl RenderData {
             sentence: self.sentence.clone(),
             status: self.notice.clone(),
             mode: self.mode.clone(),
+            reversed: false,
         }
     }
 }

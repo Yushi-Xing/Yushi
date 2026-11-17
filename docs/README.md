@@ -20,21 +20,31 @@ README.md 只介绍项目（各语言译本在 [i18n/](i18n/)），所有技术�
 | [design/aux-code.md](design/aux-code.md) | 辅码（2026-09-14）：触发键与过滤语义、Rime 码表导入、笔画原生表与大陆序覆盖、候选注记与设置界面 |
 | [design/core-internals.md](design/core-internals.md) | Core 与显示层拆解（2026-09-23）：`Engine` 的字段分组与线程归属、一次按键的数据流、三条异步旁路、上屏写回、缓存，三个平台的显示层与还各写一份的地方 |
 | [design/voice-and-swipe.md](design/voice-and-swipe.md) | 语音与滑行输入（2026-10-20）：Rust 与平台壳的分工、语音结果怎么经 Core 上屏、识别方式接口 `Transcriber`、火山引擎豆包流式识别、入口与面板交互；滑行的范围、解码接口 `SwipeDecoder`、按词表打分的 `ShapeDecoder` 与判定 |
+| [design/contacts.md](design/contacts.md) | 通讯录里的名字（2026-11-05，#876）：Kotlin、Core 与会话的分工，收哪些名字、读音怎么定、怎么排进第一页，上屏后给电话邮箱的通道，隐私边界 |
 | [plan/roadmap.md](plan/roadmap.md) | 分阶段路线图、各阶段的依赖关系与已完成项 |
+| [plan/input-efficiency-2026-11-05.md](plan/input-efficiency-2026-11-05.md) | 输入准确度、资源占用、流畅度和安装包优化的基线与实施顺序 |
+| [plan/candidate-interaction-2026-11-05.md](plan/candidate-interaction-2026-11-05.md) | 首选贴近输入行、整词浏览上限与单字入口、借鉴代码补全的调研方案 |
 | [plan/windows-focused-refactor.md](plan/windows-focused-refactor.md) | Windows 专用重构目标：全拼与自动纠错优先、按需英语句译、Win10/Win11 兼容验收、功能删减与包体优化 |
 | [plan/windows-refactor-tasks.md](plan/windows-refactor-tasks.md) | 按轮次实施的任务状态、自动测试用例与基础输入框／浏览器／VS Code／微信的兼容验收顺序 |
 | [plan/zh_tw_support_plan.md](plan/zh_tw_support_plan.md) | 繁体输出与台湾注音支持的分析与方案（贡献者 pinchiu，#22）：读音标准差异、台湾用语、简转繁一对多；两条路线 |
 | [plan/todo.md](plan/todo.md) | 待办清单，按「从自用到能给别人用」排 |
 | [plan/wubi.md](plan/wubi.md) | 五笔（形码）支持方案（2026-09-15）：为什么不能按双拼的方式接、两条平行管线、码表与词频、`[general] scheme` 收敛、分期 |
+| [design/linux-wubi.md](design/linux-wubi.md) | Linux 五笔、自制方案、热更新与会话清理设计 |
+| [plan/linux-wubi-implementation.md](plan/linux-wubi-implementation.md) | Linux 五笔接入的实现与验证清单 |
+| [notes/linux-wubi.md](notes/linux-wubi.md) | Linux 五笔验证命令、实际环境与未验证范围 |
 | [notes/crate-notes.md](notes/crate-notes.md) | 各 crate / app / tool 的实现要点：入口类型、数据文件、常数、生成命令 |
+| [notes/yushi-xing-comparison-2026-11-05.md](notes/yushi-xing-comparison-2026-11-05.md) | Yushi-Xing fork 相对青简的实际改动、继承关系、未完成项与本轮安装包验证 |
 | [notes/windows-refactor-round1-2026-10-04.md](notes/windows-refactor-round1-2026-10-04.md) | Windows 重构第一轮：会话隔离、诊断导出、日志与下载限额修复，自动与原生 ZIP 测试结果及未验项目 |
+| [notes/windows-occlusion-2026-11-05.md](notes/windows-occlusion-2026-11-05.md) | Win11 任务栏搜索与开始菜单候选遮挡：宿主回退的覆盖范围、合并接线核对、同机定位步骤与验收边界 |
 | [notes/linux-fcitx5.md](notes/linux-fcitx5.md) | Linux 默认面板构建、协议、安装与排错 |
 | [notes/linux-packaging.md](notes/linux-packaging.md) | Linux 发行包（2026-09-23）：`build.sh` 在容器里打 deb / rpm，各包装了什么、能装哪些发行版、装法与限制，`smoke/run.sh` 在五个发行版的干净容器里装包自检 |
 | [notes/linux-dual-frontend.md](notes/linux-dual-frontend.md) | Linux 双前端（Fcitx5 / IBus）怎么验（2026-09-21）：能自动跑的三套、只能真会话手测的六条及其判据、现在验不了的两件事、踩过的四个坑 |
 | [notes/linux-bringup.md](notes/linux-bringup.md) | Linux 走 IBus 那次的工程记录（2026-09-14，路线已改走 Fcitx5，留作双框架支持的参考）：分层怎么切、五个只有真机才暴露的坑（总线地址 / Shift+数字 / GVariant 嵌套 / 把 `/` 当仓库根 / 锁毒化）、合成客户端验不了什么、装机验收数字 |
 | [notes/linux-fcitx4.md](notes/linux-fcitx4.md) | Ubuntu 22.04 的 Fcitx4 源码适配、安装与验证 |
+| [notes/linux-appimage.md](notes/linux-appimage.md) | Linux AppImage：输入法为什么要 install 一步、构建环境与能跑在哪、各发行版容器里的实测 |
 | [notes/android.md](notes/android.md) | Android 输入法：键盘、候选条、面板、剪贴板、快捷翻译怎么接到 Core，取舍与踩坑 |
 | [notes/performance.md](notes/performance.md) | 历次性能优化：起因、定位方法、改法、数字前后对比与经验 |
+| [notes/input-efficiency-2026-11-05.md](notes/input-efficiency-2026-11-05.md) | 本轮输入上下文修复、后台任务取消、包体裁剪与前后评测证据 |
 | [notes/release.md](notes/release.md) | 发版流程：CHANGELOG、标签触发的 CI 打包、产品数据包、签名公证的 Secrets、官网用的 `releases.json` |
 | [notes/model-identities.md](notes/model-identities.md) | 含章·通变与含章·知微的正式名称和检查点编号 |
 | [notes/phrase-layer.md](notes/phrase-layer.md) | 短语层（2026-09-12）：常用词表收不到的 我的 / 不知道 怎么从语料挖、怎么进语言模型而不伤整句、两把尺子的前后数字 |

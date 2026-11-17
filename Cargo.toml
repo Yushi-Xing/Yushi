@@ -15,7 +15,10 @@ members = [
     "crates/bamboo-slip",
     "crates/bamboo-slip-i18n",
     "crates/qingjian-update",
-    "apps/linux/server", "apps/linux/ibus", "apps/android/core", "apps/cli", "apps/settings", "apps/macos", "apps/windows/server", "apps/windows/tsf", "apps/windows/settings", "tools/dict-convert", "tools/gloss-gen", "tools/release-sign",
+    "crates/qingjian-clipboard",
+    "crates/qingjian-clipboard-sync",
+    "crates/qingjian-code",
+    "apps/linux/server", "apps/linux/ibus", "apps/android/core", "apps/cli", "apps/settings", "apps/clipboard", "apps/macos", "apps/windows/server", "apps/windows/tsf", "apps/windows/settings", "tools/dict-convert", "tools/gloss-gen", "tools/release-sign",
 ]
 
 [workspace.package]
@@ -23,6 +26,12 @@ version = "0.1.1"
 edition = "2024"
 license = "GPL-3.0-or-later"
 repository = "https://github.com/qingjian-team/qingjian"
+
+# 跨 crate 消除未用代码并去掉符号表；保留默认的 panic 展开，平台回调仍能隔离 panic。
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "symbols"
 
 [workspace.lints.clippy]
 all = "warn"
@@ -43,6 +52,9 @@ qingjian-render = { path = "crates/qingjian-render" }
 qingjian-update = { path = "crates/qingjian-update" }
 # 自绘 UI 引擎：候选窗、状态条、设置程序都画在它上面
 bamboo-slip = { path = "crates/bamboo-slip" }
+qingjian-clipboard = { path = "crates/qingjian-clipboard" }
+qingjian-clipboard-sync = { path = "crates/qingjian-clipboard-sync" }
+qingjian-code = { path = "crates/qingjian-code" }
 bamboo-slip-i18n = { path = "crates/bamboo-slip-i18n" }
 
 # 外部依赖统一在这里定版本，子 crate 一律 `xxx.workspace = true`
@@ -76,6 +88,8 @@ candle-nn = "0.11.0"
 async-openai = { version = "0.42.0", default-features = false, features = ["chat-completion", "byot", "middleware"] }
 reqwest = { version = "0.13", default-features = false }
 uuid = { version = "1.26", features = ["v4", "v7"] }
+# 越南语 Telex 的纯 Rust 音节转换；青简在外层补 Simple Telex、恢复与组词生命周期。
+vi = "0.8.0"
 # 安卓没有可链的系统 TLS：云联想（只开 rustls 时）与语音识别走 rustls（ring + 内置 Mozilla 根证书）
 rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
 webpki-roots = "1"
@@ -113,6 +127,7 @@ objc2-input-method-kit = "0.3.2"
 # 候选窗字体设置：按字族名找字体文件（渲染器只加载指定文件）
 objc2-core-text = { version = "0.3.2", features = ["CTFont", "CTFontDescriptor"] }
 objc2-core-foundation = { version = "0.3.2", features = ["CFArray", "CFBase", "CFDictionary", "CFNumber", "CFSet", "CFString", "CFURL"] }
+objc2-core-graphics = { version = "0.3.2", default-features = false, features = ["std", "CGWindow", "CGGeometry"] }
 
 # Windows 平台层
 embed-manifest = "1.4.0"

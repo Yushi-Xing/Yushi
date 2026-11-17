@@ -6,6 +6,7 @@ use crate::candidates::row::{Row, Tone};
 
 pub(super) fn frame(frame: &Frame) -> qingjian_render::Frame {
     qingjian_render::Frame {
+        upward: false,
         preedit: frame.preedit.as_ref().map(preedit),
         rows: frame.rows.iter().map(row).collect(),
         highlighted: Some(frame.highlighted),
@@ -17,6 +18,7 @@ pub(super) fn frame(frame: &Frame) -> qingjian_render::Frame {
         sentence: frame.sentence.clone(),
         status: frame.status.clone(),
         mode: frame.mode.clone(),
+        reversed: false,
     }
 }
 
@@ -42,6 +44,7 @@ fn row(row: &Row) -> qingjian_render::Row {
     qingjian_render::Row {
         index: row.index.clone(),
         text: row.text.clone(),
+        diff: row.diff.clone(),
         code: row.code.clone(),
         annotation: row
             .annotation

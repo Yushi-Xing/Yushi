@@ -24,6 +24,9 @@
 #ifndef AppVersionNumeric
   #define AppVersionNumeric AppVersion
 #endif
+#ifndef IncludeLegacySettings
+  #define IncludeLegacySettings 0
+#endif
 #define AppName "青简"
 #define Publisher "青简"
 #define WebsiteUrl "https://qingjian.im"
@@ -66,29 +69,39 @@ Name: "chs"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
 ; 这是最容易被误解成「设置/新版没生效」的一点，所以放在完成页明说。
 FinishedLabel=安装完成。请注销后重新登录（或重启电脑），青简才会在所有应用里生效。%n%n不方便注销的话，先关掉再重新打开要打字的应用也可以。
 
+[Dirs]
+; 输入法图标所在目录：regsvr32 在这里写单色图标，之后各用户的 Server 跟着任务栏深浅改写，所以放开给普通用户写
+Name: "{commonappdata}\Qingjian"; Permissions: users-modify
+
 [Files]
 ; —— 二进制 ——
 ; DLL 按版本起名并排装；卸载时若仍被占用，登记成重启后删。
 Source: "{#Repo}\target\release\qingjian_tsf.dll";      DestDir: "{app}"; DestName: "{#TsfDll}"; Flags: ignoreversion uninsrestartdelete
 Source: "{#Repo}\target\i686-pc-windows-msvc\release\qingjian_tsf.dll"; DestDir: "{app}"; DestName: "{#TsfDll32}"; Flags: ignoreversion uninsrestartdelete
 Source: "{#Repo}\target\release\qingjian-settings.exe"; DestDir: "{app}"; Flags: ignoreversion
-; 旧版设置程序（WinUI）留一个版本作回退，下个版本删掉它与下面的运行时
+Source: "{#Repo}\target\release\qingjian-clipboard.exe"; DestDir: "{app}"; Flags: ignoreversion
+; 兼容构建可额外带旧版 WinUI 设置及运行时，标准包只带共享设置程序。
+#if Int(IncludeLegacySettings)
 Source: "{#Repo}\target\release\qingjian-settings-legacy.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; 旧版设置程序自带一份 Windows App Runtime（自包含部署：Windows 10 上机器装的框架包用不了，见 docs\notes\windows-win10.md）；
 ; 文件由 build.ps1 按 settings-runtime.txt 从 target\release 挑进 target\installer\settings-runtime，必须与 exe 同级。
 Source: "{#Repo}\target\installer\settings-runtime\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+#endif
 Source: "{#Repo}\apps\windows\tsf\resources\qingjian.ico"; DestDir: "{app}"; Flags: ignoreversion
 ; —— 随包生成数据（只装运行时要的 .qj / .tsv，不装 dev 中间产物）——
-Source: "{#Repo}\data\generated\dict.qj";        DestDir: "{app}\data\generated";       Flags: ignoreversion
-Source: "{#Repo}\data\generated\lm.qj";          DestDir: "{app}\data\generated";       Flags: ignoreversion
-Source: "{#Repo}\data\generated\glossary-en.qj"; DestDir: "{app}\data\generated";       Flags: ignoreversion
-Source: "{#Repo}\data\generated\glossary-ja.qj"; DestDir: "{app}\data\generated";       Flags: ignoreversion
-Source: "{#Repo}\data\generated\glossary-zh.qj"; DestDir: "{app}\data\generated";       Flags: ignoreversion
-Source: "{#Repo}\data\generated\glossary-es.qj"; DestDir: "{app}\data\generated";       Flags: ignoreversion
-Source: "{#Repo}\data\generated\glossary-vi.qj"; DestDir: "{app}\data\generated";       Flags: ignoreversion
-Source: "{#Repo}\data\generated\glossary-de.qj"; DestDir: "{app}\data\generated";       Flags: ignoreversion
-Source: "{#Repo}\data\generated\english.tsv";    DestDir: "{app}\data\generated";       Flags: ignoreversion
-Source: "{#Repo}\data\generated\dicts\*.qj";     DestDir: "{app}\data\generated\dicts";  Flags: ignoreversion
+; 随包词库从词库仓库取（tools\release\dicts.lock，data-fetch.sh 解到 data\generated），换随包词库要同步这几行与 build.ps1
+Source: "{#Repo}\data\generated\dict.qj";               DestDir: "{app}\data\generated"; Flags: ignoreversion
+Source: "{#Repo}\data\generated\lm.qj";                 DestDir: "{app}\data\generated"; Flags: ignoreversion
+Source: "{#Repo}\data\generated\glossary-en.qj";        DestDir: "{app}\data\generated"; Flags: ignoreversion
+Source: "{#Repo}\data\generated\glossary-zh.qj";        DestDir: "{app}\data\generated"; Flags: ignoreversion
+Source: "{#Repo}\data\generated\english.qj";            DestDir: "{app}\data\generated"; Flags: ignoreversion
+Source: "{#Repo}\data\generated\english-ipa.qj";        DestDir: "{app}\data\generated"; Flags: ignoreversion
+Source: "{#Repo}\data\generated\vietnamese.qj";         DestDir: "{app}\data\generated"; Flags: ignoreversion
+Source: "{#Repo}\data\generated\vietnamese-chinese.qj"; DestDir: "{app}\data\generated"; Flags: ignoreversion
+Source: "{#Repo}\data\generated\dicts\idioms.qj";        DestDir: "{app}\data\generated\dicts"; Flags: ignoreversion
+Source: "{#Repo}\data\generated\dicts\general.qj";       DestDir: "{app}\data\generated\dicts"; Flags: ignoreversion
+; 随包形码方案（五笔），Server 的 `dispatch::find_bundled_schemes` 在 data\generated\schemes 找
+Source: "{#Repo}\data\generated\schemes\wubi86.qj";      DestDir: "{app}\data\generated\schemes"; Flags: ignoreversion
 ; —— 随包辅码码表（笔画，开箱可用）：Server 扫 data\generated\codes\；CNS11643 筆順資料派生，署名见「关于」页 ——
 ;    产品数据一律不加 skipifsourcedoesntexist：缺了就编不过，不悄悄打出少数据的包（build.ps1 编译前先查一遍）
 Source: "{#Repo}\data\generated\codes\*.qj";   DestDir: "{app}\data\generated\codes"; Flags: ignoreversion
@@ -99,11 +112,6 @@ Source: "{#Repo}\assets\emoji\emoji-zh.tsv";     DestDir: "{app}\assets\emoji"; 
 Source: "{#Repo}\assets\emoji\emoji-en.tsv";     DestDir: "{app}\assets\emoji";  Flags: ignoreversion
 Source: "{#Repo}\assets\levels\levels-en.tsv";   DestDir: "{app}\assets\levels"; Flags: ignoreversion
 Source: "{#Repo}\assets\levels\levels-ja.tsv";   DestDir: "{app}\assets\levels"; Flags: ignoreversion
-; 随包形码方案（五笔，见 assets/schemes/wubi86/README.md；极点 86 码表，Apache-2.0）。
-; 走 assets\ 与 emoji / levels 一致，Server 的 `dispatch::code::find_bundled_schemes` 照同一个相对路径找，
-; 开发布局（cargo run）也对得上
-Source: "{#Repo}\assets\schemes\wubi86\scheme.toml";  DestDir: "{app}\assets\schemes\wubi86"; Flags: ignoreversion
-Source: "{#Repo}\assets\schemes\wubi86\table.tsv";    DestDir: "{app}\assets\schemes\wubi86"; Flags: ignoreversion
 Source: "{#Repo}\assets\sample\dict.tsv";        DestDir: "{app}\assets\sample"; Flags: ignoreversion
 ; 常用补充词库编入 Server；随包保留来源及许可声明。
 Source: "{#Repo}\assets\lexicon\supplement\JIEBA-LICENSE.txt"; DestDir: "{app}\licenses\lexicon"; Flags: ignoreversion
@@ -111,16 +119,19 @@ Source: "{#Repo}\assets\lexicon\supplement\UNICODE-LICENSE.txt"; DestDir: "{app}
 Source: "{#Repo}\assets\lexicon\00_meta\THUOCL_LICENSE.txt"; DestDir: "{app}\licenses\lexicon"; Flags: ignoreversion
 Source: "{#Repo}\assets\lexicon\supplement\README.md"; DestDir: "{app}\licenses\lexicon"; Flags: ignoreversion
 Source: "{#Repo}\assets\lexicon\supplement\manifest.json"; DestDir: "{app}\licenses\lexicon"; Flags: ignoreversion
+Source: "{#Repo}\assets\lexicon\GENERAL-NOTICE.md"; DestDir: "{app}\licenses\lexicon"; Flags: ignoreversion
 ; —— 知意（ONNX）的运行库：Server 按路径加载 exe 旁边的 onnxruntime.dll；
 ;    由 build.ps1 调 fetch-onnxruntime.ps1 取到 target\installer\onnxruntime（含许可）——
-Source: "{#Repo}\target\installer\onnxruntime\onnxruntime.dll"; DestDir: "{app}"; Flags: ignoreversion uninsrestartdelete
+Source: "{#Repo}\target\installer\onnxruntime\*.dll"; DestDir: "{app}"; Flags: ignoreversion uninsrestartdelete
 Source: "{#Repo}\target\installer\onnxruntime\*.txt"; DestDir: "{app}\licenses"; Flags: ignoreversion
 ; —— Server 放最后：它一落地，旧版 DLL 就能把它拉起来并占住数据文件（见文件头）——
 Source: "{#Repo}\target\release\qingjian-server.exe";   DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\青简设置"; Filename: "{app}\qingjian-settings.exe"; IconFilename: "{app}\qingjian.ico"
+#if Int(IncludeLegacySettings)
 Name: "{group}\青简旧版设置"; Filename: "{app}\qingjian-settings-legacy.exe"; IconFilename: "{app}\qingjian.ico"
+#endif
 Name: "{group}\卸载青简"; Filename: "{uninstallexe}"
 ; 登录自启：登录时 Explorer 走 ShellExecute 拉起本快捷方式 → AppInfo 授予 uiAccess，候选窗才能盖过商店 / 任务栏搜索。
 ; 用 {commonstartup}（所有用户「启动」文件夹）而非 {userstartup}：本安装器是 admin 机器级安装，
@@ -151,6 +162,8 @@ Filename: "{sys}\taskkill.exe"; Parameters: "/im qingjian-server.exe /f"; \
   Flags: runhidden; RunOnceId: "KillServer"
 Filename: "{sys}\taskkill.exe"; Parameters: "/im qingjian-settings.exe /f"; \
   Flags: runhidden; RunOnceId: "KillSettings"
+Filename: "{sys}\taskkill.exe"; Parameters: "/im qingjian-clipboard.exe /f"; \
+  Flags: runhidden; RunOnceId: "KillClipboard"
 Filename: "{sys}\taskkill.exe"; Parameters: "/im qingjian-settings-legacy.exe /f"; \
   Flags: runhidden; RunOnceId: "KillLegacySettings"
 Filename: "{sys}\regsvr32.exe"; Parameters: "/u /s ""{app}\{#TsfDll}"""; \
@@ -167,11 +180,30 @@ Type: filesandordirs; Name: "{app}\data\model"
 Type: filesandordirs; Name: "{app}\data\models"
 ; 0.1.4 开发版的随包码表旧位置
 Type: filesandordirs; Name: "{app}\codes"
+; 随包五笔的旧位置（scheme.toml + table.tsv），现在是 data\generated\schemes\wubi86.qj
+Type: filesandordirs; Name: "{app}\assets\schemes"
+; 随包音标表的旧位置，现在是 data\generated\english-ipa.qj
+Type: filesandordirs; Name: "{app}\assets\lexicon"
+; 旧版本随包的领域词库、其他语种释义表与 TSV 词表：现在只随包 dicts.lock 里那几本，别的在设置里下载到用户目录。
+; 先清掉再装，成语词库与通用扩展词库随后照样装回 dicts\
+Type: filesandordirs; Name: "{app}\data\generated\dicts"
+Type: files; Name: "{app}\data\generated\glossary-ja.qj"
+Type: files; Name: "{app}\data\generated\glossary-es.qj"
+Type: files; Name: "{app}\data\generated\glossary-vi.qj"
+Type: files; Name: "{app}\data\generated\glossary-de.qj"
+Type: files; Name: "{app}\data\generated\english.tsv"
+Type: files; Name: "{app}\data\generated\vietnamese.tsv"
+Type: files; Name: "{app}\data\generated\vietnamese-zh.tsv"
+; 0.3.3 及更早的 DLL 运行日志逐键记了打的字，新版不再记：升级时删掉旧的，不等它按天过期。
+; 以后的升级也照删，只是丢掉升级前几天的 DLL 排查记录。只清得到运行安装程序的这个用户；升级时还开着的应用里旧 DLL 没退出，当天可能再写一点，按天过期。
+Type: files; Name: "{localappdata}\Qingjian\logs\tsf.*.log"
 
 [UninstallDelete]
 ; 历次升级留下的旧版本 DLL（正常在升级时就删了；仍被占用的会留到这里）。
 Type: files; Name: "{app}\qingjian_tsf-*.dll"
 Type: files; Name: "{app}\qingjian-server.old-*.exe"
+; 运行日志只用来排查问题，卸载后没用了；学习数据与设置在别处，照旧保留。只清得到运行卸载程序的这个用户。
+Type: filesandordirs; Name: "{localappdata}\Qingjian\logs"
 
 [Code]
 function CreateMutex(Attributes: Longint; InitialOwner: BOOL; Name: String): THandle;
@@ -238,6 +270,7 @@ begin
   RetireServerExe;
   KillProcess('qingjian-server.exe');
   KillProcess('qingjian-settings.exe');
+  KillProcess('qingjian-clipboard.exe');
   KillProcess('qingjian-settings-legacy.exe');
   RetireLoadedDll('{#TsfDll}');
   RetireLoadedDll('{#TsfDll32}');

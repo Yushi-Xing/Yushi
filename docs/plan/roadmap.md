@@ -58,7 +58,7 @@
 - [x] bigram 语言模型（`qingjian-lm`，`LanguageModel` trait 注入）：`dict-convert bigram` 从中文维基 + LCCC 统计，`pack lm` 打成 `lm.qj` 随 bundle 打包，没有时退化为一元
 - [x] 个人 n-gram（Core `sentence::UserNgram`，`Learner::user_ngram()`）：上屏词序列在线计数，与静态模型插值进 Viterbi；`user-ngram.tsv` 落盘；
   2026-09-06 加三元（绝对折扣回退到二元，Viterbi 前二词取前驱回指，`CommitChain` 记两个词）
-- [x] 自动造词：连着选出的两个词合起来词库没有、记够次数就成用户词（同段拼音两次 / 分段三次）
+- [x] 自动造词：连着选出的两个词合起来词库没有、记够次数就成用户词（同段拼音一次 / 分段三次）
 - [x] 快捷候选（Core `shortcut`）：`rq` / `sj` / `xq` 出日期 / 时间 / 星期，`v` 开头表达式模式出四则运算结果与中文数字（见 candidate-ui.md）
 - [x] 中文标点（Core `punctuation`：全角映射、引号配对、数字后的点保持半角；组句期间 `,` `.` 把高亮候选上屏再补标点；配成翻页键时只翻页）
 - [x] 候选框顶部自绘 preedit 行与光标（不依赖应用画插入点）
@@ -181,9 +181,10 @@
   - Android 壳里还写在 Kotlin、统一时要搬进 Rust 的规则：
     - [ ] 键位表与角标：`keyboard/layout/KeyboardLayout.kt`（全键盘、九宫格、注音大千、日语、数字键盘、符号页）
     - [ ] 尺寸与排版：`keyboard/layout/KeyboardMetrics.kt`（行高、按宽度分键、九宫格列宽）
-    - [ ] 滑行起判阈值：`keyboard/SwipeTrail.kt` 的 `START_KEYS`；上滑判定：`keyboard/KeyboardView.kt` 的 `FLICK_DP`（往上多远、不偏出本列）；Shift 双击锁定的间隔：`service/input/Composer.kt` 的 `DOUBLE_TAP_MS`
+    - [ ] 游戏键盘（横屏悬浮）的尺寸档与拖动：`settings/GameKeyboard.kt` 的 `Size`（占屏宽比例、行高）、`service/GameFrame.kt`（位置按可挪范围的比例记）
+    - [ ] 滑行起判阈值：`keyboard/SwipeTrail.kt` 的 `START_KEYS`；上滑判定：`keyboard/KeyboardView.kt` 的 `FLICK_DP`（往上多远、不偏出本列）；Shift 双击锁定的间隔：`service/input/Composer.kt` 的 `DOUBLE_TAP_MS`；面板左滑删除：`panel/base/PanelView.kt` 的 `FLING_DP`、`ClipboardPanel` 的 `SWIPE_DELETE_SHARE`
     - [ ] 键位排法：`settings/Settings.kt` 的 `Arrangement`（左手便捷：符号面板分类列在左、返回在左下）
-    - [ ] 写死的颜色并进主题推导：`ClipboardPanel` 代码高亮的数字色、`VocabularyPage` 生词标签色、`TranslateBar` / `ProcessTextActivity` 的失败红、`AdvancedActivity` 的危险操作红
+    - [ ] 写死的颜色并进主题推导：`ClipboardPanel` 代码高亮的数字色与左滑删除的红、`AppColors` 的生词标签色与危险操作红、`TranslateBar` / `ProcessTextActivity` 的失败红
   - 平板与 iPad 有两种形态：接实体键盘时只剩候选窗，按 PC 方式工作（翻页键、Shift 切换等手机上不搬的项要用上）；
     不接时是屏幕键盘，要适配全宽、浮动与分屏等宽度，面板在大屏上排多列
 - [ ] 配置同步

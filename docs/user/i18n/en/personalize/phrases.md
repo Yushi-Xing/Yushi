@@ -12,7 +12,7 @@ Each phrase is a row on the page: an on/off switch (labelled with the input code
 
 Adding and editing happen in a card that pops up:
 
-- **输入码 (Input code)**: 1–32 lowercase English letters, such as `dz`.
+- **输入码 (Input code)**: 1–32 lowercase English letters, such as `dz`. No digits: while typing, digit keys pick candidates. To give a numbered symbol like ⑪ a code, spell it in letters, such as `yqsy`; circled numbers and circled ideographs (㊣) can also be found in the [symbol panel](../input/punctuation.md#Symbol-panel) by searching 序号 or 带圈汉字.
 - **权重 (Weight)**: a whole number from 1 to 999, 10 for a new phrase. Under the same input code, heavier phrases come first; weights can be equal, and equal ones keep their order on the page.
 - **内容 (Content)**: can span several lines and contain spaces, addresses, long replies or punctuation, and is committed exactly as written. The box wraps to its width; for very long content it grows to at most 12 lines and then shows the lines around the cursor.
 
@@ -33,6 +33,8 @@ The content can contain time variables, replaced with the current time when the 
 | `{minute}` `{second}` | Minute, second, two digits | 05, 07 |
 | `{weekday}` | Day of the week, 一 to 日 | 日 |
 
+Add `:02` after a number variable to pad it to two digits: `{year}-{month:02}-{day:02} {hour:02}:{minute}` gives 2026-03-08 09:05, which sorts neatly and works in file names; use the width you need (`:03` pads to three).
+
 For example, give `jt` the content 今天是{year}年{month}月{day}日，星期{weekday} and typing `jt` gives 今天是2026年3月8日，星期日; `{weekday}` is a single character, so you can put 星期 or 周 in front of it.
 To output braces as they are, double them: `{{year}}` gives `{year}`. Anything not recognized (such as `{abc}`) stays as written. These variables are also replaced in macOS system text replacements.
 
@@ -42,8 +44,8 @@ To move to another computer or keep a backup, click 导出… (Export…) in the
 
 - Imported phrases are added after your existing ones, keeping the weights and switches from the file; a phrase whose content already exists under the same input code is not added again, so importing the same file twice is harmless.
 - Plain text with one phrase per line as text, Tab, input code, Tab, weight (such as Rime's `custom_phrase.txt`) also works, for bringing phrases over from another input method; the weight is optional, and values outside 1–999 count as 1 or 999. This kind of text can't hold line breaks, so use the exported `.toml` for multi-line phrases.
-- The configuration file `config.toml` can't be imported here: settings and phrases are imported and exported separately, settings on the 高级 (Advanced) page; see [Moving to another computer](../advanced/data-files.md#moving-to-another-computer).
-- Entries written wrongly in the file are skipped; afterwards the row says how many were added, how many already existed and how many were wrong.
+- The configuration file `config.toml` can't be imported here: settings and phrases are imported and exported separately, settings on the 高级 (Advanced) page; see [Moving to another computer](../advanced/data-files.md#Moving-to-another-computer).
+- Entries written wrongly in the file are skipped; afterwards the row says how many were added, how many already existed and how many were wrong, and points out the line of the first wrong one and what is wrong with it.
 
 The exported file uses the same `[[custom_phrases]]` format as the configuration file, so you can also edit it in a text editor.
 
@@ -63,5 +65,6 @@ If a phrase is changed in another settings window while you're editing it, savin
 With 也用系统的文本替换 (Also use system text replacements) on (the default), entries in System Settings → Keyboard → Text Replacements also work while you type pinyin:
 once you've typed the whole shortcut, the phrase comes before the candidates (it counts as weight 10, and phrases from this page come first at equal weight), and `Space` or a number key commits it.
 Only entries whose shortcut is all lowercase English letters work; entries added or changed in System Settings take effect the next time you switch to Qingjian. They aren't listed on this page; change them in System Settings.
+If an unfamiliar phrase keeps coming first for some code and its right-click menu has no Delete, it's most likely an old entry in the system's text replacements: delete it in System Settings, or turn this switch off.
 
 Android's saved phrases are in the clipboard panel; see [Android: tools and AI](../platforms/android-tools.md#Clipboard-and-saved-phrases).

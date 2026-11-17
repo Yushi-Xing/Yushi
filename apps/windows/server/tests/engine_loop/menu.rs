@@ -2,7 +2,10 @@
 
 use qingjian_platform::candidate_menu::CandidateAction;
 
-use crate::support::*;
+use crate::support::{
+    CandidateMouse, ClientMessage, KeyEvent, RecordingCandidates, SESSION, preedit, press, rect,
+    router, slot_of, type_letters,
+};
 
 #[test]
 fn right_click_offers_actions_and_a_pick_shows_a_notice_until_next_key() {
@@ -40,4 +43,38 @@ fn right_click_offers_actions_and_a_pick_shows_a_notice_until_next_key() {
     let (_, _, after) = press(&mut router, KeyEvent::new(0x10, None, Default::default())); // VK_SHIFT 不动组句
     assert_eq!(after.notice, None, "提示应只活到下一次按键");
     assert_eq!(preedit(&after), "ni'hao");
+}
+
+#[test]
+fn character_view_keeps_the_spelling_and_consumes_only_the_first_syllable() {
+    let mut router = router();
+    let (_, _, frame) = type_letters(&mut router, "nihao");
+    router.handle_candidate_mouse(CandidateMouse::MenuPick {
+        offset: slot_of(&frame, "你好") as usize - 1,
+        id: CandidateAction::Characters.id(),
+    });
+    assert_eq!(router.engine_mut().composition().text(), "nihao");
+    let query = router.engine_mut().query().unwrap();
+    assert!(!query.candidates.items.is_empty());
+    assert!(
+        query
+            .candidates
+            .items
+            .iter()
+            .all(|c| c.text.chars().count() == 1)
+    );
+    assert_eq!(
+        router.engine_mut().candidate_view(),
+        qingjian_core::CandidateView::Characters
+    );
+    let ni = query
+        .candidates
+        .items
+        .iter()
+        .find(|c| c.text == "你")
+        .unwrap()
+        .clone();
+    router.engine_mut().set_hold_selections(false);
+    assert_eq!(router.engine_mut().commit(&ni), "你");
+    assert_eq!(router.engine_mut().composition().text(), "hao");
 }

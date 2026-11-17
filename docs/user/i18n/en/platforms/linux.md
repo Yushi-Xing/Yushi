@@ -6,6 +6,8 @@ description: "Installing Qingjian on Linux (and FreeBSD): the Fcitx5 prebuilt pa
 
 The Linux version of Qingjian runs as an input method in Fcitx5 or Fcitx4, and candidates use Fcitx's own candidate panel. For now it's installed from a terminal, and the background service has to be started by hand after each login.
 
+- On Debian, Ubuntu and Fedora you can install the deb / rpm packages, which start automatically at login; see "deb / rpm packages" below.
+- Newer distributions (Debian 13, Ubuntu 25.04, Fedora 42, Arch and later) can also use the AppImage: a single file, no administrator rights, starts automatically at login; see "AppImage" below.
 - For Fcitx5 there's a prebuilt package for Ubuntu 26.04; other distributions install from source. Verified with GTK4 and Qt6 apps and Firefox on the GNOME desktop (Wayland) of Ubuntu 26.04.
 - For Fcitx4 there's a source install for Ubuntu 22.04, verified with GTK3 text fields.
 - On FreeBSD 15.1, a Fcitx5 source install has been verified in XFCE and KDE Plasma X11 sessions and with Wayland apps under sway.
@@ -30,6 +32,48 @@ Download the package whose name ends in `linux-x86_64.tar.gz` from the [download
 ```
 
 Then add the input method as described in [Your first input](#Your-first-input) below.
+
+## deb / rpm packages (Debian, Ubuntu, Fedora)
+
+The [GitHub Release](https://github.com/qingjian-team/qingjian/releases/latest) also has deb and rpm packages, two of each: `qingjian` is Qingjian itself (background service, IBus front end and dictionaries), and `qingjian-fcitx5` is the Fcitx5 add-on. With IBus install only the first; with Fcitx5 install both. Qingjian then starts automatically when you log in, no terminal needed.
+
+```sh
+# Debian / Ubuntu
+sudo apt install ./qingjian_<version>_amd64.deb ./qingjian-fcitx5_<version>_amd64.deb
+
+# Fedora 42 and later
+sudo dnf install ./qingjian-<version>-1.fc42.x86_64.rpm ./qingjian-fcitx5-<version>-1.fc42.x86_64.rpm
+```
+
+- `qingjian` installs on Debian 12 and Ubuntu 22.04 or later; `qingjian-fcitx5` needs a recent Fcitx5 and only installs on Debian 13, Ubuntu 25.04, Fedora 42 or later. On older systems use IBus or the source install.
+- With IBus, log out and back in once before Qingjian shows up.
+- To uninstall: `sudo apt remove qingjian qingjian-fcitx5` or `sudo dnf remove qingjian qingjian-fcitx5`. Settings and learned data are kept.
+
+## AppImage
+
+One file is all of Qingjian: nothing to compile and no administrator rights needed. It suits newer systems such as Debian 13, Ubuntu 25.04 and later, Fedora 42 and later, and Arch.
+Your system's Fcitx5 has to be 5.1.8 or newer (the 5.1.7 shipped with Ubuntu 24.04 is too old; use the source install there). First install Fcitx5 and GTK / Qt input support with your package manager, for example on Debian / Ubuntu:
+
+```sh
+sudo apt install fcitx5 fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt6 fcitx5-config-qt
+```
+
+Download `Qingjian-<version>-x86_64.AppImage` from the [download page](https://qingjian.app/download), put it somewhere permanent (such as `~/Applications`), then:
+
+```sh
+chmod +x ~/Applications/Qingjian-*.AppImage
+~/Applications/Qingjian-*.AppImage install
+```
+
+You can also make it executable in your file manager and double-click it; the first run installs it and opens Qingjian Settings.
+Installing hooks Qingjian into Fcitx5, makes it start at login and adds "Qingjian Settings" to the application menu; the Qingjian service starts right away, no need to log in again.
+Then restart Fcitx5 (`fcitx5 -r`), untick "Only Show Current Language" in the Fcitx5 configuration tool and add "Qingjian".
+
+- **After moving or renaming the AppImage file**, run `install` again: autostart and the menu entry remember where it used to be.
+- **Updating**: replace the old file with the new one (keeping the same path and file name is easiest), log out and back in or run `install` once, then restart Fcitx5.
+- **Uninstalling**: run `Qingjian-*.AppImage uninstall`, then restart Fcitx5; after that you can delete the file. Your configuration, personal dictionaries and learning data are kept.
+- If you already installed Qingjian from source or from a package, uninstall that copy before installing the AppImage; two copies would replace each other, and the installer will tell you.
+- If the system lacks FUSE and says it can't mount, run `export APPIMAGE_EXTRACT_AND_RUN=1` first, then the commands above.
 
 ## Fcitx5 source install
 
@@ -109,7 +153,15 @@ Closing the terminal you started Qingjian from stops Qingjian; after your next l
 - **Direct English input**: once in it, digits and punctuation keep being appended, and ending with a space keeps the space (`gpt-6` then Space gives `gpt-6 `).
 - **Sentence completion** is shown in the hint line below the candidate panel; press `Tab` to accept it.
 - **Private input**: you can type in input fields Fcitx5 recognizes as private, but nothing is recorded, learned or sent; password fields are handed straight back to the app. This relies on apps marking fields correctly, and GTK4 apps' private hints currently don't come through. Fcitx4 only recognizes the password-field mark, not other private fields; if you don't want records kept, turn off learning and the input log, see [Editing the configuration file](../advanced/config-file.md#Linux).
-- **Not yet supported**: Wubi and custom schemes, auxiliary code, the symbol panel, extra paging keys and highlight keys, the punctuation shortcut, automatic spacing between Chinese and Latin text, toned pinyin.
+- **Not yet supported**: auxiliary code and key/root hints, the symbol panel, extra paging keys and highlight keys, the punctuation shortcut, automatic spacing between Chinese and Latin text, toned pinyin.
+
+## Wubi and custom schemes
+
+Open Qingjian Settings from the application menu or run `~/.local/bin/qingjian-settings`. In the Fcitx5 configuration tool, you can also select Qingjian and click the configure icon to open Qingjian Settings directly. Choose 五笔（86） under 输入 → 形码 (Input → Shape-based); turn 拼音 (Pinyin) off for pure Wubi, or keep it on for mixed input. No server restart is needed. Fcitx5, Fcitx4 and IBus share this support.
+
+Older configuration tools, including `fcitx5-config-qt 5.1.4` shipped with Ubuntu 24.04, show an intermediate window with another configure button. Click that button to open Qingjian Settings. Skipping this window requires a newer configuration tool with direct external-settings launch support; restarting Fcitx5 alone does not change this behavior.
+
+Unique full-code auto-commit, commit-on-next-code, imported Wubi dictionaries and custom double pinyin / shape-based schemes are supported. Effective scheme changes cancel uncommitted codes; root charts and auxiliary codes remain unsupported. See [Wubi and mixed input](../input/wubi.md). Older installations missing the bundled scheme need the updated installer to copy its resources.
 
 ## Updating and uninstalling
 

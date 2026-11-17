@@ -223,6 +223,38 @@ fn per_scheme_code_rules_go_into_nested_sections() {
 }
 
 #[test]
+fn setters_keep_the_rest_of_an_inline_table_section() {
+    // 手写的配置可以把分节写成行内表，加载时照样认；改其中一个键不能把同节其余的键清掉。
+    let path = std::env::temp_dir().join("qingjian-config-inline-section-test.toml");
+    std::fs::write(
+        &path,
+        "general = { page_size = 7 }\nfuzzy = { z_zh = true, n_l = true }\ncode = { wubi86 = { auto_commit = true } }\n",
+    )
+    .unwrap();
+    Config::set_bool(&path, "fuzzy", "an_ang", true).unwrap();
+    Config::set_value(&path, "general", "appearance", "dark").unwrap();
+    Config::set_value(&path, "code.wubi86", "top", true).unwrap();
+    let config = Config::load(&path).unwrap();
+    assert_eq!(config.general.page_size, 7);
+    assert_eq!(config.general.appearance(), Appearance::Dark);
+    assert!(config.fuzzy.z_zh && config.fuzzy.n_l && config.fuzzy.an_ang);
+    assert_eq!(
+        config.code_rules("wubi86"),
+        CodeRules {
+            auto_commit: Some(true),
+            top: Some(true),
+        }
+    );
+    // 改过的分节照旧写成标准表。
+    let text = std::fs::read_to_string(&path).unwrap();
+    assert!(
+        text.contains("[fuzzy]") && text.contains("[code.wubi86]"),
+        "{text}"
+    );
+    let _ = std::fs::remove_file(&path);
+}
+
+#[test]
 fn set_bool_keeps_comments_and_flips_only_that_key() {
     let path = std::env::temp_dir().join("qingjian-config-set-bool-test.toml");
     std::fs::write(
@@ -269,6 +301,32 @@ fn set_bool_starts_from_template_when_missing() {
 }
 
 #[test]
+fn vertical_reverse_defaults_on_and_reinstall_preserves_an_explicit_opt_out() {
+    let dir = std::env::temp_dir().join(format!("qingjian-reverse-config-{}", std::process::id()));
+    std::fs::create_dir_all(&dir).unwrap();
+    let path = dir.join("config.toml");
+    assert!(Config::default().general.vertical_reverse_above);
+    // 老配置没有新字段，也沿用开启状态。
+    std::fs::write(
+        &path,
+        "[general]\nlayout = \"vertical\"\n# personal preference\npage_size = 5\n",
+    )
+    .unwrap();
+    assert!(Config::load(&path).unwrap().general.vertical_reverse_above);
+    Config::set_bool(&path, "general", "vertical_reverse_above", false).unwrap();
+    let saved = std::fs::read(&path).unwrap();
+    assert!(!Config::write_template_if_missing(&path).unwrap());
+    assert_eq!(std::fs::read(&path).unwrap(), saved);
+    let config = Config::load(&path).unwrap();
+    assert!(!config.general.vertical_reverse_above);
+    assert_eq!(config.general.page_size(), 5);
+    std::fs::remove_file(&path).unwrap();
+    assert!(Config::write_template_if_missing(&path).unwrap());
+    assert!(Config::load(&path).unwrap().general.vertical_reverse_above);
+    std::fs::remove_dir_all(dir).unwrap();
+}
+
+#[test]
 fn set_bool_refuses_broken_file() {
     let path = std::env::temp_dir().join("qingjian-config-set-bool-broken-test.toml");
     std::fs::write(&path, "[fuzzy\nz_zh = false\n").unwrap();
@@ -303,6 +361,21 @@ fn font_sizes_and_animations_parse_and_default() {
     assert_eq!(default.general.candidate_font_size.get(), None);
     assert!(default.general.animations);
     assert_eq!(FontSize(-3.0).get(), None);
+}
+
+#[test]
+fn candidate_font_weight_rounds_to_hundreds_and_zero_follows_the_theme() {
+    let weight = |value: u16| {
+        let mut general = Config::default().general;
+        general.candidate_font_weight = value;
+        general.candidate_font_weight()
+    };
+    assert_eq!(weight(0), None);
+    assert_eq!(weight(500), Some(500));
+    assert_eq!(weight(449), Some(400));
+    assert_eq!(weight(880), Some(900));
+    assert_eq!(weight(99), None);
+    assert_eq!(weight(1000), None);
 }
 
 #[test]
@@ -347,4 +420,14 @@ fn manual_prediction_shortcut_round_trips() {
         toml::from_str::<Config>(&toml::to_string(&config).unwrap()).unwrap(),
         config
     );
+}
+
+/// 基础词库开关单独一项：旧配置没写 `base` 时开着，用户词库叫 base 也不影响它。
+#[test]
+fn base_dictionary_switch_is_separate_from_disabled_files() {
+    let config: Config = toml::from_str("[dictionaries]\ndisabled = [\"base\"]\n").unwrap();
+    assert!(config.dictionaries.base);
+    assert!(!config.dictionaries.is_enabled("base"));
+    let config: Config = toml::from_str("[dictionaries]\nbase = false\n").unwrap();
+    assert!(!config.dictionaries.base);
 }

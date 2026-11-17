@@ -1,6 +1,8 @@
 //! 组句 preedit：把 Server 回的拼音行经 TSF 组句（[`ITfComposition`]）显示在文档光标处（对应 macOS 的内联 marked text）。
 //! 只放最朴素的一行拼音；富样式的拼音行在候选窗口里另画。所有写操作都在异步读写编辑会话里做（理由见 `edit_session`）。
 
+mod caret;
+mod control;
 mod shared;
 mod sink;
 
@@ -14,11 +16,12 @@ use windows::Win32::UI::TextServices::{
 };
 use windows::core::{Interface, Result};
 
-use qingjian_platform::protocol::{Frame, PreeditKind};
+use qingjian_platform::protocol::{CaretEdit, Frame, PreeditKind};
 
 pub(crate) use self::shared::Shared;
 use self::sink::CompositionSink;
 use super::edit::{InputContext, caret_rect, input_context, measured_rect, mouse_screen_rect};
+use super::key::inject::{caret_by_keys, press_arrow, transitory};
 use super::service::SharedClient;
 
 /// 内联要显示的拼音行（跳过被纠错划掉的原字母）；空串表示没有组句内容。
@@ -33,6 +36,7 @@ pub(crate) fn preedit_string(frame: &Frame) -> String {
 
 /// 在编辑会话回调（持写锁 `ec`）里调：先落定 `commit`，再按 `preedit` 起 / 改 / 收组句，最后把光标位置报给 Server。
 /// 新起一段组句时顺手判输入框私密不私密（变了就告诉 Server）、把光标前的文字送给 Server（本地整句模型的前文）。
+/// `caret` 是成对符号要做的光标编辑（见 [`CaretEdit`]），在上屏这一步里一起做。
 pub(crate) fn apply(
     shared: &Rc<Shared>,
     engine: &SharedClient,
@@ -40,9 +44,30 @@ pub(crate) fn apply(
     ec: u32,
     commit: Option<&str>,
     preedit: &str,
+    caret: Option<CaretEdit>,
 ) -> Result<()> {
-    if let Some(text) = commit {
-        commit_text(shared, context, ec, text)?;
+    match (commit, caret) {
+        // 最后一个字是补上过的右半边：前面的照常上屏，光标后面正是它就跳过、不是就照常插入
+        (Some(text), Some(CaretEdit::Skip(closer))) if text.ends_with(closer) => {
+            let head = &text[..text.len() - closer.len_utf8()];
+            if !head.is_empty() || shared.has_composition() {
+                commit_text(shared, context, ec, head)?;
+            }
+            if caret::next_is(context, ec, closer)
+                || (transitory(context) && control::next_char() == Some(closer))
+            {
+                move_caret(shared, context, ec, 1)?;
+            } else {
+                commit_text(shared, context, ec, closer.encode_utf8(&mut [0; 4]))?;
+            }
+        }
+        (Some(text), caret) => {
+            commit_text(shared, context, ec, text)?;
+            if let Some(CaretEdit::Back(back)) = caret {
+                move_caret(shared, context, ec, -(back as i32))?;
+            }
+        }
+        (None, _) => {}
     }
     // 一段组句里只问一次输入框状态。行内模式看组句刚起；`preedit = window` 模式应用里根本没有组句，
     // 得另用一个标记，否则每敲一键都要重读一遍光标前文、重报一次私密状态。
@@ -56,6 +81,7 @@ pub(crate) fn apply(
     } else {
         update_preedit(shared, context, ec, preedit)?;
     }
+    shared.set_preedit(preedit);
     if let Some(InputContext { private, before }) = input {
         report_privacy(engine, private);
         if let Some(before) = before {
@@ -63,6 +89,16 @@ pub(crate) fn apply(
         }
     }
     report_caret(shared, engine, context, ec);
+    Ok(())
+}
+
+/// 插入点挪 `delta` 个字（负数往回）。Chromium 系应用与系统代管的老控件不认输入法经 TSF 改的选区，改发方向键（见 [`caret_by_keys`]）；
+/// 方向键排在输入队列里，等这次会话结束、应用落下上屏文字之后才处理。
+fn move_caret(shared: &Shared, context: &ITfContext, ec: u32, delta: i32) -> Result<()> {
+    if !caret_by_keys(context) {
+        return caret::move_caret(context, ec, delta);
+    }
+    shared.ignore_shift_events(press_arrow(delta > 0, delta.unsigned_abs()));
     Ok(())
 }
 

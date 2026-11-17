@@ -52,6 +52,9 @@ def stage():
     output = ROOT / 'target/windows-preview'
     output.mkdir(exist_ok=False)
     shutil.copy2(installer, output / installer.name)
+    size_report = installer.with_name('package-size.json')
+    if size_report.is_file():
+        shutil.copy2(size_report, output / size_report.name)
     evaluation = ROOT / 'target/journal-ci'
     summary = json.loads((evaluation / 'summary.json').read_text(encoding='utf-8'))
     if summary['clean']['count'] != 30 or summary['mutations']['count'] != 270 or summary['groups']['fuzzy']['count'] != 6:
@@ -107,7 +110,8 @@ def stage():
     info = dict(version=release, tag=os.environ['PREVIEW_TAG'], commit=os.environ['GITHUB_SHA'],
                 workflow_run=os.environ['GITHUB_RUN_ID'], rust=subprocess.check_output(['rustc', '--version'], text=True).strip(),
                 architectures=['x86_64-server-settings-tsf', 'i686-tsf'], uiaccess=False, code_signed=False,
-                data_lock=(ROOT / 'tools/release/data.lock').read_text(encoding='utf-8'),
+                data_locks={name: (ROOT / 'tools/release' / name).read_text(encoding='utf-8')
+                            for name in ['dicts.lock', 'dicts-extra.lock', 'models.lock']},
                 evaluation=summary, input_quality=quality_summary, daily_reading=daily, lexicon=lexicon, gui_acceptance='pending user tests on Win10 and Win11')
     (output / 'build-info.json').write_text(json.dumps(info, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     files = sorted(output.iterdir())

@@ -1,4 +1,4 @@
-use qingjian_dictionary::{Dictionary, WordList};
+use qingjian_dictionary::{CodeTable, Dictionary, WordList};
 
 use super::Forgotten;
 use crate::candidate::Candidate;
@@ -26,6 +26,11 @@ pub trait Learner: Send {
         0
     }
 
+    /// 完全相同输入最近选中的候选；不把简拼选择泛化到其他输入。
+    fn preferred_choice(&self, _input: &str) -> Option<&str> {
+        None
+    }
+
     /// 用户对输入串 `input` 按了回车原样上屏，而当时拼写纠错正生效：这个串就是要原样打的，以后不纠。
     fn record_raw(&mut self, _input: &str) {}
 
@@ -45,6 +50,14 @@ pub trait Learner: Send {
 
     /// 记一个词库里没有的词（来自云联想或以后的自动造词），带全拼音节；下次直接从本地出。
     fn learn_word(&mut self, _text: &str, _syllables: &[String]) {}
+
+    /// 形码组词按方案键保存，编码不冒充拼音音节。
+    fn learn_code_word(&mut self, _scheme: &str, _text: &str, _code: &str) {}
+
+    /// 指定方案的用户编码词，与该方案静态码表共同查询。
+    fn user_code_words(&self, _scheme: &str) -> Option<&CodeTable> {
+        None
+    }
 
     /// 用户词组成的小词库，与主词库一起查；没有就返回 `None`。
     fn user_words(&self) -> Option<&Dictionary> {

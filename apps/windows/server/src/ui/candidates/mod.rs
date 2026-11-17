@@ -20,14 +20,14 @@ use windows::Win32::UI::WindowsAndMessaging::{
     CreateWindowExW, DefWindowProcW, DestroyWindow, HWND_TOPMOST, IDC_ARROW, KillTimer,
     LoadCursorW, MSG, SW_HIDE, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE, SWP_SHOWWINDOW, SetTimer,
     SetWindowPos, ShowWindow, WM_LBUTTONDOWN, WM_MOUSEACTIVATE, WM_MOUSEWHEEL, WM_NCHITTEST,
-    WM_RBUTTONDOWN, WM_RBUTTONUP, WM_TIMER, WNDCLASSEXW, WS_EX_LAYERED, WS_EX_NOACTIVATE,
-    WS_EX_TOOLWINDOW, WS_EX_TOPMOST, WS_POPUP,
+    WM_RBUTTONDOWN, WM_RBUTTONUP, WM_SETTINGCHANGE, WM_TIMER, WNDCLASSEXW, WS_EX_LAYERED,
+    WS_EX_NOACTIVATE, WS_EX_TOOLWINDOW, WS_EX_TOPMOST, WS_POPUP,
 };
 use windows::core::{Error, PCWSTR, Result, w};
 
 use qingjian_platform::Appearance;
 use qingjian_platform::protocol::Frame;
-use qingjian_render::Mode;
+use qingjian_render::{Mode, Rendered};
 
 use crate::dispatch::{CandidateMenu, KeyHintView};
 
@@ -35,6 +35,7 @@ pub use self::click::CandidateClicks;
 use self::key_hint::KeyHintWindow;
 pub(crate) use self::render_data::RenderData;
 use self::theme::Theme;
+use super::layered::backdrop::Backdrop;
 use super::layered::{self, Layered};
 use super::monitor;
 use super::painter::SharedPainter;
@@ -73,6 +74,9 @@ pub(crate) struct CandidateWindow {
     /// 绘制内容。
     data: RefCell<RenderData>,
 
+    /// 竖排位于输入行上方时是否反向显示，随设置热加载。
+    vertical_reverse_above: Cell<bool>,
+
     /// 上次用的 DPI，变了重建字体。
     dpi: Cell<u32>,
 
@@ -87,6 +91,9 @@ pub(crate) struct CandidateWindow {
 
     /// 最近一次贴图时窗口左上角的屏幕坐标；动画帧贴在同一处。
     position: Cell<(i32, i32)>,
+
+    /// 主题写了 `material` 时垫在底下的系统亚克力。
+    backdrop: Backdrop,
 
     /// 旁边的键位提示窗口；建不成为 `None`，不显示键位提示。
     key_hint_window: Option<KeyHintWindow>,
@@ -135,11 +142,13 @@ impl CandidateWindow {
         Ok(Self {
             hwnd,
             data,
+            vertical_reverse_above: Cell::new(true),
             dpi: Cell::new(dpi),
             dark: Cell::new(dark),
             logged_dpi: Cell::new(None),
             painter,
             position: Cell::new((0, 0)),
+            backdrop: Backdrop::new(hwnd),
             key_hint_window,
             key_hint: RefCell::new(None),
         })
@@ -149,6 +158,17 @@ impl CandidateWindow {
     pub(crate) fn set_content(&self, frame: &Frame, mode: Mode, key_hint: Option<KeyHintView>) {
         self.data.borrow_mut().set(frame, mode);
         *self.key_hint.borrow_mut() = key_hint;
+    }
+
+    pub(crate) fn set_vertical_reverse_above(&self, enabled: bool) {
+        self.vertical_reverse_above.set(enabled);
+    }
+
+    /// 位置信息仍回传实际上下方；只对交给渲染器与 GDI 的反向标志应用开关。
+    fn reverse_above(&self, above: bool) -> bool {
+        above
+            && (self.data.borrow().layout != qingjian_platform::LayoutMode::Vertical
+                || self.vertical_reverse_above.get())
     }
 
     /// 换了主题：键位提示的渲染器也装上新主题的字体。
@@ -164,17 +184,30 @@ impl CandidateWindow {
     pub(crate) fn show(&self, anchor: RECT) {
         menu::close();
         self.sync_theme(anchor);
-        let rendered = {
+        let mut rendered = self.render();
+        if let Some(ref measured) = rendered {
+            let content = (
+                measured.content_width as i32,
+                measured.content_height as i32,
+            );
+            let overhang = measured.visible_overhang();
+            let (_, y) = place(anchor, content, (overhang.0 as i32, overhang.1 as i32));
+            let upward = y + content.1 <= anchor.top;
+            let reverse = self.reverse_above(upward);
+            let changed = self.data.borrow().upward != reverse;
+            if changed {
+                self.data.borrow_mut().upward = reverse;
+                if let Some(painter) = self.painter.borrow_mut().as_mut() {
+                    painter.forget();
+                }
+                rendered = self.render();
+            }
             let data = self.data.borrow();
-            self.painter.borrow_mut().as_mut().and_then(|painter| {
-                painter.render_frame(
-                    &data.render_frame(),
-                    data.layout,
-                    self.dark.get(),
-                    self.dpi.get(),
-                )
-            })
-        };
+            click::send(crate::dispatch::CandidateMouse::Placement {
+                upward,
+                typed_keys: data.typed_keys.clone(),
+            });
+        }
         let updated = match rendered {
             Some(rendered) => {
                 let content = (
@@ -195,6 +228,8 @@ impl CandidateWindow {
                 self.position.set(position);
                 self.schedule(rendered.next_frame);
                 click::set_hits(rendered.hits.clone(), (content_x, content_y));
+                // 先垫材质再贴图：反过来的话刚换到玻璃主题那一帧会闪一下没底色的字
+                self.backdrop.update(rendered.material, self.dark.get());
                 layered::present(self.hwnd, &rendered.pixmap, position).map(|()| {
                     Some(RECT {
                         left: content_x,
@@ -206,6 +241,7 @@ impl CandidateWindow {
             }
             None => {
                 click::set_hits(Vec::new(), (0, 0));
+                self.backdrop.update(None, self.dark.get());
                 self.show_gdi(anchor).map(|()| None)
             }
         };
@@ -230,6 +266,16 @@ impl CandidateWindow {
             }
             Err(_) => self.hide(),
         }
+    }
+
+    /// 用当前方向画一帧；方向没变时沿用上一帧，避免高亮动画反复换边。
+    fn render(&self) -> Option<Rendered> {
+        let data = self.data.borrow();
+        let frame = data.render_frame();
+        self.painter.borrow_mut().as_mut().and_then(|painter| {
+            painter.set_material_support(self.backdrop.supported());
+            painter.render_frame(&frame, data.layout, self.dark.get(), self.dpi.get())
+        })
     }
 
     /// 候选窗画好之后在它旁边贴键位提示；没有键位提示、或走 GDI 画法（`content` 为 `None`）时收起。
@@ -261,7 +307,17 @@ impl CandidateWindow {
         }
         // GDI 画法的投影顶影为 0，只有底边那一圈要避
         let (content_x, content_y) = place(anchor, content, (0, margin));
+        let upward = content_y + content.1 <= anchor.top;
+        let reverse = self.reverse_above(upward);
+        if self.data.borrow().upward != reverse {
+            let mut data = self.data.borrow_mut();
+            data.upward = reverse;
+        }
         let data = self.data.borrow();
+        click::send(crate::dispatch::CandidateMouse::Placement {
+            upward,
+            typed_keys: data.typed_keys.clone(),
+        });
         layered::composite(
             self.hwnd,
             &Layered {
@@ -416,7 +472,7 @@ pub(super) fn place(anchor: RECT, content: (i32, i32), overhang: (i32, i32)) -> 
     (x, y)
 }
 
-/// 分层窗口无需 `WM_PAINT`；鼠标交给 [`click`]，其余全交默认处理。
+/// 分层窗口无需 `WM_PAINT`；鼠标交给 [`click`]，设置变更顺带同步输入法图标，其余全交默认处理。
 unsafe extern "system" fn wndproc(hwnd: HWND, msg: u32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {
     match msg {
         WM_NCHITTEST => click::hit_test(lparam),
@@ -434,6 +490,11 @@ unsafe extern "system" fn wndproc(hwnd: HWND, msg: u32, wparam: WPARAM, lparam: 
         WM_RBUTTONUP => {
             click::right_button_up();
             LRESULT(0)
+        }
+        // 深浅色切换以 WM_SETTINGCHANGE 广播到顶层窗口，候选窗口常驻（隐藏也收得到），由它带着改写输入法图标
+        WM_SETTINGCHANGE => {
+            super::taskbar_icon::sync();
+            unsafe { DefWindowProcW(hwnd, msg, wparam, lparam) }
         }
         _ => unsafe { DefWindowProcW(hwnd, msg, wparam, lparam) },
     }

@@ -18,6 +18,7 @@ pub(super) fn spliced(
     k: usize,
     model: &dyn LanguageModel,
     personal: Personal<'_>,
+    initial: Context<'_>,
 ) -> Vec<Conversion> {
     // 最优路径上各词的 (终点, 下标)，从后往前
     let mut chain = Vec::new();
@@ -45,7 +46,7 @@ pub(super) fn spliced(
         // 换掉接口前的词之后，接口后两个词的转移（动态与静态）
         let steps = |index: usize| {
             let alt = &nodes[boundary][index];
-            let earlier = predecessor_context(nodes, boundary, index).earlier;
+            let earlier = predecessor_context(nodes, boundary, index, initial).earlier;
             let mut dynamic = transition(&alt.text, earlier, next);
             if let Some(after) = after {
                 dynamic += transition(&next.text, Some(&alt.text), after);

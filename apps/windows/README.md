@@ -9,7 +9,7 @@ Windows 端是**一个产品、两个产物**，各自一个 package，同放本
 
 ```
 应用进程 A ── qingjian_tsf.dll ─┐
-应用进程 B ── qingjian_tsf.dll ─┼─ 命名管道 \\.\pipe\qingjian ─▶ qingjian-server（唯一的 Engine）
+应用进程 B ── qingjian_tsf.dll ─┼─ 命名管道（按用户）─▶ qingjian-server（唯一的 Engine）
 应用进程 C ── qingjian_tsf.dll ─┘
 ```
 
@@ -46,14 +46,14 @@ Core 的任何一行。
 
 ## 构建
 
-本机（macOS / Linux）只做交叉 `check`，产出不了可用二进制，但协议层的端到端测试能跑：
+本 fork 在 InstaBox 的 Linux 环境通过 MSVC 交叉工具链产出 Windows 二进制，完整流程见 [InstaBox 构建说明](../../docs/notes/windows-instabox.md)。以下命令仅检查类型与协议，不生成安装包：
 
 ```bash
 cargo check --target x86_64-pc-windows-gnu -p qingjian-windows-server -p qingjian-windows-tsf
 cargo test -p qingjian-windows-server -p qingjian-windows-tsf
 ```
 
-真正编译与试用都在 Windows 机器上（MSVC 工具链）。
+原生 Windows 试用仍需在 Windows 机器上进行；Wine 下的启动与安装检查不能代替 TSF、UWP 和各宿主应用的真机验证。
 
 ### 本地联调：`scripts/test-local.ps1`
 
@@ -103,7 +103,7 @@ regsvr32 /u target\debug\qingjian_tsf.dll
 ## 旧版设置程序与 Windows App Runtime
 
 设置程序是三平台共用的 `apps/settings`（`qingjian-settings.exe`），状态条的齿轮打开它。
-`settings/`（`qingjian-settings-legacy.exe`，开始菜单「青简旧版设置」）是旧版，留一个版本作回退；它用 Windows Reactor（WinUI 3）画界面，是唯一依赖 Windows App Runtime 的产物。
+`settings/`（`qingjian-settings-legacy.exe`，开始菜单「青简旧版设置」）是可选旧版；只有打包时传 `-IncludeLegacySettings` 才附带。它用 Windows Reactor（WinUI 3）画界面，是唯一依赖 Windows App Runtime 的产物，标准包不再为它携带整套运行库。
 它的部署方式是**自包含**：`build.rs` 让 `windows-reactor-setup` 把 `Microsoft.WindowsAppSDK.Runtime` 的 MSIX 解到
 `target\release\` 并按自包含标记嵌清单，安装包把这些文件装到 exe 同级——不依赖机器上装没装框架包。
 Windows 10 上框架依赖的引导走不通（它要先调 Windows 11 才有的 `TryCreatePackageDependency`），

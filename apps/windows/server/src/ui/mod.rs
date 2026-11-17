@@ -13,6 +13,7 @@ mod monitor;
 mod painter;
 mod panel;
 mod status;
+mod taskbar_icon;
 mod window_class;
 
 use std::cell::RefCell;
@@ -199,7 +200,7 @@ fn run(
             return;
         }
     };
-    let panel = match PanelWindow::new(on_panel) {
+    let panel = match PanelWindow::new(on_panel, painter.clone()) {
         Ok(panel) => Some(panel),
         Err(error) => {
             tracing::error!(%error, "建符号面板窗口失败，将不显示符号面板");
@@ -213,6 +214,7 @@ fn run(
             None
         }
     };
+    taskbar_icon::sync();
     if ready.send(Some(thread_id)).is_err() {
         return;
     }
@@ -286,8 +288,12 @@ fn apply(
             }
         }
         UiCommand::Configure(settings) => {
+            window.set_vertical_reverse_above(settings.vertical_reverse_above);
             Painter::configure(painter, &settings);
             window.theme_changed();
+            if let Some(panel) = panel {
+                panel.theme_changed();
+            }
         }
     }
 }

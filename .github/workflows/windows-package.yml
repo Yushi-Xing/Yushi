@@ -1,0 +1,113 @@
+name: Windows x64 validated package
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-package-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_PROFILE_DEV_DEBUG: '0'
+  CARGO_PROFILE_TEST_DEBUG: '0'
+  CARGO_INCREMENTAL: '0'
+  QINGJIAN_UIACCESS: '0'
+  PYTHONUTF8: '1'
+  PYTHON: python
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@02cb101ec7c40f2c49e1d9714d64511d8e1b74de # v1
+        with:
+          toolchain: 1.96.0
+          components: rustfmt, clippy
+          targets: i686-pc-windows-msvc
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          cache-on-failure: true
+      - name: Clean restored package outputs
+        run: python tools/release/windows_package.py prepare
+      - name: Install verified Inno Setup 7.1.0
+        shell: pwsh
+        run: |
+          $exe = Join-Path $env:RUNNER_TEMP 'innosetup.exe'
+          Invoke-WebRequest -Uri 'https://github.com/jrsoftware/issrc/releases/download/is-7_1_0/innosetup-7.1.0-x64.exe' -OutFile $exe
+          if ((Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant() -ne '0362a383ed217d4c4239b5933866dd96d3eb2102737da92f80f6057a4b40df2f') { throw 'Inno Setup SHA256 mismatch' }
+          $result = Start-Process -FilePath $exe -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-' -Wait -PassThru
+          if ($result.ExitCode -ne 0) { throw "Inno Setup installation failed: $($result.ExitCode)" }
+      - name: Verify real Inno preprocessor excludes the legacy runtime
+        shell: pwsh
+        run: |
+          $env:QINGJIAN_TEST_ISCC = Join-Path $env:ProgramFiles 'Inno Setup 7/ISCC.exe'
+          $env:QINGJIAN_TEST_POWERSHELL = 'powershell.exe'
+          python tools/release/test_windows_installer.py
+          if ($LASTEXITCODE -ne 0) { throw 'Native Inno integration tests failed' }
+      - name: Verify frozen evaluation and packaging tools
+        run: |
+          mkdir -p target/package-checks
+          python -m unittest discover -s tools/eval -p 'test_*.py' 2>&1 | tee target/package-checks/eval-tools.log
+          python -m unittest discover -s tools/lexicon -p 'test_*.py' 2>&1 | tee target/package-checks/lexicon-tools.log
+          QINGJIAN_TEST_POWERSHELL=powershell.exe python -m unittest discover -s tools/release -p 'test_*.py' 2>&1 | tee target/package-checks/release-tools.log
+      - name: Format and strict Windows lint
+        run: |
+          cargo fmt --all --check
+          cargo clippy --workspace --exclude qingjian-macos --all-targets --locked -- -D warnings 2>&1 | tee target/package-checks/clippy.log
+          cargo clippy -p qingjian-windows-tsf --target i686-pc-windows-msvc --all-targets --locked -- -D warnings 2>&1 | tee target/package-checks/clippy-x86.log
+      - name: All applicable workspace tests and native diagnostics
+        run: |
+          cargo test --workspace --exclude qingjian-macos --locked 2>&1 | tee target/package-checks/workspace-tests.log
+          cargo test -p qingjian-platform --test native_diagnostics --locked -- --ignored 2>&1 | tee target/package-checks/native-diagnostics.log
+      - name: Fetch verified product data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash tools/release/data-fetch.sh
+      - name: Verify real model fallback and idle behavior
+        run: |
+          cargo test --release -p qingjian-windows-server --test model_idle --locked -- --ignored --nocapture 2>&1 | tee target/package-checks/model-idle.log
+          cargo test --release -p qingjian-cli eval::p2c --locked -- --ignored --nocapture 2>&1 | tee target/package-checks/model-fallback.log
+      - name: Build and evaluate native release CLI
+        run: |
+          cargo build --release -p qingjian-cli --locked
+          python tools/eval/names_sentences.py --binary target/release/qingjian-cli.exe --output target/package-eval/names-static --reference assets/eval/names-sentences/reference.json
+          python tools/eval/names_sentences.py --binary target/release/qingjian-cli.exe --output target/package-eval/names-model --model data/models/hanzhang-tongbian/hanzhang-tongbian-small.qjm
+          python tools/eval/input_quality.py --binary target/release/qingjian-cli.exe --output target/package-eval/quality
+          python tools/eval/daily_reading.py --binary target/release/qingjian-cli.exe --output target/package-eval/daily
+          python tools/eval/daily_reading.py --binary target/release/qingjian-cli.exe --output target/package-eval/daily-model --model data/models/hanzhang-tongbian/hanzhang-tongbian-small.qjm
+          python tools/eval/journal.py --binary target/release/qingjian-cli.exe --output target/package-eval/journal --model data/models/hanzhang-tongbian/hanzhang-tongbian-small.qjm
+          python tools/eval/lexicon.py --binary target/release/qingjian-cli.exe --output target/package-eval/lexicon
+      - name: Build x86_64 installer with 32-bit application support
+        run: powershell.exe -NoProfile -ExecutionPolicy Bypass -File apps/windows/installer/build.ps1
+      - name: Verify installation, native architecture, startup and uninstall
+        run: python tools/release/windows_package.py smoke
+      - name: Stage package with checksums and exact source revision
+        run: python tools/release/windows_package.py stage
+      - name: Upload verified installer
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: qingjian-windows-x86_64
+          path: target/windows-package/*
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+      - name: Preserve test and evaluation logs
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: windows-validation-evidence
+          path: |
+            target/package-checks/
+            target/package-eval/
+          if-no-files-found: warn
+          retention-days: 30

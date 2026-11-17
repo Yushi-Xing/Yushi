@@ -9,6 +9,9 @@ use crate::dispatch::{KeyHintView, PanelFrame};
 /// 候选窗口 / 状态条的画法。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RenderSettings {
+    /// 竖排在输入行上方时反向排列，拼音行也移到底部。
+    pub vertical_reverse_above: bool,
+
     /// 由谁画（`[general] renderer`）。
     pub renderer: CandidateRenderer,
 
@@ -20,6 +23,9 @@ pub struct RenderSettings {
 
     /// 候选字、译文字号（`[general] candidate_font_size` / `annotation_font_size`），盖过主题。
     pub font_sizes: (FontSize, FontSize),
+
+    /// 候选字字重（`[general] candidate_font_weight`，已取整到 100–900），盖过主题；`None` 用主题的。
+    pub candidate_weight: Option<u16>,
 
     /// 过渡动画（`[general] animations`）。
     pub animations: bool,
@@ -57,6 +63,9 @@ pub trait CandidateSink: Send {
 /// 候选窗口上的鼠标操作（UI 线程经工人通道送给 Router）。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CandidateMouse {
+    /// 自绘候选窗的实际方向，供按视觉方向移动高亮。
+    Placement { upward: bool, typed_keys: String },
+
     /// 左键点中候选或译词。
     Click(HitTarget),
 

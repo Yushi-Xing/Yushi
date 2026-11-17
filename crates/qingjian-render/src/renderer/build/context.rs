@@ -22,6 +22,8 @@ pub(super) struct Context<'a> {
 
     /// 在横排展开的矩阵里：格子不画逐项译文（见 `matrix.rs`）。
     pub(super) matrix: bool,
+
+    pub(super) reverse_rows: bool,
 }
 
 impl<'a> Context<'a> {
@@ -32,6 +34,7 @@ impl<'a> Context<'a> {
             cells: &[],
             cell: None,
             matrix: false,
+            reverse_rows: false,
         }
     }
 

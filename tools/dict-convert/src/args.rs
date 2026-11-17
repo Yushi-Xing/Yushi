@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 use clap::{Parser, Subcommand, ValueEnum};
 
+use crate::chaizi::ChaiziOptions;
 use crate::mmh::MmhReferenceOptions;
 use crate::stroke::StrokeOptions;
 
@@ -24,8 +25,8 @@ pub enum Command {
     /// 青简基础词库：从「输入法字词库_分类整理版」数据包 + Unihan 读音建 dict.tsv（两遍跑，见模块文档）。
     /// 各项输入缺省都并入，缺文件就报错；不要哪项用对应的 `--no-…` 排除（第一遍还没有语料词频：`--no-frequency`）
     Lexicon {
-        /// 数据包目录（含 01_characters / 02_common / 03_domains），随仓库放在 assets/lexicon
-        #[arg(long, default_value = "assets/lexicon")]
+        /// 数据包目录（含 01_characters / 02_common / 03_domains），在词库仓库 ../qingjian-dicts/official/upstream（两个仓库并排放）
+        #[arg(long, default_value = "../qingjian-dicts/official/upstream")]
         pack: PathBuf,
 
         /// Unihan_Readings.txt
@@ -53,15 +54,15 @@ pub enum Command {
         emit_ambiguous: Option<PathBuf>,
 
         /// 额外并入的词（`词\t拼音\t次数`，拼音可空，可给多个）：词库里没有的按次数当词频加进去，读音同领域词。
-        /// 缺省是 assets/lexicon 的挖词、短语、品牌、领域、中英混杂五份；给了就只用给的
+        /// 缺省是词库仓库基础词库 inputs/ 的挖词、短语、品牌、人工补充、中英混杂五份；给了就只用给的
         #[arg(
             long,
             default_values = [
-                "assets/lexicon/mined_words.tsv",
-                "assets/lexicon/phrases.tsv",
-                "assets/lexicon/brand.tsv",
-                "assets/lexicon/domain_words.tsv",
-                "assets/lexicon/mixed_words.tsv",
+                "../qingjian-dicts/official/lexicon/zh/base/inputs/mined.tsv",
+                "../qingjian-dicts/official/lexicon/zh/base/inputs/phrases.tsv",
+                "../qingjian-dicts/official/lexicon/zh/base/inputs/brands.tsv",
+                "../qingjian-dicts/official/lexicon/zh/base/inputs/manual.tsv",
+                "../qingjian-dicts/official/lexicon/zh/base/inputs/mixed.tsv",
             ]
         )]
         extra_words: Vec<PathBuf>,
@@ -97,22 +98,15 @@ pub enum Command {
         /// 通用词表（`word\tpinyin\t…`，首行表头）
         #[arg(
             long,
-            default_value = "assets/lexicon/02_common/modern_chinese_common_words.tsv"
+            default_value = "../qingjian-dicts/official/upstream/02_common/modern_chinese_common_words.tsv"
         )]
         words: PathBuf,
     },
 
-    /// 拆字表：開放詞典網拆字字典 + 词库读音 → chaizi.tsv（`字\t读音\t部件拼音串`），编进 Core 给问字模式按部件找字。
+    /// 拆字表：開放詞典網拆字字典（简体 + 繁体）+ 词库读音 + 繁简索引
+    /// → `chaizi.tsv`（`字\t读音\t拆法部件\t拆法读音`），编进 Core 给问字模式按部件读音或笔画找字。
     /// 生成后放到 `crates/qingjian-core/data/chaizi.tsv`（`--out-dir crates/qingjian-core/data`）
-    Chaizi {
-        /// 拆字字典（`字\t拆法…`，拆法里部件空格分隔）
-        #[arg(long, default_value = "assets/chaizi/chaizi-jt.txt")]
-        chaizi: PathBuf,
-
-        /// 青简词库（`词\t音节\t词频`），取单字读音与字频
-        #[arg(long, default_value = "assets/lexicon/dict.tsv")]
-        dictionary: PathBuf,
-    },
+    Chaizi(ChaiziOptions),
 
     /// 形码码表（五笔）：Rime `.dict.yaml` → `词\t编码\t词频`。词频由青简词库按词面回填，不用码表自带的权重
     Wubi {
@@ -120,7 +114,7 @@ pub enum Command {
         input: PathBuf,
 
         /// 词频来源：青简词库 TSV（`词\t拼音\t词频`）。可给多个（基础词库 + 随包领域词库），同一个词取词频最大的那份
-        #[arg(long, default_value = "assets/lexicon/dict.tsv", num_args = 1..)]
+        #[arg(long, default_value = "../qingjian-dicts/official/lexicon/zh/base/words.tsv", num_args = 1..)]
         frequency: Vec<PathBuf>,
 
         /// 输出文件名（写在 --out-dir 下）；缺省是形码方案目录里码表的缺省名
@@ -128,13 +122,13 @@ pub enum Command {
         name: String,
     },
 
-    /// 五笔字根图的字形：字根表（`assets/schemes/wubi86/roots86.tsv`）+ 思源黑体 → SVG 路径表（写在 --out-dir 下）
+    /// 五笔字根图的字形：字根表（`crates/qingjian-core/data/roots86.tsv`）+ 思源黑体 → SVG 路径表（写在 --out-dir 下）
     WubiRoots {
         /// 思源黑体 SC Regular（`SourceHanSansSC-Regular.otf`，不进仓库）
         font: PathBuf,
 
         /// 字根表
-        #[arg(long, default_value = "assets/schemes/wubi86/roots86.tsv")]
+        #[arg(long, default_value = "crates/qingjian-core/data/roots86.tsv")]
         spec: PathBuf,
 
         /// 输出文件名
@@ -152,7 +146,7 @@ pub enum Command {
         input: PathBuf,
     },
 
-    /// 英文词表（每行 `词\t编码[\t…]`，带不带表头都行，比如 `assets/lexicon/05_english/00_all_words.tsv`）→ english.tsv
+    /// 英文词表（每行 `词\t编码[\t…]`，带不带表头都行，比如 `../qingjian-dicts/official/upstream/05_english/00_all_words.tsv`）→ english.tsv
     English {
         /// 输入文件
         #[arg(required = true)]
@@ -161,6 +155,17 @@ pub enum Command {
         /// 词频表（`编码\t词频`，`tools/corpus/english_frequency.py` 生成）；给了就写进第三列，前缀补全按它排
         #[arg(long)]
         frequency: Option<PathBuf>,
+    },
+
+    /// CMU 发音词典（`cmudict.dict`，ARPAbet）→ `english-ipa.tsv`：`词\t/IPA/`（General American），
+    /// 随包给英文候选显示音标。只收纯小写字母的词，多音词取第一个
+    Ipa {
+        /// 输入的 CMUdict 文件（`cmudict.dict`）
+        input: PathBuf,
+
+        /// 输出文件名（写在 --out-dir 下）
+        #[arg(long, default_value = "english-ipa.tsv")]
+        name: String,
     },
 
     /// Unicode CLDR emoji annotations（`annotations/<语言>/annotations.json`、`annotationsDerived/…`）→ emoji-<语言>.tsv：`词\temoji …`
@@ -184,11 +189,11 @@ pub enum Command {
         #[arg(long, default_value = "data/generated/dict.tsv")]
         dict: PathBuf,
 
-        /// 短语层文件（assets/lexicon/phrases.tsv，可给多个，人工挑的领域词 domain_words.tsv 也走这条路）：里面的词不参与分词，统计完按成分合成它们的一元 / 二元计数（见 bigram.rs 模块注释）
+        /// 短语层文件（../qingjian-dicts/official/lexicon/zh/base/inputs/phrases.tsv，可给多个，人工补充的 manual.tsv 也走这条路）：里面的词不参与分词，统计完按成分合成它们的一元 / 二元计数（见 bigram.rs 模块注释）
         #[arg(long)]
         phrases: Vec<PathBuf>,
 
-        /// 品牌词文件（assets/lexicon/brand.tsv，可给多个，中英混杂词 mixed_words.tsv 也走这条路）：语料里没有的词按文件给的次数写进一元表。
+        /// 品牌词文件（../qingjian-dicts/official/lexicon/zh/base/inputs/brands.tsv，可给多个，中英混杂词 mixed.tsv 也走这条路）：语料里没有的词按文件给的次数写进一元表。
         /// 与 --phrases 的区别：合成计数要成分词在语料里，C盘 的 C 不是语料 token，只能直接给
         #[arg(long)]
         brand: Vec<PathBuf>,
@@ -221,7 +226,10 @@ pub enum Command {
         candidates: Option<PathBuf>,
 
         /// 分词用的词库（青简 TSV）
-        #[arg(long, default_value = "assets/lexicon/dict.tsv")]
+        #[arg(
+            long,
+            default_value = "../qingjian-dicts/official/lexicon/zh/base/words.tsv"
+        )]
         dict: PathBuf,
 
         /// 出现次数低于此值的不要
@@ -233,7 +241,7 @@ pub enum Command {
         max_chars: usize,
     },
 
-    /// 短语层：从 bigram 表的相邻两词与语料的相邻三词里挖 我的 / 不知道 这类人会整块打的组合 → phrases.tsv（人工过一遍后拷进 assets/lexicon/，`lexicon --extra-words` 并入）
+    /// 短语层：从 bigram 表的相邻两词与语料的相邻三词里挖 我的 / 不知道 这类人会整块打的组合 → phrases.tsv（人工过一遍后拷进词库仓库基础词库的 inputs/，`lexicon --extra-words` 并入）
     Phrases {
         /// 语料文件
         #[arg(required = true)]
@@ -265,18 +273,25 @@ pub enum Command {
     Stroke(StrokeOptions),
 
     /// 笔画对照表：从 hanzi-writer-data（Make Me a Hanzi；Arphic 许可，不进仓库）生成 `stroke --verify`
-    /// 用的两张开发期对照表到 `data/mmh/`（笔画数、首笔几何类别，见模块文档与 assets/stroke/README.md）
+    /// 用的两张开发期对照表到 `data/mmh/`（笔画数、首笔几何类别，见模块文档与 ../qingjian-dicts/official/upstream/stroke/README.md）
     MmhReference(MmhReferenceOptions),
 
+    /// 把 `.qj` 压成分发用的 `.qjz`（词库仓库的 Release 附件、设置页导入与下载）：每个输入写 <输出目录>/<主干>.qjz
+    Qjz {
+        /// 要压的 `.qj`
+        #[arg(required = true)]
+        inputs: Vec<PathBuf>,
+    },
+
     /// 把 TSV 打包成 `.qj` 容器（mmap 直接用，启动近零耗时）：`dict` 读 dict.tsv 写 dict.qj，`lm` 读 lm-unigram/bigram.tsv 写 lm.qj，
-    /// `glossary --language en` 读 glossary-en.tsv 写 glossary-en.qj；`model` 把导出的三件套目录（缺省 data/models/hanzhang-zhiwei）
+    /// `glossary --language en` 读 glossary-en.tsv 写 glossary-en.qj，`wordlist --input english.tsv` 写 english.qj，`pronunciations --input english-ipa.tsv` 写 english-ipa.qj，`codetable --input table.tsv` 写 table.qj；`model` 把导出的三件套目录（缺省 data/models/hanzhang-zhiwei）
     /// 打成一个 .qjm（`--out-dir data/models/hanzhang-zhiwei` 就写回原目录，随包只带这一个文件）；
     /// `codes` 是唯一不「原样落盘」的一种：读笔画表与词库，按取码规则算成本地码表 codes/stroke.qj（见 codes 模块）
     Pack {
         /// 打包哪种数据
         kind: PackKind,
 
-        /// 输入文件；`dict` 一个或几个 TSV（几个合成一本；缺省 dict.tsv，有 dict-cleaned.tsv 就一起），`lm` 两个（一元表、二元表），`model` 一个目录。缺省从输出目录里找同名 TSV（`model` 缺省 data/models/hanzhang-zhiwei）
+        /// 输入文件；`dict` 一个或几个 TSV（几个合成一本；缺省 dict.tsv，有 dict-cleaned.tsv 就一起），`lm` 两个（一元表、二元表），`wordlist` / `pronunciations` / `codetable` 一个（必给），`model` 一个目录。缺省从输出目录里找同名 TSV（`model` 缺省 data/models/hanzhang-zhiwei）
         #[arg(long, num_args = 1..)]
         input: Vec<PathBuf>,
 
@@ -288,7 +303,7 @@ pub enum Command {
         #[arg(long)]
         dict: Option<PathBuf>,
 
-        /// `codes` 或 `model` 用：输出文件；模型缺省 <输出目录>/model.qjm
+        /// `codes`、`model`、`wordlist`、`pronunciations` 或 `codetable` 用：输出文件；模型缺省 <输出目录>/model.qjm，词表、音标表与码表缺省 <输出目录>/<输入主干>.qj
         #[arg(long)]
         output: Option<PathBuf>,
 
@@ -311,6 +326,10 @@ pub enum Command {
         /// 元数据：数据版本（上游版本号或日期）
         #[arg(long, default_value = "")]
         data_version: String,
+
+        /// 元数据：一两句话的说明（形码方案在设置页显示的简介）
+        #[arg(long, default_value = "")]
+        description: String,
 
         /// `glossary` 专用：释义表的语言代码（en / ja / zh / es / vi / de），决定输出文件名 glossary-<语言>.qj
         #[arg(long, default_value = "en")]
@@ -335,6 +354,15 @@ pub enum PackKind {
 
     /// 笔画码表（笔画表 + 词库 → codes/stroke.qj，随包原生码表）
     Codes,
+
+    /// 词表（英文、越南语等，`词\t编码[\t词频]` → <主干>.qj）
+    Wordlist,
+
+    /// 音标表（`词\t/音标/` → <主干>.qj，与词表同一种容器）
+    Pronunciations,
+
+    /// 形码方案的码表（`词\t编码\t词频` → <主干>.qj，随包五笔）
+    Codetable,
 }
 
 impl PackKind {
@@ -346,6 +374,9 @@ impl PackKind {
             Self::Glossary => "glossary",
             Self::Model => "model",
             Self::Codes => "codes",
+            Self::Wordlist => "wordlist",
+            Self::Pronunciations => "pronunciations",
+            Self::Codetable => "codetable",
         }
     }
 }

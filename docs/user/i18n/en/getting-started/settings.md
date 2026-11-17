@@ -33,7 +33,7 @@ Settings that exist only on some platforms are hidden on the others; settings th
 | 云服务 (Cloud services) | Turning AI services on, the provider, each AI feature | [AI services](../cloud/index.md) |
 | 统计 (Statistics) | Amount typed, speed, vocabulary progress, AI usage | [Statistics](../learning/statistics.md) |
 | 生词本 (Vocabulary book) | Timeline and word list, export, clear | [Vocabulary book](../learning/vocabulary.md) |
-| 实验功能 (Experimental features) | Download and turn on local sentence models: Zhiyi and Hanzhang Tongbian (macOS, Windows) | [Sentences, abbreviations and correction](../input/sentence.md#Experimental-features) |
+| 实验功能 (Experimental features) | Qingjian Clipboard's switch, shortcut, direction, history limit, pausing, apps not to record and clearing history (macOS, Windows); download and turn on local sentence models: Zhiyi and Hanzhang Tongbian (macOS, Windows) | [Sentences, abbreviations and correction](../input/sentence.md#Experimental-features) |
 | 高级 (Advanced) | Configuration file, logs, input log | [Privacy](../help/privacy.md), [Editing the configuration file](../advanced/config-file.md) |
 | 关于 (About) | Version, update check, licenses, data sources, privacy notes | [Privacy](../help/privacy.md#Checking-for-updates) |
 
@@ -43,9 +43,9 @@ Click the 中 / 英 item in the menu bar to open it: the cloud suggestions switc
 
 ## The taskbar icon (Windows)
 
-Right-click the 中 / 英 icon on the taskbar: switch to Chinese / English, full-width punctuation, show or hide the floating status bar, open the symbol panel, open Settings or legacy Settings. New versions are also announced here.
+Right-click the 中 / 英 icon on the taskbar: switch to Chinese / English, full-width punctuation, show or hide the floating status bar, open the symbol panel or Settings. Legacy Settings appears when installed. New versions are also announced here.
 
 ## Legacy settings
 
-This version keeps the old settings window as a fallback; if the new one won't open or a setting doesn't take effect, use the old one: 旧版设置… (Legacy Settings…) in the macOS input method menu; 旧版设置… in the Windows taskbar icon's right-click menu, or 青简旧版设置 (Qingjian Legacy Settings) in the Start menu.
-Both change the same settings. The legacy settings will be removed in a later version; if you find you need them, please [report it](../help/feedback.md).
+macOS keeps 旧版设置… (Legacy Settings…) in the input method menu. The standard Windows installer includes the new Settings app; legacy Settings is available in an optional compatibility build. When installed, open it from the taskbar icon's right-click menu or the Start menu.
+Both change the same settings. If the new Settings app does not work, please [report it](../help/feedback.md); users who have legacy Settings installed can use it temporarily.

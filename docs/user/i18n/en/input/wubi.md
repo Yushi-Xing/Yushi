@@ -4,7 +4,9 @@ order: 6
 description: "Typing with shape-based codes such as Wubi (86 edition): turning it on, short codes and automatic commit, commit-on-next-code, the radical chart, and mixed input with Wubi and pinyin on together."
 ---
 
-Shape-based input is supported on macOS and Windows (Android has its own Wubi keyboard); not yet on Linux.
+Shape-based input is supported on macOS, Windows and Linux (Android has its own Wubi keyboard). Fcitx5, Fcitx4 and IBus share the same schemes and key rules on Linux.
+
+Linux reloads schemes, code tables and enabled Wubi dictionaries within about a second. Effective scheme changes cancel uncommitted input in all contexts; unrelated settings do not. Missing or unreadable schemes fall back to pinyin. Root charts and key hints remain unavailable on Linux.
 
 ## Turning it on
 
@@ -13,12 +15,17 @@ Under 设置 → 输入 → 形码 (Settings → Input → Shape-based), choose 
 - **Wubi only**: set 拼音 (Pinyin) on the same page to 关 (Off).
 - **Wubi–pinyin mixed input**: leave the pinyin scheme on; see [Mixed input](#Mixed-input) below.
 
+## Automatic phrases
+
+Settings → Input → Automatic Wubi phrases controls Wubi learning and maximum length (2–10 Chinese characters, default: 4). Wubi learns a new combination on its first consecutive input, using full character codes regardless of shortcuts. For four or more characters it takes the first code letter of the first three and last characters. These settings do not affect Pinyin or Shuangpin learning; see [Automatic phrases](../personalize/dictionaries.md#Automatic-phrases).
+
 ## Typing
 
 You type codes, not pronunciations: `ggll` gives 一, `khlg` gives 中国, `gant` gives 开发. The top of the candidate window shows the code exactly as typed.
 
 - Words are looked up by however much of the code you've typed. Words whose code is exactly what you've typed come before words with longer codes; these are the level 1 / 2 / 3 short codes.
 - Space commits the highlighted candidate and number keys pick; paging, deleting and committing work as with pinyin, and the left and right arrows move the cursor one letter at a time. Glosses beside candidates, typing habits and the vocabulary book work as usual.
+- Words you type are followed by their emoji as with pinyin (`ga` gives 开 followed by 🔓). `rq`, `sj` and `xq` give today's date, the current time and the day of the week, placed after the words whose code is exactly those two letters, so they never take the first spot.
 - Features that belong to pinyin aren't available with Wubi: sentence input, abbreviated pinyin, fuzzy pinyin, spelling correction, and the [calculations and special characters](shortcuts.md) that start with `v` / `u`.
 
 With Wubi only, a few more rules apply:

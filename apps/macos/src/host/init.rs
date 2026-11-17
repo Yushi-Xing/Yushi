@@ -2,10 +2,14 @@
 
 use super::*;
 use crate::candidates::MenuHandlers;
+use qingjian_platform::pronunciations::{ENGLISH_PRONUNCIATIONS_FILE, load_english_pronunciations};
 
 /// 加载数据并建立单例。必须在主线程、在 IMKServer 建立之前调用。版本显示在菜单末行与「关于」页。
 pub fn init(mtm: MainThreadMarker, info: &BundleInfo) -> Result<(), HostError> {
     let version = info.version.as_str();
+    if let Some(dirs) = paths::user_dirs() {
+        dirs.prepare();
+    }
     let settings = Settings::load();
     let started = std::time::Instant::now();
     // 打包过的 .qj 直接映射；没有就解析 TSV（样例词库）
@@ -30,14 +34,33 @@ pub fn init(mtm: MainThreadMarker, info: &BundleInfo) -> Result<(), HostError> {
             .or_else(|| languages.first().copied())
     };
     let glossary = learning_language.map(load_glossary).transpose()?;
-    let learner = match paths::user_data_dir() {
-        Some(dir) => load_learner(&dir),
+    let learner = match paths::user_dirs() {
+        Some(dirs) => load_learner(&dirs.learning()),
         None => FrequencyLearner::default(),
     };
-    // 英文词表可选：没有就不出英文候选
-    let english = paths::resource("english.tsv")
+    // 英文词表可选：没有就不出英文候选；随包的是 .qj，样例词库只有 TSV
+    let english = paths::resource("english.qj")
+        .or_else(|_| paths::resource("english.tsv"))
         .ok()
         .map(WordList::from_path)
+        .transpose()?;
+    let vietnamese_words = paths::resource("vietnamese.qj")
+        .ok()
+        .map(WordList::from_path)
+        .transpose()?;
+    let vietnamese_glossary = paths::resource("vietnamese-chinese.qj")
+        .ok()
+        .map(|path| {
+            let bundled = Glossary::from_path(Language::Chinese, path)?;
+            let personal = match paths::user_dirs() {
+                Some(dirs) => PersonalGlossary::open(
+                    Language::Chinese,
+                    dirs.learning().join("user-glossary-input-vi-zh.tsv"),
+                ),
+                None => PersonalGlossary::in_memory(Language::Chinese),
+            };
+            Ok::<_, HostError>(LayeredTranslator::new(bundled, personal))
+        })
         .transpose()?;
     tracing::info!(
         entries = dictionary.len(),
@@ -45,14 +68,14 @@ pub fn init(mtm: MainThreadMarker, info: &BundleInfo) -> Result<(), HostError> {
         english = english.as_ref().map_or(0, WordList::len),
         learned = learner.len(),
         dictionary_ms,
-        "数据加载完成"
+        "data loaded"
     );
     let mut engine = Engine::new(dictionary).with_learner(Box::new(learner));
     if let Some(glossary) = glossary {
         engine = engine.with_translator(Box::new(glossary));
     }
-    // 输入统计（打了多少字）：与学习数据同目录；没有数据目录就只在内存里数
-    if let Some(dir) = paths::user_data_dir() {
+    // 输入统计（打了多少字）、生词本、面板用量记在 `records/`；没有数据目录就只在内存里数
+    if let Some(dir) = paths::user_dirs().map(|dirs| dirs.records()) {
         // 词汇等级表（levels-en.tsv / levels-ja.tsv）随包可选：有就按级统计
         let mut vocabulary = VocabularyBook::open(dir.join(VOCABULARY_FILE));
         for language in GLOSSARY_LANGUAGES {
@@ -62,7 +85,7 @@ pub fn init(mtm: MainThreadMarker, info: &BundleInfo) -> Result<(), HostError> {
             match LevelTable::from_path(&path) {
                 Ok(table) => vocabulary = vocabulary.with_levels(language, table),
                 Err(error) => {
-                    tracing::warn!(path = %path.display(), %error, "词汇等级表读不了，不分级")
+                    tracing::warn!(path = %path.display(), %error, "level table unreadable, vocabulary not graded")
                 }
             }
         }
@@ -71,29 +94,29 @@ pub fn init(mtm: MainThreadMarker, info: &BundleInfo) -> Result<(), HostError> {
             .with_panel_history(Box::new(PanelUsage::open(&dir)))
             .with_vocabulary_tracker(Box::new(vocabulary));
     }
-    // 附加词库：随包的领域词库 + 用户目录 dicts/ 下的文件
+    // 附加词库：随包的领域词库 + 用户导入的、设置里下载的
+    let user_dicts = user_dict_dirs();
+    let user_dicts: Vec<&std::path::Path> = user_dicts.iter().map(PathBuf::as_path).collect();
     engine.set_extra_dictionaries(extra_dictionaries::load(
         paths::bundled_dicts_dir().as_deref(),
-        paths::dicts_dir().as_deref(),
+        &user_dicts,
         &settings.config().dictionaries,
     ));
+    engine.set_blocked_words(settings.config().dictionaries.blocked.clone());
+    engine.set_base_words(settings.config().dictionaries.base);
     // 英文候选的中文释义（英→中）可选：没有这张表英文候选右侧就留空
-    if let Ok(path) =
-        paths::resource("glossary-zh.qj").or_else(|_| paths::resource("glossary-zh.tsv"))
-    {
-        match Glossary::from_path(Language::Chinese, &path) {
-            Ok(glossary) => {
-                tracing::info!(glosses = glossary.len(), "英→中释义表已加载");
-                engine = engine.with_english_translator(Box::new(glossary));
-            }
-            Err(error) => tracing::warn!(%error, "英→中释义表加载失败"),
-        }
+    if let Some(glossary) = load_english_glossary() {
+        engine = engine.with_english_translator(Box::new(glossary));
     }
     if let Some(words) = english {
         engine = engine.with_english(words);
     }
+    // 音标表可选：没有就只是英文候选不显示音标
+    if let Ok(path) = paths::resource(ENGLISH_PRONUNCIATIONS_FILE) {
+        engine.set_english_pronunciations(load_english_pronunciations(&path));
+    }
     if let Some(table) = load_emoji_tables(&["emoji-zh.tsv", "emoji-en.tsv"]) {
-        tracing::info!(words = table.len(), "emoji 表已加载");
+        tracing::info!(words = table.len(), "emoji table loaded");
         engine = engine.with_emoji(table);
     }
     // 语言模型可选：没有就退化成一元词频整句；打包过的 lm.qj 优先
@@ -112,7 +135,7 @@ pub fn init(mtm: MainThreadMarker, info: &BundleInfo) -> Result<(), HostError> {
             words = model.word_count(),
             bigrams = model.bigram_count(),
             total_ms = started.elapsed().as_millis(),
-            "语言模型已加载"
+            "language model loaded"
         );
         engine = engine.with_language_model(Box::new(model));
     }
@@ -141,8 +164,12 @@ pub fn init(mtm: MainThreadMarker, info: &BundleInfo) -> Result<(), HostError> {
             settings,
             watch,
             mode_switch,
+            vietnamese: Default::default(),
+            vietnamese_words,
+            vietnamese_glossary,
             osd,
             last_osd_english: None,
+            last_osd_vietnamese: None,
             last_osd_caps: None,
             themes: qingjian_render::ThemeLibrary::load(paths::themes_dir().as_deref()),
             last_flush: std::time::Instant::now(),
@@ -152,6 +179,7 @@ pub fn init(mtm: MainThreadMarker, info: &BundleInfo) -> Result<(), HostError> {
             aux_files: Vec::new(),
             code_word_files: Vec::new(),
             dictionary_files: Vec::new(),
+            glossary_files: glossary_files(),
             aux_code_show: false,
             dictionary_list: Vec::new(),
             learning_language,
@@ -170,6 +198,7 @@ pub fn init(mtm: MainThreadMarker, info: &BundleInfo) -> Result<(), HostError> {
             translate_keys: KeyCombo::TRANSLATE_DEFAULT,
             punctuation_keys: None,
             predict_keys: KeyCombo::PREDICT_DEFAULT,
+            translate_panel_keys: KeyCombo::TRANSLATE_PANEL_DEFAULT,
             manual_prediction: None,
             candidate_translation: None,
             translation: None,
@@ -179,10 +208,12 @@ pub fn init(mtm: MainThreadMarker, info: &BundleInfo) -> Result<(), HostError> {
             root_keyboard: None,
             preedit_mode: PreeditMode::default(),
             translation_pos: true,
+            show_english_pronunciation: false,
             layout: LayoutMode::default(),
             horizontal_grid: false,
             grid_page_keys: false,
             highlight_keys: HighlightKeys::default(),
+            extra_candidate_navigation: false,
             english_candidates: true,
             text_replacements: Vec::new(),
             apps: AppsConfig::default(),
@@ -192,8 +223,9 @@ pub fn init(mtm: MainThreadMarker, info: &BundleInfo) -> Result<(), HostError> {
             rescore: RescoreMonitor::new(mtm),
             model_loader: None,
             applied_model: None,
-            updates: paths::user_data_dir()
-                .map(|dir| qingjian_update::Checker::new(dir.join(UPDATE_STATE_FILE), version)),
+            updates: paths::user_dirs().map(|dirs| {
+                qingjian_update::Checker::new(dirs.cache().join(UPDATE_STATE_FILE), version)
+            }),
             update_status: UpdateStatus::default(),
             session: Session::default(),
             trace: None,
@@ -293,18 +325,56 @@ pub(super) fn load_emoji_tables(names: &[&str]) -> Option<EmojiTable> {
     merged
 }
 
+/// 设置页下载的（`downloads/glossaries/`）优先，其次随包的 `.qj`、`.tsv`。
 pub(super) fn glossary_path(language: Language) -> Result<PathBuf, HostError> {
+    if let Some(path) = paths::user_dirs()
+        .map(|dirs| downloaded_glossary(&dirs.downloads(), language))
+        .filter(|path| path.is_file())
+    {
+        return Ok(path);
+    }
     paths::resource(&format!("glossary-{}.qj", language.code()))
         .or_else(|_| paths::resource(&format!("glossary-{}.tsv", language.code())))
+}
+
+/// 英→中释义表（英文候选右侧的中文）：没有这张表返回 `None`，坏了记日志也返回 `None`。
+pub(super) fn load_english_glossary() -> Option<Glossary> {
+    let path = glossary_path(Language::Chinese).ok()?;
+    match Glossary::from_path(Language::Chinese, &path) {
+        Ok(glossary) => {
+            tracing::info!(glosses = glossary.len(), "英→中释义表已加载");
+            Some(glossary)
+        }
+        Err(error) => {
+            tracing::warn!(%error, "英→中释义表加载失败");
+            None
+        }
+    }
+}
+
+/// `downloads/glossaries/` 的快照，只 stat；设置页下载装上新表后变。
+pub(super) fn glossary_files() -> Vec<(PathBuf, Option<std::time::SystemTime>, u64)> {
+    paths::user_dirs()
+        .map(|dirs| extra_dictionaries::snapshot(&dirs.downloads().join(DOWNLOADED_DIR)))
+        .unwrap_or_default()
+}
+
+/// 用户的附加词库目录：导入的（`custom/dicts/`）与设置里下载的（`downloads/dicts/`）。
+pub(super) fn user_dict_dirs() -> Vec<PathBuf> {
+    [paths::dicts_dir(), paths::downloaded_dicts_dir()]
+        .into_iter()
+        .flatten()
+        .collect()
 }
 
 /// 随包释义表叠上用户目录的个人释义表（`user-glossary-<语言>.tsv`，释义兜底写入、可手改）。
 pub(super) fn load_glossary(language: Language) -> Result<LayeredTranslator, HostError> {
     let bundled = Glossary::from_path(language, glossary_path(language)?)?;
-    let personal = match paths::user_data_dir() {
-        Some(dir) => PersonalGlossary::open(
+    let personal = match paths::user_dirs() {
+        Some(dirs) => PersonalGlossary::open(
             language,
-            dir.join(format!("user-glossary-{}.tsv", language.code())),
+            dirs.learning()
+                .join(format!("user-glossary-{}.tsv", language.code())),
         ),
         None => PersonalGlossary::in_memory(language),
     };

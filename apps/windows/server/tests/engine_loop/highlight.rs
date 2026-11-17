@@ -1,6 +1,9 @@
 //! 组句中的方向键：`[shortcut] highlight_keys` 决定高亮由 `↑` / `↓` 还是 `←` / `→` 移动。
 
-use crate::support::*;
+use crate::support::{
+    CandidateMouse, HighlightKeys, KeyOutcome, Router, RouterConfig, function_key, preedit, press,
+    router, router_with, type_letters,
+};
 
 const LEFT: u32 = 0x25;
 const UP: u32 = 0x26;
@@ -111,4 +114,39 @@ fn arrows_pass_through_when_not_composing() {
         let (outcome, _, _) = press(&mut router, function_key(key));
         assert_eq!(outcome, KeyOutcome::Passthrough);
     }
+}
+
+#[test]
+fn above_vertical_arrows_follow_visual_rows_and_number_keys_keep_logical_indices() {
+    let mut router = router_with(RouterConfig {
+        layout: qingjian_platform::LayoutMode::Vertical,
+        ..RouterConfig::default()
+    });
+    let (_, _, initial) = type_letters(&mut router, "nihao");
+    let first = initial.candidates.items[0].text.clone();
+    router.handle_candidate_mouse(CandidateMouse::Placement {
+        upward: true,
+        typed_keys: "nihao".into(),
+    });
+    let (_, _, moved) = press(&mut router, function_key(UP));
+    assert_eq!(moved.highlight, 1);
+    let (_, _, moved) = press(&mut router, function_key(DOWN));
+    assert_eq!(moved.highlight, 0);
+    let (_, committed, _) = press(&mut router, crate::support::letter('1'));
+    assert_eq!(committed.as_deref(), Some(first.as_str()));
+}
+
+#[test]
+fn placement_from_an_old_composition_cannot_reverse_the_current_arrows() {
+    let mut router = router_with(RouterConfig {
+        layout: qingjian_platform::LayoutMode::Vertical,
+        ..RouterConfig::default()
+    });
+    type_letters(&mut router, "nihao");
+    router.handle_candidate_mouse(CandidateMouse::Placement {
+        upward: true,
+        typed_keys: "zhangwei".into(),
+    });
+    let (_, _, moved) = press(&mut router, function_key(DOWN));
+    assert_eq!(moved.highlight, 1);
 }

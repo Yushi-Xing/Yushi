@@ -6,6 +6,7 @@ pub enum Popup {
     Scheme,
     /// 形码方案：关、内置五笔、用户目录里的方案。
     Code,
+    AutoPhraseLength,
     LearningLanguage,
     /// 输出字形：简体与三档繁体。
     Traditional,
@@ -19,4 +20,6 @@ pub enum Popup {
     AuxScheme,
     /// 设置程序与候选窗的界面语言。
     UiLanguage,
+    /// 连按两次 Shift 切换到的第三输入法。
+    ThirdInput,
 }

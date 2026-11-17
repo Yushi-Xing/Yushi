@@ -76,6 +76,7 @@ impl Engine {
             |index, syllable| expanded.cost(index, syllable),
         )
         .with_emission(&emission)
+        .with_context(self.chain.context())
         .with_limits(self.search_limits);
         sentence::diagnose(&input, &expanded.positions(), gold, best)
     }

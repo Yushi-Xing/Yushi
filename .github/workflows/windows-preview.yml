@@ -1,8 +1,8 @@
+# 本 fork 仅在用户明确要求时手动运行，并选择版本标签作为 ref。
 name: Windows preview release
 
 on:
-  push:
-    tags: ['yushi-windows-v*']
+  workflow_dispatch:
 
 permissions:
   contents: read

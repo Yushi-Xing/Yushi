@@ -9,9 +9,9 @@
 #
 # 架构：缺省编译本机架构；QINGJIAN_TARGET=x86_64-apple-darwin（或 aarch64-apple-darwin）交叉编译另一种，
 # 先 `rustup target add` 一次。CI 在 Apple Silicon runner 上两个都打（.github/workflows/release.yml）。
-# 产品数据缺省全带（词库、语言模型、领域词库、笔画码表、英文词表、释义表），缺哪样就报错停下，
-# 不悄悄退回样例：2026-09 在没有 data/ 的 worktree 里打出过只有 148 条样例词库的包。TSV 比 .qj 新会重打。
-# 没有数据管道的机器跑 tools/release/data-fetch.sh 按 tools/release/data.lock 下载。
+# 产品数据缺省全带（随包词库、语言模型、笔画码表），缺哪样就报错停下，
+# 不悄悄退回样例：2026-09 在没有 data/ 的 worktree 里打出过只有 148 条样例词库的包。
+# 每次打包跑 tools/release/data-fetch.sh：语言模型按 models.lock 从模型仓库取，随包词库与码表按 dicts.lock 从词库仓库取（已下过的只核对）。
 #
 # 签名与公证都由环境变量决定，没设就 ad-hoc 签名、pkg 不签（本机自用够了，分发给别人会被 Gatekeeper 拦，
 # 对方要在「系统设置 → 隐私与安全性」里点「仍要打开」）：
@@ -55,28 +55,14 @@ esac
 cd "$ROOT"
 # 先查产品数据再编译，缺了早停
 if [[ "$SAMPLE_DATA" == 0 ]]; then
-  missing=()
-  [[ -f data/generated/dict.qj || -f data/generated/dict.tsv ]] || missing+=("data/generated/dict.qj")
-  [[ -f data/generated/lm.qj || -f data/generated/lm-bigram.tsv ]] || missing+=("data/generated/lm.qj")
-  [[ -f data/generated/english.tsv ]] || missing+=("data/generated/english.tsv")
-  ls data/generated/dicts/*.qj >/dev/null 2>&1 || missing+=("data/generated/dicts/*.qj（领域词库）")
-  ls data/generated/codes/*.qj >/dev/null 2>&1 || missing+=("data/generated/codes/*.qj（笔画码表）")
-  for lang in en ja zh es vi de; do
-    [[ -f "assets/glossary/glossary-$lang.tsv" || -f "data/generated/glossary-$lang.qj" ]] || missing+=("data/generated/glossary-$lang.qj")
-  done
-  if [[ ${#missing[@]} -gt 0 ]]; then
-    echo "缺产品数据：" >&2
-    printf '  %s\n' "${missing[@]}" >&2
-    echo "跑 tools/release/data-fetch.sh 下载；开发自测只用样例词库加 --sample-data" >&2
-    exit 1
-  fi
+  tools/release/data-fetch.sh
 fi
 # 构建标识进「关于」页与诊断信息：git 短哈希（工作区有改动加 +）与日期；编译期 option_env! 读
 GIT_REV="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
 if [[ -n "$(git status --porcelain 2>/dev/null)" ]]; then GIT_REV="${GIT_REV}+"; fi
 QINGJIAN_BUILD="${GIT_REV} · $(date +%Y-%m-%d)"
 export QINGJIAN_BUILD
-BUILD_ARGS=(-p "$BIN_NAME" -p qingjian-settings --locked)
+BUILD_ARGS=(-p "$BIN_NAME" -p qingjian-settings -p qingjian-clipboard-app --locked)
 [[ "$PROFILE" == "release" ]] && BUILD_ARGS+=(--release)
 BIN_DIR="target/$PROFILE"
 if [[ -n "$TARGET" ]]; then
@@ -113,90 +99,37 @@ if [[ "$SETTINGS_VERSION" == *-dev ]]; then SETTINGS_VERSION="${SETTINGS_VERSION
 cp apps/macos/scripts/uninstall.sh "$APP/Contents/Resources/uninstall.sh"
 # 输入源名字按系统语言本地化（中文系统显示「青简」，其他显示 Qingjian）
 cp -R apps/macos/resources/*.lproj "$APP/Contents/Resources/"
-# 词库与释义表打进 Resources：产品数据（自建词库 + 语言模型 + LLM 释义表）在下面拷，assets/sample/ 的样例一直带着
-cp assets/sample/*.tsv "$APP/Contents/Resources/"
 # emoji 表（Unicode CLDR，可发布）
 cp assets/emoji/*.tsv "$APP/Contents/Resources/"
 # 词汇等级表（CEFR-J / Octanove / JLPT，见 assets/levels/README.md），「统计」页按级数词汇
 cp assets/levels/levels-*.tsv "$APP/Contents/Resources/"
-# 随包形码方案（五笔，见 assets/schemes/wubi86/README.md；极点 86 码表，Apache-2.0）：每套只拷 scheme.toml 与码表
-for scheme in assets/schemes/*/; do
-  name=$(basename "$scheme")
-  mkdir -p "$APP/Contents/Resources/schemes/$name"
-  cp "$scheme"scheme.toml "$scheme"table.tsv "$APP/Contents/Resources/schemes/$name/"
-done
 if [[ "$SAMPLE_DATA" == 0 ]]; then
-  # 词库与语言模型打成 .qj（mmap 直接用），TSV 比 .qj 新时重新打包；只有 .qj（CI 从数据包解出来的）就直接用
-  # dict-cleaned.tsv 是青简词库已清洗的部分，pack dict 缺省与 dict.tsv 合成一份
-  if [[ -f data/generated/dict.tsv && ( ! -f data/generated/dict.qj || data/generated/dict.tsv -nt data/generated/dict.qj \
-        || ( -f data/generated/dict-cleaned.tsv && data/generated/dict-cleaned.tsv -nt data/generated/dict.qj ) ) ]]; then
-    cargo run --release -q -p qingjian-dict-convert -- pack dict --name "青简基础词库" \
-      --license "MIT AND Unicode-3.0 AND GPL-3.0-or-later" --attribution "通用规范汉字表；现代汉语常用词表（liuxilu 校对版）；THUOCL（清华大学自然语言处理实验室，MIT）；读音 Unihan（Unicode）；青简词库（GPL-3.0-or-later）" \
-      --source https://github.com/qingjian-team/qingjian/tree/main/assets/lexicon
-  fi
-  if [[ -f data/generated/lm-bigram.tsv && ( ! -f data/generated/lm.qj || data/generated/lm-bigram.tsv -nt data/generated/lm.qj ) ]]; then
-    cargo run --release -q -p qingjian-dict-convert -- pack lm --name "青简语言模型（中文维基 + LCCC，青简词库分词）" \
-      --license "CC-BY-SA-4.0 AND MIT" --attribution "中文维基百科（CC BY-SA 4.0）；LCCC（清华大学 CoAI，MIT）"
-  fi
-  cp data/generated/dict.qj "$APP/Contents/Resources/"
-  # 领域词库（lexicon 拆出的 dicts/*.qj）随包放 Resources/dicts/，缺省只开成语，偏好设置「词库」页可勾选
-  if ls data/generated/dicts/*.qj >/dev/null 2>&1; then
-    mkdir -p "$APP/Contents/Resources/dicts"
-    cp data/generated/dicts/*.qj "$APP/Contents/Resources/dicts/"
-  fi
-  [[ -f data/generated/lm.qj ]] && cp data/generated/lm.qj "$APP/Contents/Resources/"
-  # 随包辅码码表（笔画，CNS11643 筆順資料派生，需署名）放 Resources/codes/，与 Windows 的 data\generated\codes 同一份
-  if ls data/generated/codes/*.qj >/dev/null 2>&1; then
-    mkdir -p "$APP/Contents/Resources/codes"
-    cp data/generated/codes/*.qj assets/stroke/LICENSE-CNS11643.txt "$APP/Contents/Resources/codes/"
-  fi
+  # 语言模型按 models.lock 从模型仓库取（data-fetch.sh）
+  cp data/generated/lm.qj "$APP/Contents/Resources/"
+  # 随包词库（基础词库、通用扩展词库、成语词库、英文词表与音标表、英语与中文释义表、越南语词表与对照、五笔与笔画码表）：dicts.lock 里列的逐本拷，附加词库放 Resources/dicts/、形码方案放 Resources/schemes/、辅码码表放 Resources/codes/。
+  # 别的词库与释义表在设置里下载到用户目录，不随包
+  while read -r _ _ _ installed; do
+    mkdir -p "$(dirname "$APP/Contents/Resources/$installed")"
+    cp "data/generated/$installed" "$APP/Contents/Resources/$installed"
+  done < <(grep -v '^#' tools/release/dicts.lock)
+  # 笔画码表派生自 CNS11643 筆順資料，许可要求随数据带上原文
+  cp assets/stroke/LICENSE-CNS11643.txt "$APP/Contents/Resources/codes/"
   # 本地整句模型不随包：缺省不用模型，含章·通变与知意都在设置的「实验功能」里下载到用户目录 models/
-  # 释义表打成 .qj（TSV 比 .qj 新时重打），英文词表仍是 TSV。各表来源不同，元数据按表写（见 assets/glossary/README.md）
-  for lang in en ja zh es vi de; do
-    src="assets/glossary/glossary-$lang.tsv"
-    out="data/generated/glossary-$lang.qj"
-    if [[ ! -f "$src" ]]; then
-      cp "$out" "$APP/Contents/Resources/"
-      continue
-    fi
-    if [[ "$lang" == es ]]; then
-      license="GPL-3.0-or-later"
-      attribution="Azure Translator 机器翻译（Tofuzhu，tools/corpus/glossary_es.py）"
-    elif [[ "$lang" == vi ]]; then
-      license="GPL-3.0-or-later"
-      attribution="LLM 生成（gpt-5.5），qingjian-gloss-gen"
-    elif [[ "$lang" == de ]]; then
-      license="GPL-3.0-or-later"
-      attribution="LLM 生成（DeepSeek），qingjian-gloss-gen"
-    else
-      license="MIT"
-      attribution="LLM 生成（DeepSeek），qingjian-gloss-gen"
-    fi
-    if [[ ! -f "$out" || "$src" -nt "$out" ]]; then
-      cargo run --release -q -p qingjian-dict-convert -- pack glossary --language "$lang" --input "$src" \
-        --name "青简释义表（${lang}）" --license "$license" --attribution "$attribution"
-    fi
-    cp "$out" "$APP/Contents/Resources/"
-  done
-  for f in assets/lexicon/english.tsv data/generated/english.tsv; do
-    [[ -f "$f" ]] && cp "$f" "$APP/Contents/Resources/"
-  done
-  echo "使用 data/generated/ 的产品数据（自建词库）"
+  echo "使用 data/generated/ 的产品数据"
 else
+  # 样例只在这里带：和产品数据同放会被当成随包的表，不随包、该下载的释义表就会退到几行的样例上
+  cp assets/sample/*.tsv "$APP/Contents/Resources/"
   echo "只带样例词库（--sample-data），不是可分发的包"
 fi
 printf 'APPL????' > "$APP/Contents/PkgInfo"
 
 # 图标：应用图标从 assets/icon/macos/app.png 生成 .icns；输入法菜单图标直接用 assets/icon/menu.pdf（矢量，随 Info.plist 的 TISIconIsTemplate 按深浅色反色）
-ICONSET="$ROOT/target/Qingjian.iconset"
-rm -rf "$ICONSET" && mkdir -p "$ICONSET"
-for size in 16 32 128 256 512; do
-  sips -z $size $size assets/icon/macos/app.png --out "$ICONSET/icon_${size}x${size}.png" >/dev/null
-  double=$((size * 2))
-  sips -z $double $double assets/icon/macos/app.png --out "$ICONSET/icon_${size}x${size}@2x.png" >/dev/null
-done
-iconutil -c icns "$ICONSET" -o "$APP/Contents/Resources/Qingjian.icns"
+apps/macos/scripts/make-icns.sh "$APP/Contents/Resources/Qingjian.icns"
 cp "$APP/Contents/Resources/Qingjian.icns" "$SETTINGS_APP/Contents/Resources/Qingjian.icns"
+# 青简剪贴板（实验功能）也是独立的 .app：常驻菜单栏，输入法按配置用 open 拉起它（apps/macos/src/host/clipboard_process.rs）。
+# 与剪贴板单独打包共用 assemble.sh
+apps/clipboard/macos/assemble.sh "$BIN_DIR/qingjian-clipboard" "$APP/Contents/Applications/QingjianClipboard.app" \
+  "$BUILD_NUMBER" "$APP/Contents/Resources/Qingjian.icns" >/dev/null
 cp assets/icon/menu.pdf "$APP/Contents/Resources/qingjian-menu.pdf"
 # 仓库放在 iCloud 同步的目录（Documents）时新建的 .app 会带上 Finder 扩展属性，codesign 会拒（detritus not allowed）：签名前清掉
 xattr -cr "$APP"
@@ -273,6 +206,8 @@ if [[ "$MODE" == "--install" ]]; then
   # 系统会在下次切换到该输入法时重新拉起进程
   pkill -x "$BIN_NAME" 2>/dev/null || true
   pkill -x qingjian-settings 2>/dev/null || true
+  # 剪贴板开着的话，输入法下次套用配置时用新版拉起来
+  pkill -x qingjian-clipboard 2>/dev/null || true
   rm -rf "$INSTALL_DIR/$APP_NAME.app"
   mv "$STAGING" "$INSTALL_DIR/$APP_NAME.app"
   forget_bundle "$APP"

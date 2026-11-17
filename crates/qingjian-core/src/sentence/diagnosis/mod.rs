@@ -160,7 +160,7 @@ where
                     let next = states.entry((end, offset + length)).or_default();
                     for (previous, partial) in &here {
                         let context = if start == 0 {
-                            Context::START
+                            input.context
                         } else {
                             Context {
                                 previous: Some(previous.as_str()),
@@ -200,7 +200,7 @@ where
                                 hit.text.clone(),
                                 Partial {
                                     parts,
-                                    earlier: (start > 0).then(|| previous.clone()),
+                                    earlier: context.previous.map(str::to_owned),
                                     worst,
                                 },
                             );

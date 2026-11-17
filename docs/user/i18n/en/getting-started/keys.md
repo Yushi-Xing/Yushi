@@ -11,8 +11,8 @@ For keys you can change, see [Changing keys](../personalize/keys-settings.md); A
 
 | Action | macOS | Windows | Linux |
 |---|---|---|---|
-| Switch Chinese / English | `Caps Lock`; after ticking 单击 Shift (Tap Shift) under 切换键 (Switch key) in 设置 → 中英文 (Settings → Chinese/English), also a tap of `Shift` (`Caps Lock` then only controls capitals). A 中 / 英 hint flashes in the top-right corner of the screen when you switch | Tap `Shift`; the system's `Ctrl + Space`; click 中 / 英 on the taskbar or the floating status bar | Tap `Shift` |
-| Type uppercase English directly | Hold `⇧` in English mode | `Caps Lock` on (in either mode) | `Caps Lock` on |
+| Switch Chinese / English | `Caps Lock`; after ticking 单击 Shift (Tap Shift) under 切换键 (Switch key) in 设置 → 中英文 (Settings → Chinese/English), also a tap of `Shift` (`Caps Lock` then only controls capitals). A 中 / 英 (or 越 when a third input method is enabled) hint flashes in the top-right corner of the screen when you switch | Tap `Shift`; the system's `Ctrl + Space`; click 中 / 英 on the taskbar or the floating status bar | Tap `Shift` |
+| Type uppercase English directly | Hold `⇧` in English mode; with Tap Shift ticked or 中英文切换 (Chinese/English switching) turned off, `Caps Lock` on also types capitals | `Caps Lock` on (in either mode) | `Caps Lock` on |
 | Type one capital letter while typing pinyin | `⇧ + letter` | `Shift + letter` | `Shift + letter` |
 | Switch full-width / half-width punctuation | `⌃ + .` can be enabled (off by default) | Click the ，。 cell on the floating status bar; `Ctrl + .` can be enabled (off by default) | — |
 | Switch Simplified / Traditional output | — | `Ctrl + Shift + F` can be enabled (off by default) | — |
@@ -35,6 +35,8 @@ On Windows and Linux, the Chinese / English switch can also be a tap of `Ctrl` o
 | Delete the syllable before the cursor | `⌥ + Backspace` | — | — |
 | Delete all pinyin before the cursor | `⌘ + Backspace` | — | — |
 | Clear | `Esc` | `Esc` | `Esc` |
+| List only single characters (press again to go back; normal candidates return after you commit; can be changed or turned off in Settings) | — | `Ctrl + D` | — |
+| Next word: keep the first word of the top sentence and list choices for the next word (can be changed or turned off in Settings) | — | `Ctrl + V` | — |
 | Move the highlight (pages automatically at the edge) | `↑` / `↓` | `↑` / `↓` | `↑` / `↓` |
 | Page | `[` `]`, `PageUp` / `PageDown`, `⇧ + Tab` (previous page); click the arrows beside the page number | `[` `]`, `PageUp` / `PageDown`, `Shift + Tab` (previous page); click the arrows beside the page number, or scroll the mouse wheel over the candidates | `[` `]`, `PageUp` / `PageDown`, `Shift + Tab` (previous page) |
 | Accept the AI sentence completion (next page if there is none) | `Tab` | `Tab` | `Tab` |
@@ -51,18 +53,33 @@ On Windows, numpad digits also pick candidates by default. Set 小键盘数字 (
 When the cursor is in the middle of the pinyin, candidates are based only on the pinyin before the cursor (`ni|hao` gives 你); after committing, the rest of the pinyin stays and the cursor moves to the end.
 A few keys differ with Dachen Zhuyin and Wubi; see [Pinyin schemes and fuzzy pinyin](../input/fuzzy-and-shuangpin.md#Dachen-Zhuyin) and [Wubi and mixed input](../input/wubi.md).
 
+## Pure Wubi
+
+| Action | macOS, Windows, Linux |
+|---|---|
+| Commit highlighted candidate / candidate N | `Space` / `1` to `9` |
+| Auto-commit a unique full code | On by default; can be disabled in Settings |
+| Type another letter after a full code | Commit the highlight and start the next code; commit-on-next-code can be disabled |
+| Clear an unmatched code / keep raw letters | `Space` or punctuation clears it; `Enter` commits raw letters |
+
+Automatic commits apply only to pure shape-based input, not mixed input. See [Wubi and mixed input](../input/wubi.md).
+
 ## In the symbol panel
 
 | Action | Keys |
 |---|---|
 | Move | `↑` `↓` `←` `→` |
-| Switch between the Search / Symbols / Emoji groups | `Tab` / `⇧ + Tab` |
+| Switch between the Translate / Search / Symbols / Emoji groups | `Tab` / `⇧ + Tab` |
 | Switch category | `[` `]` |
 | Scroll a screen | `PageUp` / `PageDown` |
 | Commit | `Space`, `Enter`, a number key or double-click |
 | Back to candidates | `Esc`, `Backspace` or the ✕ at the top right |
 
 Typing a letter closes the panel and continues typing. Details in [Punctuation, symbols and emoji](../input/punctuation.md#Symbol-panel).
+
+The Translate group works differently: letters type pinyin as usual, `Space` / number keys put words into the box, `[` `]` switch the target language, `Enter` commits the translation, `Esc` clears the box (with an empty box it goes back to the candidates), and `Backspace` deletes pinyin first, then the character before the cursor.
+While typing pinyin, `←` `→` move the candidate highlight; otherwise `←` `→`, `Home` and `End` move the cursor in the box (with `Shift` held they select), `⌘ + A` (`Ctrl + A` on Windows) selects all, and `Delete` removes the selection or the character after the cursor; clicking in the box places the cursor and dragging selects.
+Details in [Translating in the symbol panel](../cloud/question-and-translate.md#Translating-in-the-symbol-panel).
 
 ## In English mode
 
@@ -93,6 +110,7 @@ All of these require AI services to be turned on first; see [AI services](../clo
 | Translation result: replace the selection | `Enter` / `Space` / `1` | Same | Same |
 | Translation result: keep the original | `Esc` | `Esc` | `Esc` |
 | Ask for AI candidates manually while typing pinyin | `⌃⌥J` | `Ctrl + Alt + J` | `Ctrl + Alt + J` |
+| Open the Translate group of the symbol panel when not typing | `⌃⌥Y` | `Ctrl + Alt + Y` | — |
 | Ask about a character | `u`, then type pinyin | Same | Same |
 
 ## Prefixes

@@ -22,6 +22,9 @@ pub struct ShortcutConfig {
     /// 候选高亮由 `↑` / `↓` 还是 `←` / `→` 移动（Windows 用）。详见 [`HighlightKeys`]。
     pub highlight_keys: HighlightKeys,
 
+    /// 候选中额外启用 Ctrl + F / B / N / P / A / E 导航（macOS）。
+    pub extra_candidate_navigation: bool,
+
     /// 切换当前中英模式的全 / 半角标点（macOS 只切中文模式的），空串禁用，例如 `ctrl+.`。
     #[serde(with = "super::optional_key_combo")]
     pub toggle_punctuation: Option<KeyCombo>,
@@ -35,16 +38,35 @@ pub struct ShortcutConfig {
     /// 数字键配这些修饰键：上屏候选的第二个译词（候选右侧有两个译词时）。
     pub translation_second: Modifiers,
 
+    /// macOS：回车优先上屏高亮候选的第一条非中文译词；没有可用译词时仍走原回车逻辑。
+    pub enter_translation: bool,
+
     /// 把应用里选中的文字译成学习语言（需要云服务开着）。
     pub translate_selection: KeyCombo,
 
     /// 组句中按需调用 AI（缺省 Ctrl+Alt+J，macOS 是 ⌃⌥J）。
     pub predict: KeyCombo,
 
+    /// 没在打字时打开符号面板的翻译组（缺省 Ctrl+Alt+Y，macOS 是 ⌃⌥Y；需要云服务开着）。
+    pub translate_panel: KeyCombo,
+
+    /// 呼出剪贴板面板（实验功能，Windows 用），见 [`super::ClipboardConfig`]。
+    pub clipboard: KeyCombo,
+
     /// 在简体与上次用的繁体字形之间切换（Windows 用），空串禁用（缺省），例如 `ctrl+shift+f`。
     /// 缺省不开：只要青简是当前输入法，这个组合在所有应用里都会被拿走，编辑器的「在文件中查找」也用它。
     #[serde(with = "super::optional_key_combo")]
     pub toggle_traditional: Option<KeyCombo>,
+
+    /// 组句中切换单字模式（Windows 用，#848）：候选只留单字，再按一次恢复，上屏完自动回到正常候选。
+    /// 空串禁用。只在组句时拿走这个组合，没在打字时应用照常收到（缺省 Ctrl + D 不影响书签、复制行）。
+    #[serde(with = "super::optional_key_combo")]
+    pub single_chars: Option<KeyCombo>,
+
+    /// 组句中按词跳（Windows 用）：首选整句的第一个词先定下来，候选换成从下一个词起的，改长句中间的词不用挪光标。
+    /// 空串禁用。只在组句时拿走这个组合（缺省 Ctrl + V，没在打字时照常粘贴）。
+    #[serde(with = "super::optional_key_combo")]
+    pub next_word: Option<KeyCombo>,
 
     /// 组句时上屏高亮候选的键（Windows、Linux 用），缺省不带 Shift 的空格。详见 [`CommitKey`]。
     pub commit_candidate: CommitKey,
@@ -75,13 +97,19 @@ impl Default for ShortcutConfig {
             mode: ModeKeys::default(),
             switch_mode: SwitchKeys::default(),
             highlight_keys: HighlightKeys::UpDown,
+            extra_candidate_navigation: false,
             toggle_punctuation: None,
             extra_page_keys: PageKeys::default(),
             translation,
             translation_second,
+            enter_translation: false,
             translate_selection,
             predict: KeyCombo::PREDICT_DEFAULT,
+            translate_panel: KeyCombo::TRANSLATE_PANEL_DEFAULT,
+            clipboard: KeyCombo::CLIPBOARD_DEFAULT,
             toggle_traditional: None,
+            single_chars: Some(KeyCombo::SINGLE_CHARS_DEFAULT),
+            next_word: Some(KeyCombo::NEXT_WORD_DEFAULT),
             commit_candidate: CommitKey::SPACE,
             commit_raw: CommitKey::ENTER,
         }
@@ -118,6 +146,22 @@ impl ShortcutConfig {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn enter_translation_defaults_off_and_round_trips() {
+        let old: ShortcutConfig = toml::from_str("expression = 'i'").unwrap();
+        assert!(!old.enter_translation);
+        for enabled in [false, true] {
+            let config: ShortcutConfig =
+                toml::from_str(&format!("enter_translation = {enabled}")).unwrap();
+            let restored: ShortcutConfig =
+                toml::from_str(&toml::to_string(&config).unwrap()).unwrap();
+            assert_eq!(restored.enter_translation, enabled);
+            assert_eq!(restored.commit_raw, old.commit_raw);
+            assert_eq!(restored.commit_candidate, old.commit_candidate);
+        }
+        assert!(toml::from_str::<ShortcutConfig>("enter_translation = 'yes'").is_err());
+    }
 
     #[test]
     fn optional_punctuation_and_extra_page_keys_round_trip() {
@@ -163,6 +207,33 @@ mod tests {
     }
 
     #[test]
+    fn single_chars_shortcut_defaults_on_and_can_be_disabled() {
+        let default: ShortcutConfig = toml::from_str("").unwrap();
+        assert_eq!(default.single_chars, Some(KeyCombo::SINGLE_CHARS_DEFAULT));
+        for text in ["", "ctrl+d", "ctrl+shift+d"] {
+            let config: ShortcutConfig =
+                toml::from_str(&format!("single_chars = {text:?}")).unwrap();
+            let restored: ShortcutConfig =
+                toml::from_str(&toml::to_string(&config).unwrap()).unwrap();
+            assert_eq!(restored.single_chars, config.single_chars);
+            assert_eq!(config.single_chars.is_none(), text.is_empty());
+        }
+    }
+
+    #[test]
+    fn next_word_shortcut_defaults_to_ctrl_v_and_can_be_disabled() {
+        let default: ShortcutConfig = toml::from_str("").unwrap();
+        assert_eq!(default.next_word, Some(KeyCombo::NEXT_WORD_DEFAULT));
+        for text in ["", "ctrl+v", "ctrl+shift+j"] {
+            let config: ShortcutConfig = toml::from_str(&format!("next_word = {text:?}")).unwrap();
+            let restored: ShortcutConfig =
+                toml::from_str(&toml::to_string(&config).unwrap()).unwrap();
+            assert_eq!(restored.next_word, config.next_word);
+            assert_eq!(config.next_word.is_none(), text.is_empty());
+        }
+    }
+
+    #[test]
     fn old_files_without_modifier_keys_still_parse_and_get_defaults() {
         // 缺省值分平台（Windows 用 Ctrl 系、其余用 Option 系），断言跟着平台的 Default 走
         let default = ShortcutConfig::default();
@@ -193,6 +264,21 @@ mod tests {
         assert_eq!(off.switch_mode, crate::SwitchKeys::NONE);
         let missing: ShortcutConfig = toml::from_str("").unwrap();
         assert_eq!(missing.switch_mode, SwitchKeys::default());
+    }
+
+    #[test]
+    fn extra_candidate_navigation_defaults_and_round_trips() {
+        let old: ShortcutConfig = toml::from_str("expression = 'i'").unwrap();
+        assert!(!old.extra_candidate_navigation);
+        for enabled in [false, true] {
+            let config: ShortcutConfig =
+                toml::from_str(&format!("extra_candidate_navigation = {enabled}")).unwrap();
+            assert_eq!(config.extra_candidate_navigation, enabled);
+            let restored: ShortcutConfig =
+                toml::from_str(&toml::to_string(&config).unwrap()).unwrap();
+            assert_eq!(restored.extra_candidate_navigation, enabled);
+        }
+        assert!(toml::from_str::<ShortcutConfig>("extra_candidate_navigation = 'yes'").is_err());
     }
 
     #[test]

@@ -1,7 +1,7 @@
 ---
 title: Pinyin schemes and fuzzy pinyin
 order: 5
-description: "Choosing full pinyin, one of nine double pinyin schemes or Dachen Zhuyin; turning on the nine fuzzy pinyin pairs and how they're ranked; how the double pinyin schemes differ, and key hints; keys for Dachen Zhuyin."
+description: "Choosing full pinyin, one of nine double pinyin schemes or Dachen Zhuyin; turning on the ten fuzzy pinyin pairs and your own rules, and how they're ranked; how the double pinyin schemes differ, and key hints; keys for Dachen Zhuyin."
 ---
 
 ## Choosing a scheme
@@ -19,25 +19,38 @@ Full pinyin, double pinyin and Zhuyin share the same dictionary, sentence conver
 ## A few spellings in full pinyin
 
 - `lue` / `nue` are equivalent to `lve` / `nve`; `v` after j / q / x / y is accepted too (`tiqv` → 提取), including with a final (`xvexi` → 学习, `jvan` → 卷, `yvn` → 云). The pinyin line spells ü the way Hanyu Pinyin does: `ü` after l and n (typing `lve` or `lue` shows `lüe`, `nv` shows `nü`), and `u` after j / q / x / y (typing `qv` shows `qu`, `jvan` shows `juan`). Pinyin decoded from shuangpin and the nine-key pinyin line are shown the same way.
-- 嗯 is typed as `en` by convention (`enen` → 嗯嗯); `ng` on its own also gives 嗯, but use `en` when it's joined to other pinyin.
+- 嗯 is typed as `en` by convention (`enen` → 嗯嗯); `ng` on its own also gives 嗯, but use `en` when it's joined to other pinyin. Likewise `hng` on its own gives 哼, and 噷 is among the candidates for `hm`.
+- In shuangpin, `ng` on its own (the neng keys in every scheme) keeps 能 first with 嗯 second.
 - `lo` shares its key sequence with `luo` and is treated as luo.
 
 ## Fuzzy pinyin
 
-Nine pairs: z/zh, c/ch, s/sh, n/l, f/h, l/r, an/ang, en/eng, in/ing. All are off by default.
+Ten pairs: z/zh, c/ch, s/sh, n/l, f/h, l/r, an/ang, en/eng, in/ing, eng/ong. All are off by default.
 
 Tick them under 设置 → 输入 → 模糊音 (Settings → Input → Fuzzy pinyin); on macOS you can also tick them in the 模糊音 (Fuzzy pinyin) submenu of the input method menu. With z/zh on, `zi` also gives 知 / 之; with f/h on, `kaiha` also gives 开发.
-Words matching what you actually typed still come first, followed by fuzzy matches. The three final pairs only apply to complete syllables. Not available when Pinyin is set to Off.
+Words matching what you actually typed still come first, followed by fuzzy matches. The four final pairs only apply to complete syllables. Not available when Pinyin is set to Off.
+
+### Custom rules
+
+You can add pairs beyond these ten: under 设置 → 输入 → 模糊音, write them in 自定义规则 (Custom rules) as sound=sound, separated by spaces, and press Enter.
+
+- Two initials: `zh=j`, so `ji` also gives 知.
+- Two finals: `ian=iang`, so `xian` also gives 想. Like the built-in final pairs, this only applies to complete syllables.
+- Two whole syllables: `fa=hua`, so `hua` also gives 发; other syllables aren't affected.
+
+Added rules appear after the ten above and can be ticked on or off at any time; delete one from the box to remove it. Anything that can't be read (an initial paired with a final, a misspelled syllable) isn't added, and a note says so. In the config file they're `custom` (all rules) and `custom_off` (the ones turned off) under `[fuzzy]`; see [Config file](../advanced/config-file.md).
 
 ## Double pinyin
 
 Nine schemes: Xiaohe, Ziranma, Microsoft, Sogou, Zhineng ABC, Xiaolang, Shoudao, Pinyin Jiajia, Ziguang.
 
-- By default both the app's input box and the pinyin line in the candidate window show the decoded full pinyin (`nihc` → `ni'hao`). 设置 → 输入 (Settings → Input) has two switches, one for each: with 输入框显示按键 (Show keys in the input box) on, the app's input box shows the keys you typed (`kdfa`); with 候选窗显示按键 (Show keys in the candidate window) on, the pinyin line in the candidate window shows the keys you typed. Turn both on to show keys in both places. 候选窗显示按键 is available on macOS and Windows.
+- By default both the app's input box and the pinyin line in the candidate window show the decoded full pinyin (`nihc` → `ni'hao`). 设置 → 输入 (Settings → Input) has two switches, one for each: with 输入框显示按键 (Show keys in the input box) on, the app's input box shows the keys you typed (`kdfa`); with 候选窗显示按键 (Show keys in the candidate window) on, the pinyin line in the candidate window shows the keys you typed. Turn both on to show keys in both places. 候选窗显示按键 is available on macOS and Windows. Typing habits are recorded by the decoded full pinyin.
 - Double pinyin supports fuzzy pinyin too. With s/sh on, `sd` in Ziranma / Microsoft / Sogou and `sl` in Xiaohe find 双.
 - When the whole input can't form a single complete syllable, it's read again as initials, one per key: Pinyin Jiajia `im` → 什么, `zm` → 怎么. Input that decodes normally is unaffected, and complete double pinyin codes still work as before.
 - Spelling mistakes aren't corrected in double pinyin.
 - In double pinyin, v / u / i are all syllable keys, so calculations and asking about characters start with `Shift + V` and `Shift + U` instead; see [Dates, calculations and special characters](shortcuts.md#Changing-the-prefix-letters).
+
+**Full pinyin too** (off by default): when turned on under 设置 → 输入 (Settings → Input), full pinyin works alongside the double pinyin scheme, and both styles can be mixed within one input. It suits a computer shared by double pinyin and full pinyin typists: both `nihao` and `nihc` give 你好, and `kaifh` (full pinyin first, double pinyin second) gives 开发. When both readings cover the whole input, their sentence scores decide the order rather than always putting the double pinyin reading first; with the switch off, only the chosen scheme is read.
 
 How the schemes differ:
 
@@ -50,7 +63,7 @@ How the schemes differ:
 - **Pinyin Jiajia**: the retroflex initials are `v` for zh, `u` for ch and `i` for sh (ch / sh are the reverse of Xiaohe and Ziranma); frequent finals sit on the home row: ai→S, ao→D, an→F, ang→G, ei→W, en→R, eng→T, with ing on `q`; ü is on `v` (`nv` 女, `lv` 绿) and üe on `x` (`jx` → jue, `nx` → nüe); zero-initial syllables are mainly doubled (`aa` `as` `af`, `ee` `er` `eq`, `oo` `op`; note that en is `er` and er is `eq`), with the o prefix also accepted (`oa` `oe`); the `;` key isn't used.
 - **Ziguang**: the retroflex initials are `u` for zh, `a` for ch and `i` for sh (`ui` → zhi, `ai` → chi, `ii` → shi; `a` and `i` double as finals); `;` is ing; ü is on `v` (`nv` 女, `lv` 绿), and üe shares `n` with ue and ui (`jn` → jue, `yn` → yue, `gn` → gui); zero-initial syllables are only `o` + the final key, with neither doubled vowels (`aa` is cha) nor doubled finals `ii` `uu` (those are shi and zhu).
 
-If a layout doesn't suit your hands, or the scheme you want isn't listed, you can make your own; see [Custom schemes and code tables](../advanced/custom-schemes.md#Custom-double-pinyin-schemes) (macOS, Windows).
+If a layout doesn't suit your hands, or the scheme you want isn't listed, you can make your own; see [Custom schemes and code tables](../advanced/custom-schemes.md#Custom-double-pinyin-schemes) (macOS, Windows, Linux).
 
 ### Key hints
 
@@ -61,7 +74,7 @@ Choose under 键位提示 (Key hints) in 设置 → 输入 (Settings → Input):
 - **卡住时显示 (When stuck)**: appears only when you pause partway through or type a key that can't form a syllable, so you won't see it while typing smoothly. Once it appears it stays for the rest of that input and closes after you commit.
 - **一直显示 (Always)**: shown the whole time you're typing.
 
-键位提示大小 (Key hint size) and 键位提示透明度 (Key hint opacity) set the keyboard's size and transparency. The keyboard is placed on the side of the candidate window facing away from the cursor so it doesn't cover the line you're typing; if it doesn't fit anywhere, it isn't shown that time.
+键位提示大小 (Key hint size) and 键位提示不透明度 (Key hint opacity) set the keyboard's size and opacity. The keyboard is placed on the side of the candidate window facing away from the cursor so it doesn't cover the line you're typing; if it doesn't fit anywhere, it isn't shown that time.
 Supported on macOS and Windows; on Windows, the candidate window must be drawn by Qingjian's renderer (the default). Wubi's radical chart uses the same settings; see [Wubi and mixed input](wubi.md#Radical-chart).
 
 ## Dachen Zhuyin

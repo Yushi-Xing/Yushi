@@ -36,8 +36,8 @@ impl TextService_Impl {
                 .shared
                 .candidates
                 .update(&response.frame, context.as_ref());
-            self.shared.set_composing(!response.frame.is_empty());
-            if response.commit.is_some() || response.frame.is_empty() {
+            self.shared.follow_frame(&response.frame);
+            if response.commit.is_some() || response.caret.is_some() || response.frame.is_empty() {
                 let Some(context) = context else {
                     continue;
                 };
@@ -53,6 +53,7 @@ impl TextService_Impl {
                     self.shared.clone(),
                     response.commit,
                     preedit,
+                    response.caret,
                 ) {
                     log(&format!("宿主选词编辑会话失败: {error}"));
                 }

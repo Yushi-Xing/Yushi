@@ -8,19 +8,23 @@
       3) 找 ISCC.exe（PATH 或常见安装位置）；
       4) iscc /DAppVersion=<版本> 编脚本，成品在 target\installer\qingjian-<版本>-windows-x86_64-setup.exe。
     随包数据（.qj / .tsv）直接由 .iss 从仓库 data\generated 与 assets 里取，不另建暂存目录；
-    产品数据缺省全带，编译前先查一遍，缺了就停（tools\release\data-fetch.sh 按 data.lock 下载）。
+    语言模型每次按 tools\release\models.lock 从模型仓库取，随包词库与码表按 dicts.lock 从词库仓库取（已下过的只核对），
+    编译前再查一遍文件齐不齐，缺了就停。
     uiAccess 跟着 -Sign 走，不用手设 QINGJIAN_UIACCESS（见 -Sign）。
 .PARAMETER SkipBuild
     跳过 cargo build（数据或 .iss 改了、二进制没变时重编安装包用）。
+.PARAMETER IncludeLegacySettings
+    另带旧版 WinUI 设置和自包含 Windows App Runtime；标准包只带共享设置程序。
 .PARAMETER Sign
     自签产物（sign-local.ps1）并开 uiAccess（候选窗才能盖过商店 / 任务栏搜索）。uiAccess=true 的 exe 要本机受信任的签名
     才准启动，自签证书只有编译机信任——所以 -Sign 只用于本机真机测，对外分发的包不加此开关：不签名、关 uiAccess，
     候选窗在那几个系统界面里会被盖住，但任何机器都能起。
 #>
 [CmdletBinding()]
-param([switch]$SkipBuild, [switch]$Sign)
+param([switch]$SkipBuild, [switch]$Sign, [switch]$IncludeLegacySettings)
 
 $ErrorActionPreference = 'Stop'
+$python = if ($env:PYTHON) { $env:PYTHON } else { 'python' }
 
 # 仓库根：本脚本在 apps\windows\installer 下，往上三层是 ime\。
 $Repo = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
@@ -34,26 +38,52 @@ if ($Sign) {
     Write-Host 'uiAccess=0（对外分发：Server 任何机器都能起；候选窗在商店 / 任务栏搜索里可能被盖）' -ForegroundColor Cyan
 }
 
-# 0) 产品数据缺一样就停：与 .iss 的 [Files] 和 data-bundle.sh 的数据包一致，免得编译几分钟后才在 iscc 那步报错，
+# 0) 产品数据缺一样就停：与 .iss 的 [Files] 一致，免得编译几分钟后才在 iscc 那步报错，
 #    更免得少了码表的包照样能装（以前它标了 skipifsourcedoesntexist，缺了也悄悄打包）。本地整句模型不随包。
+& $python (Join-Path $Repo 'tools\release\models-fetch.py')
+if ($LASTEXITCODE -ne 0) { throw "取随包模型失败（退出码 $LASTEXITCODE）" }
+& $python (Join-Path $Repo 'tools\release\dicts-fetch.py')
+if ($LASTEXITCODE -ne 0) { throw "取随包词库失败（退出码 $LASTEXITCODE）" }
 $data = @(
     'data\generated\dict.qj',
     'data\generated\lm.qj',
-    'data\generated\english.tsv',
-    'data\generated\dicts\*.qj',
+    'data\generated\glossary-en.qj',
+    'data\generated\glossary-zh.qj',
+    'data\generated\english.qj',
+    'data\generated\english-ipa.qj',
+    'data\generated\vietnamese.qj',
+    'data\generated\vietnamese-chinese.qj',
+    'data\generated\dicts\idioms.qj',
+    'data\generated\dicts\general.qj',
+    'data\generated\schemes\wubi86.qj',
     'data\generated\codes\*.qj'
-) + ('en', 'ja', 'zh', 'es', 'vi', 'de' | ForEach-Object { "data\generated\glossary-$_.qj" })
+)
 $absent = @($data | Where-Object { -not (Test-Path (Join-Path $Repo $_)) })
 if ($absent.Count -gt 0) {
-    throw "缺产品数据：$($absent -join ', ')。先跑 tools\release\data-fetch.sh 下载（或从别的机器拷 data\generated）"
+    throw "缺产品数据：$($absent -join ', ')"
 }
 
-# 1) 构建产物：Server、DLL（64 / 32 位）、设置程序、旧版设置程序。
+# 1) 构建产物：Server、DLL（64 / 32 位）、共享设置程序与剪贴板；旧版设置按需加入。
 if (-not $SkipBuild) {
     Write-Host '构建 release 产物…' -ForegroundColor Cyan
     Push-Location $Repo
     try {
-        cargo build --release --locked -p qingjian-windows-server -p qingjian-windows-tsf -p qingjian-settings -p qingjian-windows-settings
+        # 先构建离线验证工具；体验回归失败时停止，不编译或打包产品。
+        cargo build --release --locked -p qingjian-cli
+        if ($LASTEXITCODE -ne 0) { throw "体验验证工具编译失败（退出码 $LASTEXITCODE）" }
+        $experienceOutput = Join-Path $Repo 'target\package-eval\experience'
+        if (Test-Path $experienceOutput) {
+            $archive = Join-Path $Repo 'target\experience-history'
+            New-Item -ItemType Directory -Path $archive -Force | Out-Null
+            Move-Item $experienceOutput (Join-Path $archive ([guid]::NewGuid().ToString('N')))
+        }
+        & $python (Join-Path $Repo 'tools\eval\experience.py') `
+            --binary (Join-Path $Repo 'target\release\qingjian-cli.exe') --output $experienceOutput
+        if ($LASTEXITCODE -ne 0) { throw "打字体验回归失败（退出码 $LASTEXITCODE）" }
+        $packages = @('qingjian-windows-server', 'qingjian-windows-tsf', 'qingjian-settings', 'qingjian-clipboard-app')
+        if ($IncludeLegacySettings) { $packages += 'qingjian-windows-settings' }
+        $packageArgs = @($packages | ForEach-Object { '-p'; $_ })
+        cargo build --release --locked @packageArgs
         if ($LASTEXITCODE -ne 0) { throw "cargo build 失败（退出码 $LASTEXITCODE）" }
         cargo build --release --locked -p qingjian-windows-tsf --target i686-pc-windows-msvc
         if ($LASTEXITCODE -ne 0) { throw "32 位 DLL cargo build 失败（退出码 $LASTEXITCODE）" }
@@ -66,8 +96,9 @@ $targets = @(
     'i686-pc-windows-msvc\release\qingjian_tsf.dll',
     'release\qingjian-server.exe',
     'release\qingjian-settings.exe',
-    'release\qingjian-settings-legacy.exe'
+    'release\qingjian-clipboard.exe'
 )
+if ($IncludeLegacySettings) { $targets += 'release\qingjian-settings-legacy.exe' }
 foreach ($t in $targets) {
     $p = Join-Path $Repo "target\$t"
     if (-not (Test-Path $p)) { throw "缺产物 $p，先跑一次不带 -SkipBuild 的构建" }
@@ -76,24 +107,26 @@ foreach ($t in $targets) {
 # 1.2) 自包含 Windows App Runtime：设置程序不再依赖机器上装的框架包（Windows 10 上框架依赖的引导用不了，
 #      见 apps\windows\settings\build.rs）。cargo 构建时 windows-reactor-setup 已按清单把运行时铺到
 #      target\release\，这里挑进暂存目录；target\release 里还有 deps\ 之类的中间产物，不能整个目录装。
-$runtimeStage = Join-Path $Repo 'target\installer\settings-runtime'
-$runtimeList  = Join-Path $PSScriptRoot 'settings-runtime.txt'
-# 清单是 UTF-8 且带中文注释：不指定编码时 PowerShell 5.1 按 GBK 读，注释末尾的字节会吞掉换行，紧跟其后的一项被当成注释漏掉。
-$wanted = Get-Content $runtimeList -Encoding UTF8 | Where-Object { $_ -and -not $_.StartsWith('#') } | ForEach-Object { $_.Trim() }
-if (Test-Path $runtimeStage) { Remove-Item $runtimeStage -Recurse -Force }
-New-Item -ItemType Directory -Path $runtimeStage -Force | Out-Null
-$missing = @()
-foreach ($name in $wanted) {
-    $src = Join-Path $Repo "target\release\$name"
-    if (Test-Path $src) {
-        Copy-Item $src -Destination (Join-Path $runtimeStage $name) -Recurse -Force
-    } else {
-        $missing += $name
+if ($IncludeLegacySettings) {
+    $runtimeStage = Join-Path $Repo 'target\installer\settings-runtime'
+    $runtimeList  = Join-Path $PSScriptRoot 'settings-runtime.txt'
+    # 清单是 UTF-8 且带中文注释：不指定编码时 PowerShell 5.1 按 GBK 读，注释末尾的字节会吞掉换行，紧跟其后的一项被当成注释漏掉。
+    $wanted = Get-Content $runtimeList -Encoding UTF8 | Where-Object { $_ -and -not $_.StartsWith('#') } | ForEach-Object { $_.Trim() }
+    if (Test-Path $runtimeStage) { Remove-Item $runtimeStage -Recurse -Force }
+    New-Item -ItemType Directory -Path $runtimeStage -Force | Out-Null
+    $missing = @()
+    foreach ($name in $wanted) {
+        $src = Join-Path $Repo "target\release\$name"
+        if (Test-Path $src) {
+            Copy-Item $src -Destination (Join-Path $runtimeStage $name) -Recurse -Force
+        } else {
+            $missing += $name
+        }
     }
+    # 缺文件说明自包含运行时没铺成功（build.rs 下载 NuGet 或解 MSIX 失败），早报错，别打出个跑不起来的包。
+    if ($missing.Count -gt 0) { throw "自包含 Windows App Runtime 缺 $($missing.Count) 项：$($missing -join ', ')" }
+    Write-Host "自包含运行时 $($wanted.Count) 项 → target\installer\settings-runtime" -ForegroundColor Cyan
 }
-# 缺文件说明自包含运行时没铺成功（build.rs 下载 NuGet 或解 MSIX 失败），早报错，别打出个跑不起来的包。
-if ($missing.Count -gt 0) { throw "自包含 Windows App Runtime 缺 $($missing.Count) 项：$($missing -join ', ')" }
-Write-Host "自包含运行时 $($wanted.Count) 项 → target\installer\settings-runtime" -ForegroundColor Cyan
 
 # 1.3) 知意（ONNX）的运行库 ONNX Runtime，装到 Server 旁边。
 & (Join-Path $PSScriptRoot 'fetch-onnxruntime.ps1')
@@ -147,8 +180,12 @@ if (-not $iscc) { throw '找不到 ISCC.exe：装 Inno Setup 7 或用 QINGJIAN_I
 Write-Host "用 $iscc" -ForegroundColor Cyan
 
 # 4) 编安装包。
-& $iscc "/DAppVersion=$Version" "/DAppVersionNumeric=$VersionNumeric" $Iss
+& $iscc "/DAppVersion=$Version" "/DAppVersionNumeric=$VersionNumeric" "/DIncludeLegacySettings=$([int][bool]$IncludeLegacySettings)" $Iss
 if ($LASTEXITCODE -ne 0) { throw "iscc 失败（退出码 $LASTEXITCODE）" }
 
 $out = Join-Path $Repo "target\installer\qingjian-$Version-windows-x86_64-setup.exe"
+$sizeArgs = @('--installer', $out, '--output', (Join-Path $Repo 'target\installer\package-size.json'))
+if ($IncludeLegacySettings) { $sizeArgs += '--include-legacy-settings' }
+& $python (Join-Path $Repo 'tools\release\windows-size.py') @sizeArgs
+if ($LASTEXITCODE -ne 0) { throw "安装包体积清单生成失败（退出码 $LASTEXITCODE）" }
 Write-Host "完成：$out" -ForegroundColor Green

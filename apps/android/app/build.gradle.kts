@@ -43,7 +43,15 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
+        debug {
+            // 手机上装着发版签名的包时并排装调试版（-PsideBySide），不用卸载、不丢数据
+            if (project.hasProperty("sideBySide")) applicationIdSuffix = ".dev"
+        }
         release {
             isMinifyEnabled = false
             if (releaseKeystore != null) signingConfig = signingConfigs.getByName("release")
@@ -93,23 +101,17 @@ val stageData by tasks.registering(Sync::class) {
     val hasGenerated = generated.resolve("dict.qj").isFile
     into(bundledAssets.map { it.dir("data") })
     if (hasGenerated) {
-        from(generated) {
-            // 学习语言可选，几门语言的释义表都带上（共约 65 MB）
-            include("dict.qj", "lm.qj", "glossary-*.qj", "english.tsv")
-        }
-        // 随包领域词库（与 PC 同一份），词库页里勾选
-        from(generated.resolve("dicts")) { into("dicts") }
+        // 随包词库按 tools/release/dicts.lock 从词库仓库取（data-fetch.sh 解到 data/generated/）；安卓没有越南语输入，不带越南语两本。
+        // 其他释义表与领域词库在设置里下载
+        from(generated) { include("dict.qj", "lm.qj", "glossary-en.qj", "glossary-zh.qj", "english.qj", "dicts/idioms.qj", "dicts/general.qj") }
+        // 五笔码表（形码方案用，与 PC 随包的同一本），放在数据目录顶层
+        from(generated.resolve("schemes")) { include("wubi86.qj") }
     } else {
         from(repoRoot.resolve("assets/sample")) { include("dict.tsv", "glossary-en.tsv", "english.tsv") }
     }
     from(repoRoot.resolve("assets/emoji")) { include("emoji-zh.tsv", "emoji-en.tsv") }
     // 词汇等级表（英语 CEFR、日语 JLPT），生词本按级筛与统计页按级分用
     from(repoRoot.resolve("assets/levels")) { include("levels-*.tsv") }
-    // 五笔码表（形码方案用，与 PC 随包的同一份），解出来仍叫 wubi86.tsv
-    from(repoRoot.resolve("assets/schemes/wubi86")) {
-        include("table.tsv")
-        rename { "wubi86.tsv" }
-    }
 }
 
 tasks.named("preBuild") {

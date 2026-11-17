@@ -23,6 +23,15 @@ impl Router {
         if self.focused != Some(session) {
             self.reset_composition();
             self.focused = Some(session);
+            let own_window = self
+                .sessions
+                .get(&session)
+                .is_none_or(|info| info.own_candidates);
+            self.engine.set_default_candidate_view(if own_window {
+                qingjian_core::CandidateView::Compact
+            } else {
+                qingjian_core::CandidateView::All
+            });
             let app = self.focused_app().map(str::to_owned);
             self.engine.set_application(app);
             let private = self.focused_private();
@@ -48,16 +57,10 @@ impl Router {
         }
         if self.focused == Some(session) {
             self.engine.set_private(private);
-            if private {
-                self.sentence_translation_cache = None;
-                self.engine.cancel_sentence_translation();
-                if let Some(super::Composed::Candidates {
-                    sentence_translation,
-                    ..
-                }) = &mut self.composed
-                {
-                    *sentence_translation = None;
-                }
+            if private && self.engine.panel_translating() {
+                self.close_panel();
+                self.recompose();
+                self.hide_candidate_window();
             }
         }
     }
@@ -67,19 +70,26 @@ impl Router {
         if self.focused != Some(session) {
             return None;
         }
-        let text = (!self.engine.composition().is_empty()).then(|| self.engine.take_raw());
+        let text = if !self.vietnamese.is_empty() {
+            Some(self.vietnamese.commit())
+        } else if !self.engine.composition().is_empty() {
+            Some(self.engine.take_raw())
+        } else {
+            None
+        };
         self.reset_composition();
         text
     }
 
     /// 清掉组句、展示状态、在飞的云联想与翻译评审，收起候选窗口。
     pub(super) fn reset_composition(&mut self) {
+        self.candidate_upward = false;
         self.engine.break_chain();
         self.engine.clear();
+        self.vietnamese.clear();
         self.cancel_prediction();
         self.stop_rescoring();
         self.composed = None;
-        self.sentence_translation_cache = None;
         self.grid = None;
         self.translation = None;
         self.pending_selection = None;

@@ -1,6 +1,10 @@
+mod code_words;
 mod decay;
 mod demotions;
 mod learner_impl;
+#[cfg(test)]
+mod phrase_tests;
+mod preferences;
 mod tables;
 
 use std::cell::Cell;
@@ -11,9 +15,10 @@ use foldhash::HashMap;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-use qingjian_core::sentence::{Context, UserNgram};
+use qingjian_core::sentence::UserNgram;
 use qingjian_core::storage::{read_text_lossy, write_atomic};
-use qingjian_core::{Candidate, Forgotten, Learner};
+#[cfg(test)]
+use qingjian_core::{Candidate, Learner, sentence::Context};
 use qingjian_dictionary::{Dictionary, WordList};
 
 use crate::error::LearningError;
@@ -36,7 +41,7 @@ const USER_DEMOTED_FILE: &str = "user-demoted.tsv";
 /// 一个词在一个输入串下最多降几次。
 const MAX_DEMOTION: u32 = 99;
 
-/// 个人英文词表文件名，与词频文件同目录：`词\t次数`（词按第一次敲的写法存）。
+/// 个人英文词表文件名，与词频文件同目录：`词\t次数`（词按最近一次敲的写法存）。
 const USER_ENGLISH_FILE: &str = "user-english.tsv";
 
 /// 个人敲错表文件名，与词频文件同目录：`敲的\t要的\t次数`（音节级，接受过的纠正）。
@@ -61,6 +66,8 @@ const RAW_MARK: &str = "<raw>";
 /// （`COLD_DAYS`），落盘时才连侧车一起清出。不改「一次误选翻不过静态证据」的封顶设计。
 #[derive(Debug)]
 pub struct FrequencyLearner {
+    /// 按形码方案隔离的用户词与编码，独立保存到 `user-code-words.tsv`。
+    code_words: code_words::CodeWords,
     /// 词 → 用户选择次数（带最近使用日）。
     counts: HashMap<String, Decay>,
 
@@ -74,7 +81,7 @@ pub struct FrequencyLearner {
     /// 自上次保存后是否有新记录。
     dirty: bool,
 
-    /// [`Learner::flush`] 时写回的路径；`None` 表示只在内存里学习。
+    /// [`qingjian_core::Learner::flush`] 时写回的路径；`None` 表示只在内存里学习。
     path: Option<PathBuf>,
 
     /// 用户词：词 → 全拼（空格分隔）。词库里没有、用户却选过的词（云联想接受的等）。
@@ -92,13 +99,21 @@ pub struct FrequencyLearner {
     /// 个人 n-gram 自上次保存后是否有变化。
     ngram_dirty: bool,
 
-    /// 输入串 → (词 → 在这个输入串下被选的次数)。读音键与字面键混在同一张表（见 [`Learner::record_choice`]）。
+    /// 输入串 → (词 → 在这个输入串下被选的次数)。读音键与字面键混在同一张表（见 [`qingjian_core::Learner::record_choice`]）。
     choices: HashMap<String, HashMap<String, u32>>,
 
     /// 按输入串记的选择自上次保存后是否有变化。
     choices_dirty: bool,
 
-    /// 个人英文词：小写编码 → (第一次敲的写法, 带衰减的次数)。回车原样上屏的英文词、选过的英文候选。
+    /// 原样输入最近选中的词，独立于累计次数，避免旧记录压住刚改选的候选。
+    preferences: BTreeMap<String, String>,
+
+    preferences_dirty: bool,
+
+    /// 只保留进程内最近的撤销信息；持久化文件只保存每个输入的最终偏好。
+    preference_undo: std::collections::VecDeque<(String, String, Option<String>)>,
+
+    /// 个人英文词：小写编码 → (最近一次敲的写法, 带衰减的次数)。回车原样上屏的英文词、选过的英文候选。
     english: BTreeMap<String, (String, Decay)>,
 
     /// 个人英文词组成的词表，随 `english` 重建。
@@ -123,6 +138,7 @@ pub struct FrequencyLearner {
 impl Default for FrequencyLearner {
     fn default() -> Self {
         Self {
+            code_words: code_words::CodeWords::default(),
             counts: HashMap::default(),
             half_life_days: DEFAULT_HALF_LIFE_DAYS,
             today: Cell::new(decay::today()),
@@ -135,6 +151,9 @@ impl Default for FrequencyLearner {
             ngram_dirty: false,
             choices: HashMap::default(),
             choices_dirty: false,
+            preferences: BTreeMap::default(),
+            preferences_dirty: false,
+            preference_undo: std::collections::VecDeque::new(),
             english: BTreeMap::default(),
             english_list: None,
             english_dirty: false,
@@ -202,7 +221,7 @@ impl FrequencyLearner {
         self.tick();
     }
 
-    /// 从文件加载，之后 [`Learner::flush`] 会写回同一个文件。
+    /// 从文件加载，之后 [`qingjian_core::Learner::flush`] 会写回同一个文件。
     /// 文件不存在时返回空表，而不是报错：首次运行没有用户数据是正常的。
     ///
     /// 各文件按行容错：格式不对的行（崩溃写坏、手改错了）记一条警告跳过，其余照读，下次落盘时就没了；
@@ -220,6 +239,10 @@ impl FrequencyLearner {
             learner.load_days(&source);
         }
         let words_path = Self::words_path(&path);
+        let code_words_path = path.with_file_name("user-code-words.tsv");
+        if let Some(source) = read_text_lossy(&code_words_path)? {
+            note_skipped(&code_words_path, learner.code_words.load(&source));
+        }
         if let Some(source) = read_text_lossy(&words_path)? {
             let skipped = learner.load_words(&source);
             note_skipped(&words_path, skipped);
@@ -234,6 +257,11 @@ impl FrequencyLearner {
         if let Some(source) = read_text_lossy(&choices_path)? {
             let skipped = learner.load_choices(&source);
             note_skipped(&choices_path, skipped);
+        }
+        let preferences_path = Self::preferences_path(&path);
+        if let Some(source) = read_text_lossy(&preferences_path)? {
+            let skipped = learner.load_preferences(&source);
+            note_skipped(&preferences_path, skipped);
         }
         let english_path = Self::english_path(&path);
         let english_mtime = decay::mtime_day(&english_path);
@@ -272,8 +300,10 @@ impl FrequencyLearner {
             frequency_path.to_path_buf(),
             Self::days_path(frequency_path),
             Self::words_path(frequency_path),
+            frequency_path.with_file_name("user-code-words.tsv"),
             Self::ngram_path(frequency_path),
             Self::choices_path(frequency_path),
+            Self::preferences_path(frequency_path),
             Self::english_path(frequency_path),
             Self::english_days_path(frequency_path),
             Self::typos_path(frequency_path),
@@ -334,10 +364,12 @@ impl FrequencyLearner {
     /// 有没有还没落盘的学习数据（任何一张表）。
     pub fn has_unsaved(&self) -> bool {
         self.dirty
+            || self.code_words.dirty
             || self.words_dirty
             || self.english_dirty
             || self.ngram_dirty
             || self.choices_dirty
+            || self.preferences_dirty
             || self.typos_dirty
             || self.demoted_dirty
     }

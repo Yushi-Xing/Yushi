@@ -1,6 +1,6 @@
-//! 附加词库：随包的领域词库（`Resources/dicts/`，按 `[dictionaries] domains` 挑）与用户目录 `dicts/` 下的 `.qj`（或 TSV）
-//! 文件（按 `[dictionaries] disabled` 过滤），加载后一起接到 Engine 上。
-//! 随包目录里的通用大词库（[`GENERAL_DICTIONARY`]）例外：缺省打开、列进 `disabled` 才关，标成补充词库（排序低主词库一档，见 `Dictionary::set_secondary`）。
+//! 附加词库：随包的领域词库（`Resources/dicts/`，按 `[dictionaries] domains` 挑）与用户目录里导入的、下载的 `.qj`（或 TSV）
+//! 文件（`custom/dicts/` 与 `downloads/dicts/`，按 `[dictionaries] disabled` 过滤），加载后一起接到 Engine 上。
+//! 通用大词库（[`GENERAL_DICTIONARY`]）不管在哪都标成补充词库（排序低主词库一档，见 `Dictionary::set_secondary`）；随包的那本缺省打开、列进 `disabled` 才关。
 
 use std::path::{Path, PathBuf};
 use std::time::SystemTime;
@@ -50,35 +50,39 @@ pub fn list(dir: &Path) -> Vec<(String, PathBuf)> {
         .collect()
 }
 
-/// 加载没被关掉的词库：先随包领域词库，再用户目录。坏文件只记日志、跳过：一本词库坏了不能拖垮输入法。
+/// 加载没被关掉的词库：先随包领域词库，再用户目录（导入的、下载的）。坏文件只记日志、跳过：一本词库坏了不能拖垮输入法。
+/// 随包里有通用大词库时，用户目录里同名的那本（从下载列表装的）不再加载，免得同一批词挂两份。
 pub fn load(
     bundled_dir: Option<&Path>,
-    user_dir: Option<&Path>,
+    user_dirs: &[&Path],
     config: &DictionariesConfig,
 ) -> Vec<Dictionary> {
     let mut loaded = Vec::new();
+    let mut bundled_general = false;
     if let Some(dir) = bundled_dir {
         for (stem, path) in list(dir) {
             if stem == GENERAL_DICTIONARY {
+                bundled_general = true;
                 if config.is_enabled(&stem) {
-                    loaded.extend(open(&stem, &path).map(|mut dictionary| {
-                        dictionary.set_secondary(true);
-                        dictionary
-                    }));
+                    loaded.extend(open(&stem, &path));
                 }
                 continue;
             }
             if !config.is_domain_enabled(&stem) {
-                tracing::debug!(name = %stem, "随包领域词库未打开，跳过");
+                tracing::debug!(name = %stem, "bundled domain dictionary off, skipped");
                 continue;
             }
             loaded.extend(open(&stem, &path));
         }
     }
-    if let Some(dir) = user_dir {
+    for dir in user_dirs {
         for (stem, path) in list(dir) {
             if !config.is_enabled(&stem) {
-                tracing::debug!(name = %stem, "附加词库已关闭，跳过");
+                tracing::debug!(name = %stem, "extra dictionary disabled, skipped");
+                continue;
+            }
+            if bundled_general && stem == GENERAL_DICTIONARY {
+                tracing::debug!(file = %path.display(), "general dictionary is bundled, user copy skipped");
                 continue;
             }
             loaded.extend(open(&stem, &path));
@@ -89,7 +93,8 @@ pub fn load(
 
 fn open(stem: &str, path: &Path) -> Option<Dictionary> {
     match Dictionary::from_path(path) {
-        Ok(dictionary) => {
+        Ok(mut dictionary) => {
+            dictionary.set_secondary(stem == GENERAL_DICTIONARY);
             tracing::info!(
                 name = %dictionary.metadata().map_or(stem, |m| m.name.as_str()),
                 file = %path.display(),
@@ -144,6 +149,61 @@ mod tests {
             .collect();
         assert_eq!(names, [("idioms", "idioms.qj")]);
         let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    /// 通用大词库在用户目录里（设置里下载的）时也按补充词库排在主词库后面；别的用户词库照常。
+    #[test]
+    fn general_dictionary_in_user_dir_stays_secondary() {
+        let dir =
+            std::env::temp_dir().join(format!("qingjian-user-general-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(
+            dir.join(format!("{GENERAL_DICTIONARY}.tsv")),
+            "按照规定\tan zhao gui ding\t10\n",
+        )
+        .unwrap();
+        std::fs::write(dir.join("law.tsv"), "合同法\the tong fa\t10\n").unwrap();
+
+        let loaded = load(None, &[dir.as_path()], &DictionariesConfig::default());
+        let secondary: Vec<bool> = loaded.iter().map(Dictionary::is_secondary).collect();
+        assert_eq!(secondary, [true, false]);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    /// 随包和用户目录里都有通用大词库时只挂随包那本；随包的被关掉时用户那本也不挂（同一个开关）。
+    #[test]
+    fn bundled_general_dictionary_shadows_user_copy() {
+        let root =
+            std::env::temp_dir().join(format!("qingjian-bundled-general-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&root);
+        let (bundled, user) = (root.join("bundled"), root.join("user"));
+        for dir in [&bundled, &user] {
+            std::fs::create_dir_all(dir).unwrap();
+            std::fs::write(
+                dir.join(format!("{GENERAL_DICTIONARY}.tsv")),
+                "按照规定\tan zhao gui ding\t10\n",
+            )
+            .unwrap();
+        }
+        std::fs::write(user.join("law.tsv"), "合同法\the tong fa\t10\n").unwrap();
+
+        let loaded = load(
+            Some(&bundled),
+            &[user.as_path()],
+            &DictionariesConfig::default(),
+        );
+        let secondary: Vec<bool> = loaded.iter().map(Dictionary::is_secondary).collect();
+        assert_eq!(secondary, [true, false]);
+
+        let off = DictionariesConfig {
+            disabled: vec![GENERAL_DICTIONARY.to_owned()],
+            ..DictionariesConfig::default()
+        };
+        let loaded = load(Some(&bundled), &[user.as_path()], &off);
+        let secondary: Vec<bool> = loaded.iter().map(Dictionary::is_secondary).collect();
+        assert_eq!(secondary, [false]);
+        let _ = std::fs::remove_dir_all(&root);
     }
 }
 

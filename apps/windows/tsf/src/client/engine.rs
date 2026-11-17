@@ -34,11 +34,13 @@ impl<S: Read + Write> EngineClient<S> {
                 outcome,
                 commit,
                 frame,
+                caret,
                 ..
             } => Ok(KeyResponse {
                 outcome,
                 commit,
                 frame,
+                caret,
             }),
             _ => Err(ClientError::Unexpected("expected candidate UI result")),
         }
@@ -95,11 +97,13 @@ impl<S: Read + Write> EngineClient<S> {
                 outcome,
                 commit,
                 frame,
+                caret,
                 ..
             } => Ok(KeyReply::Result(Box::new(KeyResponse {
                 outcome,
                 commit,
                 frame,
+                caret,
             }))),
             ServerMessage::RequestSelection { request, .. } => {
                 Ok(KeyReply::NeedSelection { request })
@@ -126,11 +130,13 @@ impl<S: Read + Write> EngineClient<S> {
                 outcome,
                 commit,
                 frame,
+                caret,
                 ..
             } => Ok(KeyResponse {
                 outcome,
                 commit,
                 frame,
+                caret,
             }),
             _ => Err(ClientError::Unexpected("expected key result for selection")),
         }
@@ -193,11 +199,13 @@ impl<S: Read + Write> EngineClient<S> {
         })? {
             ServerMessage::ModeSync {
                 english,
+                vietnamese,
                 input,
                 indicator,
                 ..
             } => Ok(ModeSyncReply {
                 english,
+                vietnamese,
                 input,
                 indicator,
             }),
@@ -206,10 +214,11 @@ impl<S: Read + Write> EngineClient<S> {
     }
 
     /// 把当前会话的中英模式推给 Server（悬浮状态条）。不回话。
-    pub fn mode_changed(&mut self, english: bool) -> Result<(), ClientError> {
+    pub fn mode_changed(&mut self, english: bool, vietnamese: bool) -> Result<(), ClientError> {
         self.send(&ClientMessage::ModeChanged {
             session: self.session,
             english,
+            vietnamese,
         })
     }
 

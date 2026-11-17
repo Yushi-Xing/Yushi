@@ -2,6 +2,9 @@
 name = "English"
 
 [candidate_menu]
+characters = "Choose characters"
+more = "More candidates"
+compact = "Compact candidates"
 edit_translation = "Edit translation…"
 regenerate_translation = "Regenerate translation with the model"
 pin = "Pin to top"
@@ -9,6 +12,7 @@ unpin = "Unpin"
 demote = "Move down"
 undemote = "Undo move down"
 delete = "Delete"
+promote = "Promote"
 needs_window = "This action has to be handled by the input method window"
 cant_pin = "“{text}” can't be pinned here"
 unchanged = "Nothing to change for “{text}”"
@@ -90,6 +94,9 @@ enter = "Return"
 [phrase_file]
 empty = "The file has no custom phrases"
 is_config = "This is a configuration file, not a phrase file; import settings on the Advanced page, and export the phrases on the other computer first"
+no_tab = "The text and the code must be separated by a Tab"
+skipped_entry = "entry {entry}: {reason}"
+skipped_line = "line {line} (“{text}”): {reason}"
 unreadable = "Can't read this file: it's neither a phrase file exported by Qingjian nor text with one “text<Tab>code” entry per line"
 
 [settings_file]

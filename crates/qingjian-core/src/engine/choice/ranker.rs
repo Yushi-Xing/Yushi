@@ -3,6 +3,8 @@
 use std::cell::RefCell;
 use std::sync::Arc;
 
+use super::condition::Condition;
+use super::job::Job;
 use super::worker::ChoiceWorker;
 use super::{CharTable, ChoiceModel, ChoiceRequest, ComposeRequest};
 use crate::engine::rescoring::WakeSlot;
@@ -14,6 +16,11 @@ const TABLES: usize = 8;
 pub(crate) struct ChoiceRanker {
     pub model: Arc<dyn ChoiceModel>,
     pub worker: ChoiceWorker,
+
+    condition: RefCell<Option<Condition>>,
+
+    /// 同一输入尚未收回的任务，重复查询不重新提交。
+    pub(super) in_flight: RefCell<Option<Job>>,
 
     /// 最近打好分的一页；候选窗里一次只有一页要排，留一条就够。
     pub scored: RefCell<Option<(ChoiceRequest, Vec<f32>, u64)>>,
@@ -32,11 +39,40 @@ impl ChoiceRanker {
     pub fn new(model: Arc<dyn ChoiceModel>, wake: WakeSlot) -> Self {
         Self {
             worker: ChoiceWorker::spawn(model.clone(), wake),
+            condition: RefCell::new(None),
+            in_flight: RefCell::new(None),
             model,
             scored: RefCell::new(None),
             wanted: RefCell::new(None),
             tables: RefCell::new(Vec::new()),
             compose_wanted: RefCell::new(Vec::new()),
+        }
+    }
+
+    pub(super) fn prepare(&self, condition: Condition) {
+        let mut previous = self.condition.borrow_mut();
+        if previous.as_ref() != Some(&condition) {
+            self.worker.cancel();
+            self.in_flight.borrow_mut().take();
+            *previous = Some(condition);
+        }
+        self.wanted.borrow_mut().take();
+        self.compose_wanted.borrow_mut().clear();
+    }
+
+    pub(super) fn cancel(&self) {
+        self.worker.cancel();
+        self.in_flight.borrow_mut().take();
+        self.condition.borrow_mut().take();
+        self.wanted.borrow_mut().take();
+        self.compose_wanted.borrow_mut().clear();
+    }
+
+    pub(super) fn submit(&self, job: Job) {
+        let mut in_flight = self.in_flight.borrow_mut();
+        if in_flight.as_ref() != Some(&job) {
+            self.worker.submit(job.clone());
+            *in_flight = Some(job);
         }
     }
 

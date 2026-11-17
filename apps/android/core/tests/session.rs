@@ -17,7 +17,7 @@ fn session() -> Session {
     let engine = Engine::new(Dictionary::from_path(sample("dict.tsv")).unwrap())
         .with_translator(Box::new(glossary));
     let code_table =
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../assets/schemes/wubi86/table.tsv");
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../assets/sample/wubi86.tsv");
     let user_dir = std::env::temp_dir().join(format!("qingjian-session-{}", std::process::id()));
     Session::new(engine, code_table, sample(""), user_dir)
 }
@@ -243,4 +243,20 @@ fn holding_selections_can_be_turned_off() {
     let frame = session.push('a');
     let frame = select_text(&mut session, &frame, "你好");
     assert_eq!(frame.commit, "你好");
+}
+
+#[test]
+fn clearing_offers_an_undo_until_text_comes_back() {
+    let mut session = session();
+    let frame = session.cleared("你好，世界");
+    assert_eq!(frame.candidates.len(), 1);
+    assert_eq!(frame.candidates[0].text, "撤销");
+    // 删完光标前是空的，壳问补全时留着
+    assert_eq!(session.complete("").candidates.len(), 1);
+    let frame = session.select(0);
+    assert_eq!(frame.commit, "你好，世界");
+    assert!(frame.candidates.is_empty());
+
+    session.cleared("abc");
+    assert!(session.complete("x").candidates.is_empty());
 }

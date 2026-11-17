@@ -2,6 +2,7 @@
 
 use super::{ChoiceRequest, ComposeRequest};
 
+#[derive(Clone, PartialEq)]
 pub(crate) enum Job {
     /// 给一页候选打分。
     Score(ChoiceRequest),

@@ -4,19 +4,19 @@
 //! - `tones`：通用词表的数字声调 → 单字声调表 `tones.tsv`（编进 Core，注音按敲的声调排序）
 //! - `chaizi`：開放詞典網拆字字典（CC BY 3.0）+ 词库读音 → 拆字表 `chaizi.tsv`（编进 Core，问字模式按部件读音找字）
 //! - `wubi`：Rime 形码码表（极点 86 五笔，Apache-2.0）→ 形码方案的 `table.tsv`（`词\t编码\t词频`，词频由青简词库按词面回填）
-//! - `wubi-roots`：五笔字根表（`assets/schemes/wubi86/roots86.tsv`）+ 思源黑体（SIL OFL，不进仓库）→ `roots86-glyphs.tsv`（字根图的 SVG 路径，随包，沿用 OFL）
+//! - `wubi-roots`：五笔字根表（`crates/qingjian-core/data/roots86.tsv`）+ 思源黑体（SIL OFL，不进仓库）→ `roots86-glyphs.tsv`（字根图的 SVG 路径，随包，沿用 OFL）
 //! - `cedict`：CC-CEDICT（CC BY-SA 4.0）→ `glossary-en.tsv`（释义表的备用来源，现在用 gloss-gen 的 LLM 表）
 //! - `english`：`词\t编码` 英文词表（数据包的 `05_english`，ESDB / CSpell，MIT）→ `english.tsv`
 //! - `emoji`：Unicode CLDR annotations（Unicode License v3，`--language zh|en`）→ `emoji-<语言>.tsv`（可发布，放 `assets/emoji/`）
 //! - `bigram`：纯文本语料（如 `tools/corpus/parquet_to_text.py` 转出的中文维基 CC BY-SA 4.0、LCCC 对话 MIT）→ `lm-unigram.tsv` + `lm-bigram.tsv`
 //! - `mine`：语料里分词落成连续单字的段 → `oov-candidates.tsv`（词库没收的高频词，标音后用 `lexicon --extra-words` 并入）
 //! - `phrases`：bigram 表的相邻两词 + 语料的相邻三词 → `phrases.tsv`（我的 / 不知道 这类短语层，读音由成分词拼出，同样用 `lexicon --extra-words` 并入）
-//! - `stroke`：CNS11643 全字庫「筆順資料」+ 大陆序覆盖表（`assets/stroke/prc-rules.tsv`）→ `codes/stroke.tsv`（随包笔画码表的源数据，`--verify` 抽样对照大陆笔画数）
+//! - `stroke`：CNS11643 全字庫「筆順資料」+ 大陆序覆盖表（`../qingjian-dicts/official/upstream/stroke/prc-rules.tsv`）→ `codes/stroke.tsv`（随包笔画码表的源数据，`--verify` 抽样对照大陆笔画数）
 //! - `mmh-reference`：hanzi-writer-data（Make Me a Hanzi；Arphic 许可，不进仓库）→ `data/mmh/` 的两张开发期对照表
 //!   （笔画数、首笔几何类别），`stroke --verify` 找不到哪张就跳过哪张对照
 //! - `pack codes`：笔画表（`stroke` 的产物，`字\t序列`）+ 词库 → `codes/stroke.qj`（随包原生辅码表：单字前 4 笔 + 末笔、
 //!   词组每字首笔；缺字的词跳过并计入统计，见 `codes` 模块）
-//! - `pack dict|lm|glossary|model`：TSV → `.qj` 容器（`dict.qj` / `lm.qj`），带名称 / 许可证 / 署名元数据，输入法与 CLI 优先加载它；
+//! - `pack dict|lm|glossary|wordlist|model`：TSV → `.qj` 容器（`dict.qj` / `lm.qj` / `english.qj`），带名称 / 许可证 / 署名元数据，输入法与 CLI 优先加载它；
 //!   `model` 把本地整句模型的三件套目录打成一个 `.qjm` 文件
 //!
 //! 输出默认写到仓库根目录 `data/generated/`（gitignore）。
@@ -29,6 +29,7 @@ mod codes;
 mod emoji;
 mod english;
 mod error;
+mod ipa;
 mod lexicon;
 mod mmh;
 mod oov_filter;
@@ -81,7 +82,7 @@ fn run() -> Result<(), ConvertError> {
             let pinyin = included(
                 pinyin,
                 no_pinyin,
-                "generate it with gloss-gen pinyin (assets/lexicon/QINGJIAN.md), or pass --no-pinyin",
+                "generate it with gloss-gen pinyin (see BUILD.md of the base dictionary in qingjian-dicts), or pass --no-pinyin",
             )?;
             let frequency = included(
                 frequency,
@@ -120,11 +121,13 @@ fn run() -> Result<(), ConvertError> {
             tracing::info!(characters, "单字声调表已写出");
             Ok(())
         }
-        Command::Chaizi { chaizi, dictionary } => {
-            let summary = chaizi::convert(&chaizi, &dictionary, &args.out_dir.join("chaizi.tsv"))?;
+        Command::Chaizi(options) => {
+            let summary = chaizi::convert(&options, &args.out_dir)?;
             tracing::info!(
                 characters = summary.characters,
+                splits = summary.splits,
                 unread = summary.unread,
+                merged_from_traditional = summary.merged,
                 "拆字表已写出"
             );
             Ok(())
@@ -164,6 +167,7 @@ fn run() -> Result<(), ConvertError> {
             frequency.as_deref(),
             &args.out_dir.join("english.tsv"),
         ),
+        Command::Ipa { input, name } => ipa::convert(&input, &args.out_dir.join(name)),
         Command::Emoji { inputs, language } => emoji::convert(
             &inputs,
             &args.out_dir.join(format!("emoji-{language}.tsv")),
@@ -225,6 +229,7 @@ fn run() -> Result<(), ConvertError> {
         ),
         Command::Stroke(options) => stroke::convert(&options, &args.out_dir),
         Command::MmhReference(options) => mmh::generate(&options),
+        Command::Qjz { inputs } => pack::qjz(&inputs, &args.out_dir),
         Command::Pack {
             kind,
             input,
@@ -236,6 +241,7 @@ fn run() -> Result<(), ConvertError> {
             attribution,
             source,
             data_version,
+            description,
             language,
         } => pack::pack(
             kind,
@@ -252,6 +258,7 @@ fn run() -> Result<(), ConvertError> {
                 attribution,
                 source,
                 version: data_version,
+                description,
                 ..qingjian_format::Metadata::default()
             },
             &args.out_dir,

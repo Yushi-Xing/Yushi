@@ -10,7 +10,7 @@ Linux 版当前候选面板由 Fcitx 绘制，主题与字号暂时只影响设�
 
 ## 放在哪里
 
-自制主题放在[数据文件夹](data-files.md#数据文件)的 `themes` 文件夹中，一个主题一个文件夹，文件夹里放一个 `theme.json`：
+自制主题放在[数据文件夹](data-files.md#数据文件)的 `custom/themes` 文件夹中，一个主题一个文件夹，文件夹里放一个 `theme.json`：
 
 ```text
 themes/
@@ -33,7 +33,7 @@ themes/
 ```
 
 - `theme.json` 里可以写注释（`//` 到行尾，或 `/* … */`），对象和列表的最后一项后面多一个逗号也没关系。
-- `extends` 写底子主题：`qingjian`（青简绿）、`system-blue`（系统蓝）、`wechat`（微信绿）、`sakura`（樱花）、`dafeiyu`（大肥鱼）、`miku`（初音未来）或 `bocchi`（波奇酱）。没写的部分都沿用底子主题；底子主题的图片不用拷进自己的文件夹。不写 `extends` 就以青简绿为底。
+- `extends` 写底子主题：`qingjian`（青简绿）、`system-blue`（系统蓝）、`wechat`（微信绿）、`sujian`（素笺）、`glass`（玻璃）、`slate`（墨岩）、`sakura`（樱花）、`dafeiyu`（大肥鱼）、`miku`（初音未来）或 `bocchi`（波奇酱）。没写的部分都沿用底子主题；底子主题的图片不用拷进自己的文件夹。不写 `extends` 就以青简绿为底。
 - `meta.id` 必须与文件夹名相同，且不能与内置主题重名，也不能是 `system`、`light`、`dark`；`meta.name` 是主题列表里显示的名字。
 - 颜色写作 `#rrggbb` 或带不透明度的 `#rrggbbaa`；写成 `{ "light": …, "dark": … }` 时浅色与深色外观各用一个。
 
@@ -49,6 +49,7 @@ themes/
 | `fresh` | 生词的译词 |
 | `cloud` | 云端候选与云朵 |
 | `hl_text`、`hl_gloss`、`hl_faint`、`hl_fresh`、`hl_cloud` | 高亮那一行里对应的颜色 |
+| `kb_board`、`kb_function`、`kb_brand` | 手机键盘的底板、功能键、回车键（不写就按 `surface` 与 `accent` 自动配） |
 
 ## 渐变与图片
 
@@ -99,7 +100,7 @@ themes/
 
 粗细写 `light`（细）、`regular`（常规）、`medium`（中等）、`semibold`（半粗）、`bold`（粗），或 100–900 的数字。系统字体没有某一档粗细时，用最接近的一档。
 
-设置里改了「候选字号」「译文字号」时，盖过主题里 `candidate`、`annotation` 的字号，行高按同样比例缩放；`index`、`preedit` 与表格行高跟着候选字号一起缩放，同一行才对得齐。表格一行里的各格按文字底线自动对齐，主题不用为不同字号调边距。悬浮状态条按候选字号的比例整体缩放，主题不用管。主题里其它自己起名的样式不受影响。
+设置里改了「候选字号」「译文字号」时，盖过主题里 `candidate`、`annotation` 的字号，行高按同样比例缩放；`index`、`preedit` 与表格行高跟着候选字号一起缩放，同一行才对得齐。表格一行里的各格按文字底线自动对齐，主题不用为不同字号调边距。悬浮状态条按候选字号的比例整体缩放，主题不用管。主题里其它自己起名的样式不受影响。设置里调了「候选字粗细」时只换 `candidate` 样式的字重；节点上自己写了 `weight` 的不变。
 
 ## 字体与斜体
 
@@ -116,6 +117,7 @@ themes/
 ```
 
 - `family` 写一个字体名，或按顺序写几个：用第一个装了的。`system` 表示「设置 → 外观 → 字体」里选的字体（没选就是系统字体）；一个都没装时也用它。
+- 用户在设置里选了字体时，`text` 下的 `family` 和 `candidate`、`annotation`、`index`、`preedit` 上写的 `family` 都让给那个字体；别的样式（标语、装饰字）照主题写的。
 - 字体名写字族名，即系统字体列表里显示的英文名，如 `Songti SC`、`Microsoft YaHei`、`Georgia`。macOS 与 Windows 的字体不同，两边都要好看时把两边的名字都写上。
 - 字体里没有的字（比如英文字体遇到汉字）自动用系统字体补上。
 - 字体没有斜体时，把正体倾斜显示；汉字的斜体也是这样来的。
@@ -128,6 +130,17 @@ themes/
 ```
 
 支持 TTF、OTF、TTC，单个文件不超过 32 MB。只带许可允许再分发的字体（如 OFL 许可的霞鹜文楷），系统自带的字体只写名字、不要拷进主题。
+
+## 和首选不一样的字
+
+整句、长句的候选看着差不多时，青简把次选里和首选不一样的字换一种颜色。颜色写在候选词的文字上：
+
+```json
+{ "type": "text", "bind": "text", "font": "candidate", "color": "@text",
+  "diff": { "if": "highlighted", "then": "@hl_diff", "else": "@diff" } }
+```
+
+内置主题都写了 `diff` 与 `hl_diff` 两个变量，继承内置主题时改这两个变量就行。自己从头写的候选词节点不写 `diff`，就整条同色、不标。
 
 ## 文字描边
 
@@ -195,7 +208,8 @@ themes/
 - `appearance`：`glass` 缺省是 `auto`，玻璃跟着背后的内容变深变浅，文字随之换成主题的浅色或深色那一套颜色，所以 `variables` 的 `light`、`dark` 两套都要写好；
   写 `system` 时文字跟系统的浅色 / 深色模式走，玻璃会换成毛玻璃，因为新玻璃会自己变色。`blur` 缺省就是 `system`。主题在 `meta` 里锁定了外观的，始终跟锁定的外观。
 - 写了之后窗口的 `fill` 和阴影交给系统来画；想在材质上叠一层颜色，写 `"tint": "#ffffff33"` 这样的半透明颜色。
-- 目前只有 macOS 支持。Windows 上照旧画窗口的 `fill`，所以 `fill` 还要写成不透明的颜色。
+- Windows 11 上 `glass` 与 `blur` 都是系统的亚克力毛玻璃：文字跟系统的浅色 / 深色模式走，不跟背后的内容变；圆角固定是系统窗口的圆角，不按主题写的 `radius`，阴影也由系统画；伸出窗口的装饰下面也会铺上毛玻璃，别和 `material` 一起用。
+- Windows 10、关了系统「透明效果」，以及生成预览图时，照旧画窗口的 `fill` 与阴影，所以 `fill` 还要写成不透明的颜色。
 
 ## 翻页箭头
 
@@ -239,6 +253,28 @@ Windows 屏幕右下角的悬浮状态条也可以按主题画，写法与候选
 - 整条状态条也能用「显示输入状态」里的 `mode.english` 等，自己决定画什么。
 - 格子之间可以夹装饰，点到装饰算前一格。
 - 不写 `root` 时状态条按原来的样子画，只用 `status` 里的颜色与尺寸。macOS 没有悬浮状态条。
+
+## 符号面板
+
+符号面板（组句时按 ↑，或从状态条、菜单打开）的排法是固定的：顶上一行分组，下面一行分类，中间是格子，底下一行显示选中条目的名字。主题里能改的是字体、尺寸和颜色，写在 `panel` 下面，只写想改的几项就行，其余照青简绿：
+
+```json
+"panel": {
+  "background": { "image": "images/panel-bg.svg", "slice": [24, 24, 24, 24] },
+  "highlight": "@accent",
+  "pill_fill": "@cyan",
+  "pill_text": "#ffffff",
+  "radius": 14
+}
+```
+
+- `background`（整块的底）、`pill_fill`（当前分组）、`highlight`（选中的格子）可以写纯色、渐变或图片，写法同「渐变与图片」。
+- 文字颜色：`text`（条目和当前分类）、`label`（其余分组与分类、条目名字）、`hint`（按键提示和行号）、`pill_text`（当前分组的字）。
+- 其余颜色：`underline_color`（当前分类下划线）、`divider`（分类下面的分隔线）、`close_fill`、`close_icon`（右上角的关闭按钮）。
+- 字体：`label_font`、`hint_font`、`item_font`（一行十格时的条目）、`wide_item_font`（颜文字这类一行放不满十格的条目）。
+- 尺寸（点）：`padding`、`radius`、`cell`（格子高，也是一行十格时的格宽）、`cell_gap`、`cell_radius`、`pill_padding_x`、`pill_padding_y`、`pill_gap`、`tab_gap`、`underline`、`section_gap`、`close_size`。
+- 投影写在 `effects`，写法同「阴影」。
+- 面板不跟设置里的候选字号变大变小。
 
 ## 过渡动画
 

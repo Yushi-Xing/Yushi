@@ -1,5 +1,6 @@
 //! 任务栏「中 / 英」图标的右键菜单。做法同小狼毫：`TrackPopupMenuEx` 挂在输入框所在窗口上，同步取回点的项。
 
+use std::path::PathBuf;
 use windows::Win32::Foundation::{HWND, POINT};
 use windows::Win32::UI::WindowsAndMessaging::{
     AppendMenuW, CreatePopupMenu, DestroyMenu, MENU_ITEM_FLAGS, MF_CHECKED, MF_GRAYED,
@@ -59,7 +60,13 @@ pub(crate) fn track(owner: HWND, point: POINT, state: &MenuState) -> Option<Menu
         )));
     }
     items.push(Some((ID_SETTINGS, "设置…", MENU_ITEM_FLAGS(0))));
-    items.push(Some((ID_LEGACY_SETTINGS, "旧版设置…", MENU_ITEM_FLAGS(0))));
+    if crate::com::module_path().ok().is_some_and(|module| {
+        PathBuf::from(module.to_string())
+            .with_file_name("qingjian-settings-legacy.exe")
+            .is_file()
+    }) {
+        items.push(Some((ID_LEGACY_SETTINGS, "旧版设置…", MENU_ITEM_FLAGS(0))));
+    }
     let menu = unsafe { CreatePopupMenu() }.ok()?;
     for item in items {
         let _ = match item {

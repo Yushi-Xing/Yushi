@@ -17,6 +17,16 @@ impl Router {
             if let Some(info) = self.sessions.get_mut(&session) {
                 info.own_candidates = own_window;
             }
+            if self.focused == Some(session) {
+                // 宿主列表没有“更多候选”菜单，保留完整列表和宿主原来的方向键规则。
+                self.engine.set_default_candidate_view(if own_window {
+                    qingjian_core::CandidateView::Compact
+                } else {
+                    qingjian_core::CandidateView::All
+                });
+                self.candidate_upward = false;
+                self.recompose();
+            }
         } else if self.focused == Some(session) {
             match action {
                 CandidateAction::Select {
@@ -75,6 +85,7 @@ impl Router {
             commit,
             frame,
             english: None,
+            caret: None,
         }
     }
 }

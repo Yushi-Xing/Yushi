@@ -1,0 +1,692 @@
+[
+  {
+    "id": "common_name-01",
+    "scene": "common_name",
+    "text": "张伟",
+    "keys": "zhangwei",
+    "syllables": [
+      "zhang",
+      "wei"
+    ]
+  },
+  {
+    "id": "common_name-07",
+    "scene": "common_name",
+    "text": "刘洋",
+    "keys": "liuyang",
+    "syllables": [
+      "liu",
+      "yang"
+    ]
+  },
+  {
+    "id": "common_name-18",
+    "scene": "common_name",
+    "text": "李明",
+    "keys": "liming",
+    "syllables": [
+      "li",
+      "ming"
+    ]
+  },
+  {
+    "id": "public_name-14",
+    "scene": "public_name",
+    "text": "袁隆平",
+    "keys": "yuanlongping",
+    "syllables": [
+      "yuan",
+      "long",
+      "ping"
+    ]
+  },
+  {
+    "id": "public_name-15",
+    "scene": "public_name",
+    "text": "屠呦呦",
+    "keys": "tuyouyou",
+    "syllables": [
+      "tu",
+      "you",
+      "you"
+    ]
+  },
+  {
+    "id": "daily_sentence-01",
+    "scene": "daily_sentence",
+    "text": "你好",
+    "keys": "nihao",
+    "syllables": [
+      "ni",
+      "hao"
+    ]
+  },
+  {
+    "id": "daily_sentence-02",
+    "scene": "daily_sentence",
+    "text": "谢谢你",
+    "keys": "xiexieni",
+    "syllables": [
+      "xie",
+      "xie",
+      "ni"
+    ]
+  },
+  {
+    "id": "daily_sentence-03",
+    "scene": "daily_sentence",
+    "text": "不好意思",
+    "keys": "buhaoyisi",
+    "syllables": [
+      "bu",
+      "hao",
+      "yi",
+      "si"
+    ]
+  },
+  {
+    "id": "daily_sentence-04",
+    "scene": "daily_sentence",
+    "text": "没关系",
+    "keys": "meiguanxi",
+    "syllables": [
+      "mei",
+      "guan",
+      "xi"
+    ]
+  },
+  {
+    "id": "daily_sentence-05",
+    "scene": "daily_sentence",
+    "text": "请稍等一下",
+    "keys": "qingshaodengyixia",
+    "syllables": [
+      "qing",
+      "shao",
+      "deng",
+      "yi",
+      "xia"
+    ]
+  },
+  {
+    "id": "daily_sentence-06",
+    "scene": "daily_sentence",
+    "text": "我马上就到",
+    "keys": "womashangjiudao",
+    "syllables": [
+      "wo",
+      "ma",
+      "shang",
+      "jiu",
+      "dao"
+    ]
+  },
+  {
+    "id": "daily_sentence-07",
+    "scene": "daily_sentence",
+    "text": "你现在方便吗",
+    "keys": "nixianzaifangbianma",
+    "syllables": [
+      "ni",
+      "xian",
+      "zai",
+      "fang",
+      "bian",
+      "ma"
+    ]
+  },
+  {
+    "id": "daily_sentence-08",
+    "scene": "daily_sentence",
+    "text": "我们明天见",
+    "keys": "womenmingtianjian",
+    "syllables": [
+      "wo",
+      "men",
+      "ming",
+      "tian",
+      "jian"
+    ]
+  },
+  {
+    "id": "daily_sentence-09",
+    "scene": "daily_sentence",
+    "text": "今天晚上吃什么",
+    "keys": "jintianwanshangchishenme",
+    "syllables": [
+      "jin",
+      "tian",
+      "wan",
+      "shang",
+      "chi",
+      "shen",
+      "me"
+    ]
+  },
+  {
+    "id": "daily_sentence-10",
+    "scene": "daily_sentence",
+    "text": "我想喝一杯咖啡",
+    "keys": "woxiangheyibeikafei",
+    "syllables": [
+      "wo",
+      "xiang",
+      "he",
+      "yi",
+      "bei",
+      "ka",
+      "fei"
+    ]
+  },
+  {
+    "id": "daily_sentence-11",
+    "scene": "daily_sentence",
+    "text": "记得早点休息",
+    "keys": "jidezaodianxiuxi",
+    "syllables": [
+      "ji",
+      "de",
+      "zao",
+      "dian",
+      "xiu",
+      "xi"
+    ]
+  },
+  {
+    "id": "daily_sentence-12",
+    "scene": "daily_sentence",
+    "text": "路上注意安全",
+    "keys": "lushangzhuyianquan",
+    "syllables": [
+      "lu",
+      "shang",
+      "zhu",
+      "yi",
+      "an",
+      "quan"
+    ]
+  },
+  {
+    "id": "daily_sentence-13",
+    "scene": "daily_sentence",
+    "text": "周末一起出去玩",
+    "keys": "zhoumoyiqichuquwan",
+    "syllables": [
+      "zhou",
+      "mo",
+      "yi",
+      "qi",
+      "chu",
+      "qu",
+      "wan"
+    ]
+  },
+  {
+    "id": "daily_sentence-14",
+    "scene": "daily_sentence",
+    "text": "生日快乐",
+    "keys": "shengrikuaile",
+    "syllables": [
+      "sheng",
+      "ri",
+      "kuai",
+      "le"
+    ]
+  },
+  {
+    "id": "daily_sentence-15",
+    "scene": "daily_sentence",
+    "text": "祝你工作顺利",
+    "keys": "zhunigongzuoshunli",
+    "syllables": [
+      "zhu",
+      "ni",
+      "gong",
+      "zuo",
+      "shun",
+      "li"
+    ]
+  },
+  {
+    "id": "daily_sentence-16",
+    "scene": "daily_sentence",
+    "text": "最近天气有点冷",
+    "keys": "zuijintianqiyoudianleng",
+    "syllables": [
+      "zui",
+      "jin",
+      "tian",
+      "qi",
+      "you",
+      "dian",
+      "leng"
+    ]
+  },
+  {
+    "id": "daily_sentence-17",
+    "scene": "daily_sentence",
+    "text": "请把文件发给我",
+    "keys": "qingbawenjianfageiwo",
+    "syllables": [
+      "qing",
+      "ba",
+      "wen",
+      "jian",
+      "fa",
+      "gei",
+      "wo"
+    ]
+  },
+  {
+    "id": "daily_sentence-18",
+    "scene": "daily_sentence",
+    "text": "这个问题已经解决了",
+    "keys": "zhegewentiyijingjiejuele",
+    "syllables": [
+      "zhe",
+      "ge",
+      "wen",
+      "ti",
+      "yi",
+      "jing",
+      "jie",
+      "jue",
+      "le"
+    ]
+  },
+  {
+    "id": "daily_sentence-19",
+    "scene": "daily_sentence",
+    "text": "明天下午三点开会",
+    "keys": "mingtianxiawusandiankaihui",
+    "syllables": [
+      "ming",
+      "tian",
+      "xia",
+      "wu",
+      "san",
+      "dian",
+      "kai",
+      "hui"
+    ]
+  },
+  {
+    "id": "daily_sentence-20",
+    "scene": "daily_sentence",
+    "text": "我正在整理会议记录",
+    "keys": "wozhengzaizhenglihuiyijilu",
+    "syllables": [
+      "wo",
+      "zheng",
+      "zai",
+      "zheng",
+      "li",
+      "hui",
+      "yi",
+      "ji",
+      "lu"
+    ]
+  },
+  {
+    "id": "daily_sentence-21",
+    "scene": "daily_sentence",
+    "text": "麻烦确认一下时间",
+    "keys": "mafanquerenyixiashijian",
+    "syllables": [
+      "ma",
+      "fan",
+      "que",
+      "ren",
+      "yi",
+      "xia",
+      "shi",
+      "jian"
+    ]
+  },
+  {
+    "id": "daily_sentence-22",
+    "scene": "daily_sentence",
+    "text": "我们需要办理手续",
+    "keys": "womenxuyaobanlishouxu",
+    "syllables": [
+      "wo",
+      "men",
+      "xu",
+      "yao",
+      "ban",
+      "li",
+      "shou",
+      "xu"
+    ]
+  },
+  {
+    "id": "daily_sentence-23",
+    "scene": "daily_sentence",
+    "text": "请问地铁站怎么走",
+    "keys": "qingwenditiezhanzenmezou",
+    "syllables": [
+      "qing",
+      "wen",
+      "di",
+      "tie",
+      "zhan",
+      "zen",
+      "me",
+      "zou"
+    ]
+  },
+  {
+    "id": "daily_sentence-24",
+    "scene": "daily_sentence",
+    "text": "我想买一张火车票",
+    "keys": "woxiangmaiyizhanghuochepiao",
+    "syllables": [
+      "wo",
+      "xiang",
+      "mai",
+      "yi",
+      "zhang",
+      "huo",
+      "che",
+      "piao"
+    ]
+  },
+  {
+    "id": "daily_sentence-25",
+    "scene": "daily_sentence",
+    "text": "请帮我查一下订单",
+    "keys": "qingbangwochayixiadingdan",
+    "syllables": [
+      "qing",
+      "bang",
+      "wo",
+      "cha",
+      "yi",
+      "xia",
+      "ding",
+      "dan"
+    ]
+  },
+  {
+    "id": "daily_sentence-26",
+    "scene": "daily_sentence",
+    "text": "这个地址可以送货吗",
+    "keys": "zhegedizhikeyisonghuoma",
+    "syllables": [
+      "zhe",
+      "ge",
+      "di",
+      "zhi",
+      "ke",
+      "yi",
+      "song",
+      "huo",
+      "ma"
+    ]
+  },
+  {
+    "id": "daily_sentence-27",
+    "scene": "daily_sentence",
+    "text": "今天的工作已经完成了",
+    "keys": "jintiandegongzuoyijingwanchengle",
+    "syllables": [
+      "jin",
+      "tian",
+      "de",
+      "gong",
+      "zuo",
+      "yi",
+      "jing",
+      "wan",
+      "cheng",
+      "le"
+    ]
+  },
+  {
+    "id": "daily_sentence-28",
+    "scene": "daily_sentence",
+    "text": "我觉得这个办法不错",
+    "keys": "wojuedezhegebanfabucuo",
+    "syllables": [
+      "wo",
+      "jue",
+      "de",
+      "zhe",
+      "ge",
+      "ban",
+      "fa",
+      "bu",
+      "cuo"
+    ]
+  },
+  {
+    "id": "daily_sentence-29",
+    "scene": "daily_sentence",
+    "text": "有时间给我打电话",
+    "keys": "youshijiangeiwodadianhua",
+    "syllables": [
+      "you",
+      "shi",
+      "jian",
+      "gei",
+      "wo",
+      "da",
+      "dian",
+      "hua"
+    ]
+  },
+  {
+    "id": "daily_sentence-30",
+    "scene": "daily_sentence",
+    "text": "我们一起去图书馆",
+    "keys": "womenyiqiqutushuguan",
+    "syllables": [
+      "wo",
+      "men",
+      "yi",
+      "qi",
+      "qu",
+      "tu",
+      "shu",
+      "guan"
+    ]
+  },
+  {
+    "id": "daily_sentence-31",
+    "scene": "daily_sentence",
+    "text": "请问附近有超市吗",
+    "keys": "qingwenfujinyouchaoshima",
+    "syllables": [
+      "qing",
+      "wen",
+      "fu",
+      "jin",
+      "you",
+      "chao",
+      "shi",
+      "ma"
+    ]
+  },
+  {
+    "id": "daily_sentence-32",
+    "scene": "daily_sentence",
+    "text": "我会尽快回复你的消息",
+    "keys": "wohuijinkuaihuifunidexiaoxi",
+    "syllables": [
+      "wo",
+      "hui",
+      "jin",
+      "kuai",
+      "hui",
+      "fu",
+      "ni",
+      "de",
+      "xiao",
+      "xi"
+    ]
+  },
+  {
+    "id": "name_sentence-01",
+    "scene": "name_sentence",
+    "text": "请联系张伟",
+    "keys": "qinglianxizhangwei",
+    "syllables": [
+      "qing",
+      "lian",
+      "xi",
+      "zhang",
+      "wei"
+    ]
+  },
+  {
+    "id": "name_sentence-04",
+    "scene": "name_sentence",
+    "text": "请把资料发给刘洋",
+    "keys": "qingbaziliaofageiliuyang",
+    "syllables": [
+      "qing",
+      "ba",
+      "zi",
+      "liao",
+      "fa",
+      "gei",
+      "liu",
+      "yang"
+    ]
+  },
+  {
+    "id": "daily_sentence-08-initials",
+    "scene": "abbreviations",
+    "text": "我们明天见",
+    "keys": "wmmtj",
+    "syllables": [
+      "wo",
+      "men",
+      "ming",
+      "tian",
+      "jian"
+    ]
+  },
+  {
+    "id": "daily_sentence-17-initials",
+    "scene": "abbreviations",
+    "text": "请把文件发给我",
+    "keys": "qbwjfgw",
+    "syllables": [
+      "qing",
+      "ba",
+      "wen",
+      "jian",
+      "fa",
+      "gei",
+      "wo"
+    ]
+  },
+  {
+    "id": "daily_sentence-21-initials",
+    "scene": "abbreviations",
+    "text": "麻烦确认一下时间",
+    "keys": "mfqryxsj",
+    "syllables": [
+      "ma",
+      "fan",
+      "que",
+      "ren",
+      "yi",
+      "xia",
+      "shi",
+      "jian"
+    ]
+  },
+  {
+    "id": "daily_sentence-23-initials",
+    "scene": "abbreviations",
+    "text": "请问地铁站怎么走",
+    "keys": "qwdtzzmz",
+    "syllables": [
+      "qing",
+      "wen",
+      "di",
+      "tie",
+      "zhan",
+      "zen",
+      "me",
+      "zou"
+    ]
+  },
+  {
+    "id": "typo-meeting",
+    "scene": "correction",
+    "text": "明天",
+    "keys": "mingtain",
+    "syllables": [
+      "ming",
+      "tian"
+    ]
+  },
+  {
+    "id": "rare-name",
+    "scene": "rare_name",
+    "text": "珺玥",
+    "keys": "junyue",
+    "syllables": [
+      "jun",
+      "yue"
+    ]
+  },
+  {
+    "id": "mixed",
+    "scene": "mixed",
+    "text": "我的database",
+    "keys": "wodedatabase",
+    "syllables": [
+      "wo",
+      "de",
+      "database"
+    ]
+  },
+  {
+    "id": "edit-backspace",
+    "scene": "editing",
+    "text": "你好",
+    "keys": "nihaoa",
+    "erase": 1,
+    "syllables": [
+      "ni",
+      "hao"
+    ]
+  },
+  {
+    "id": "english",
+    "scene": "english",
+    "text": "database",
+    "keys": "database",
+    "english": true,
+    "syllables": [
+      "database"
+    ]
+  },
+  {
+    "id": "punctuation-comma",
+    "scene": "punctuation",
+    "text": "你好，",
+    "keys": "nihao",
+    "punctuation": ",",
+    "syllables": [
+      "ni",
+      "hao"
+    ]
+  },
+  {
+    "id": "punctuation-question",
+    "scene": "punctuation",
+    "text": "你好吗？",
+    "keys": "nihaoma",
+    "punctuation": "?",
+    "syllables": [
+      "ni",
+      "hao",
+      "ma"
+    ]
+  }
+]

@@ -6,6 +6,7 @@ use crate::{Frame, Mode, Preedit, Row, Tone};
 /// 真机敲「nihao」看到的第一页（2026-09-13 从截图抄），拼音行带光标、译文、生词橙色、页码。
 pub fn nihao() -> Frame {
     Frame {
+        upward: false,
         preedit: Some(Preedit::plain("ni'hao", 6)),
         rows: vec![
             annotated(
@@ -59,6 +60,7 @@ pub fn nihao() -> Frame {
         mode: Mode::default(),
         columns: 0,
         column_ems: Vec::new(),
+        reversed: false,
     }
 }
 
@@ -74,6 +76,7 @@ pub fn annotated(index: usize, text: &str, annotation: &[(&str, Tone)], cloud: b
     Row {
         index: (index + 1).to_string(),
         text: text.to_owned(),
+        diff: Vec::new(),
         annotation: annotation
             .iter()
             .map(|(s, tone)| ((*s).to_owned(), *tone))

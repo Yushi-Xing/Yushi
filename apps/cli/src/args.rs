@@ -3,17 +3,12 @@ use std::path::PathBuf;
 use clap::Parser;
 use qingjian_platform::ZhiyiTier;
 
-/// 按优先级挑一个存在的数据文件：`data/generated/` 里打包好的 `.qj`、那里的 TSV、仓库自带的产品数据
-/// （`assets/lexicon/dict.tsv`、`assets/glossary/glossary-*.tsv`、`assets/lexicon/english.tsv`），最后是 `assets/sample/` 的样例。
+/// 按优先级挑一个存在的数据文件：`data/generated/` 里的 `.qj`（dicts-fetch 从词库仓库取的）、那里的 TSV，
+/// 最后是 `assets/sample/` 的样例。
 pub fn default_data_file(name: &str) -> PathBuf {
     let generated = PathBuf::from("data/generated").join(name);
     let packed = generated.with_extension("qj");
-    let shipped = if name.starts_with("glossary-") {
-        PathBuf::from("assets/glossary").join(name)
-    } else {
-        PathBuf::from("assets/lexicon").join(name)
-    };
-    for candidate in [packed, generated, shipped] {
+    for candidate in [packed, generated] {
         if candidate.is_file() {
             return candidate;
         }
@@ -41,6 +36,18 @@ pub fn default_config_file() -> PathBuf {
 #[derive(Debug, Parser)]
 #[command(name = "qingjian", about = "青简输入法 Core 测试工具")]
 pub struct Args {
+    /// 用隔离数据回放多场景逐键输入，输出评分报告（无网络/用户配置）。
+    #[arg(long)]
+    pub experience: Option<PathBuf>,
+
+    /// 体验评测使用完整候选，作为精简列表的对照。
+    #[arg(long)]
+    pub experience_all: bool,
+
+    /// 体验回放的普通整词额度，用于对比 9 / 18 / 27；不改产品配置。
+    #[arg(long, default_value_t = qingjian_core::CandidateView::WORD_LIMIT)]
+    pub experience_word_limit: usize,
+
     /// 每次查询的 emoji 候选上限，0 关闭；缺省保持最多三个。
     #[arg(long, default_value_t = 3, value_parser = clap::value_parser!(u8).range(0..=3))]
     pub emoji_limit: u8,
@@ -74,9 +81,17 @@ pub struct Args {
     #[arg(long, value_delimiter = ',')]
     pub aux_query: Vec<String>,
 
-    /// 英文词表路径（中英混输）。缺省：data/generated/english.tsv 存在就用它，否则不启用
+    /// 英文词表路径（中英混输）。缺省：data/generated/english.qj（或同名 TSV）存在就用它，否则不启用
     #[arg(long)]
     pub english: Option<PathBuf>,
+
+    /// 英文音标表（`english-ipa.qj`，或 `词\t/音标/` 的 TSV）。缺省：data/generated/english-ipa.qj 存在就用它
+    #[arg(long)]
+    pub english_ipa: Option<PathBuf>,
+
+    /// 英文候选与英文译文旁显示音标（配置 `[general] show_english_pronunciation`，缺省关）
+    #[arg(long)]
+    pub show_english_pronunciation: bool,
 
     /// 用户词频文件；给了就在退出时写回，不给则只在本次会话内学习
     #[arg(long)]
@@ -126,6 +141,10 @@ pub struct Args {
     /// 双拼方案（xiaohe / ziranma / microsoft / sogou / abc / xiaolang / shoudao / jiajia / ziguang，或用户双拼方案的目录），覆盖配置里的 `[general]` scheme；off 强制全拼
     #[arg(long)]
     pub shuangpin: Option<String>,
+
+    /// 双拼方案下同时接受全拼（覆盖配置里的 `[general]` shuangpin_full_pinyin）：同一段输入里两种打法可以混用
+    #[arg(long)]
+    pub shuangpin_full_pinyin: bool,
 
     /// 九宫格方案：输入写数字键（`64426` → 你好），验证手机 9 键的候选与整句
     #[arg(long)]

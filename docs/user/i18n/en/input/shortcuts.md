@@ -11,6 +11,15 @@ description: "Typing dates, times and weekdays with rq / sj / xq; calculating, w
 | `rq` / `sj` / `xq` | Today's date (`2026年9月3日`, `2026-09-03`), the current time (`19:06`, `19点06分`, timestamp `20260903190623`), the day of the week, inserted after the first candidate |
 | `riqi` / `shijian` / `xingqi` | When 日期 (date), 时间 (time) or 星期 (weekday) appears among the candidates, the same forms follow right after it |
 
+There are many forms. The first three follow the leading candidate; the rest go to the end of the list, so the
+first page stays for words — typing `sj` for 时间 doesn't need paging.
+
+| Input | First three | The rest (examples) |
+|---|---|---|
+| `rq` | `2026年11月9日`, `2026-11-09`, `2026/11/09` | `2026.11.09`, `11月9日`, `20261109`, `26-11-09`, `09/11/2026` (European), `11/09/2026` (US), `2026-W45-1`, `二〇二六年十一月九日` |
+| `sj` | `19:06`, `19:06:23`, `19点06分` | with milliseconds, with the date, 12-hour (`下午7:06`, `7:06 PM`), bare digits (`190623`, `20261109190623`), filename-friendly (`20261109_190623`) |
+| `xq` | `星期一`, `周一`, `礼拜一` | — |
+
 ## Calculations, Chinese numerals and dates
 
 Start with `v`:
@@ -21,8 +30,12 @@ Start with `v`:
 | `v123` | Chinese numerals: 一百二十三 and 壹佰贰拾叁; amounts: 一百二十三元整 and 壹佰贰拾叁元整 |
 | `v123.5` | Decimal reading: 一百二十三点五 and 壹佰贰拾叁点伍; amounts: 一百二十三元五角 and 壹佰贰拾叁元伍角 (up to two decimal places, i.e. fen) |
 | `v1998-3-8` | Chinese date: 一九九八年三月八日; plus 1998年3月8日 and 1998-03-08. The separator can be `-`, `/` or `.` |
+| `vnow` | Today's date, in exactly the same forms as `v2026.11.5` |
+| `vnow+4` / `vnow-4` | Four days from now / four days ago. `vnow;4` works too (semicolon or colon; without a sign it counts forward) |
+| `v1234.9.9-7` / `v1234.9.9+30` | Seven days before / thirty days after a given date. Only complete dates, and the offset sign must differ from the date separator |
 
-- A date is recognized as **a four-digit year + month + day**; if the year isn't four digits (`v98-3-8`) or the month and day aren't valid (`v1998-2-30`), it's treated as a calculation.
+- A date is recognized as **a four-digit year + month + day**; if the year isn't four digits (`v98-3-8`) or the month and day aren't valid (`v1998-2-30`), it's treated as a calculation. A bare year and a year-month also need four digits (`v1632` looks up the fifth year of Chongzhen; `v123` stays a calculation), while a full three-part date drops to three (`v755.4.1` is the fourteenth year of Tianbao).
+- `-` and `/` can be either date separators or minus: `v1998-3-8` gives both the date forms and the calculation result, date first. Forms that can't be read (`v1-2-3`) are treated as a calculation.
 - After a `v`, digits and operators all go into the expression and are no longer used to pick or page; to pick the second item, use `↑` / `↓` and `Space`. `Enter` outputs what you typed as is.
 - English words starting with `v` (`very`) aren't affected and still get English candidates.
 
@@ -30,6 +43,57 @@ Start with `v`:
 
 `vts` gives four candidates: Unix seconds, UTC in RFC 3339 (`2026-09-03T11:06:23Z`), Unix milliseconds and ISO 8601 with your time zone (`2026-09-03T19:06:23+08:00`). Number keys select candidates as usual; the values are taken when you type `vts` and don't change before you pick one.
 
+Put a moment after the semicolon to compute that moment instead: `vts;2024-03-04` is local midnight that day, `vts;2024-03-04.12:09:38` is that instant. The separators `.` `-` `/` `:` are all accepted and can be mixed; **the number of parts sets the precision**:
+
+| Parts | Example | Meaning |
+|---|---|---|
+| 3 | `vts;2024.3.4` | date (local midnight) |
+| 4 | `vts;2024.3.4.12` | down to the hour |
+| 5 | `vts;2024.3.4.12.9` | down to the minute |
+| 6 | `vts;2024.3.4.12.9.59` | down to the second |
+| 7 | `vts;2024.3.4.12.9.59.383` | down to the millisecond |
+
+Only digits and `.` `-` `/` `:` `;` can be typed into the argument; space commits the candidate, so split the parts with one of those symbols. Out-of-range values (`2024.2.30`, `12.9.60`) produce no candidates.
+
+## Bit operations and sub-modes
+
+`v<name>:<statement>`: a name, a colon (half- or full-width; semicolon works too), then the statement.
+
+| Sub-mode | Example | Result |
+|---|---|---|
+| `vbit:` | `vbit:1<<3` | 64-bit signed; gives decimal, hex, binary and Chinese numerals |
+| `vbitu:` | `vbitu:1<<3` | 64-bit unsigned |
+| `vbit8:` `vbit16:` `vbit32:` `vbit64:` `vbit128:` | `vbit8:0xff` | A fixed width, read as two's complement (`vbit8:0xff` is -1) |
+| with a `u` suffix | `vbit8u:0xff`, `vbit128u:not0` | unsigned |
+
+Operators follow C++: `<<` `>>` `&` `|` `^` `~` `%` `+ - * /`, plus the spelled-out `shl` `shr` `and` `or` `xor` `not` (`1shl10`, `0xffand3`). Hex is `0x`, binary is `0b`.
+
+There is no space key in the middle of an input, so operators go right against the numbers.
+
+An unrecognized name (`vfoo:bar`) falls back to the ordinary calculation instead of raising an error.
+## Base conversion and statistics
+
+| Sub-mode | Example | Result |
+|---|---|---|
+| `vbase;` | `vbase;128;16` | Reads 128 as decimal, gives hex: `80`, `128(10) = 80(16)`, `0x80` |
+| `vbase;` | `vbase;255;2` | Binary: `11111111`, `0b11111111` |
+| `vstat;` | `vstat;1;2;3;4` | Statistics over a list of numbers |
+
+`vbase` takes the number first and the target base second, bases 2–36. An argument it can't read produces no candidates.
+
+`vstat` gives **plain numbers**, in this order:
+
+```
+mean → median → mode → variance → sample variance → standard deviation → range → min and max → sum → count → sorted list
+```
+
+The mode (absent when every value appears only once) and the sample variance (absent with a single number)
+**take no slot when missing** — later values shift up. So `vstat;1;2;3;4` yields `2.5`, `2.5`, `1.25`,
+`1.666667`… where the third is the variance, not the mode.
+
+**One unreadable argument kills the whole set** (`vstat;1;2;x` won't quietly compute over 1 and 2).
+
+Separate arguments with a semicolon (full-width works too). **Not a comma** — in Chinese mode a comma commits the candidate and never reaches the buffer.
 ## UUID
 
 `vuuid` gives four candidates: a random UUID v4, a time-ordered v7, and the same v4 in uppercase and without hyphens. Number keys select candidates as usual.

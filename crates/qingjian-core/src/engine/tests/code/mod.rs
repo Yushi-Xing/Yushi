@@ -1,5 +1,6 @@
 //! 形码（五笔）：编码直接查码表，不走拼音的切分与整句。
 
+mod extras;
 mod keys;
 
 use qingjian_dictionary::CodeTable;
@@ -65,10 +66,8 @@ fn looks_up_by_code_prefix_and_prefers_the_finished_code() {
 #[test]
 fn first_level_codes_match_the_wubi_86_key_chart() {
     // 86 五笔 A–Y 的一级简码必须是首选，不能被同码高词频单字挤下去。
-    let table = CodeTable::parse(include_str!(
-        "../../../../../../assets/schemes/wubi86/table.tsv"
-    ))
-    .unwrap();
+    let table =
+        CodeTable::parse(include_str!("../../../../../../assets/sample/wubi86.tsv")).unwrap();
     let mut engine = engine();
     engine.set_code_scheme(Some(CodeScheme::new("wubi", table.clone())));
     engine.set_phonetic(false);
@@ -122,8 +121,6 @@ fn takes_no_part_in_the_pinyin_machinery() {
     let mut engine = wubi();
     // `v` 是字根键，不当表达式模式的前缀
     assert_eq!(code_texts(&mut engine, "v"), ["发"]);
-    // 快捷候选按拼音键认，形码下不出
-    assert!(code_texts(&mut engine, "rq").is_empty());
     // 模糊音不参与：`ga` 不会命中并不存在的 `ka`
     engine.set_fuzzy(FuzzyRules::ALL);
     assert_eq!(code_texts(&mut engine, "ga"), ["开", "开发"]);

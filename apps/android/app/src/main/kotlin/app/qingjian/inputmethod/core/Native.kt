@@ -6,6 +6,14 @@ internal object Native {
         System.loadLibrary("qingjian_android")
     }
 
+    /** 日志接到 logcat 并写进 [logDir]，见 [AppLog]。 */
+    external fun initLogging(logDir: String)
+
+    external fun setVerboseLog(on: Boolean)
+
+    /** [level]：0 错误、1 警告、2 信息、其余调试。 */
+    external fun log(level: Int, message: String)
+
     /** 失败返回 0，原因在 logcat（标签 qingjian）。 */
     external fun create(dataDir: String, userDir: String): Long
 
@@ -26,6 +34,12 @@ internal object Native {
 
     external fun select(handle: Long, index: Int): String?
 
+    /** 展开面板的「全部 / 单字」：切换这段组句的单字模式。 */
+    external fun toggleSingleChars(handle: Long): String?
+
+    /** 点了拼音行第 [index] 个字之后：拼音里的光标挪过去。 */
+    external fun moveCaret(handle: Long, index: Int): String?
+
     external fun selectTranslation(handle: Long, index: Int, sense: Int): String?
 
     external fun forget(handle: Long, index: Int): String?
@@ -33,6 +47,12 @@ internal object Native {
     external fun commitRaw(handle: Long): String?
 
     external fun clear(handle: Long): String?
+
+    /** 删除键上划清掉了光标前的 [text]（壳已经删了）：帧里放一个「撤销」，选它原样放回。 */
+    external fun cleared(handle: Long, text: String): String?
+
+    /** 候选条上放着上屏名字后的电话邮箱、或清空后的「撤销」：删除键、重输键先只收起它们。 */
+    external fun hasOffer(handle: Long): Boolean
 
     external fun setNineKey(handle: Long, on: Boolean): String?
 
@@ -51,6 +71,12 @@ internal object Native {
     external fun setOptions(handle: Long, options: String): String?
 
     external fun punctuate(handle: Long, c: Char): String?
+
+    /** 成对符号：符号要上屏前问一次；回 `insert:<退几格>:<文本>`、`skip:<右半边>`，照常上屏回 null。 */
+    external fun pairPunctuation(handle: Long, text: String, english: Boolean): String?
+
+    /** 没在组句时的退格：刚补完一对时回这一对（两个字），否则 null。 */
+    external fun pairBackspace(handle: Long): String?
 
     /** 日语罗马音模式开关：开着时敲键、选词走 Core 的罗马音缓冲区。 */
     external fun setJapanese(handle: Long, on: Boolean): String?
@@ -89,6 +115,43 @@ internal object Native {
 
     /** 剪贴板操作（[request] 是 `{"op":…}` 的 JSON），回操作之后的列表 JSON（[{text, image}]）；[limit] 是最大条数。 */
     external fun clipboard(userDir: String, request: String, limit: Int): String?
+
+    /** 没起名时的默认设备名。 */
+    external fun clipboardSyncDefaultName(userDir: String, chinese: Boolean): String?
+
+    /** 开始局域网同步（已开着就重开），成功回真。 */
+    external fun clipboardSyncStart(userDir: String, name: String, model: String, limit: Int): Boolean
+
+    external fun clipboardSyncStop()
+
+    /** 设备 id 和监听端口（JSON），注册 NSD 用。 */
+    external fun clipboardSyncInfo(): String?
+
+    external fun clipboardSyncFound(deviceId: String, name: String, model: String, address: String)
+
+    external fun clipboardSyncGone(deviceId: String)
+
+    /** 本机剪贴板内容变了，推给在线的设备。 */
+    external fun clipboardSyncChanged()
+
+    /** 等下一个同步事件（JSON），超时回 null。 */
+    external fun clipboardSyncPoll(timeoutMillis: Int): String?
+
+    /** 已配对和附近的设备（JSON）。 */
+    external fun clipboardSyncDevices(): String?
+
+    /** 设备页开了或关了。 */
+    external fun clipboardSyncWatch(watching: Boolean)
+
+    /** 显示配对码：生成一个新码。 */
+    external fun clipboardSyncBeginPairing(): String?
+
+    external fun clipboardSyncCancelPairing()
+
+    /** 输入配对码去连对方，结果走事件；地址写错回假。 */
+    external fun clipboardSyncJoin(address: String, code: String): Boolean
+
+    external fun clipboardSyncUnpair(deviceId: String)
 
     /** 记一张复制的图片，回操作之后的列表 JSON。 */
     external fun clipboardAddImage(userDir: String, bytes: ByteArray, extension: String, limit: Int): String?
@@ -133,6 +196,12 @@ internal object Native {
 
     /** 私密输入：应用声明不要学习的输入框里不学习、不记统计与生词、不发云端。 */
     external fun setPrivate(handle: Long, private: Boolean)
+
+    /**
+     * 通讯录（`[{"name":…,"details":[…]}]`，空数组即关掉）：名字并进候选，[details] 是上屏名字后给不给电话、邮箱。
+     * 返回收进来的名字数，出错 -1。
+     */
+    external fun setContacts(handle: Long, contacts: String, details: Boolean): Int
 
     /** 测试连接，阻塞到有结果（请求自带超时），只能在后台线程调；回 `{ok, message}`。 */
     external fun cloudTest(settings: String): String?

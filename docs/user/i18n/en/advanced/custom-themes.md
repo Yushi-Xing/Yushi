@@ -32,7 +32,7 @@ The simplest approach is to start from a built-in theme and change a few colours
 ```
 
 - `theme.json` can contain comments (`//` to the end of the line, or `/* … */`), and a trailing comma after the last item of an object or list is fine.
-- `extends` names the base theme: `qingjian` (青简绿), `system-blue` (系统蓝), `wechat` (微信绿), `sakura` (樱花), `dafeiyu` (大肥鱼), `miku` (初音未来) or `bocchi` (波奇酱). Anything you don't write is taken from the base theme, and the base theme's images don't need to be copied into your folder. Without `extends`, 青简绿 is the base.
+- `extends` names the base theme: `qingjian` (青简绿), `system-blue` (系统蓝), `wechat` (微信绿), `sujian` (素笺), `glass` (玻璃), `slate` (墨岩), `sakura` (樱花), `dafeiyu` (大肥鱼), `miku` (初音未来) or `bocchi` (波奇酱). Anything you don't write is taken from the base theme, and the base theme's images don't need to be copied into your folder. Without `extends`, 青简绿 is the base.
 - `meta.id` must be the same as the folder name, can't be the same as a built-in theme, and can't be `system`, `light` or `dark`; `meta.name` is the name shown in the theme list.
 - Colours are written as `#rrggbb`, or `#rrggbbaa` with opacity; written as `{ "light": …, "dark": … }`, the light and dark appearances each use one.
 
@@ -48,6 +48,7 @@ Colours you can change:
 | `fresh` | Glosses of new words |
 | `cloud` | Cloud candidates and the cloud icon |
 | `hl_text`, `hl_gloss`, `hl_faint`, `hl_fresh`, `hl_cloud` | The matching colours within the highlighted row |
+| `kb_board`, `kb_function`, `kb_brand` | The phone keyboard's background, function keys and Enter key (worked out from `surface` and `accent` if not given) |
 
 ## Gradients and images
 
@@ -98,7 +99,7 @@ Parts such as the window and the highlight can have drop shadows (`drop-shadow`)
 
 Weights are `light`, `regular`, `medium`, `semibold`, `bold`, or a number from 100 to 900. If the system font doesn't have a given weight, the nearest one is used.
 
-When 候选字号 (Candidate size) or 译文字号 (Gloss size) is changed in Settings, it overrides the theme's `candidate` and `annotation` sizes, and line heights scale in proportion; `index`, `preedit` and table row heights scale along with the candidate size so that rows line up. Cells in a table row are aligned automatically on the text baseline, so themes don't need to adjust margins for different sizes. The floating status bar scales as a whole in proportion to the candidate size, which themes don't need to handle. Other styles you name yourself in the theme aren't affected.
+When 候选字号 (Candidate size) or 译文字号 (Gloss size) is changed in Settings, it overrides the theme's `candidate` and `annotation` sizes, and line heights scale in proportion; `index`, `preedit` and table row heights scale along with the candidate size so that rows line up. Cells in a table row are aligned automatically on the text baseline, so themes don't need to adjust margins for different sizes. The floating status bar scales as a whole in proportion to the candidate size, which themes don't need to handle. Other styles you name yourself in the theme aren't affected. When 候选字粗细 (Candidate text weight) is set, only the `candidate` style's weight changes; nodes that set their own `weight` keep it.
 
 ## Fonts and italics
 
@@ -115,6 +116,7 @@ Each kind of text can use a different font, written as `family`; italics are `"s
 ```
 
 - `family` is one font name, or several in order, of which the first installed one is used. `system` means the font chosen under 设置 → 外观 → 字体 (Settings → Appearance → Font) (the system font if none is chosen); it's also used when none of the fonts are installed.
+- When the user picks a font in Settings, it replaces the `family` under `text` and the `family` on `candidate`, `annotation`, `index` and `preedit`; other styles (taglines, decorations) keep what the theme wrote.
 - Write the font family name, the English name shown in the system's font list, such as `Songti SC`, `Microsoft YaHei` or `Georgia`. macOS and Windows have different fonts, so list names for both if it should look good on both.
 - Characters a font doesn't have (such as Chinese characters in an English font) are filled in from the system font automatically.
 - If a font has no italic, the regular style is slanted instead; that's also how italics for Chinese characters are produced.
@@ -194,7 +196,8 @@ To let the window show what's behind it like the system's popovers, add `materia
 - `appearance`: for `glass` the default is `auto`: the glass turns darker or lighter with what's behind it and the text switches to the theme's light or dark colors to match, so write both `light` and `dark` in `variables`;
   with `system`, the text follows the system's light or dark mode and the glass becomes frosted glass, since the new glass changes color on its own. For `blur` the default is `system`. A theme that locks its appearance in `meta` always uses that appearance.
 - With it, the system draws the window's `fill` and shadow. To lay a color over the material, write a translucent color such as `"tint": "#ffffff33"`.
-- Only macOS supports it for now. Windows still draws the window's `fill`, so keep `fill` an opaque color.
+- On Windows 11 both `glass` and `blur` are the system's acrylic frosted glass: the text follows the system's light or dark mode rather than what's behind the window; the corner radius is fixed to the system's window corners instead of the theme's `radius`, and the system draws the shadow too. Decorations that stick out of the window also get the frosted glass under them, so don't combine them with `material`.
+- On Windows 10, with the system's Transparency effects turned off, and in generated previews, the window's `fill` and shadow are drawn as before, so keep `fill` an opaque color.
 
 ## Page arrows
 

@@ -11,7 +11,7 @@ use std::path::PathBuf;
 use std::thread;
 
 use qingjian_core::Language;
-use qingjian_platform::protocol::{KeyEvent, KeyModifiers, KeyOutcome, SessionId};
+use qingjian_platform::protocol::{CaretEdit, KeyEvent, KeyModifiers, KeyOutcome, SessionId};
 use qingjian_tsf::client::{EngineClient, KeyReply, KeyResponse};
 use qingjian_windows_server::{AssemblySpec, Router, RouterConfig, assembly, ipc};
 
@@ -104,6 +104,28 @@ fn space_commits_first_candidate() {
     assert!(space.frame.is_empty(), "上屏后应收起候选");
 
     client.close().expect("close session");
+    server.join().unwrap();
+}
+
+#[test]
+fn paired_punctuation_caret_edits_survive_boxed_key_replies() {
+    let (client_end, server_end) = UnixStream::pair().unwrap();
+    let server = spawn_server(server_end);
+    let (mut client, _) = EngineClient::open(client_end, SESSION, None).unwrap();
+    for (typed, text, caret) in [
+        ('(', "（）", CaretEdit::Back(1)),
+        (')', "）", CaretEdit::Skip('）')),
+    ] {
+        let reply = result(
+            client
+                .key(KeyEvent::new(0xBA, Some(typed), Default::default()))
+                .unwrap(),
+        );
+        assert_eq!(reply.outcome, KeyOutcome::Consumed);
+        assert_eq!(reply.commit.as_deref(), Some(text));
+        assert_eq!(reply.caret, Some(caret));
+    }
+    client.close().unwrap();
     server.join().unwrap();
 }
 

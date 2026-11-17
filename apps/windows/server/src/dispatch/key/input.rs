@@ -1,8 +1,8 @@
 //! 按键怎么作用到 Engine / 高亮上。分流规则与 macOS 壳的 `handle_text` / `handle_command` 对齐。
 
 use qingjian_core::candidate::arrows::{self, Arrow, ArrowAction, Focus};
-use qingjian_core::{CandidateKind, QUESTION_PREFIX, punctuation};
-use qingjian_platform::protocol::KeyEvent;
+use qingjian_core::{CandidateKind, PairEdit, QUESTION_PREFIX, punctuation};
+use qingjian_platform::protocol::{CaretEdit, KeyEvent};
 use qingjian_platform::{CommitRoute, HighlightKeys, NumpadDigit};
 
 use super::{Effect, codes, with_prefix};
@@ -12,6 +12,39 @@ impl Router {
     /// 功能键靠键码，其余靠字符。组句中修饰键 + 数字是快捷键；带 Ctrl / Alt / Win 而没配到快捷键的键归应用。
     /// 表达式模式里 Shift + 数字打的是 `^ * ( )`，不当快捷键。
     pub(crate) fn apply_key(&mut self, event: &KeyEvent) -> Effect {
+        // 上方候选的上下方向按视觉位置走；数字键与左右顺序不变。
+        if self.candidate_upward
+            && (self.config.layout != qingjian_platform::LayoutMode::Vertical
+                || self.config.vertical_reverse_above)
+            && self.composing()
+            && self.panel.is_none()
+            && self.translation.is_none()
+            && (self.config.layout == qingjian_platform::LayoutMode::Vertical || self.grid_keys())
+            && matches!(event.virtual_key, codes::UP | codes::DOWN)
+        {
+            let mut visual = *event;
+            visual.virtual_key = if event.virtual_key == codes::UP {
+                codes::DOWN
+            } else {
+                codes::UP
+            };
+            self.candidate_upward = false;
+            let effect = self.apply_key(&visual);
+            self.candidate_upward = true;
+            return effect;
+        }
+        if event.modifiers.vietnamese_mode {
+            return self.apply_vietnamese(event);
+        }
+        if !self.vietnamese.is_empty() {
+            let prefix = self.vietnamese.commit();
+            self.composed = None;
+            let effect = self.apply_key(event);
+            return match event.character {
+                Some(c) => with_prefix(Some(prefix), effect, c),
+                None => Effect::Changed(Some(prefix)),
+            };
+        }
         if self.config.toggle_traditional.is_some_and(|combo| {
             event.virtual_key == combo.key.to_ascii_uppercase() as u32
                 && event.modifiers.chord() == combo.modifiers.into()
@@ -21,6 +54,30 @@ impl Router {
         }
         if let Some(effect) = self.apply_panel_key(event) {
             return effect;
+        }
+        if self.composing()
+            && self.config.single_chars.is_some_and(|combo| {
+                event.virtual_key == combo.key.to_ascii_uppercase() as u32
+                    && event.modifiers.chord() == combo.modifiers.into()
+            })
+            && self.engine.toggle_single_chars()
+        {
+            return Effect::Changed(None);
+        }
+        if self.composing()
+            && self.config.next_word.is_some_and(|combo| {
+                event.virtual_key == combo.key.to_ascii_uppercase() as u32
+                    && event.modifiers.chord() == combo.modifiers.into()
+            })
+        {
+            // 跳不动（首选不是整句）也吃掉：组句中粘贴会粘到拼音后面
+            let Some(lead) = self.layout_candidate(0) else {
+                return Effect::Navigated;
+            };
+            return match self.engine.hold_next_word(&lead) {
+                Some(text) => Effect::Changed((!text.is_empty()).then_some(text)),
+                None => Effect::Navigated,
+            };
         }
         if let Some(effect) = self.apply_commit_key(event) {
             return effect;
@@ -385,13 +442,36 @@ impl Router {
             && self.full_width_for(english)
             && let Some(text) = self.engine.punctuate(c)
         {
-            return Effect::Changed(Some(text.to_owned()));
+            let text = text.to_owned();
+            return Effect::Changed(Some(self.pair(text, english)));
+        }
+        // 没转全角的原字符（英文模式、关了全角）：半角括号与双引号也成对
+        if !codes::is_keypad(event.virtual_key) && !lead {
+            let text = self.pair(c.to_string(), english);
+            if self.pending_caret.is_some() {
+                return Effect::Changed(Some(text));
+            }
         }
         self.engine.note_passthrough(c);
         if lead {
             Effect::Changed(Some(format!(" {c}")))
         } else {
             Effect::Passthrough
+        }
+    }
+
+    /// 成对符号（#928）：符号 `text` 要补右半边或要跳过补上的那个时，记下要 DLL 做的光标编辑，返回要上屏的文本。
+    fn pair(&mut self, text: String, english: bool) -> String {
+        match self.engine.pair_punctuation(&text, english) {
+            Some(PairEdit::Insert { text, back }) => {
+                self.pending_caret = Some(CaretEdit::Back(back as u32));
+                text
+            }
+            Some(PairEdit::Skip { closer }) => {
+                self.pending_caret = Some(CaretEdit::Skip(closer));
+                text
+            }
+            None => text,
         }
     }
 
@@ -579,7 +659,7 @@ impl Router {
     }
 
     pub(in crate::dispatch) fn composing(&self) -> bool {
-        !self.engine.composition().is_empty()
+        !self.engine.composition().is_empty() || !self.vietnamese.is_empty()
     }
 
     /// 横排矩阵展开着时按阅读顺序移一格（跨行、跳过空位），否则逐个移动高亮（到页边自动翻页）。

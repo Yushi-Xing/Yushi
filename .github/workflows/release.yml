@@ -1,3 +1,4 @@
+# 本 fork 仅在用户明确要求时手动运行，并选择版本标签作为 ref。
 # 推 v<版本> 标签发四个平台（共用一个 GitHub Release）；单平台补丁推 macos-v / windows-v / linux-v / android-v<版本>，只打那一个平台。
 # 版本号读各平台壳：macOS apps/macos/Cargo.toml、Windows apps/windows/server/Cargo.toml、Linux apps/linux/server/Cargo.toml、Android apps/android/core/Cargo.toml，要打的平台都得与标签一致。
 # 流程：prepare 核对版本、建草稿 Release → 各平台 job 并行打包，把安装包与摘要 / 构建信息片段传到草稿上
@@ -25,12 +26,11 @@
 #
 # 门禁：版本号与标签一致且不带 -dev；标签指向的提交必须在 main 上（防止从没合并的分支或手滑的本地提交发版）。
 # Secrets 不放 workflow 顶层 env，只注入真正用它的那一步；有没有配由第一步算成输出（secrets 不能直接写在 if 里）。
-# actions 钉到 commit（注释是对应标签），Dependabot 每周更新；产品数据与本地整句模型按 tools/release/data.lock 钉住的 data-vN Release 下载、按锁文件里的哈希校验，标签与哈希记进 build-info.json。
+# actions 钉到 commit（注释是对应标签），Dependabot 每周更新；随包的语言模型与含章·通变按 tools/release/models.lock、词库按 dicts.lock 从模型仓库与词库仓库下载并核对哈希，模型摘要记进 build-info.json。
 name: release
 
 on:
-  push:
-    tags: ['v*', 'macos-v*', 'windows-v*', 'linux-v*', 'android-v*']
+  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
@@ -143,7 +143,7 @@ jobs:
           toolchain: 1.96.0
           targets: aarch64-apple-darwin, x86_64-apple-darwin
 
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
 
       - name: Detect optional secrets
         id: secrets
@@ -156,7 +156,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           tools/release/data-fetch.sh
-          ls -la data/generated data/generated/dicts data/models/hanzhang-tongbian
+          ls -la data/generated data/models/hanzhang-tongbian
 
       - name: Import signing certificates
         if: steps.secrets.outputs.sign == 'true'
@@ -232,14 +232,14 @@ jobs:
           # 安装包另带一份 32 位 TSF DLL（build.ps1 编）
           targets: i686-pc-windows-msvc
 
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
 
       - name: Fetch product data
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           tools/release/data-fetch.sh
-          ls -la data/generated data/generated/dicts data/models/hanzhang-tongbian
+          ls -la data/generated data/models/hanzhang-tongbian
 
       # 与开发机同版本（7.1.0，自带简体中文翻译；Chocolatey 只有 6.x，6 的安装包不带简中）。钉死 GitHub Release 上的文件。
       - name: Install Inno Setup 7.1.0
@@ -282,7 +282,7 @@ jobs:
         with:
           toolchain: 1.96.0
 
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
 
       - name: Install Fcitx5 build dependencies
         run: |
@@ -294,7 +294,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           tools/release/data-fetch.sh
-          ls -la data/generated data/generated/dicts data/models/hanzhang-tongbian
+          ls -la data/generated data/models/hanzhang-tongbian
 
       - name: Build package
         run: apps/linux/scripts/package.sh
@@ -319,6 +319,81 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: tools/release/upload-build.sh linux "$(. /etc/os-release && echo "$PRETTY_NAME"), Fcitx5 $(pkg-config --modversion Fcitx5Core)" target/linux-package/*.tar.gz
 
+  # deb / rpm：全在容器里编（Rust 部分 Ubuntu 22.04，fcitx5 插件对着 Debian 13 / Fedora 42 各编一份），见 docs/notes/linux-packaging.md。
+  # 只挂在 Release 上、不进 releases.json：每种格式两个包（qingjian 与 qingjian-fcitx5），检查更新与官网下载页仍按 tar.gz 认 Linux。
+  linux-packages:
+    needs: prepare
+    if: needs.prepare.outputs.linux == 'true'
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.prepare.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # build.sh 把本机的 ~/.cargo 与 ~/.rustup 挂进 Ubuntu 22.04 容器编 Rust 部分
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # v1
+        with:
+          toolchain: 1.96.0
+
+      - name: Fetch product data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: tools/release/data-fetch.sh
+
+      - name: Build deb and rpm
+        run: apps/linux/packaging/build.sh deb rpm
+
+      # 在干净容器里装、自检（插件缺不缺库、打 nihao 出候选、卸载清干净）；图形会话里打字仍要真机试
+      - name: Smoke-test packages
+        run: apps/linux/packaging/smoke/run.sh debian:trixie ubuntu:26.04 fedora:42
+
+      - name: Upload to draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: tools/release/upload-build.sh linux-packages "deb：Debian 13 容器；rpm：Fedora 42 容器；Rust 部分：Ubuntu 22.04 容器" target/linux-pkg/out/*.deb target/linux-pkg/out/*.rpm
+
+  # AppImage：在 Debian 13 容器里编（Fcitx5 ≥ 5.1.8 里 glibc 最老的），见 docs/notes/linux-appimage.md。
+  # 进 releases.json，官网 Linux 的主按钮给它，tar.gz 作小字链接。
+  linux-appimage:
+    needs: prepare
+    if: needs.prepare.outputs.linux == 'true'
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.prepare.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # 只给 upload-build.sh 记工具链版本；编译用的是容器里的同一版
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # v1
+        with:
+          toolchain: 1.96.0
+
+      - name: Fetch product data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: tools/release/data-fetch.sh
+
+      - name: Build AppImage
+        run: apps/linux/appimage/build.sh
+
+      # Debian 13 容器里装、起 Fcitx5、Mousepad 里打字比对；Ubuntu 24.04（Fcitx5 5.1.7）应按预期拒装
+      - name: Smoke-test AppImage
+        timeout-minutes: 30
+        run: apps/linux/appimage/test/test.sh target/appimage/Qingjian-*-x86_64.AppImage debian13 ubuntu2404
+
+      - name: Upload to draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: tools/release/upload-build.sh linux-appimage "Debian 13 容器，Fcitx5 5.1.12" target/appimage/Qingjian-*-x86_64.AppImage
+
   android:
     needs: prepare
     if: needs.prepare.outputs.android == 'true'
@@ -338,7 +413,7 @@ jobs:
           toolchain: 1.96.0
           targets: aarch64-linux-android
 
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
 
       # Gradle 8.14 只认到 JDK 24，runner 缺省的是 25
       - name: Use JDK 21
@@ -362,7 +437,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           tools/release/data-fetch.sh
-          ls -la data/generated data/generated/dicts
+          ls -la data/generated
 
       - name: Build signed APK
         env:
@@ -393,7 +468,7 @@ jobs:
         run: tools/release/upload-build.sh android "$(. /etc/os-release && echo "$PRETTY_NAME"), NDK $NDK_VERSION" target/android-package/*.apk
 
   publish:
-    needs: [prepare, macos, windows, linux, android]
+    needs: [prepare, macos, windows, linux, linux-packages, linux-appimage, android]
     # 没选中的平台是 skipped，照样发；有平台失败就停在草稿
     if: ${{ !cancelled() && needs.prepare.result == 'success' && !contains(needs.*.result, 'failure') }}
     runs-on: ubuntu-26.04
@@ -408,7 +483,7 @@ jobs:
         with:
           toolchain: 1.96.0
 
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
 
       - name: Detect optional secrets
         id: secrets

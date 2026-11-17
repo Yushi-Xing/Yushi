@@ -277,6 +277,10 @@ impl FrequencyLearner {
             });
         }
         self.choices.retain(|_, texts| !texts.is_empty());
+        let before = self.preferences.len();
+        self.preferences
+            .retain(|input, _| self.choices.contains_key(input));
+        self.preferences_dirty |= before != self.preferences.len();
     }
 
     /// 用户词文件与词频文件同目录。

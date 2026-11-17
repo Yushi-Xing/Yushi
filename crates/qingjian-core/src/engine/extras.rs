@@ -1,8 +1,8 @@
 //! 附加候选：日期时间等快捷项、中英混输的英文词与补全、emoji 与颜文字、符号。
 
 use super::{
-    EMOJI_PER_WORD, EMOJI_SCAN, ENGLISH_COMPLETIONS, Engine, KAOMOJI_PER_WORD, KEYWORD_SCAN,
-    Learner, MIN_COMPLETION_LETTERS,
+    EMOJI_PER_WORD, EMOJI_SCAN, ENGLISH_COMPLETIONS, Engine, INLINE_SHORTCUTS, KAOMOJI_PER_WORD,
+    KEYWORD_SCAN, Learner, MIN_COMPLETION_LETTERS,
 };
 use crate::candidate::{Candidate, CandidateKind};
 use crate::custom_phrase::{CustomPhrase, expand_variables};
@@ -11,6 +11,37 @@ use crate::shortcut;
 use qingjian_dictionary::WordList;
 
 impl Engine {
+    /// 叹词的标准音（嗯 ng、哼 hng、噷 hm）不是拼音音节（音节表不收叹词写法，`n` / `m` 要留给简拼），
+    /// 整段正好是这几个键时按快捷候选给（#880）。双拼里 `ng` 是 neng，能 留在第一、嗯 排第二；
+    /// hm / hng 在双拼里是别的音、注音里不是这些键，都不给。
+    fn insert_interjection(&self, items: &mut Vec<Candidate>, scope: &str) {
+        if self.zhuyin {
+            return;
+        }
+        let shuangpin = self.shuangpin.is_some();
+        let (text, at) = match scope {
+            "ng" => ("嗯", usize::from(shuangpin)),
+            "hng" if !shuangpin => ("哼", 0),
+            // hm 也是 好吗 一类的简拼
+            "hm" if !shuangpin => ("噷", 1),
+            _ => return,
+        };
+        // 已经有这个字（九宫格选定了 ng、或词库按别的读音带出来排在后面）就挪上来，不另插一个
+        let candidate = match items.iter().position(|c| c.text == text) {
+            Some(found) if found <= at => return,
+            Some(found) => items.remove(found),
+            None => Candidate {
+                text: text.to_owned(),
+                kind: CandidateKind::Shortcut,
+                syllables: Vec::new(),
+                reading: None,
+                translation: None,
+                aux_code: None,
+            },
+        };
+        items.insert(at.min(items.len()), candidate);
+    }
+
     /// 精确匹配自定义输入码时，数字键应选择候选。
     pub(super) fn has_custom_phrase(&self) -> bool {
         !self.english_mode
@@ -70,27 +101,18 @@ impl Engine {
             } else {
                 self.modes().expression
             };
-        // 嗯 的标准音 ng 不是拼音音节（音节表不收叹词写法）；整段正好是 ng 时按快捷候选给它，排第一。
-        // 只认全拼：双拼与注音里这两个键是别的音
-        if scope == "ng" && self.shuangpin.is_none() && !self.zhuyin {
-            items.insert(
-                0,
-                Candidate {
-                    text: "嗯".to_owned(),
-                    kind: CandidateKind::Shortcut,
-                    syllables: Vec::new(),
-                    reading: None,
-                    translation: None,
-                    aux_code: None,
-                },
-            );
-        }
+        self.insert_interjection(items, scope);
         let shortcuts = shortcut::candidates(scope, expression_char, &jiff::Zoned::now());
         if shortcuts.is_empty() {
             return;
         }
+        // 前几条紧跟第一个词，其余垫到最后：写法一多（`sj` 有十五条）会把简拼原来
+        // 第一页的词整片推走——`sj` 打的是 世纪，不该翻到第二页才找得到。
+        let inline = shortcuts.len().min(INLINE_SHORTCUTS);
+        let (head, tail) = shortcuts.split_at(inline);
         let position = items.len().min(1);
-        items.splice(position..position, shortcuts);
+        items.splice(position..position, head.iter().cloned());
+        items.extend(tail.iter().cloned());
     }
 
     /// 全拼打出了「日期 / 时间 / 星期」（排在前 [`KEYWORD_SCAN`] 个词里，配的 emoji 这些不算）：对应的快捷写法
@@ -116,8 +138,12 @@ impl Engine {
                 (!forms.is_empty()).then_some((i, forms))
             });
         if let Some((index, forms)) = found {
+            let candidates = shortcut::as_candidates(forms);
+            let inline = candidates.len().min(INLINE_SHORTCUTS);
+            let (head, tail) = candidates.split_at(inline);
             let position = index + 1;
-            items.splice(position..position, shortcut::as_candidates(forms));
+            items.splice(position..position, head.iter().cloned());
+            items.extend(tail.iter().cloned());
         }
     }
 
@@ -139,14 +165,6 @@ impl Engine {
         if text.contains('\'') {
             return;
         }
-        let english_candidate = |word: &str| Candidate {
-            text: word.to_owned(),
-            kind: CandidateKind::English,
-            syllables: Vec::new(),
-            reading: None,
-            translation: None,
-            aux_code: None,
-        };
         let word = lists.iter().find_map(|words| words.get(text));
         // 这段字母下用户选中文词（`key` → 可以）比选英文词的次数多：中文词留在第一，英文让到后面；
         // 拼音再不像话也是他自己教的
@@ -173,7 +191,7 @@ impl Engine {
         };
         let mut budget = self.english_max_in_chinese;
         if let Some(word) = word {
-            items.insert(position, english_candidate(word));
+            items.insert(position, self.english_candidate(word));
             position += 1;
             budget -= 1;
         }
@@ -189,7 +207,7 @@ impl Engine {
                     {
                         continue;
                     }
-                    items.insert(position, english_candidate(word));
+                    items.insert(position, self.english_candidate(word));
                     position += 1;
                     budget -= 1;
                 }
@@ -293,7 +311,10 @@ fn insert_following(
         index += 1;
         if !matches!(
             item.kind,
-            CandidateKind::Chinese | CandidateKind::Sentence | CandidateKind::English
+            CandidateKind::Chinese
+                | CandidateKind::Code
+                | CandidateKind::Sentence
+                | CandidateKind::English
         ) {
             continue;
         }

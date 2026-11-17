@@ -2,13 +2,20 @@
 //! 移除是挪进目录里的 `removed/`，不真删。
 
 mod entry;
+mod glossaries;
 mod kind;
+
+pub use glossaries::remove as remove_glossary;
+
+#[cfg(all(test, target_os = "linux"))]
+mod tests;
 
 pub use entry::Entry;
 pub use kind::Kind;
 
 use std::path::{Path, PathBuf};
 
+use qingjian_core::Language;
 use qingjian_dictionary::import::code_words_scheme;
 use qingjian_dictionary::{AuxCodeTable, CodeTable, Dictionary, aux_code_table_info};
 use qingjian_platform::aux_schemes::{self, AuxSchemeEntry};
@@ -20,6 +27,9 @@ use crate::system::paths;
 
 #[derive(Debug, Clone, Default)]
 pub struct Library {
+    /// 随包基础词库：单字、读音与常用词都在里面；关掉（`[dictionaries] base`）只关词，单字照常出。
+    pub base: Option<Entry>,
+
     pub domains: Vec<Entry>,
 
     pub dictionaries: Vec<Entry>,
@@ -39,29 +49,41 @@ pub struct Library {
 
     /// 用户目录 `schemes/` 下的双拼方案（内置九套不在这里）。
     pub shuangpin_schemes: Vec<ShuangpinSchemeEntry>,
+
+    /// 从词库仓库下载、装在用户目录 `glossaries/` 里的释义表。
+    pub glossaries: Vec<Entry>,
+
+    /// 有释义表（随包的或下载的）的语言：学习语言选了没表的，「候选」页提示去下载。
+    pub glossary_languages: Vec<Language>,
 }
 
 impl Library {
     pub fn scan() -> Self {
-        let scan = |kind: Kind, dir: Option<PathBuf>| -> Vec<Entry> {
-            dir.map(|dir| {
-                kind.list(&dir)
-                    .into_iter()
-                    .map(|(stem, path)| entry(kind, stem, &path))
-                    .collect()
-            })
-            .unwrap_or_default()
+        let scan = |kind: Kind, dirs: Vec<PathBuf>| -> Vec<Entry> {
+            dirs.iter()
+                .flat_map(|dir| kind.list(dir))
+                .map(|(stem, path)| entry(kind, stem, &path))
+                .collect()
         };
         let code_schemes = scan_code_schemes();
         Self {
-            domains: scan(Kind::Dictionary, Kind::Dictionary.bundled_dir()),
-            dictionaries: scan(Kind::Dictionary, Kind::Dictionary.user_dir()),
+            base: base_dictionary().map(|path| entry(Kind::Dictionary, "base".to_owned(), &path)),
+            domains: scan(
+                Kind::Dictionary,
+                Kind::Dictionary.bundled_dir().into_iter().collect(),
+            ),
+            dictionaries: scan(Kind::Dictionary, Kind::Dictionary.user_dirs()),
             code_words: scan_code_words(&code_schemes),
-            bundled_codes: scan(Kind::CodeTable, Kind::CodeTable.bundled_dir()),
-            codes: scan(Kind::CodeTable, Kind::CodeTable.user_dir()),
+            bundled_codes: scan(
+                Kind::CodeTable,
+                Kind::CodeTable.bundled_dir().into_iter().collect(),
+            ),
+            codes: scan(Kind::CodeTable, Kind::CodeTable.user_dirs()),
             aux_schemes: scan_aux_schemes(),
             code_schemes,
             shuangpin_schemes: scan_shuangpin_schemes(),
+            glossaries: glossaries::downloaded(),
+            glossary_languages: glossaries::available(),
         }
     }
 
@@ -98,7 +120,7 @@ impl Library {
 }
 
 fn scan_aux_schemes() -> Vec<Entry> {
-    aux_schemes::list(paths::user_dir().as_deref(), bundled_schemes().as_deref())
+    aux_schemes::list(custom_dir().as_deref(), bundled_schemes().as_deref())
         .into_iter()
         .map(aux_scheme_entry)
         .collect()
@@ -114,6 +136,7 @@ fn aux_scheme_entry(scheme: AuxSchemeEntry) -> Entry {
         name: scheme.label,
         entries: table.as_ref().map_or(0, AuxCodeTable::len),
         license: scheme.meta.license,
+        version: String::new(),
         broken: table.is_err(),
     }
 }
@@ -145,16 +168,17 @@ fn code_words_entry(stem: String, path: &Path, scheme: &str) -> Entry {
         stem,
         entries: table.as_ref().map_or(0, CodeTable::len),
         license: String::new(),
+        version: String::new(),
         broken: table.is_err(),
     }
 }
 
 fn scan_code_schemes() -> Vec<CodeSchemeEntry> {
-    code_schemes::list(paths::user_dir().as_deref(), bundled_schemes().as_deref())
+    code_schemes::list(custom_dir().as_deref(), bundled_schemes().as_deref())
 }
 
 fn scan_shuangpin_schemes() -> Vec<ShuangpinSchemeEntry> {
-    shuangpin_schemes::list(paths::user_dir().as_deref(), bundled_schemes().as_deref())
+    shuangpin_schemes::list(custom_dir().as_deref(), bundled_schemes().as_deref())
 }
 
 fn entry(kind: Kind, stem: String, path: &Path) -> Entry {
@@ -165,6 +189,7 @@ fn entry(kind: Kind, stem: String, path: &Path) -> Entry {
                 Entry {
                     name: metadata.map_or_else(|| stem.clone(), |m| m.name.clone()),
                     license: metadata.map_or_else(String::new, |m| m.license.clone()),
+                    version: metadata.map_or_else(String::new, |m| m.version.clone()),
                     entries: dictionary.len(),
                     broken: false,
                     stem,
@@ -177,6 +202,7 @@ fn entry(kind: Kind, stem: String, path: &Path) -> Entry {
                     stem,
                     entries: 0,
                     license: String::new(),
+                    version: String::new(),
                     broken: true,
                 }
             }
@@ -192,6 +218,7 @@ fn entry(kind: Kind, stem: String, path: &Path) -> Entry {
                 name: info.name,
                 entries: info.entries,
                 license: info.license,
+                version: String::new(),
                 broken: info.broken,
             }
         }
@@ -209,13 +236,13 @@ fn bundled_dir(name: &str) -> Option<PathBuf> {
         .or_else(|| paths::bundled(&format!("data/generated/{name}")))
 }
 
-/// 随包的形码方案目录，与各平台输入法读的同一处：macOS 在 `Resources/schemes/`，其他平台在随包根的 `assets/schemes/`。
+/// 随包的形码方案目录，与各平台输入法读的同一处：macOS 在 `Resources/schemes/`，其他平台在随包根的 `data/generated/schemes/`。
 fn bundled_schemes() -> Option<PathBuf> {
     paths::mac_resources()
         .into_iter()
         .map(|dir| dir.join(code_schemes::DIR))
         .find(|dir| dir.is_dir())
-        .or_else(|| paths::bundled(&format!("assets/{}", code_schemes::DIR)))
+        .or_else(|| paths::bundled(&format!("data/generated/{}", code_schemes::DIR)))
 }
 
 /// 导入无读音词表时的参考词库：随包基础词库加随包领域词库，读不到的跳过（导入报告里会说到）。
@@ -245,18 +272,44 @@ fn base_dictionary() -> Option<PathBuf> {
         .or_else(|| paths::bundled("data/generated/dict.qj"))
 }
 
-/// 挪进 `removed/`；输入法看到文件没了会自己卸掉。
+/// 用户自己做的形码方案在这下面（`schemes/`），与输入法读的同一处。
+fn custom_dir() -> Option<PathBuf> {
+    paths::user_dirs().map(|dirs| dirs.custom())
+}
+
+/// 挪进它所在目录的 `removed/`；输入法看到文件没了会自己卸掉。
 pub fn remove(kind: Kind, stem: &str) -> Result<(), String> {
-    let dir = kind.user_dir().ok_or(tr("common.no_data_dir"))?;
-    let (_, path) = kind
-        .list(&dir)
-        .into_iter()
-        .find(|(name, _)| name == stem)
-        .ok_or(tr("library.gone"))?;
+    let (dir, path) = locate(kind, stem)?;
     let removed = dir.join("removed");
     std::fs::create_dir_all(&removed)
         .map_err(|error| tr_args("library.remove_failed", &[("error", &error)]))?;
     let name = path.file_name().ok_or(tr("library.bad_name"))?;
     std::fs::rename(&path, removed.join(name))
         .map_err(|error| tr_args("library.remove_failed", &[("error", &error)]))
+}
+
+/// 用户目录里的一本在哪：(所在目录, 文件)。
+fn locate(kind: Kind, stem: &str) -> Result<(PathBuf, PathBuf), String> {
+    kind.user_dirs()
+        .into_iter()
+        .find_map(|dir| {
+            let (_, path) = kind.list(&dir).into_iter().find(|(name, _)| name == stem)?;
+            Some((dir, path))
+        })
+        .ok_or_else(|| tr("library.gone").to_owned())
+}
+
+/// 把「我的词库」里的一本导出成 TSV，返回写了几条。
+pub fn export_tsv(stem: &str, target: &Path) -> Result<usize, String> {
+    let (_, path) = locate(Kind::Dictionary, stem)?;
+    let failed =
+        |error: &dyn std::fmt::Display| tr_args("library.export_failed", &[("error", error)]);
+    let dictionary = Dictionary::from_path(&path).map_err(|error| failed(&error))?;
+    let file = std::fs::File::create(target).map_err(|error| failed(&error))?;
+    let mut out = std::io::BufWriter::new(file);
+    let count = dictionary
+        .write_tsv(&mut out)
+        .map_err(|error| failed(&error))?;
+    std::io::Write::flush(&mut out).map_err(|error| failed(&error))?;
+    Ok(count)
 }

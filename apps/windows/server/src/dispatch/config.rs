@@ -2,7 +2,8 @@ use qingjian_core::TraditionalVariant;
 use qingjian_platform::protocol::KeyModifiers;
 use qingjian_platform::{
     Appearance, AppsConfig, CandidateRenderer, CommitKeys, Config, FontSize, HighlightKeys,
-    KeyCombo, KeyHintMode, LayoutMode, NumpadDigit, PageKeys, PreeditMode, Scheme, SwitchKeys,
+    KeyCombo, KeyHintMode, LayoutMode, NumpadDigit, PageKeys, PreeditMode, Scheme, ShortcutConfig,
+    SwitchKeys, ThirdInputMethod,
 };
 
 use super::RenderSettings;
@@ -19,9 +20,6 @@ pub struct RouterConfig {
     /// 是否请求云端候选词和整句补全（`[predict] enabled`）。
     pub cloud_enabled: bool,
 
-    /// 本地整句候选是否异步请求译文（`[predict] sentence_translation`）。
-    pub sentence_translation: bool,
-
     /// 中文模式下 Shift+字母收进组句缓冲区（`[general] shift_letter = "compose"`）。
     /// 关着（缺省）时壳把大写字母交给应用，与以前一致。
     pub shift_letter_compose: bool,
@@ -31,6 +29,9 @@ pub struct RouterConfig {
 
     /// 候选排布（`[general] layout`）。
     pub layout: LayoutMode,
+
+    /// 竖排在输入行上方时反向排列（`[general] vertical_reverse_above`）。
+    pub vertical_reverse_above: bool,
 
     /// 横排时上 / 下键把单行展开成多行矩阵（`[general] horizontal_grid`）。
     pub horizontal_grid: bool,
@@ -52,6 +53,9 @@ pub struct RouterConfig {
 
     /// 候选字、译文字号（`[general] candidate_font_size` / `annotation_font_size`）。
     pub font_sizes: (FontSize, FontSize),
+
+    /// 候选字字重（`[general] candidate_font_weight`）；只对青简渲染器生效。
+    pub candidate_weight: Option<u16>,
 
     /// 过渡动画（`[general] animations`）。
     pub animations: bool,
@@ -84,6 +88,9 @@ pub struct RouterConfig {
     /// 中英切换键（`[shortcut] switch_mode`）：由 Server 经协议下发给 DLL，由它认键。
     pub switch_mode: SwitchKeys,
 
+    /// 双击 Shift 切换到的第三输入法。
+    pub double_shift_input: ThirdInputMethod,
+
     /// 候选高亮由哪对方向键移动（`[shortcut] highlight_keys`）。
     pub highlight_keys: HighlightKeys,
 
@@ -112,6 +119,9 @@ pub struct RouterConfig {
     /// 「翻译选中文字」快捷键（`[shortcut] translate_selection`）。
     pub translate_selection: KeyCombo,
 
+    /// 没在组句时打开符号面板翻译组的快捷键（`[shortcut] translate_panel`）。
+    pub translate_panel: KeyCombo,
+
     /// 组句中按需调用 AI 的快捷键（`[shortcut] predict`）。
     pub predict: KeyCombo,
 
@@ -120,6 +130,12 @@ pub struct RouterConfig {
 
     /// 简繁切换快捷键；与选区翻译相同时不登记，保留翻译行为。
     pub toggle_traditional: Option<KeyCombo>,
+
+    /// 组句中切换单字模式的快捷键（`[shortcut] single_chars`）；与别的组合键撞了时不用（见本文件的 `single_chars_key`）。
+    pub single_chars: Option<KeyCombo>,
+
+    /// 组句中按词跳的快捷键（`[shortcut] next_word`）；与别的组合键撞了时不用，同 `single_chars`。
+    pub next_word: Option<KeyCombo>,
 
     /// 悬浮状态条开关（`[status_bar] enabled`）。
     pub status_enabled: bool,
@@ -147,6 +163,9 @@ pub struct RouterConfig {
 
     /// 译词旁是否显示词性标注（`[general] translation_pos`）。随帧下发给候选窗。
     pub translation_pos: bool,
+
+    /// 英文候选的 `reading` 是音标、用淡色画（`[general] show_english_pronunciation`）。随帧下发。
+    pub show_english_pronunciation: bool,
 
     /// 键位提示（`[general] key_hint`）。
     pub key_hint: KeyHintMode,
@@ -179,10 +198,12 @@ impl RouterConfig {
     /// 交给 UI 线程的画法。
     pub fn render_settings(&self) -> RenderSettings {
         RenderSettings {
+            vertical_reverse_above: self.vertical_reverse_above,
             renderer: self.renderer,
             font: self.font.clone(),
             theme: self.theme.clone(),
             font_sizes: self.font_sizes,
+            candidate_weight: self.candidate_weight,
             animations: self.animations,
             themes_stamp: self.themes_stamp,
         }
@@ -195,10 +216,10 @@ impl From<&Config> for RouterConfig {
             page_size: config.general.page_size(),
             cloud_slots: config.predict.slots,
             cloud_enabled: config.predict.enabled,
-            sentence_translation: config.predict.sentence_translation,
             shift_letter_compose: config.general.shift_letter.compose(),
             numpad_digit: config.general.numpad_digit,
             layout: config.general.layout,
+            vertical_reverse_above: config.general.vertical_reverse_above,
             horizontal_grid: config.general.horizontal_grid,
             grid_page_keys: config.general.grid_page_keys,
             appearance: config.general.appearance(),
@@ -209,6 +230,7 @@ impl From<&Config> for RouterConfig {
                 config.general.candidate_font_size,
                 config.general.annotation_font_size,
             ),
+            candidate_weight: config.general.candidate_font_weight(),
             animations: config.general.animations,
             themes_stamp: 0,
             preedit: config.general.preedit,
@@ -219,6 +241,7 @@ impl From<&Config> for RouterConfig {
             default_english: config.general.default_english,
             remember_mode_per_app: config.general.remember_mode_per_app,
             switch_mode: config.shortcut.switch_mode,
+            double_shift_input: config.general.double_shift_input,
             highlight_keys: config.shortcut.highlight_keys,
             toggle_punctuation: config.shortcut.toggle_punctuation,
             full_width: config.general.full_width_punctuation,
@@ -231,12 +254,15 @@ impl From<&Config> for RouterConfig {
                 (first.into(), second.into())
             },
             translate_selection: config.shortcut.translate_selection,
+            translate_panel: config.shortcut.translate_panel,
             predict: config.shortcut.predict,
             commit_keys: config.shortcut.commit_keys(),
             toggle_traditional: config
                 .shortcut
                 .toggle_traditional
                 .filter(|key| *key != config.shortcut.translate_selection),
+            single_chars: single_chars_key(&config.shortcut),
+            next_word: next_word_key(&config.shortcut),
             status_enabled: config.status_bar.enabled,
             status_pos: config.status_bar.x.zip(config.status_bar.y),
             status_size: config.status_bar.size.clamp(60, 150),
@@ -246,6 +272,7 @@ impl From<&Config> for RouterConfig {
             aux_code_key: config.general.aux_code_key(),
             aux_code_show: config.general.aux_code_show,
             translation_pos: config.general.translation_pos,
+            show_english_pronunciation: config.general.show_english_pronunciation,
             key_hint: config.general.key_hint,
             key_hint_look: (
                 config.general.key_hint_opacity.clamp(30, 100),
@@ -259,4 +286,33 @@ impl Default for RouterConfig {
     fn default() -> Self {
         Self::from(&Config::default())
     }
+}
+
+/// 组句里才拿走的组合键（单字模式、按词跳）的有效值：和别的组合键（翻译、AI、剪贴板、简繁、全半角）撞了，
+/// 或是「译词修饰键 + 数字」时不用，让那一项照旧——手改配置文件才会撞，设置程序录的时候就不让撞。
+fn composing_key(shortcut: &ShortcutConfig, combo: Option<KeyCombo>) -> Option<KeyCombo> {
+    let combo = combo?;
+    let others = [
+        Some(shortcut.translate_selection),
+        Some(shortcut.translate_panel),
+        Some(shortcut.predict),
+        Some(shortcut.clipboard),
+        shortcut.toggle_traditional,
+        shortcut.toggle_punctuation,
+    ];
+    let (first, second) = shortcut.translation_keys();
+    let translation =
+        combo.key.is_ascii_digit() && (combo.modifiers == first || combo.modifiers == second);
+    (!translation && !others.contains(&Some(combo))).then_some(combo)
+}
+
+/// 单字模式的有效组合键，见 [`composing_key`]。
+fn single_chars_key(shortcut: &ShortcutConfig) -> Option<KeyCombo> {
+    composing_key(shortcut, shortcut.single_chars)
+}
+
+/// 按词跳的有效组合键，见 [`composing_key`]；和单字模式撞了时让给单字模式。
+fn next_word_key(shortcut: &ShortcutConfig) -> Option<KeyCombo> {
+    composing_key(shortcut, shortcut.next_word)
+        .filter(|combo| shortcut.single_chars != Some(*combo))
 }

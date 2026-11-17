@@ -12,79 +12,89 @@ use qingjian_dictionary::{Dictionary, WordList};
 use qingjian_learning::{FrequencyLearner, InputLog, PanelUsage, UsageStats, VocabularyBook};
 use qingjian_lm::{MixedModel, TRIGRAM_WEIGHT, TrigramModel};
 use qingjian_platform::code_tables::AuxCodeSources;
-use qingjian_platform::{Config, extra_dictionaries, model_words};
-use qingjian_translate::{Glossary, LayeredTranslator, PersonalGlossary};
+use qingjian_platform::pronunciations::load_english_pronunciations;
+use qingjian_platform::{Config, UserDirs, extra_dictionaries, model_words};
+use qingjian_translate::{Glossary, LayeredTranslator, PersonalGlossary, downloaded_glossary};
 
 use crate::error::ServerError;
 
 pub use self::language_model::LanguageModelFiles;
 pub use self::spec::AssemblySpec;
 
-/// 知意三元模型在用户目录里的位置（与 `models/zhiyi-onnx` 并列）。
-const ZHIYI_NGRAM: &str = "models/zhiyi-ngram/zh.ngram";
+/// 知意三元模型在下载的模型目录里的位置（与 `zhiyi-onnx` 并列）。
+const ZHIYI_NGRAM: &str = "zhiyi-ngram/zh.ngram";
 
 pub fn assemble(spec: &AssemblySpec) -> Result<Engine, ServerError> {
     let started = Instant::now();
     let dictionary = Dictionary::from_path(&spec.dict)?;
-    let learner = match &spec.user_dir {
-        Some(dir) => load_learner(dir),
+    let learner = match &spec.user {
+        Some(user) => load_learner(&user.learning()),
         None => FrequencyLearner::default(),
     };
     tracing::info!(
         entries = dictionary.len(),
         learned = learner.len(),
         dictionary_ms = started.elapsed().as_millis(),
-        "词库与学习数据已加载"
+        "dictionary and learning data loaded"
     );
     let mut engine = Engine::new(dictionary).with_learner(Box::new(learner));
     if let Some((language, path)) = &spec.glossary {
         engine = engine.with_translator(Box::new(load_glossary(
             *language,
             path,
-            spec.user_dir.as_deref(),
+            spec.user.as_ref().map(UserDirs::learning).as_deref(),
         )?));
     }
-    if let Some(dir) = &spec.user_dir {
+    if let Some(user) = &spec.user {
+        let records = user.records();
         engine = engine
-            .with_usage_meter(Box::new(UsageStats::open(dir)))
-            .with_panel_history(Box::new(PanelUsage::open(dir)))
-            .with_vocabulary_tracker(Box::new(VocabularyBook::open(dir.join("user-vocab.tsv"))));
+            .with_usage_meter(Box::new(UsageStats::open(&records)))
+            .with_panel_history(Box::new(PanelUsage::open(&records)))
+            .with_vocabulary_tracker(Box::new(VocabularyBook::open(
+                records.join("user-vocab.tsv"),
+            )));
         if spec.input_log {
-            let path = dir.join("input-log.jsonl");
-            tracing::info!(path = %path.display(), "输入日志开着");
+            let path = user.input_log();
+            tracing::info!(path = %path.display(), "input log enabled");
             engine = engine.with_input_logger(Box::new(InputLog::open(path)));
         }
     }
+    let user_dicts = spec.user.as_ref().map(UserDirs::extra_dict_dirs);
+    let user_dicts: Vec<&Path> = user_dicts.iter().flatten().map(PathBuf::as_path).collect();
     let mut dictionaries = extra_dictionaries::load(
         spec.bundled_dicts_dir.as_deref(),
-        user_dicts_dir(spec.user_dir.as_deref()).as_deref(),
+        &user_dicts,
         &spec.dictionaries,
     );
     dictionaries.push(Dictionary::builtin_patch()?);
+    engine.set_default_candidate_view(qingjian_core::CandidateView::Compact);
     engine.set_extra_dictionaries(dictionaries);
+    engine.set_blocked_words(spec.dictionaries.blocked.clone());
+    engine.set_base_words(spec.dictionaries.base);
     let aux_sources = AuxCodeSources {
         bundled_codes: spec.bundled_codes_dir.clone(),
-        user_codes: user_codes_dir(spec.user_dir.as_deref()),
+        user_codes: spec.user.as_ref().map(UserDirs::code_tables),
         bundled_schemes: spec.bundled_schemes_dir.clone(),
-        user_dir: spec.user_dir.clone(),
+        user_dir: spec.user.as_ref().map(UserDirs::custom),
     };
     engine.set_aux_codes(aux_sources.load(&spec.aux_code));
-    if let Some(path) = &spec.english_glossary {
-        match Glossary::from_path(Language::Chinese, path) {
-            Ok(glossary) => {
-                tracing::info!(glosses = glossary.len(), "英→中释义表已加载");
-                engine = engine.with_english_translator(Box::new(glossary));
-            }
-            Err(error) => tracing::warn!(%error, "英→中释义表加载失败"),
-        }
+    if let Some(glossary) = spec
+        .english_glossary
+        .as_deref()
+        .and_then(load_english_glossary)
+    {
+        engine = engine.with_english_translator(Box::new(glossary));
     }
     if let Some(path) = &spec.english {
         let words = WordList::from_path(path)?;
-        tracing::info!(words = words.len(), "英文词表已加载");
+        tracing::info!(words = words.len(), "english word list loaded");
         engine = engine.with_english(words);
     }
+    if let Some(path) = &spec.english_ipa {
+        engine.set_english_pronunciations(load_english_pronunciations(path));
+    }
     if let Some(table) = load_emoji(&spec.emoji) {
-        tracing::info!(words = table.len(), "emoji 表已加载");
+        tracing::info!(words = table.len(), "emoji table loaded");
         engine = engine.with_emoji(table);
     }
     let mut bigram = None;
@@ -95,13 +105,14 @@ pub fn assemble(spec: &AssemblySpec) -> Result<Engine, ServerError> {
             words = model.word_count(),
             bigrams = model.bigram_count(),
             load_ms = started.elapsed().as_millis(),
-            "语言模型已加载"
+            "language model loaded"
         );
         bigram = Some(model);
     }
-    match (spec.user_dir.as_deref().and_then(load_trigram), bigram) {
+    let models = spec.user.as_ref().map(UserDirs::models);
+    match (models.as_deref().and_then(load_trigram), bigram) {
         (Some((phrase, lattice)), bigram) => {
-            if let Some(dir) = &spec.user_dir {
+            if let Some(dir) = &models {
                 let words = load_model_words(&engine, &phrase, &dir.join(ZHIYI_NGRAM), &spec.dict);
                 engine.set_model_words(words);
             }
@@ -121,9 +132,9 @@ pub fn assemble(spec: &AssemblySpec) -> Result<Engine, ServerError> {
     Ok(engine)
 }
 
-/// 用户放进 `models/zhiyi-ngram/` 的知意三元模型：映射两份，一份给选词重排、一份进整句词图（同一文件，页面共用）。
-fn load_trigram(user_dir: &Path) -> Option<(TrigramModel, TrigramModel)> {
-    let path = user_dir.join(ZHIYI_NGRAM);
+/// 用户放进 `downloads\models\zhiyi-ngram\` 的知意三元模型：映射两份，一份给选词重排、一份进整句词图（同一文件，页面共用）。
+fn load_trigram(models: &Path) -> Option<(TrigramModel, TrigramModel)> {
+    let path = models.join(ZHIYI_NGRAM);
     if !path.is_file() {
         return None;
     }
@@ -163,20 +174,6 @@ fn load_model_words(
     })
 }
 
-/// 用户导入词库目录 `dicts/`，不存在则创建；建不了当没有。
-pub fn user_dicts_dir(user_dir: Option<&Path>) -> Option<std::path::PathBuf> {
-    let dir = user_dir?.join("dicts");
-    std::fs::create_dir_all(&dir).ok()?;
-    Some(dir)
-}
-
-/// 用户导入码表目录 `codes/`，不存在则创建；建不了当没有。
-pub fn user_codes_dir(user_dir: Option<&Path>) -> Option<std::path::PathBuf> {
-    let dir = user_dir?.join("codes");
-    std::fs::create_dir_all(&dir).ok()?;
-    Some(dir)
-}
-
 /// 读不了就退回只在内存里学，不拿空表覆盖用户文件。
 fn load_learner(dir: &Path) -> FrequencyLearner {
     let path = dir.join("user.tsv");
@@ -201,42 +198,61 @@ pub fn learning_language(config: &Config) -> Option<Language> {
     }))
 }
 
-/// 某语言的释义表：`<root>/data/generated/` 打包过的 `.qj` 优先，否则随 git 的 `assets/glossary/` TSV；都没有为 `None`。
+/// 某语言的释义表：设置页下载的（`downloads\glossaries\`，`downloads` 是下载目录）优先，其次 `<root>/data/generated/` 打包过的 `.qj`，
+/// 再次同一目录里开发时导出的 TSV；都没有为 `None`。
 ///
 /// 启动装配（main）与热加载（swap_translator）都走这里。中文那张是英→中表，缺失本就可选、保持静默；
-/// 其他学习语言两张候选都缺时警告一条——只陈述「两张候选都没找到」的查找事实，不断言后果，
+/// 其他学习语言几处都缺时警告一条——只陈述查找事实，不断言后果，
 /// 因为两种语境后果不同：启动装配时是候选旁不显示译文；热加载时旧译文继续显示（由
 /// reload/mod.rs 那条「没有这门语言的释义表，学习语言不变」说明）。
-pub fn glossary_file(root: &Path, language: Language) -> Option<PathBuf> {
+pub fn glossary_file(root: &Path, downloads: Option<&Path>, language: Language) -> Option<PathBuf> {
     let code = language.code();
     let candidates = [
-        root.join("data/generated")
-            .join(format!("glossary-{code}.qj")),
-        root.join("assets/glossary")
-            .join(format!("glossary-{code}.tsv")),
+        downloads.map(|dir| downloaded_glossary(dir, language)),
+        Some(
+            root.join("data/generated")
+                .join(format!("glossary-{code}.qj")),
+        ),
+        Some(
+            root.join("data/generated")
+                .join(format!("glossary-{code}.tsv")),
+        ),
     ];
-    if let Some(path) = candidates.iter().find(|path| path.is_file()) {
+    if let Some(path) = candidates.iter().flatten().find(|path| path.is_file()) {
         return Some(path.clone());
     }
     if language != Language::Chinese {
         tracing::warn!(
             language = code,
-            qj = %candidates[0].display(),
-            tsv = %candidates[1].display(),
-            "学习语言的释义表两张候选都没找到"
+            bundled = %root.join("data/generated").display(),
+            "no glossary found for the learning language"
         );
     }
     None
 }
 
-/// 随包释义表叠上个人释义表（`user-glossary-<语言>.tsv`）。启动装配与热加载换语言共用。
+/// 英→中释义表（英文候选右侧的中文）：装不上记日志返回 `None`。启动装配与下载后重装共用。
+pub fn load_english_glossary(path: &Path) -> Option<Glossary> {
+    match Glossary::from_path(Language::Chinese, path) {
+        Ok(glossary) => {
+            tracing::info!(glosses = glossary.len(), "英→中释义表已加载");
+            Some(glossary)
+        }
+        Err(error) => {
+            tracing::warn!(%error, "英→中释义表加载失败");
+            None
+        }
+    }
+}
+
+/// 随包释义表叠上学习数据目录里的个人释义表（`user-glossary-<语言>.tsv`）。启动装配与热加载换语言共用。
 pub(crate) fn load_glossary(
     language: Language,
     path: &Path,
-    user_dir: Option<&Path>,
+    learning: Option<&Path>,
 ) -> Result<LayeredTranslator, ServerError> {
     let bundled = Glossary::from_path(language, path)?;
-    let personal = match user_dir {
+    let personal = match learning {
         Some(dir) => PersonalGlossary::open(
             language,
             dir.join(format!("user-glossary-{}.tsv", language.code())),

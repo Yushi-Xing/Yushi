@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 本仓库与上游
+
+- 本仓库的 `origin` 是 `https://github.com/likeplayscav/Yushi.git`。
+- 固定上游 `upstream` 为 `https://github.com/qingjian-team/qingjian.git`，以后同步上游都使用这个地址的 `main` 分支。
+- 同步时先检查工作区并获取双方最新提交，再合并 `upstream/main`，保留本仓库的独有改动；解决冲突后按下文要求验证。
+- 编译与构建验证使用 [InstaBox](https://instabox.sh)，可在本地登录其 CLI 后执行远程命令；本地进行代码编辑与不需编译的检查。除非用户明确要求，不得使用 GitHub Actions，包括手动触发、重跑与自动触发；所有工作流仅保留手动入口。需要原生 Windows 或 macOS 时先核实 InstaBox 环境能力，不能擅自改用 Actions。
+
 ## 仓库现状
 
 跨平台输入法，Core 平台无关，各平台只做壳。已发版 0.1.3（macOS 与 Windows 共用版本号，2026-09-17）；Linux 提供 Rust Server + Fcitx5 默认候选面板（源码安装，0.1.4 起另有 Ubuntu 26.04 预编译包），另有 Ubuntu 22.04 的 Fcitx4 源码适配。
@@ -25,11 +32,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `crates/bamboo-slip`：自绘 UI 引擎（场景树、布局、文字、动画 → 位图，另有控件库与窗口宿主），候选窗与设置程序共用；不放任何青简的概念，约定见该目录的 `CLAUDE.md`。双许可，见该目录的 `LICENSE.md`。
 - `crates/bamboo-slip-i18n`：界面文案多语言：各 crate 的 `locales/*.toml` 编译时嵌入，`tr` 按进程级的界面语言查，回退英文再回退中文。双许可，见该目录的 `LICENSE.md`。
 - `crates/qingjian-update`：检查更新：读官网的 `releases.json`、验 ed25519 签名、按平台与渠道挑新版本，只提示不安装；发版侧的签名工具是 `tools/release-sign`。见 `docs/design/update.md`。
+- `crates/qingjian-code`：认出一段文字像不像代码并切高亮片段，输入法与剪贴板共用；core 里转出为 `qingjian_core::code`。
+- `crates/qingjian-clipboard`：剪贴板历史存储（SQLite，留好同步要用的字段）与面板位置，平台无关，不放窗口与界面。
+- `crates/qingjian-clipboard-sync`：剪贴板的设备间同步：配对、加密通道、合并、发现与扫描，不依赖具体存储；Windows 与 Android 共用。
 - `apps/settings`：设置程序（三平台共用，画在 bamboo-slip 上，读写同一份配置文件），页面与设置项按 `docs/design/settings.md`；macOS 装在 `Qingjian.app/Contents/Applications/`，Windows、Linux 与 Server 同目录。`--png <目录>` 拷一份配置按脚本截图。
+- `apps/clipboard`：青简剪贴板（独立进程，Windows 与 macOS）：监听复制、全局快捷键呼出卡片面板、粘贴回原窗口，画在 bamboo-slip 上；系统相关的在 `src/system/{windows,macos}/`，霓虹灯的节奏与像素在共用的 `src/system/neon/`。macOS 版是输入法包里的 `QingjianClipboard.app`，由输入法按配置拉起。
 - `apps/cli`：Core 的验证工具：查询、逐键计时、输入日志回放、整句评测、常数扫描。排序 / 整句 / 纠错的改动先跑它再合。
 - `apps/macos`：IMK 壳，按 `app / host / imk / candidates / menubar / preferences` 分目录（`preferences` 是旧版设置，新版 `apps/settings` 为主、旧版只作兜底）；`scripts/bundle.sh --install` 装到本机，`--pkg` 出分发包。
-- `apps/windows`：`server`（Server 进程：Engine + IPC + 自绘候选窗与状态条）+ `tsf`（TSF DLL）+ `settings`（旧版设置，WinUI 3，只作兜底，新版 `apps/settings` 为主）+ `installer`（Inno）。DLL 不能带 Engine 的依赖树，所以是两个 package。
-- `apps/linux`：`server`（Engine + Unix socket）+ `fcitx5` / `fcitx4`（框架事件、默认面板）+ `ibus`（第二个前端：IBus，按键 / 焦点 / 面板已通，对着真 daemon 验过）+ `scripts`（用户级安装卸载、`package.sh` 打 Fcitx5 预编译包）+ `packaging`（`build.sh` 在容器里打 deb / rpm，见 `docs/notes/linux-packaging.md`）；Server 手动启动或装成 systemd 用户服务，见 `docs/notes/linux-fcitx5.md` 和 `docs/notes/linux-fcitx4.md`。
+- `apps/windows`：`server`（Server 进程：Engine + IPC + 自绘候选窗与状态条）+ `tsf`（TSF DLL）+ `settings`（可选旧版 WinUI 3 设置，打包加 `-IncludeLegacySettings` 才附带，标准包使用 `apps/settings`）+ `installer`（Inno）。DLL 不能带 Engine 的依赖树，所以是两个 package。
+- `apps/linux`：`server`（Engine + Unix socket）+ `fcitx5` / `fcitx4`（框架事件、默认面板）+ `ibus`（第二个前端：IBus，按键 / 焦点 / 面板已通，对着真 daemon 验过）+ `scripts`（用户级安装卸载、`package.sh` 打 Fcitx5 预编译包）+ `packaging`（`build.sh` 在容器里打 deb / rpm，见 `docs/notes/linux-packaging.md`）+ `appimage`（`build.sh` 在 Debian 13 容器里打 AppImage，`test/test.sh` 各发行版容器实测，见 `docs/notes/linux-appimage.md`）；Server 手动启动或装成 systemd 用户服务，见 `docs/notes/linux-fcitx5.md` 和 `docs/notes/linux-fcitx4.md`。
 - `apps/android`：`core`（Rust crate：Engine 装配 + `Session` + JNI，编成 `libqingjian_android.so`）+ `app`（Kotlin `InputMethodService` 壳，自绘键盘，候选条贴渲染器位图）；Gradle 构建时自动跑 `cargo ndk`，见 `apps/android/README.md`。
 - `tools/dict-convert`、`tools/gloss-gen`、`tools/corpus`：产品数据生成（词库 / 语言模型 / 释义表 / emoji / 英文词表），输出到 `data/generated/`（gitignore）。
 - `assets/`：随包数据源与样例，各目录有 README 写来源与许可。雾凇拼音（GPL）已彻底移除，不要再引入。
@@ -48,7 +59,8 @@ cargo run -p qingjian-cli -- <拼音>...          # Core 的主要验证方式�
 apps/macos/scripts/bundle.sh --install        # mac 壳装到 ~/Library/Input Methods/（IMK 不能 cargo run 验证）
 ```
 
-Windows 本机只 `cargo check --target x86_64-pc-windows-gnu`，真编译与真机测试在 Windows 机器上做（部署方式见 `apps/windows/README.md`）；
+Windows 安装包默认在 InstaBox 用 MSVC 交叉工具链与 Inno Setup 构建，流程见 `docs/notes/windows-instabox.md`；
+Windows 真机交互验收仍需在 Windows 上完成（部署方式见 `apps/windows/README.md`）；
 端到端验证 mac 可用 `osascript` 往 TextEdit 发按键再读回文本。
 
 ## 约定

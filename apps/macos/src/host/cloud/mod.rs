@@ -6,14 +6,48 @@ mod test_monitor;
 pub(super) use predict_monitor::PredictMonitor;
 pub(super) use test_monitor::CloudTestMonitor;
 
+use std::time::Instant;
+
 use super::*;
 
 impl Host {
+    /// 保存独立输入法的模型译词覆盖；目前 `vi → zh` 使用越南语个人释义层。
+    /// 后续日语 / 韩语应按各自输入法命名空间持有独立的 LayeredTranslator。
+    fn save_independent_candidate_translation(
+        &mut self,
+        word: &str,
+        language: Language,
+        text: &str,
+    ) {
+        let Some(glossary) = self.vietnamese_glossary.as_mut() else {
+            return;
+        };
+        let (part_of_speech, text) = match text.trim().split_once('\t') {
+            Some((part, text)) => (part.trim().parse().ok(), text.trim()),
+            None => (None, text.trim()),
+        };
+        if text.is_empty() {
+            return;
+        }
+        let translation = Translation::new(
+            language,
+            vec![Sense {
+                part_of_speech,
+                text: text.to_owned(),
+                reading: None,
+                pronunciation: None,
+                fresh: false,
+            }],
+        );
+        glossary.learn(word, translation);
+        glossary.flush();
+    }
+
     /// 清空输入日志文件；开着的话重新打开继续记。
     /// 「测试连接」：用当前配置发一条最小请求，结果回到偏好设置窗口底部的状态行。
     pub(super) fn start_cloud_test(&mut self) {
         let config = self.settings.config().predict.clone();
-        let usage = paths::user_data_dir().map(|dir| dir.join(API_USAGE_FILE));
+        let usage = paths::user_dirs().map(|dirs| dirs.records().join(API_USAGE_FILE));
         match ConnectionTest::start_with_usage(&config, usage) {
             Ok(test) => {
                 self.cloud_test = Some(test);
@@ -78,8 +112,12 @@ impl Host {
     }
 
     /// 定时器回调：结果到了就画上去。云端词补进第一页末尾，整句挂在 preedit 右侧。
-    pub fn poll_prediction(&mut self) {
-        let Some(prediction) = self.engine.poll_prediction() else {
+    /// 符号面板的翻译框也借这个节拍防抖、收译文；返回翻译框有没有变化（变了要连 preedit 一起重画，得借文本客户端）。
+    pub fn poll_prediction(&mut self) -> bool {
+        let prediction = self.engine.poll_prediction();
+        let translated = self.engine.tick_panel_translation(Instant::now());
+        let waiting = self.engine.panel_translation_pending();
+        let Some(prediction) = prediction else {
             if self.monitor.expired() {
                 if let Some(job) = self.candidate_translation.take() {
                     self.engine.cancel_candidate_translation(job.sequence);
@@ -88,11 +126,19 @@ impl Host {
                 }
                 self.monitor.stop();
             }
-            return;
+            return translated;
         };
         self.apply_prediction(prediction);
-        if self.candidate_translation.is_none() {
+        if self.candidate_translation.is_none() && !waiting {
             self.monitor.stop();
+        }
+        translated
+    }
+
+    /// 翻译框的原文或语言变了：开始轮询，停键够久就发。
+    pub fn watch_panel_translation(&mut self) {
+        if self.engine.panel_translation_pending() {
+            self.monitor.start();
         }
     }
 
@@ -104,24 +150,53 @@ impl Host {
         {
             let job = self.candidate_translation.take().expect("刚检查过候选译文");
             self.monitor.stop();
-            self.status = match prediction.sentence {
-                Some(generated)
-                    if self
-                        .engine
-                        .set_generated_candidate_translation(&job.candidate, &generated) =>
-                {
-                    Some(format!("已更新「{}」的译文", job.candidate.text))
+            let generated = prediction.sentence.filter(|text| !text.trim().is_empty());
+            if let (Some(language), Some(generated)) =
+                (job.independent_translation, generated.as_deref())
+            {
+                self.save_independent_candidate_translation(
+                    &job.candidate.text,
+                    language,
+                    generated,
+                );
+            }
+            self.status = if job.independent_translation.is_some() {
+                generated.as_ref().map_or_else(
+                    || Some("模型没有生成可用译文".to_owned()),
+                    |_| Some(format!("已更新「{}」的中文译词", job.candidate.text)),
+                )
+            } else {
+                match generated.as_deref() {
+                    Some(generated)
+                        if self
+                            .engine
+                            .set_generated_candidate_translation(&job.candidate, generated) =>
+                    {
+                        Some(format!("已更新「{}」的译文", job.candidate.text))
+                    }
+                    _ => Some("模型没有生成可用译文".to_owned()),
                 }
-                _ => Some("模型没有生成可用译文".to_owned()),
             };
             for candidate in self.session.layout.local_mut() {
                 if candidate.text == job.candidate.text {
-                    candidate.translation = self.engine.candidate_translation(&candidate.text);
+                    candidate.translation = if job.independent_translation.is_some() {
+                        self.vietnamese_glossary
+                            .as_ref()
+                            .and_then(|glossary| glossary.translate(&candidate.text))
+                    } else {
+                        self.engine.candidate_translation(&candidate.text)
+                    };
                 }
             }
             for candidate in self.session.layout.cloud_mut() {
                 if candidate.text == job.candidate.text {
-                    candidate.translation = self.engine.candidate_translation(&candidate.text);
+                    candidate.translation = if job.independent_translation.is_some() {
+                        self.vietnamese_glossary
+                            .as_ref()
+                            .and_then(|glossary| glossary.translate(&candidate.text))
+                    } else {
+                        self.engine.candidate_translation(&candidate.text)
+                    };
                 }
             }
             self.render();

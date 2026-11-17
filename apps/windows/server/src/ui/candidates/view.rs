@@ -115,14 +115,25 @@ pub(super) fn paint(hdc: HDC, data: &RenderData, client: RECT) {
     unsafe { SetBkMode(hdc, TRANSPARENT) };
 
     let mut y = theme.padding;
-    y += draw_top_line(hdc, data, y);
+    if !data.upward {
+        y += draw_top_line(hdc, data, y);
+    }
     y += draw_notice(hdc, data, y);
+    let body_y = y;
     match data.layout {
         LayoutMode::Vertical => draw_rows(hdc, data, y, client.right - client.left),
         LayoutMode::Horizontal if data.columns > 0 => {
             draw_matrix(hdc, data, y, client.right - client.left)
         }
         LayoutMode::Horizontal => draw_horizontal(hdc, data, y, client.right - client.left),
+    }
+    if data.upward {
+        let height = match data.layout {
+            LayoutMode::Vertical => vertical_size(hdc, data).1,
+            LayoutMode::Horizontal if data.columns > 0 => matrix_size(hdc, data).1,
+            LayoutMode::Horizontal => horizontal_size(hdc, data).1,
+        };
+        draw_top_line(hdc, data, body_y + height);
     }
 }
 
@@ -234,7 +245,16 @@ fn draw_rows(hdc: HDC, data: &RenderData, mut y: i32, width: i32) {
     let columns = columns(hdc, theme, &data.rows);
     let text_x = theme.padding + columns.index_width + theme.column_gap;
     let annotation_x = text_x + columns.text_width + theme.column_gap;
-    for (i, row) in data.rows.iter().enumerate() {
+    if data.upward {
+        y += draw_footer(hdc, data, y, width);
+    }
+    for visual in 0..data.rows.len() {
+        let i = if data.upward {
+            data.rows.len() - 1 - visual
+        } else {
+            visual
+        };
+        let row = &data.rows[i];
         if i == data.highlight {
             let rect = RECT {
                 left: theme.padding / 2,
@@ -269,6 +289,13 @@ fn draw_rows(hdc: HDC, data: &RenderData, mut y: i32, width: i32) {
         }
         y += columns.row_height;
     }
+    if !data.upward {
+        draw_footer(hdc, data, y, width);
+    }
+}
+
+fn draw_footer(hdc: HDC, data: &RenderData, y: i32, width: i32) -> i32 {
+    let theme = &data.theme;
     if let Some(footer) = &data.footer {
         let size = measure(hdc, theme.index_font, footer);
         draw_text(
@@ -279,6 +306,9 @@ fn draw_rows(hdc: HDC, data: &RenderData, mut y: i32, width: i32) {
             y + theme.row_padding,
             footer,
         );
+        size.cy + theme.row_padding
+    } else {
+        0
     }
 }
 
@@ -295,6 +325,16 @@ fn draw_horizontal(hdc: HDC, data: &RenderData, y: i32, width: i32) {
         .map(|row| measure(hdc, theme.text_font, &row.text).cy + theme.row_padding * 2)
         .max()
         .unwrap_or(0);
+    let annotation_y = if data.upward {
+        y + theme.row_padding / 2
+    } else {
+        y + row_height + theme.row_padding / 2
+    };
+    let y = if data.upward {
+        y + highlighted_annotation_size(hdc, data).map_or(0, |(_, height)| height)
+    } else {
+        y
+    };
     let baseline = y + theme.row_padding;
     let mut x = theme.padding + highlight_inset;
     for (i, row) in data.rows.iter().enumerate() {
@@ -347,7 +387,7 @@ fn draw_horizontal(hdc: HDC, data: &RenderData, y: i32, width: i32) {
     }
     if let Some(row) = data.rows.get(data.highlight) {
         let mut x = theme.padding + highlight_inset;
-        let top = y + row_height + theme.row_padding / 2;
+        let top = annotation_y;
         for (segment, tone) in &row.annotation {
             x += draw_text(
                 hdc,
@@ -414,6 +454,17 @@ fn draw_matrix(hdc: HDC, data: &RenderData, y: i32, width: i32) {
     let inset = theme.padding / 2;
     let index_gap = theme.column_gap / 2;
     let origin = theme.padding + inset;
+    let grid_rows = data.rows.len().div_ceil(columns);
+    let info_top = if data.upward {
+        y
+    } else {
+        y + cells.row_height * grid_rows as i32
+    } + theme.row_padding / 2;
+    let y = if data.upward {
+        y + line_height(hdc, theme.annotation_font) + theme.row_padding
+    } else {
+        y
+    };
     for (i, row) in data.rows.iter().enumerate() {
         let (text, _) = &cells.texts[i];
         if text.is_empty() && row.index.is_empty() {
@@ -421,7 +472,13 @@ fn draw_matrix(hdc: HDC, data: &RenderData, y: i32, width: i32) {
         }
         let cell_width = cells.column_widths[i % columns];
         let x = origin + cells.offset(i % columns, theme.column_gap);
-        let row_y = y + cells.row_height * (i / columns) as i32;
+        let logical = i / columns;
+        let visual = if data.upward {
+            data.rows.len().div_ceil(columns) - 1 - logical
+        } else {
+            logical
+        };
+        let row_y = y + cells.row_height * visual as i32;
         let baseline = row_y + theme.row_padding;
         if i == data.highlight {
             fill_round_rect(
@@ -459,8 +516,6 @@ fn draw_matrix(hdc: HDC, data: &RenderData, y: i32, width: i32) {
         );
     }
     // 信息行：页码靠右；左边先放被截断的高亮候选的完整文本，再放译文，放不下的截断
-    let grid_rows = data.rows.len().div_ceil(columns);
-    let info_top = y + cells.row_height * grid_rows as i32 + theme.row_padding / 2;
     let right = width - theme.padding;
     // 译文与完整文本的间距（10 点，按 padding 的 DPI 比例换算）
     let info_gap = theme.padding * 5 / 4;

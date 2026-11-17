@@ -180,20 +180,17 @@ where
                 let bonus = weight_bonus((input.weight)(&hit.text));
                 let fallback = fallback_log_prob(hit.frequency, hit.secondary, log_total);
                 let emitted = (input.emission)(start, &hit.text, &hit.syllables);
-                for (score, back) in predecessors(
-                    &nodes,
-                    start,
-                    &hit.text,
-                    input.model,
-                    input.personal,
-                    fallback,
-                    histories,
-                ) {
+                for (score, back) in
+                    predecessors(&nodes, start, &hit.text, input, fallback, histories)
+                {
                     let previous = &nodes[start][back];
                     let penalty = previous.penalty + hit.penalty;
                     let static_step = input
                         .model
-                        .log_prob((start > 0).then_some(previous.text.as_str()), &hit.text)
+                        .log_prob(
+                            predecessor_context(&nodes, start, back, input.context).previous,
+                            &hit.text,
+                        )
                         .unwrap_or(fallback);
                     let static_score = previous.static_score + static_step;
                     nodes[end].push(Node {
@@ -220,6 +217,7 @@ where
                 &NoModel,
                 Personal::NONE,
                 UNKNOWN_LOG_PROB,
+                input.context,
             );
             let penalty = nodes[start][back].penalty;
             let static_score = nodes[start][back].static_score + UNKNOWN_LOG_PROB;
@@ -251,7 +249,14 @@ where
         }
     }
     if histories > 1 && n >= MIN_SPLICED_SYLLABLES {
-        paths.extend(splice::spliced(&nodes, n, k, input.model, input.personal));
+        paths.extend(splice::spliced(
+            &nodes,
+            n,
+            k,
+            input.model,
+            input.personal,
+            input.context,
+        ));
         paths.sort_by(|a, b| b.score.total_cmp(&a.score));
         let mut seen = std::collections::HashSet::new();
         paths.retain(|p| seen.insert(p.text.clone()));
@@ -350,10 +355,12 @@ where
         })
         .collect();
     scored.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap_or(std::cmp::Ordering::Equal));
-    scored.dedup_by(|a, b| a.3.text == b.3.text);
-    scored.truncate(limit);
+    // 同词在不同词库里的词频不同，按分数排序后不一定相邻；每个词只占一个格子名额。
+    let mut seen = std::collections::HashSet::with_capacity(limit.min(scored.len()));
     scored
         .into_iter()
+        .filter(|(_, _, _, hit)| seen.insert(hit.text))
+        .take(limit)
         .map(|(_, penalty, tone, hit)| SpanWord {
             text: hit.text.to_owned(),
             syllables: hit.syllables().map(str::to_owned).collect(),
@@ -377,27 +384,33 @@ pub(super) fn span_limit(span: &[Vec<SyllablePattern<'_>>], limits: &SearchLimit
 
 /// 在 `nodes[start]` 的前驱里挑让 `word` 得分最高的前 `histories` 条，按得分降序返回 (累计得分, 前驱下标)。
 /// 转移概率先问静态模型（不认识就用词库兜底值），再与个人 n-gram 插值；前二词是前驱自己的前驱（回指）。
-fn predecessors(
+fn predecessors<W, C>(
     nodes: &[Vec<Node>],
     start: usize,
     word: &str,
-    model: &dyn LanguageModel,
-    personal: Personal<'_>,
+    input: &SearchInput<'_, W, C>,
     fallback: f64,
     histories: usize,
-) -> Vec<(f64, usize)> {
-    if histories == 1 {
-        return vec![best_predecessor(
-            nodes, start, word, model, personal, fallback,
-        )];
-    }
+) -> impl Iterator<Item = (f64, usize)> + use<W, C> {
+    let single = (histories == 1).then(|| {
+        best_predecessor(
+            nodes,
+            start,
+            word,
+            input.model,
+            input.personal,
+            fallback,
+            input.context,
+        )
+    });
     let mut all: Vec<(f64, usize)> = (0..nodes[start].len())
+        .take(if histories == 1 { 0 } else { usize::MAX })
         .map(|index| {
             let score = nodes[start][index].score
                 + transition_log_prob(
-                    model,
-                    personal,
-                    predecessor_context(nodes, start, index),
+                    input.model,
+                    input.personal,
+                    predecessor_context(nodes, start, index, input.context),
                     word,
                     fallback,
                 );
@@ -406,18 +419,27 @@ fn predecessors(
         .collect();
     all.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap_or(std::cmp::Ordering::Equal));
     all.truncate(histories);
-    all
+    single.into_iter().chain(all)
 }
 
 /// `nodes[start][index]` 作前驱时的上下文：前词是它，前二词是它的回指。
-fn predecessor_context(nodes: &[Vec<Node>], start: usize, index: usize) -> Context<'_> {
+fn predecessor_context<'a>(
+    nodes: &'a [Vec<Node>],
+    start: usize,
+    index: usize,
+    initial: Context<'a>,
+) -> Context<'a> {
     if start == 0 {
-        return Context::START;
+        return initial;
     }
     let previous = &nodes[start][index];
     Context {
         previous: Some(previous.text.as_str()),
-        earlier: (previous.start > 0).then(|| nodes[previous.start][previous.back].text.as_str()),
+        earlier: if previous.start > 0 {
+            Some(nodes[previous.start][previous.back].text.as_str())
+        } else {
+            initial.previous
+        },
     }
 }
 
@@ -429,18 +451,11 @@ fn best_predecessor(
     model: &dyn LanguageModel,
     personal: Personal<'_>,
     fallback: f64,
+    initial: Context<'_>,
 ) -> (f64, usize) {
     let mut best = (f64::NEG_INFINITY, 0);
     for (index, previous) in nodes[start].iter().enumerate() {
-        let context = if start == 0 {
-            Context::START
-        } else {
-            Context {
-                previous: Some(previous.text.as_str()),
-                earlier: (previous.start > 0)
-                    .then(|| nodes[previous.start][previous.back].text.as_str()),
-            }
-        };
+        let context = predecessor_context(nodes, start, index, initial);
         let score = previous.score + transition_log_prob(model, personal, context, word, fallback);
         if score > best.0 {
             best = (score, index);

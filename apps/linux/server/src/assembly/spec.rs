@@ -2,7 +2,7 @@
 use std::path::PathBuf;
 
 use qingjian_core::Language;
-use qingjian_platform::DictionariesConfig;
+use qingjian_platform::{DictionariesConfig, UserDirs};
 
 use super::LanguageModelFiles;
 
@@ -20,6 +20,9 @@ pub struct AssemblySpec {
     /// 英文词表。
     pub english: Option<PathBuf>,
 
+    /// 英文音标表（随包 `english-ipa.qj`）。可选，没有就只是不显示音标。
+    pub english_ipa: Option<PathBuf>,
+
     /// emoji 表（多张合成一张）。
     pub emoji: Vec<PathBuf>,
 
@@ -32,14 +35,11 @@ pub struct AssemblySpec {
     /// `[dictionaries]` 配置。
     pub dictionaries: DictionariesConfig,
 
-    /// 用户数据目录（XDG data home）；没有就都只在内存。
-    pub user_dir: Option<PathBuf>,
+    /// 用户数据（XDG data home 下的 `qingjian/`，分类见 `UserDirs`）；没有就都只在内存。
+    pub user: Option<UserDirs>,
 
     /// 是否写输入日志（`[general] input_log`）。
     pub input_log: bool,
-
-    /// 输入日志目录（XDG_STATE_HOME 下）；缺省回落用户数据目录。
-    pub log_dir: Option<PathBuf>,
 }
 
 impl AssemblySpec {
@@ -49,13 +49,13 @@ impl AssemblySpec {
             glossary: None,
             english_glossary: None,
             english: None,
+            english_ipa: None,
             emoji: Vec::new(),
             language_model: None,
             bundled_dicts_dir: None,
             dictionaries: DictionariesConfig::default(),
-            user_dir: None,
+            user: None,
             input_log: false,
-            log_dir: None,
         }
     }
 }

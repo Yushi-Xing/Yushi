@@ -4,9 +4,9 @@ use serde::{Deserialize, Serialize};
 
 use super::frame::Frame;
 use super::indicator::IndicatorState;
-use super::key::KeyOutcome;
+use super::key::{CaretEdit, KeyOutcome};
 use super::session::SessionId;
-use crate::config::{KeyCombo, SwitchKeys};
+use crate::config::{KeyCombo, SwitchKeys, ThirdInputMethod};
 
 /// Server 下发给 DLL 的「按键行为」设置。
 ///
@@ -25,6 +25,10 @@ pub struct InputSettings {
 
     /// 内置英文模式总开关（`[general] english_mode`）。
     pub english_mode: bool,
+
+    /// 连按两次 Shift 切换到的第三输入法。
+    #[serde(default)]
+    pub double_shift_input: ThirdInputMethod,
 
     /// 中文模式下 Shift+字母进组句（`[general] shift_letter = "compose"`）。DLL 据此决定没在组句时
     /// 按住 Shift 敲的字母吃不吃：缺省交给应用，开着时送 Server 起一段组句（`⇧C` 接 `pan` 出「C盘」）。
@@ -48,6 +52,20 @@ pub struct InputSettings {
     /// 组句中的按需 AI 快捷键；旧 Server 没有这项。
     #[serde(default)]
     pub predict: Option<KeyCombo>,
+
+    /// 英文候选旁显示音标（`[general] show_english_pronunciation`）。
+    ///
+    /// 音标本身由 Core 填进 `Candidate::reading`，DLL 只是按这个开关决定画不画：
+    /// `reading` 是共用的字段（问字模式的带调拼音也走它），DLL 不区分来源，所以要靠开关告诉它
+    /// 「这次的 reading 是不是英文音标、该不该用淡色」。旧 Server 不带时按关处理。
+    #[serde(default)]
+    pub show_english_pronunciation: bool,
+    /// 组句中切换单字模式的快捷键（`[shortcut] single_chars`）；旧 Server 没有这项，DLL 就不吃它。
+    #[serde(default)]
+    pub single_chars: Option<KeyCombo>,
+    /// 组句中按词跳的快捷键（`[shortcut] next_word`）；旧 Server 没有这项，DLL 就不吃它。
+    #[serde(default)]
+    pub next_word: Option<KeyCombo>,
 }
 
 fn english_candidates_default() -> bool {
@@ -60,11 +78,15 @@ impl Default for InputSettings {
             toggle_punctuation: None,
             switch_mode: SwitchKeys::default(),
             english_mode: true,
+            double_shift_input: ThirdInputMethod::Off,
             shift_letter_compose: false,
             restore_mode: false,
             toggle_traditional: None,
             english_candidates: true,
             predict: None,
+            show_english_pronunciation: false,
+            single_chars: None,
+            next_word: None,
         }
     }
 }
@@ -78,6 +100,8 @@ mod tests {
     fn old_server_settings_disable_the_new_preserved_shortcut() {
         let input = InputSettings {
             predict: Some(KeyCombo::PREDICT_DEFAULT),
+            single_chars: Some(KeyCombo::SINGLE_CHARS_DEFAULT),
+            next_word: Some(KeyCombo::NEXT_WORD_DEFAULT),
             ..InputSettings::default()
         };
         let mut wire = serde_json::to_value(input).unwrap();
@@ -86,8 +110,12 @@ mod tests {
             input
         );
         wire.as_object_mut().unwrap().remove("predict");
+        wire.as_object_mut().unwrap().remove("single_chars");
+        wire.as_object_mut().unwrap().remove("next_word");
         let old = serde_json::from_value::<InputSettings>(wire).unwrap();
         assert_eq!(old.predict, None);
+        assert_eq!(old.single_chars, None);
+        assert_eq!(old.next_word, None);
         assert_eq!(old.switch_mode, input.switch_mode);
         assert_eq!(old.english_mode, input.english_mode);
     }
@@ -144,6 +172,10 @@ pub enum ServerMessage {
         /// Linux 插件拿它弹「中」/「英」提示气泡，其余平台忽略。
         #[serde(default)]
         english: Option<bool>,
+
+        /// 成对符号要对文档做的事（#928）；老 DLL 读不到时只是多插一个右半边、光标停在后面。
+        #[serde(default)]
+        caret: Option<CaretEdit>,
     },
 
     /// 对一次 [`super::ClientMessage::Commit`] 的答复：缓冲区里原样上屏的文本（拼音字母 / 英文模式下敲的字母）；
@@ -177,6 +209,10 @@ pub enum ServerMessage {
 
         /// 全局模式：`Some(true)` 英文、`Some(false)` 中文，DLL 与自己不同就跟上；`None` 不动（老 Server 没有待切换时）。
         english: Option<bool>,
+
+        /// 全局第三输入法状态；旧 Server 不带时为 `None`，DLL 保留本地状态。
+        #[serde(default)]
+        vietnamese: Option<bool>,
 
         /// 按键行为设置；老 DLL 不认识这个字段，读到时忽略（serde 默认忽略多余字段）。
         #[serde(default)]

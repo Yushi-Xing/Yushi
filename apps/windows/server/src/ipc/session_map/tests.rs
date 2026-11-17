@@ -59,6 +59,7 @@ fn requests(session: SessionId) -> Vec<ClientMessage> {
         ClientMessage::ModeChanged {
             session,
             english: true,
+            vietnamese: false,
         },
         ClientMessage::SyncMode { session },
         ClientMessage::Indicator {

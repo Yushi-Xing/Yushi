@@ -1,5 +1,6 @@
 package app.qingjian.inputmethod.clipboard
 
+import app.qingjian.inputmethod.clipboard.sync.ClipboardSync
 import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Context
@@ -48,12 +49,17 @@ class ClipboardWatcher(private val context: Context) {
                     }
                 }.getOrNull() ?: return@thread
                 ClipboardStore.addImage(context, bytes, ClipboardImageProvider.extensionOf(mime), settings.clipboardLimit)
+                ClipboardSync.changed()
                 main.post { onChanged?.invoke() }
             }
             return
         }
         val text = item.text?.toString() ?: return
-        ClipboardStore.add(context, text, settings.clipboardLimit)
+        // 同步刚放上来的不再记：记了时刻变新，又传回去，两边来回传
+        if (text != ClipboardSync.lastReceived) {
+            ClipboardStore.add(context, text, settings.clipboardLimit)
+            ClipboardSync.changed()
+        }
         onChanged?.invoke()
     }
 

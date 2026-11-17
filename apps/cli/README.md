@@ -12,7 +12,7 @@ cargo run --release -p qingjian-cli                     # 交互模式
 
 ## 数据文件
 
-缺省按优先级找：`data/generated/` 里打包好的 `.qj` → 那里的 TSV → 仓库自带的产品数据（`assets/lexicon/`、`assets/glossary/`）→ `assets/sample/` 的样例。
+缺省按优先级找：`data/generated/` 里的 `.qj`（`tools/release/data-fetch.sh` 与 dicts-fetch 取下来的）→ 那里的 TSV → `assets/sample/` 的样例。
 语言模型 `data/generated/lm.qj`（或 `lm-unigram.tsv` / `lm-bigram.tsv`）有就加载，没有就退化成一元词频整句；emoji 表在 `assets/emoji/`。
 
 | 参数 | 作用 |
@@ -61,10 +61,10 @@ cargo run --release -p qingjian-cli -- --typing jintianwanshangwomenquchifan
 
 ## 回放评测：`--replay`
 
-读输入法记的输入日志（`~/Library/Application Support/Qingjian/input-log.jsonl`，每次上屏一行），把每行当时的键重新喂给引擎，看现在的排序会不会把当时选的词放在首选：
+读输入法记的输入日志（`~/Library/Application Support/Qingjian/records/input-log.jsonl`，每次上屏一行），把每行当时的键重新喂给引擎，看现在的排序会不会把当时选的词放在首选：
 
 ```bash
-cargo run --release -p qingjian-cli -- --replay ~/Library/Application\ Support/Qingjian/input-log.jsonl --misses 20
+cargo run --release -p qingjian-cli -- --replay ~/Library/Application\ Support/Qingjian/records/input-log.jsonl --misses 20
 ```
 
 - 按来源（词 / 整句 / 英文 / 其他）算首选命中率、前五命中率、平均名次、不在候选里的条数；云端词、云端整句、原样上屏、译词不评分只计数。

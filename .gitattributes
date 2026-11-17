@@ -1,6 +1,7 @@
 # 固定词源与评测数据的字节表示，Windows 自动换行不能改变冻结 SHA256。
 assets/lexicon/** text=auto eol=lf
 assets/eval/** text=auto eol=lf
+tools/release/data.lock text eol=lf
 # Shell 脚本必须以 LF 存储、以 LF 检出。
 #
 # 没有这条规则时，Windows 上 core.autocrlf=true 会把工作区脚本转成 CRLF，

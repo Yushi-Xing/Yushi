@@ -90,6 +90,10 @@ class Engine(context: Context, private val onReady: () -> Unit) {
 
     fun select(index: Int): Frame = Frame.parse(Native.select(handle, index))
 
+    fun toggleSingleChars(): Frame = Frame.parse(Native.toggleSingleChars(handle))
+
+    fun moveCaret(index: Int): Frame = Frame.parse(Native.moveCaret(handle, index))
+
     fun selectTranslation(index: Int, sense: Int): Frame =
         Frame.parse(Native.selectTranslation(handle, index, sense))
 
@@ -98,6 +102,10 @@ class Engine(context: Context, private val onReady: () -> Unit) {
     fun commitRaw(): Frame = Frame.parse(Native.commitRaw(handle))
 
     fun clear(): Frame = Frame.parse(Native.clear(handle))
+
+    fun cleared(text: String): Frame = Frame.parse(Native.cleared(handle, text))
+
+    fun hasOffer(): Boolean = ready && Native.hasOffer(handle)
 
     fun setNineKey(on: Boolean): Frame = Frame.parse(Native.setNineKey(handle, on))
 
@@ -115,6 +123,13 @@ class Engine(context: Context, private val onReady: () -> Unit) {
 
     /** 中文标点键：Core 按设置转全角或原样；引擎没装好原样。 */
     fun punctuate(c: Char): String = (if (ready) Native.punctuate(handle, c) else null) ?: c.toString()
+
+    /** 成对符号（#928）：见 [Native.pairPunctuation]；引擎没装好照常上屏。 */
+    fun pairPunctuation(text: String, english: Boolean): String? =
+        if (ready) Native.pairPunctuation(handle, text, english) else null
+
+    /** 没在组句时的退格：刚补完一对时回这一对，见 [Native.pairBackspace]。 */
+    fun pairBackspace(): String? = if (ready) Native.pairBackspace(handle) else null
 
     /** 拆词；引擎没装好时一字一块。 */
     fun textPieces(text: String): List<String> {
@@ -184,6 +199,10 @@ class Engine(context: Context, private val onReady: () -> Unit) {
     fun setPrivate(private: Boolean) {
         if (ready) Native.setPrivate(handle, private)
     }
+
+    /** 交通讯录（见 [Native.setContacts]）；引擎还没装好返回 -1。 */
+    fun setContacts(contacts: String, details: Boolean): Int =
+        if (ready) Native.setContacts(handle, contacts, details) else -1
 
     fun cancelTranslation() {
         if (ready) Native.cancelTranslation(handle)

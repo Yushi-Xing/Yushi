@@ -6,9 +6,9 @@
 ## 主题文件
 
 - 一个主题一个目录：`theme.json`，加上它引用的 `images/…`（PNG、SVG）与 `fonts/…`（TTF / OTF / TTC）。包内路径一律相对 `theme.json`，拒绝 `..` 与绝对路径。
-- 内置主题八个，随 crate 编进来（`crates/qingjian-render/themes/<id>/theme.json`）：`qingjian` 青简绿（缺省）、`system-blue` 系统蓝、`wechat` 微信绿、`glass` 玻璃、`sakura` 樱花、`dafeiyu` 大肥鱼、`miku` 初音未来、`bocchi` 波奇酱；系统蓝、微信绿 `extends` 青简绿、只改颜色变量，玻璃 `extends` 青简绿、改了窗口与高亮组件并写了 `material`（照 macOS 26 自带简体拼音的胶囊条），后四个整套重写了窗口、组件与状态条（只有浅色）。
+- 内置主题十个，随 crate 编进来（`crates/qingjian-render/themes/<id>/theme.json`）：`qingjian` 青简绿（缺省）、`system-blue` 系统蓝、`wechat` 微信绿、`sujian` 素笺、`glass` 玻璃、`slate` 墨岩、`sakura` 樱花、`dafeiyu` 大肥鱼、`miku` 初音未来、`bocchi` 波奇酱；系统蓝、微信绿、素笺 `extends` 青简绿、只改颜色变量，玻璃 `extends` 青简绿、改了窗口与高亮组件并写了 `material`（照 macOS 26 自带简体拼音的胶囊条），墨岩 `extends` 青简绿、换掉整套颜色并把圆角与阴影改成方角，后四个整套重写了窗口、组件与状态条（只有浅色）。
   内置主题的图片用 `include_bytes!` 编进程序（`theme/mod.rs` 的 `BUILTINS` 里每个主题一张「路径 → 内容」表，与用户主题走同一套解码），不带字体文件、只用系统字体；测试检查内置主题用到的图片都编进去了。用户主题 `extends` 内置主题时，主题目录里没有的图片到那个内置主题编进程序的文件里找（只看顶层 `extends` 那一层）。
-- 用户主题放在 `<用户数据目录>/themes/<id>/`，由 `ThemeLibrary` 与内置主题合成一个列表（内置在前、用户按 id 排）。目录名必须等于 `meta.id`，不能与内置主题重名，
+- 用户主题放在 `<用户数据目录>/custom/themes/<id>/`，由 `ThemeLibrary` 与内置主题合成一个列表（内置在前、用户按 id 排）。目录名必须等于 `meta.id`，不能与内置主题重名，
   不能是 `system` / `light` / `dark`；读不进来的跳过并记警告。设置界面（mac 偏好设置、Windows 设置程序「候选窗口」页）按显示名列出，写回 `[general] theme` 的 id。
 
 ### 为什么用 JSON
@@ -36,6 +36,7 @@
 | `windows` | `vertical` / `horizontal` 两个根节点，按用户选的排布取一个 |
 | `material` | 窗口底下垫的系统材质：`{ "kind": "glass" \| "blur", "tint": 颜色, "appearance": "auto" \| "system" }`（`glass` 缺省 `auto`、`blur` 缺省 `system`）（见「填充与效果」） |
 | `status` | 悬浮状态条（只有 Windows 有）：字体、内边距、圆角、各处颜色、`effects`，排法固定；写了 `root` 就按节点树画（见「状态条」） |
+| `panel` | 符号面板：分组、分类、格子与信息行的字体、尺寸与颜色，底、当前分组胶囊与高亮格是填充写法（可渐变 / 图片），`effects`，排法固定、尺寸与内容无关；不跟设置的字号；点击区域随位图给出（`HitTarget::Panel`） |
 | `keyboard` | 双拼键位提示的键盘：键名与小字的字体、键的宽高与间距、圆角、各状态（平常 / 刚敲下 / 能接 / 拼不出）的填充与文字颜色、`effects`，排法固定（三排错位）；整块跟着候选字比例缩放，透明度由壳设在窗口上 |
 
 节点：
@@ -43,7 +44,7 @@
 | `type` | 属性 |
 |---|---|
 | `frame` | `direction`（row / column）、`fill`、`border`、`radius`、`children`；带 `table: { row_height }` 时排成表格 |
-| `text` | `bind` 或 `text`（固定文字）、`font`、`color`、`stroke` |
+| `text` | `bind` 或 `text`（固定文字）、`font`、`color`、`stroke`；绑定候选词 `text` 时可写 `diff`（和首选不一样的字的颜色，不写就整条同色） |
 | `icon` | `icon`（cloud / gear / chevron-left / chevron-right）、`size`、`color`；盒子缺省与图标同大，图标垂直居中 |
 | `preedit` | `font`、`typed` / `rest` / `struck` 三种拼音颜色、`caret: { width, color }`、`stroke` |
 | `annotation` | `bind`、`font`、`gloss` / `fresh` / `faint` 三种颜色（`pos`、`separator` 可单独写，缺省同 `faint`）、`tones`（只画哪几种片段）、`senses`（只画前几个义项）、`stroke` |
@@ -69,6 +70,7 @@
   `candidate` 与 `annotation` 换成设置的字号，行高同比例；`index`、`preedit` 与表格 `row_height` 按候选字的比例缩放（`theme/text_sizes.rs`）。
   节点里在样式上写死的字号（`{ "base": "candidate", "size": 19 }`，手机候选条这样写）也按那个样式的比例缩放。
   表格行高是下限（`minmax(row_height, auto)`），内容更高时撑开。
+  `[general] candidate_font_weight`（100–900，0 用主题的）经 `Theme::with_candidate_weight` 只换 `candidate` 样式的字重；节点上自己写了 `weight` 的（键位提示的键帽字）不动，只写字号的跟着设置。
   状态条不跟设置的字号：`render_status` 去掉设置的字号按主题原样画，大小由壳按 `[status_bar] size` 乘进整条的倍数（文字、图标、边距、点击边界一起缩放）。
 - **状态条**：`status.root` 是一棵与候选窗口同写法的节点树，`repeat` 绑定 `cells` 展开格子（Windows 现在是模式、标点、齿轮三格）。
   格子里的条件 `emphasized`（当前模式、生效的全角标点）、`gear`、`first`、`last`，文字绑定 `text`；整条能用 `mode.*`（`Renderer::render_status` 收一份 `Mode`，Windows 的 `StatusView` 带着，与候选窗口同一个 `Router::input_mode`）。
@@ -97,13 +99,17 @@
 - **伸出窗口的装饰**：负 `inset` 的绝对定位节点（`"inset": [-24, -24, "auto", "auto"]`）。布局后把所有自己画东西的节点（连同投影、描边）并成画出范围，位图按它开，
   根节点的盒子是内容区（`Rendered::content_*`）；壳照旧按内容区对齐光标、夹进屏幕，装饰可以伸到屏幕外。
   鼠标整个穿透：mac 面板本来就 `ignoresMouseEvents`，Windows 候选窗加 `WS_EX_TRANSPARENT`。
-- **系统材质**：顶层 `material` 写了、壳又声明垫得了（`Renderer::set_material_support`，现在只有 mac）时，窗口根节点的 `fill` 换成 `tint`（不写不着色）、
+- **系统材质**：顶层 `material` 写了、壳又声明垫得了（`Renderer::set_material_support`，mac 与 Windows 11）时，窗口根节点的 `fill` 换成 `tint`（不写不着色）、
   根节点不画 `effects`，位图不再为投影留边；`Rendered::material` 给出种类与根节点圆角（像素），壳在内容区底下垫系统视图、按圆角裁，阴影交给系统按窗口形状算。
   mac：面板的内容视图是个容器，材质视图在候选视图下面（`candidates/backdrop.rs`）；`glass` 用 macOS 26 的 `NSGlassEffectView`，没有这个类时与 `blur` 一样用
   `NSVisualEffectView`（弹出层材质、窗口后面混合、常亮，圆角靠九宫格遮罩图）；每帧 `invalidateShadow`。
   新玻璃会随背后内容变深变浅并改它里面视图的外观。`appearance` 为 `auto`（`glass` 的缺省；且主题没锁定外观）时玻璃里放一个不画东西的探针视图，候选视图按探针的深浅取主题、它一变就重画，文字因此跟着反色；
   否则文字照常跟系统，材质视图的外观钉在锁定的外观或系统外观上（`MaterialBacking::follows_backdrop` / `locked_dark`）；
   新玻璃不认设给它的外观（macOS 26.6 实测压在深色背景上照样变深），这时 `glass` 换成毛玻璃。垫不了的壳照旧画 `fill` 与投影，所以 `fill` 要写成不透明的兜底。
+  Windows（`ui/layered/backdrop/`）：分层窗口用 `SetWindowCompositionAttribute` 开亚克力，`glass` 与 `blur` 一样；模糊铺满整个窗口矩形、不认 `SetWindowRgn`，
+  只有 DWM 的窗口圆角（`DWMWCP_ROUND`，定死约 8 点）裁得动它并给出阴影，所以壳用 `Renderer::set_material_corner_radius` 让根节点改用这个圆角、描边与裁出的形状对齐，DWM 自己的边框关掉。
+  探测靠设 `DWMWA_WINDOW_CORNER_PREFERENCE` 成不成功：Windows 10 不认，垫上会是直角模糊块，所以不垫；用户关了「透明效果」（`EnableTransparency`）也不垫。
+  亚克力跟不了背后内容的深浅，文字跟系统外观（或主题锁定的外观），着色按深浅取壳里的近白 / 深灰。
 - **锁定外观**：`meta.appearance` 写了就不跟随外观设置切换；用浅色图片做底的主题要锁浅色。
 
 ### 文字
@@ -143,6 +149,7 @@
 - 深浅按键面亮度判断（不看外观设置），锁定浅色的主题在深色模式下仍是浅色键盘。
 - 底板与功能键：浅色是键面掺一点 `accent` 的色相再压暗（底板 8% 色相、6% 黑，功能键 12%、13%）；深色是键面提亮 8% 当键面，底板压暗 35%，功能键只掺色相。
 - 回车键（品牌色）：`accent` 去掉不透明度后保持色相与饱和度，按 HSL 亮度调暗到白字对比度 ≥ 3.5。
+- 主题可以写 `kb_board` / `kb_function` / `kb_brand` 直接给底板、功能键、回车键的颜色（叠在键面上成不透明，回车键照样按白字对比度调暗），不写就按上面推。素笺用它们做成 iOS 那样不带色相的灰底板、灰功能键。
 - 只换整体样子的角色主题（樱花、大肥鱼、初音未来、波奇酱）高亮写死在组件里，为了候选条与键盘也是这个主题的颜色，各自补了 `surface` 与 `accent` 变量（桌面窗口不用这两个变量，画法不变）。
 
 ## 实现
@@ -180,6 +187,6 @@ theme.json + Frame 数据
 - 状态条的节点树画法不播动画；mac 没有悬浮状态条（菜单栏图标），主题的状态条只在 Windows 上显示。
 - 图片是 PNG 与 SVG；SVG 里的文字、内嵌位图不画；没有 APNG 帧动画。
 - 没有窗口出现 / 消失动画、混合模式、图层模糊、渐变字、变体覆盖（用 `when` 分支与条件颜色代替）。
-- 背景毛玻璃只有 macOS 有（`material`，壳垫系统视图）；Windows 与预览图照旧画 `fill`。
+- 背景毛玻璃只有 macOS 与 Windows 11 有（`material`，壳垫系统材质）；Windows 10 与预览图照旧画 `fill`。
 - 主题只能以目录形式安装，`extends` 只能继承内置主题。
 - Linux 上候选窗由 Fcitx5 / IBus 画，主题不生效。

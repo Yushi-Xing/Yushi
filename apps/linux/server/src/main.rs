@@ -8,7 +8,8 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     use qingjian_linux_server::{
         AssemblySpec, LanguageModelFiles, Router, RouterConfig, assembly, find_model,
     };
-    use qingjian_platform::Config;
+    use qingjian_platform::pronunciations::ENGLISH_PRONUNCIATIONS_FILE;
+    use qingjian_platform::{Config, UserDirs};
     use std::path::PathBuf;
     if std::env::args().any(|arg| arg == "--version") {
         println!("qingjian-linux-server {}", env!("CARGO_PKG_VERSION"));
@@ -38,13 +39,17 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         .map(PathBuf::from)
         .or_else(|| paths::generated(&root, "dict.qj"))
         .unwrap_or_else(|| root.join("assets/sample/dict.tsv"));
-    let user_dir = paths::user_dir();
+    let user = UserDirs::at(paths::user_dir());
+    user.prepare();
+    let downloads = user.downloads();
     let mut spec = AssemblySpec {
-        glossary: assembly::learning_language(&config)
-            .and_then(|lang| assembly::glossary_file(&root, lang).map(|p| (lang, p))),
-        english_glossary: assembly::glossary_file(&root, Language::Chinese),
-        english: paths::generated(&root, "english.tsv")
+        glossary: assembly::learning_language(&config).and_then(|lang| {
+            assembly::glossary_file(&root, Some(&downloads), lang).map(|p| (lang, p))
+        }),
+        english_glossary: assembly::glossary_file(&root, Some(&downloads), Language::Chinese),
+        english: paths::generated(&root, "english.qj")
             .or_else(|| paths::asset(&root, "sample/english.tsv")),
+        english_ipa: paths::generated(&root, ENGLISH_PRONUNCIATIONS_FILE),
         emoji: ["emoji/emoji-zh.tsv", "emoji/emoji-en.tsv"]
             .into_iter()
             .filter_map(|n| paths::asset(&root, n))
@@ -52,27 +57,26 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         language_model: LanguageModelFiles::find(&root.join("data/generated")),
         bundled_dicts_dir: Some(root.join("data/generated/dicts")),
         dictionaries: config.dictionaries.clone(),
-        user_dir: Some(user_dir.clone()),
+        user: Some(user.clone()),
         input_log: config.general.input_log,
-        log_dir: Some(paths::log_dir()),
         ..AssemblySpec::new(dictionary)
     };
     let mut engine = match assembly::assemble(&spec) {
         Ok(engine) => engine,
         Err(error) => {
-            tracing::warn!(%error, "主词库不可用，降级样例词库");
+            tracing::warn!(%error, "main dictionary unavailable, falling back to the sample");
             spec.dict = root.join("assets/sample/dict.tsv");
             assembly::assemble(&spec)?
         }
     };
-    engine.set_fuzzy(config.fuzzy);
-    engine.set_shuangpin(config.general.shuangpin());
+    engine.set_fuzzy(config.fuzzy.clone());
     engine.set_shuangpin_raw_preedit(config.general.shuangpin_raw_preedit);
+    engine.set_shuangpin_full_pinyin(config.general.shuangpin_full_pinyin);
     engine.set_hold_selections(config.general.hold_selections);
     engine.set_context_memory(config.model.context_memory_seconds);
-    engine.set_zhuyin_mode(config.general.is_zhuyin());
     engine.set_shift_letter_compose(config.general.shift_letter.compose());
     engine.set_learning(config.general.learning);
+    engine.set_auto_phrase(config.auto_phrase.enabled, config.auto_phrase.max_chars);
     engine.set_chinese_first(config.general.chinese_first);
     engine.set_spelling_correction(config.general.spelling_correction);
     engine.set_emoji_limit(usize::from(config.general.emoji.get()));
@@ -86,12 +90,12 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     engine
         .set_custom_phrases(config.custom_phrases.clone())
         .map_err(std::io::Error::other)?;
-    let usage_path = user_dir.join(qingjian_predict::API_USAGE_FILE);
+    let usage_path = user.records().join(qingjian_predict::API_USAGE_FILE);
     assembly::attach_cloud(&mut engine, &config.predict, Some(usage_path));
     engine.log_session(env!("CARGO_PKG_VERSION"), "linux");
     let mut router = Router::new(engine, RouterConfig::from(&config));
-    router.configure_local_model(find_model(Some(&user_dir), &root), &config.model);
-    router.watch_config(&config, config_path, root, user_dir);
+    router.configure_local_model(find_model(Some(&user.models()), &root), &config.model);
+    router.watch_config(&config, config_path, root, user);
     extern "C" fn stop(_: libc::c_int) {
         qingjian_linux_server::ipc::request_shutdown();
     }
@@ -100,7 +104,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         libc::signal(libc::SIGINT, stop as *const () as libc::sighandler_t);
     }
     let socket = qingjian_platform::protocol::linux::socket_path();
-    tracing::info!(path = %socket.display(), "青简 Linux Server 启动");
+    tracing::info!(path = %socket.display(), "Qingjian Linux Server started");
     qingjian_linux_server::ipc::serve_socket(socket, &mut router)?;
     Ok(())
 }

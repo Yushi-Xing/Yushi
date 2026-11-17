@@ -118,6 +118,10 @@ fn native_host_owns_display_across_poll_position_and_other_session_changes() {
         session: SESSION,
         action: CandidateAction::Visibility { own_window: false },
     });
+    assert_eq!(
+        router.engine_mut().candidate_view(),
+        qingjian_core::CandidateView::All
+    );
     for _ in 0..50 {
         router.handle(ClientMessage::Poll { session: SESSION });
         router.handle(ClientMessage::PositionCandidates {

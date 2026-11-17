@@ -7,6 +7,7 @@ mod build;
 mod hit;
 mod keyboard;
 mod menu;
+mod panel;
 mod rendered;
 mod status;
 
@@ -26,7 +27,7 @@ use crate::theme::file::MaterialAppearance;
 
 use build::Builder;
 
-pub use hit::{HitRegion, HitTarget};
+pub use hit::{HitRegion, HitTarget, PanelHit, PreeditHit};
 pub use rendered::Rendered;
 pub use status::{RenderedStatus, StatusCell};
 
@@ -43,8 +44,14 @@ pub struct Renderer {
     /// 上一帧候选窗的点击区域，动画帧照抄（布局不变）。
     hits: Vec<HitRegion>,
 
+    /// 上一帧拼音行各字之间的位置，动画帧照抄。
+    preedit: Option<PreeditHit>,
+
     /// 壳能在窗口底下垫系统材质（见 [`Self::set_material_support`]）。
     material_support: bool,
+
+    /// 壳的材质圆角是系统定死的（像 Windows 11 的窗口圆角）：点，见 [`Self::set_material_corner_radius`]。
+    material_corner: Option<f32>,
 
     /// 上一帧要垫的材质，动画帧照抄。
     material: Option<MaterialBacking>,
@@ -57,7 +64,9 @@ impl Renderer {
         Self {
             stage,
             hits: Vec::new(),
+            preedit: None,
             material_support: false,
+            material_corner: None,
             material: None,
         }
     }
@@ -66,6 +75,12 @@ impl Renderer {
     /// 由 [`Rendered::material`] 告诉壳垫哪种、圆角多大、文字深浅跟谁；不能的话照旧画主题的 `fill`。
     pub fn set_material_support(&mut self, supported: bool) {
         self.material_support = supported;
+    }
+
+    /// 壳垫的材质圆角由系统定死、不能按主题裁时（Windows 11 的 DWM 窗口圆角），告诉渲染器这个圆角（点）：
+    /// 垫了材质时根节点的圆角换成它，描边与系统裁出的形状对齐。`None`（缺省）照主题写的圆角。
+    pub fn set_material_corner_radius(&mut self, radius: Option<f32>) {
+        self.material_corner = radius;
     }
 
     fn text(&mut self) -> &mut TextPainter {
@@ -125,7 +140,9 @@ impl Renderer {
             candidate_nodes: Vec::new(),
             sense_nodes: Vec::new(),
             action_nodes: Vec::new(),
+            preedit_node: None,
             material_root: material.map(|spec| spec.tint.clone()),
+            material_corner: self.material_corner,
             root_radius: 0.0,
         };
         let root = builder.window(frame, layout)?;
@@ -143,13 +160,27 @@ impl Renderer {
             senses: builder.sense_nodes,
             actions: builder.action_nodes,
         };
+        let preedit_node = builder.preedit_node;
         let content = scene.layout(root, self.stage.text())?;
         self.hits = hit_regions(&scene, root, &nodes, scale)?;
+        self.preedit = match preedit_node {
+            Some((node, edges)) => {
+                let (x, y, _, height) = scene.rect_in(node, root)?;
+                Some(PreeditHit {
+                    y,
+                    height,
+                    edges: edges.into_iter().map(|edge| x + edge).collect(),
+                })
+            }
+            None => None,
+        };
         // 排布变了位置不可比，不与上一帧配对过渡
         let painted = self
             .stage
             .present(scene, root, content, layout as u64, scale, now)?;
-        Ok(Rendered::new(painted, self.hits.clone()).with_material(self.material))
+        Ok(Rendered::new(painted, self.hits.clone())
+            .with_material(self.material)
+            .with_preedit(self.preedit.clone()))
     }
 
     /// 跟随系统的「减少动态效果」：开着时过渡直接跳到终点。
@@ -165,8 +196,11 @@ impl Renderer {
     /// 有过渡或循环动画在播时，按 `now` 重画一帧（不重建树、不排版）；没有在播的返回 `None`。
     pub fn tick_at(&mut self, now: Instant) -> Result<Option<Rendered>, RenderError> {
         let painted = self.stage.tick_at(now)?;
-        Ok(painted
-            .map(|painted| Rendered::new(painted, self.hits.clone()).with_material(self.material)))
+        Ok(painted.map(|painted| {
+            Rendered::new(painted, self.hits.clone())
+                .with_material(self.material)
+                .with_preedit(self.preedit.clone())
+        }))
     }
 
     /// 同 [`Self::tick_at`]，用当前时间。

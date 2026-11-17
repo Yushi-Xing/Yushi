@@ -6,6 +6,7 @@
 
 mod char_table;
 mod compose;
+mod condition;
 mod finished;
 mod job;
 mod model;
@@ -18,12 +19,13 @@ mod worker;
 use std::sync::Arc;
 
 use super::input_log::ChoiceNote;
-use super::{Engine, take_last_chars};
+use super::{Engine, Learner, take_last_chars};
 use crate::sentence::{LanguageModel, segment_text};
 use crate::{Candidate, CandidateKind};
 
 pub use char_table::CharTable;
 pub(crate) use compose::ComposeRequest;
+use condition::Condition;
 use finished::Finished;
 use job::Job;
 pub use model::ChoiceModel;
@@ -34,6 +36,9 @@ pub use tier::ChoiceTier;
 
 /// 最多看前这么多条候选（知意 `laya` 的 2 × 每页 9 条），各档在这以内取。
 const WINDOW: usize = 18;
+
+/// 用户选过的词至少这么多字，选择次数才压过模型（[`Engine::chosen_long_word`]）。
+const CHOSEN_WORD_MIN_CHARS: usize = 4;
 
 /// 至少这么多条可比的才重排。
 const MIN_CANDIDATES: usize = 2;
@@ -90,6 +95,9 @@ impl Engine {
 
     /// 换档，下一次查询就按新档比。
     pub fn set_choice_tier(&mut self, tier: ChoiceTier) {
+        if self.choice_tier != tier {
+            self.cancel_choice();
+        }
         self.choice_tier = tier;
     }
 
@@ -140,6 +148,17 @@ impl Engine {
         }
         if whole.len() < MIN_CANDIDATES {
             return;
+        }
+        // 词级排序已按同一输入的选择次数排好；模型不能再把用户学出的首选换掉。
+        // 只保护已经排在比较组首位的词，不让其他读法的低位学习记录越过匹配规则。
+        if !english {
+            let input = self.whole_scope().1;
+            let first = &items[whole[0].0].text;
+            if self.learner.choice_weight(&input, first) > 0
+                || self.learner.preferred_choice(&input) == Some(first.as_str())
+            {
+                return;
+            }
         }
         let limit = self.choice_tier.context_chars(english);
         let context = match &self.rescoring_before {
@@ -207,9 +226,12 @@ impl Engine {
             })
             .collect();
         let total = |s: &ChoiceScore| s.model + s.language_model + s.prior;
-        let best = (0..scores.len())
+        let mut best = (0..scores.len())
             .max_by(|&a, &b| total(&scores[a]).total_cmp(&total(&scores[b])))
             .unwrap_or(0);
+        if let Some(chosen) = self.chosen_long_word(items, &whole, &keys, best) {
+            best = chosen;
+        }
         *self.last_choice_scores.borrow_mut() = scores;
         self.last_rescored.set(true);
         self.last_choice.set(Some(ChoiceNote {
@@ -222,6 +244,27 @@ impl Engine {
             let candidate = items.remove(whole[best].0);
             items.insert(whole[0].0, candidate);
         }
+    }
+
+    /// 用户在这串键下选得比模型挑的 `best` 多的长词（在 `whole` 里的序号）：模型看不到个人学习，
+    /// 语言模型又不认识 多孩家庭 这种词库词，按分数它每次都输给拆开换字的 多还家庭。短词不这样，
+    /// 同一串键这次要词还是要整句由上下文定（`shiyong` 选过 使用，这次要 是用）。
+    fn chosen_long_word(
+        &self,
+        items: &[Candidate],
+        whole: &[(usize, Vec<u32>)],
+        keys: &str,
+        best: usize,
+    ) -> Option<usize> {
+        let weight = |k: usize| self.learner.choice_weight(keys, &items[whole[k].0].text);
+        (0..whole.len())
+            .filter(|&k| {
+                let candidate = &items[whole[k].0];
+                candidate.kind == CandidateKind::Chinese
+                    && candidate.text.chars().count() >= CHOSEN_WORD_MIN_CHARS
+            })
+            .max_by_key(|&k| weight(k))
+            .filter(|&k| weight(k) > weight(best))
     }
 
     /// 这段音节的字分布（选词模型按音节出的），整句词图给路径上的字打分用。算好了就给；没算过就记下来，
@@ -254,11 +297,27 @@ impl Engine {
         None
     }
 
-    /// 查询开头：上一次查询记下、还没送出的出字请求作废，只留这次要的。逐键打字时每个前缀都会记一条，
-    /// 不清的话停键后几十个过时前缀排队先算，整句那张表要等好几百毫秒（空格早就上屏了）。
-    pub(super) fn forget_stale_compose(&self) {
+    /// 查询开头：输入或前文变了就取消旧任务；尚未发送的打分与出字只留这次查询需要的。
+    pub(super) fn prepare_choice(&self) {
         if let Some(choice) = &self.choice {
-            choice.compose_wanted.borrow_mut().clear();
+            let limit = self.choice_tier.context_chars(self.english_mode);
+            let context = match &self.rescoring_before {
+                Some(before) => take_last_chars(before, limit),
+                None => self.history.recent(limit).to_owned(),
+            };
+            choice.prepare(Condition {
+                input: self.composition.scope().to_owned(),
+                context,
+                english: self.english_mode,
+                tier: self.choice_tier,
+            });
+        }
+    }
+
+    /// 上屏、清空或切换会话后，不让剩余读法继续占用模型线程。
+    pub(super) fn cancel_choice(&self) {
+        if let Some(choice) = &self.choice {
+            choice.cancel();
         }
     }
 
@@ -278,13 +337,13 @@ impl Engine {
         let compose: Vec<ComposeRequest> = choice.compose_wanted.borrow_mut().drain(..).collect();
         if !compose.is_empty() {
             choice.wanted.borrow_mut().take();
-            choice.worker.submit(Job::Compose(compose));
+            choice.submit(Job::Compose(compose));
             return true;
         }
         let Some(request) = choice.wanted.borrow_mut().take() else {
             return false;
         };
-        choice.worker.submit(Job::Score(request));
+        choice.submit(Job::Score(request));
         true
     }
 
@@ -296,6 +355,7 @@ impl Engine {
         let latest = choice.worker.latest();
         let mut updated = false;
         while let Some((serial, finished)) = choice.worker.poll() {
+            choice.in_flight.borrow_mut().take();
             match finished {
                 Finished::Scored {
                     request,

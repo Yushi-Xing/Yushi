@@ -11,9 +11,9 @@
 use std::io::Cursor;
 
 use qingjian_platform::protocol::{
-    CandidateAction, ClientMessage, Frame, IndicatorCommand, IndicatorState, InputSettings,
-    KeyEvent, KeyModifiers, KeyOutcome, PreeditKind, PreeditSegment, ScreenRect, ServerMessage,
-    SessionId, read_message, write_message,
+    CandidateAction, CaretEdit, ClientMessage, Frame, IndicatorCommand, IndicatorState,
+    InputSettings, KeyEvent, KeyModifiers, KeyOutcome, PreeditKind, PreeditSegment, ScreenRect,
+    ServerMessage, SessionId, read_message, write_message,
 };
 
 /// 一个够用的 `Frame`。字段不全填，`Default` 的部分留默认值——
@@ -126,6 +126,7 @@ fn client_messages() -> Vec<ClientMessage> {
         ClientMessage::ModeChanged {
             session,
             english: true,
+            vietnamese: true,
         },
         ClientMessage::SyncMode { session },
         ClientMessage::ImeSwitched { session },
@@ -155,6 +156,7 @@ fn server_messages() -> Vec<ServerMessage> {
             commit: None,
             frame: frame(),
             english: None,
+            caret: None,
         },
         // `commit` 的 `Some` 侧：上屏时带文字。只测 `None` 的话，`Option` 的序列化形状变了没人发现。
         ServerMessage::KeyResult {
@@ -163,6 +165,7 @@ fn server_messages() -> Vec<ServerMessage> {
             commit: Some("上屏".to_owned()),
             frame: Frame::default(),
             english: Some(true),
+            caret: Some(CaretEdit::Back(1)),
         },
         ServerMessage::Committed {
             session,
@@ -185,12 +188,14 @@ fn server_messages() -> Vec<ServerMessage> {
         ServerMessage::ModeSync {
             session,
             english: Some(false),
+            vietnamese: Some(false),
             input: InputSettings::default(),
             indicator: IndicatorState::default(),
         },
         ServerMessage::ModeSync {
             session,
             english: Some(true),
+            vietnamese: Some(true),
             input: InputSettings::default(),
             indicator: IndicatorState::default(),
         },

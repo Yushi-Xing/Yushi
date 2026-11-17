@@ -15,10 +15,15 @@ impl Engine {
         start: Instant,
     ) -> Query {
         let body = scope.strip_prefix(self.modes().expression).unwrap_or(scope);
-        let mut items = if shortcut::is_generated_keyword(body) {
-            self.generated_candidates(body)
-        } else {
-            shortcut::candidates(scope, self.modes().expression, &jiff::Zoned::now())
+        // `vts;` 与 `vts` 等价，`vts;2026-11-05` 按指定日期算：分号后面是参数
+        let mut items = match shortcut::generated_call(body) {
+            Some((keyword, args)) => self.generated_candidates(keyword, args),
+            None => shortcut::candidates_with_modes(
+                scope,
+                self.modes().expression,
+                &jiff::Zoned::now(),
+                self.expression_sub_modes(),
+            ),
         };
         if let Some(candidate) = self.english_word_candidate(scope) {
             items.push(candidate);
@@ -51,14 +56,8 @@ impl Engine {
     /// 英文直输段：首选就是原文（`no-way`），空格 / 回车都上屏它；preedit 原样显示。
     /// 原文是「用户名@」（`qingjian@`、`zhang.san@q`）时后面跟常见邮箱的整个地址，不记学习。
     pub(in crate::engine) fn query_raw(&self, scope: &str, rest: String, start: Instant) -> Query {
-        let mut items = vec![Candidate {
-            text: scope.to_owned(),
-            kind: CandidateKind::English,
-            syllables: Vec::new(),
-            reading: None,
-            translation: None,
-            aux_code: None,
-        }];
+        // 直输段的首选也是英文词（`hello` 打出来原样上屏），音标照给
+        let mut items = vec![self.english_candidate(scope)];
         items.extend(
             crate::email_completions(scope)
                 .into_iter()
@@ -111,14 +110,7 @@ impl Engine {
             ENGLISH_MODE_CANDIDATES,
         )
         .into_iter()
-        .map(|text| Candidate {
-            text,
-            kind: CandidateKind::English,
-            syllables: Vec::new(),
-            reading: None,
-            translation: None,
-            aux_code: None,
-        })
+        .map(|text| self.english_candidate(&text))
         .collect();
         self.insert_emoji(&mut items);
         items.sort_by_key(|c| c.kind.follows_word());
@@ -181,10 +173,13 @@ impl Engine {
                     format!("{prefix}{}", self.marked_rest(body))
                 };
                 let mut items: Vec<Candidate> = english.into_iter().collect();
-                if !items.is_empty() && scope == shortcut::UUID_KEYWORD {
-                    items.extend(self.generated_candidates(shortcut::UUID_KEYWORD));
-                }
+                // 英文词归英文词，字照旧跟在后面：`uh` 既是英文的 uh，也是「一」——
+                // 那是笔画输入最基础的入口，不能因为撞上一个英文词就一条字都不给。
+                // `unchanged` 这类长词前面不相干，弱匹配由 `lookup` 的门槛挡着。
                 items.extend(chaizi_candidates(body));
+                if scope == shortcut::UUID_KEYWORD {
+                    items.extend(self.generated_candidates(shortcut::UUID_KEYWORD, ""));
+                }
                 (CandidateList { items }, tail)
             }
         };
@@ -221,22 +216,62 @@ impl Engine {
             .english_lists()
             .iter()
             .find_map(|words| words.get(&code))?;
-        Some(Candidate {
+        Some(self.english_candidate(word))
+    }
+
+    /// 英文候选：词面 + 音标（`[general] show_english_pronunciation` 打开时才填）。
+    ///
+    /// 音标走 `reading` 字段——平台层的 annotation 渲染本来就把 `reading` 画在候选词后面
+    /// （问字模式的带调拼音走同一条路）。中文候选从不设 `reading`，所以这条只影响英文候选。
+    /// 查不到音标（CMUdict 没收的派生词形）就留 `None`，候选照常显示。
+    pub(in crate::engine) fn english_candidate(&self, word: &str) -> Candidate {
+        Candidate {
             text: word.to_owned(),
             kind: CandidateKind::English,
             syllables: Vec::new(),
-            reading: None,
+            reading: self.english_pronunciation(word),
             translation: None,
             aux_code: None,
-        })
+        }
+    }
+
+    /// 英文词的音标，`[general] show_english_pronunciation` 关着或查不到时为 `None`。
+    ///
+    /// 查询按小写码（`Company` / `company` 同一份数据），`reading` 里存的是 `/ˈkʌmpəni/` 原样。
+    fn english_pronunciation(&self, word: &str) -> Option<String> {
+        if !self.show_english_pronunciation {
+            return None;
+        }
+        self.english_pronunciations
+            .as_ref()
+            .and_then(|table| table.pronunciation(&word.to_ascii_lowercase()))
+            .map(str::to_owned)
+    }
+
+    /// 中文候选的译文如果是英文词（`你好` → `int. hello`），给它补上音标。
+    ///
+    /// 只认**单条英文词**：译文是短语（`look after`）、带标点的句子（`it's fine.`）都不注——
+    /// 音标表按单词收，整句查不到还容易在半截上乱标。日语译文走假名那条路（`Sense::reading`），
+    /// 别的语言直接跳过。
+    pub(in crate::engine) fn annotate_pronunciation(&self, translation: &mut crate::Translation) {
+        if !self.show_english_pronunciation || translation.language != crate::Language::English {
+            return;
+        }
+        for sense in translation.senses_mut() {
+            sense.pronunciation = self.english_pronunciation(sense.text.trim());
+        }
     }
 
     /// `keyword`（`uuid` / `ts`）的候选：这段组句第一次查时生成，之后反复查都是同一组，换了词才重新生成。
-    fn generated_candidates(&self, keyword: &str) -> Vec<Candidate> {
+    ///
+    /// 缓存键带上参数：`vts` 与 `vts;2026-11-05` 是两组不同的值，不能互相命中。
+    fn generated_candidates(&self, keyword: &'static str, args: &str) -> Vec<Candidate> {
+        let key = format!("{keyword};{args}");
         let mut cache = self.generated_forms.borrow_mut();
-        if cache.as_ref().is_none_or(|(cached, _)| cached != keyword) {
-            let forms = shortcut::generated_forms(keyword, &jiff::Zoned::now()).unwrap_or_default();
-            *cache = Some((keyword.to_owned(), forms));
+        if cache.as_ref().is_none_or(|(cached, _)| cached != &key) {
+            let forms =
+                shortcut::generated_forms(keyword, args, &jiff::Zoned::now()).unwrap_or_default();
+            *cache = Some((key, forms));
         }
         let forms = cache
             .as_ref()
@@ -249,17 +284,17 @@ impl Engine {
 /// 问字模式里拆字最多出几个候选（短前缀能命中几千个字）。
 const CHAIZI_LIMIT: usize = 50;
 
-/// 按部件读音拆出的字，带上这个字最常见的读音（有声调的标上调号），生僻字也知道怎么念。
+/// 按部件读音、笔画或两者混着找出的字，带上这个字最常见的读音（有声调的标上调号），生僻字也知道怎么念。
 fn chaizi_candidates(keys: &str) -> Vec<Candidate> {
     crate::chaizi::lookup(keys, CHAIZI_LIMIT)
         .into_iter()
-        .map(|(ch, syllable)| Candidate {
-            text: ch.to_string(),
+        .map(|hit| Candidate {
+            text: hit.ch.to_string(),
             kind: CandidateKind::Shortcut,
             syllables: Vec::new(),
             reading: Some(qingjian_dictionary::marked(
-                syllable,
-                crate::zhuyin::tone::usual(ch, syllable),
+                hit.reading,
+                crate::zhuyin::tone::usual(hit.ch, hit.reading),
             )),
             translation: None,
             aux_code: None,

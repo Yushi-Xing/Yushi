@@ -4,6 +4,8 @@ pub mod preedit;
 
 pub use preedit::{PreeditKind, PreeditSegment};
 
+use std::ops::Range;
+
 use serde::{Deserialize, Serialize};
 
 use qingjian_core::CandidateList;
@@ -36,6 +38,11 @@ pub struct Frame {
 
     /// 当前页的候选（已排好序、不带译文由后续 [`super::ServerMessage::Update`] 补）。
     pub candidates: CandidateList,
+
+    /// `candidates` 各条里和整份候选的首选不一样的字（候选词的字节范围，见 [`qingjian_core::differs_from_lead`]），
+    /// 与 `candidates.items` 一一对应，短了的按没有算。由 Server 自绘候选窗消费；DLL 不读。
+    #[serde(default)]
+    pub differs: Vec<Vec<Range<usize>>>,
 
     /// 当前页里高亮的候选下标（页内，从 0 起）。
     pub highlight: usize,
@@ -75,6 +82,12 @@ pub struct Frame {
     #[serde(default)]
     pub translation_pos: bool,
 
+    /// 英文候选的 `reading` 是音标（`[general] show_english_pronunciation`）：候选窗据此用淡色画它，
+    /// 与问字模式那种含义不同、同色的带调拼音区分开。
+    /// 音标本身由 Core 填进 `Candidate::reading`，这里只传「怎么画」。
+    #[serde(default)]
+    pub english_reading_ipa: bool,
+
     /// 整句补全（云联想给的整段拼音的整句结果）：画在 preedit 行右侧，按 Tab 上屏。无则 `None`。
     pub sentence: Option<String>,
 
@@ -87,6 +100,10 @@ pub struct Frame {
     /// 面板由 Server 自绘，这一帧的候选不画。
     #[serde(default)]
     pub symbol_panel: bool,
+
+    /// 面板停在翻译组、没在打拼音：框里的字归 Server 编辑，DLL 把 Ctrl+A 也交给 Server（全选框里的字），不放给应用。
+    #[serde(default)]
+    pub panel_text_box: bool,
 }
 
 impl Frame {

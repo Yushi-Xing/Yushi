@@ -8,7 +8,8 @@ use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
 use qingjian_core::{Engine, Language};
-use qingjian_platform::{Config, ConfigError, LogLevel, resources};
+use qingjian_platform::pronunciations::ENGLISH_PRONUNCIATIONS_FILE;
+use qingjian_platform::{Config, ConfigError, LogLevel, UserDirs, resources};
 use qingjian_windows_server::assembly::{glossary_file, learning_language};
 use qingjian_windows_server::{
     AssemblySpec, LanguageModelFiles, Router, RouterConfig, ServerError, assembly, dispatch,
@@ -179,8 +180,8 @@ fn main() -> ExitCode {
         return ExitCode::SUCCESS;
     };
     match template {
-        Some(Ok(true)) => tracing::info!("已写出配置模板"),
-        Some(Err(error)) => tracing::warn!(%error, "写配置模板失败"),
+        Some(Ok(true)) => tracing::info!("config template written"),
+        Some(Err(error)) => tracing::warn!(%error, "failed to write config template"),
         _ => {}
     }
     let language = learning_language(&config);
@@ -189,10 +190,15 @@ fn main() -> ExitCode {
     let dict = std::env::var_os("QINGJIAN_DICT")
         .map(PathBuf::from)
         .unwrap_or_else(|| default_dict(&root));
+    let user = qingjian_platform::dirs::user_dirs();
+    if let Some(user) = &user {
+        user.prepare();
+    }
+    let downloads = user.as_ref().map(UserDirs::downloads);
     let glossary_path = language.and_then(|language| {
         std::env::var_os("QINGJIAN_GLOSSARY")
             .map(PathBuf::from)
-            .or_else(|| glossary_file(&root, language))
+            .or_else(|| glossary_file(&root, downloads.as_deref(), language))
             .filter(|path| path.is_file())
     });
     let glossary = language.zip(glossary_path);
@@ -200,8 +206,9 @@ fn main() -> ExitCode {
     let bundled_codes_dir = Some(root.join("data/generated/codes")).filter(|dir| dir.is_dir());
     let spec = AssemblySpec {
         glossary: glossary.clone(),
-        english_glossary: glossary_file(&root, Language::Chinese),
-        english: generated(&root, "english.tsv"),
+        english_glossary: glossary_file(&root, downloads.as_deref(), Language::Chinese),
+        english: generated(&root, "english.qj"),
+        english_ipa: generated(&root, ENGLISH_PRONUNCIATIONS_FILE),
         emoji: ["emoji-zh.tsv", "emoji-en.tsv"]
             .into_iter()
             .filter_map(|name| asset(&root, &format!("emoji/{name}")))
@@ -212,21 +219,22 @@ fn main() -> ExitCode {
         bundled_codes_dir: bundled_codes_dir.clone(),
         bundled_schemes_dir: dispatch::find_bundled_schemes(&root),
         aux_code: config.aux_code.clone(),
-        user_dir: user_dir(),
+        user: user.clone(),
         input_log: config.general.input_log,
         ..AssemblySpec::new(&dict)
     };
     let mut engine = match assemble_with_fallback(spec, &root) {
         Ok(engine) => engine,
         Err(error) => {
-            tracing::error!(%error, "样例词库也装配失败");
+            tracing::error!(%error, "sample dictionary failed to assemble too");
             return ExitCode::FAILURE;
         }
     };
-    engine.set_fuzzy(config.fuzzy);
+    engine.set_fuzzy(config.fuzzy.clone());
     dispatch::attach_custom_phrases(&mut engine, &config);
     engine.set_traditional(config.general.traditional());
     engine.set_learning(config.general.learning);
+    engine.set_auto_phrase(config.auto_phrase.enabled, config.auto_phrase.max_chars);
     engine.set_mode_keys(config.shortcut.mode);
     engine.set_aux_code_key(config.general.aux_code_key(), config.general.page_keys());
     engine.set_aux_keep_empty(config.general.aux_code_keep_empty);
@@ -239,40 +247,76 @@ fn main() -> ExitCode {
     engine.set_kaomoji_limit(usize::from(config.general.kaomoji.get()));
     engine.set_symbol_limit(usize::from(config.general.symbols.get()));
     engine.set_english_in_chinese(config.general.english_in_chinese);
+    engine.set_show_english_pronunciation(config.general.show_english_pronunciation);
     engine.set_english_max_in_chinese(config.general.english_max_in_chinese());
     engine.set_english_min_position(config.general.english_min_position());
     engine.set_shift_letter_compose(config.general.shift_letter.compose());
     engine.set_auto_space(config.general.auto_space);
+    engine.set_half_width_symbols(&config.general.half_width_symbols);
     engine.set_shuangpin_raw_preedit(config.general.shuangpin_raw_preedit);
     engine.set_shuangpin_raw_window(config.general.shuangpin_raw_window);
+    engine.set_shuangpin_full_pinyin(config.general.shuangpin_full_pinyin);
     engine.set_hold_selections(config.general.hold_selections);
     engine.set_context_memory(config.model.context_memory_seconds);
     engine.log_session(env!("CARGO_PKG_VERSION"), "windows");
-    let usage_path = user_dir().map(|dir| dir.join(qingjian_predict::API_USAGE_FILE));
+    let usage_path = user
+        .as_ref()
+        .map(|user| user.records().join(qingjian_predict::API_USAGE_FILE));
+    qingjian_windows_server::clipboard_process::sync(config.clipboard.enabled);
     dispatch::attach_cloud(&mut engine, &config.predict, usage_path);
     let router_config = RouterConfig::from(&config);
     let mut router = Router::new(engine, router_config.clone());
+    let vietnamese_words = generated(&root, "vietnamese.qj").and_then(|path| {
+        match qingjian_dictionary::WordList::from_path(&path) {
+            Ok(words) => Some(words),
+            Err(error) => {
+                tracing::warn!(%error, path = %path.display(), "vietnamese word list unreadable");
+                None
+            }
+        }
+    });
+    router.set_vietnamese_words(vietnamese_words);
+    let vietnamese_glossary = generated(&root, "vietnamese-chinese.qj").and_then(|path| {
+        match qingjian_translate::Glossary::from_path(Language::Chinese, &path) {
+            Ok(bundled) => {
+                let personal = user.as_ref().map_or_else(
+                    || qingjian_translate::PersonalGlossary::in_memory(Language::Chinese),
+                    |user| {
+                        qingjian_translate::PersonalGlossary::open(
+                            Language::Chinese,
+                            user.learning().join("user-glossary-input-vi-zh.tsv"),
+                        )
+                    },
+                );
+                Some(qingjian_translate::LayeredTranslator::new(
+                    bundled, personal,
+                ))
+            }
+            Err(error) => {
+                tracing::warn!(%error, path = %path.display(), "vietnamese-chinese glossary unreadable");
+                None
+            }
+        }
+    });
+    router.set_vietnamese_glossary(vietnamese_glossary);
     router.configure_local_model(
         dispatch::ModelDirs {
-            user: user_dir(),
+            downloaded: user.as_ref().map(UserDirs::models),
             bundled_root: root.clone(),
         },
         &config.model,
     );
     router.configure_schemes(&config, dispatch::find_bundled_schemes(&root));
     if let Some(path) = config_path() {
-        let user = user_dir();
         router.watch_config(
             &config,
             path,
             root.clone(),
             dispatch::DataDirs {
-                user_root: user.clone(),
+                user: user.clone(),
                 bundled_dicts: bundled_dicts_dir,
                 bundled_codes: bundled_codes_dir,
                 bundled_schemes: dispatch::find_bundled_schemes(&root),
-                user_dicts: assembly::user_dicts_dir(user.as_deref()),
-                user_codes: assembly::user_codes_dir(user.as_deref()),
             },
         );
     }
@@ -291,7 +335,7 @@ fn main() -> ExitCode {
         model = config.model.name.key(),
         model_enabled = config.model.enabled,
         sessions = router.session_count(),
-        "青简 Windows Server 就绪"
+        "Qingjian Windows Server ready"
     );
 
     let code = serve(router);
@@ -325,6 +369,7 @@ fn grant_appcontainer_log_access() {
 /// 起 UI 线程作为候选窗口 / 状态条的输出端（失败退化为不画），再在命名管道上服务到进程结束。
 #[cfg(windows)]
 fn serve(mut router: Router) -> ExitCode {
+    use qingjian_platform::pipe::{LEGACY_PIPE_NAME, UserSid, pipe_name};
     use qingjian_windows_server::ipc::{Work, pipe};
     use qingjian_windows_server::ui::UiHandle;
     grant_appcontainer_log_access();
@@ -347,10 +392,20 @@ fn serve(mut router: Router) -> ExitCode {
             router.set_candidate_sink(Box::new(ui.clone()));
             router.set_status_sink(Box::new(ui));
         }
-        Err(error) => tracing::error!(%error, "UI 线程启动失败，将不显示候选框 / 状态条"),
+        Err(error) => {
+            tracing::error!(%error, "UI thread failed to start, no candidate window or status bar")
+        }
     }
-    if let Err(error) = pipe::serve_pipe(pipe::DEFAULT_PIPE_NAME, &mut router, work_tx, work_rx) {
-        tracing::error!(%error, "命名管道服务退出");
+    let name = match UserSid::current().and_then(|me| pipe_name(&me)) {
+        Ok(name) => name,
+        Err(error) => {
+            tracing::error!(%error, "Cannot derive the named pipe name from the user token");
+            return ExitCode::FAILURE;
+        }
+    };
+    let legacy = Some(LEGACY_PIPE_NAME);
+    if let Err(error) = pipe::serve_pipe(&name, legacy, &mut router, work_tx, work_rx) {
+        tracing::error!(%error, "Named pipe service stopped");
         return ExitCode::FAILURE;
     }
     ExitCode::SUCCESS

@@ -42,6 +42,29 @@ fn picks_common_words_over_characters() {
 }
 
 #[test]
+fn overlapping_dictionaries_do_not_spend_span_slots_on_the_same_word() {
+    let primary = Dictionary::parse("家\tjia\t1000\n甲\tjia\t950\n假\tjia\t800\n").unwrap();
+    let imported = Dictionary::parse("家\tjia\t900\n甲\tjia\t850\n假\tjia\t700\n").unwrap();
+    let dictionaries = [&primary, &imported];
+    let input = SearchInput::new(
+        &dictionaries,
+        &NoLanguageModel,
+        Personal::NONE,
+        |_| 0,
+        |_, _| 0.0,
+    );
+    let hits = span_candidates(&input, &complete(&["jia"]), 0, &[], 3);
+    assert_eq!(
+        hits.iter().map(|hit| hit.text.as_str()).collect::<Vec<_>>(),
+        ["家", "甲", "假"]
+    );
+    assert_eq!(
+        hits.iter().map(|hit| hit.frequency).collect::<Vec<_>>(),
+        [1000, 950, 800]
+    );
+}
+
+#[test]
 fn user_weight_lifts_near_ties_but_is_capped() {
     let dictionary = Dictionary::parse(SAMPLE).unwrap();
     // wo qu 没有整词：卧 / 我 词频差 450 倍（log 差 6.1），加分封顶后选多少次都翻不过来

@@ -1,7 +1,7 @@
 [package]
 name = "qingjian-settings"
 description = "三平台共用的设置程序：画在 bamboo-slip 上，读写输入法同一份 config.toml"
-version = "0.3.2-beta.2"
+version = "0.3.4-dev"
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
@@ -24,6 +24,7 @@ qingjian-predict.workspace = true
 qingjian-update.workspace = true
 # 词库页：读词库信息、导入词库与码表
 qingjian-dictionary.workspace = true
+qingjian-format.workspace = true
 # 统计页：读输入量与词汇记录、词汇等级表
 qingjian-learning.workspace = true
 qingjian-translate.workspace = true
@@ -45,6 +46,9 @@ tracing-appender.workspace = true
 toml.workspace = true
 
 # 只开一个窗口：第二次启动把已开的带到前台；系统的 Ctrl + Space
+[target."cfg(windows)".dev-dependencies]
+qingjian-clipboard.workspace = true
+
 [target."cfg(windows)".dependencies]
 windows = { version = "0.62.2", features = [
     "Win32_Foundation",

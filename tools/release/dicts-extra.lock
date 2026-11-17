@@ -1,0 +1,3 @@
+# 本 fork 继续随包的官方词库；dicts-fetch.py --update 只更新 dicts.lock，不改这里。
+# 保留通用扩展词库的既有覆盖，仍按补充词库加载，用户可以关闭。
+general-v1.0.0 = 2fab313d7c21bd5f539c6047c27188a441c27cdd1ff8351b5fa0c66980390d1f dicts/general.qj

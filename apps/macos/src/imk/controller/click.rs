@@ -16,6 +16,10 @@ thread_local! {
     /// 最近激活的会话；`deactivateServer:` 时清掉。
     static ACTIVE: RefCell<Option<Retained<QingjianInputController>>> = const { RefCell::new(None) };
 
+    /// 最近激活的会话。右键菜单会让应用先 deactivate、再询问菜单项，`ACTIVE` 此时已空；
+    /// 仍需保留最近控制器直到下一次 activate，用于完成这次菜单操作。
+    static LAST_ACTIVE: RefCell<Option<Retained<QingjianInputController>>> = const { RefCell::new(None) };
+
     /// 打开右键菜单时的控制器。点菜单会让输入法短暂 deactivate，不能只依赖 `ACTIVE`。
     static MENU_CONTROLLER: RefCell<Option<Retained<QingjianInputController>>> = const { RefCell::new(None) };
 }
@@ -45,6 +49,19 @@ pub fn commit_raw_after_switch() {
     with_active(|controller, client| {
         controller.commit_raw(client);
     });
+}
+
+/// 延迟确认的 Shift 单击落实后，结束切换前遗留的中文 / 越南语 composition。
+pub fn commit_pending_after_switch() {
+    with_active(|controller, client| {
+        controller.commit_vietnamese(client);
+        controller.commit_raw(client);
+    });
+}
+
+/// 符号面板翻译框的译文到了或没翻出来（联想定时器回调）：重画面板，译文写进应用的 preedit。
+pub fn panel_translation_changed() {
+    with_active(|controller, client| controller.render(client));
 }
 
 /// 符号面板的点击回调（host 建窗口时注册）。
@@ -81,19 +98,30 @@ fn with_active(f: impl FnOnce(&QingjianInputController, TextClient<'_>)) {
     f(&controller, TextClient::new(&client));
 }
 
-/// 候选右键菜单要的项：组句中才给（编号, 标题）。
+/// 候选右键菜单要的项：中文 Engine 组句或越南语组词中才给（编号, 标题）。
 pub fn menu_items(offset: usize) -> Vec<(u32, &'static str)> {
-    let composing = host::with(|h| !h.engine.composition().is_empty()).unwrap_or(false);
+    let composing = host::with(|h| {
+        !h.engine.composition().is_empty() || (h.vietnamese_mode() && !h.vietnamese.is_empty())
+    })
+    .unwrap_or(false);
     if !composing {
         return Vec::new();
     }
-    let controller = ACTIVE.with(|active| active.borrow().clone());
+    let controller = ACTIVE
+        .with(|active| active.borrow().clone())
+        .or_else(|| LAST_ACTIVE.with(|active| active.borrow().clone()));
     MENU_CONTROLLER.with(|saved| *saved.borrow_mut() = controller);
-    host::with(|h| h.candidate_actions(offset))
-        .unwrap_or_default()
-        .into_iter()
-        .map(|action| (action.id(), action.label()))
-        .collect()
+    host::with(|h| {
+        if h.vietnamese_mode() && !h.vietnamese.is_empty() {
+            h.vietnamese_candidate_actions(offset)
+        } else {
+            h.candidate_actions(offset)
+        }
+    })
+    .unwrap_or_default()
+    .into_iter()
+    .map(|action| (action.id(), action.label()))
+    .collect()
 }
 
 /// 候选右键菜单点中了一项。
@@ -103,7 +131,8 @@ pub fn menu_pick(offset: usize, id: u32) {
     };
     let controller = MENU_CONTROLLER
         .with(|saved| saved.borrow_mut().take())
-        .or_else(|| ACTIVE.with(|active| active.borrow().clone()));
+        .or_else(|| ACTIVE.with(|active| active.borrow().clone()))
+        .or_else(|| LAST_ACTIVE.with(|active| active.borrow().clone()));
     let Some(controller) = controller else {
         tracing::warn!(offset, id, "候选菜单点击时没有可用的输入会话");
         return;
@@ -120,7 +149,17 @@ pub fn menu_pick(offset: usize, id: u32) {
 
 impl QingjianInputController {
     pub(super) fn set_active(&self) {
-        ACTIVE.with(|active| *active.borrow_mut() = Some(self.retain()));
+        let controller = self.retain();
+        ACTIVE.with(|active| *active.borrow_mut() = Some(controller.clone()));
+        LAST_ACTIVE.with(|active| *active.borrow_mut() = Some(controller));
+    }
+
+    /// 有些 IMK 客户端新建控制器后直接送 `handleEvent:`，不先回调 `activateServer:`。
+    /// 每次实际收到事件都更新最近会话，保证候选点击和右键菜单能找到产生当前窗口的控制器。
+    pub(super) fn note_event_controller(&self) {
+        let controller = self.retain();
+        ACTIVE.with(|active| *active.borrow_mut() = Some(controller.clone()));
+        LAST_ACTIVE.with(|active| *active.borrow_mut() = Some(controller));
     }
 
     pub(super) fn clear_active(&self) {
@@ -143,6 +182,38 @@ impl QingjianInputController {
             return;
         };
         let client = TextClient::new(&client);
+        let vietnamese =
+            host::with(|h| h.vietnamese_mode() && !h.vietnamese.is_empty()).unwrap_or(false);
+        if vietnamese {
+            let handled =
+                host::with(|h| h.perform_vietnamese_candidate_action(offset, action)).flatten();
+            let mut notice = handled.as_ref().map(|(outcome, _)| outcome.notice.clone());
+            if let Some((outcome, candidate)) = handled
+                && let Some(language) = outcome.translation_request
+            {
+                let sequence = host::with(|h| {
+                    let sequence = h
+                        .engine
+                        .request_candidate_translation_to(&candidate.text, language);
+                    if let Some(sequence) = sequence {
+                        h.begin_independent_candidate_translation(sequence, candidate, language);
+                    }
+                    sequence
+                })
+                .flatten();
+                if sequence.is_none() {
+                    notice = Some("模型生成不可用".to_owned());
+                }
+            }
+            self.show_vietnamese(client);
+            if let Some(notice) = notice {
+                host::with(|h| {
+                    h.status = Some(notice);
+                    h.render();
+                });
+            }
+            return;
+        }
         if action == CandidateAction::EditTranslation {
             let target = host::with(|h| {
                 let candidate = h
@@ -215,7 +286,10 @@ impl QingjianInputController {
             return;
         };
         let client = TextClient::new(&client);
-        let composing = host::with(|h| !h.engine.composition().is_empty()).unwrap_or(false);
+        let composing = host::with(|h| {
+            !h.engine.composition().is_empty() || (h.vietnamese_mode() && !h.vietnamese.is_empty())
+        })
+        .unwrap_or(false);
         if !composing {
             return;
         }
@@ -233,8 +307,8 @@ impl QingjianInputController {
             HitTarget::Page(step) => {
                 self.turn_page(step, client);
             }
-            // 菜单项在菜单自己的窗口里点，候选窗不会给出
-            HitTarget::MenuItem(_) => {}
+            // 菜单项在菜单自己的窗口里点，面板的点击走面板自己的回调，都不会到这里
+            HitTarget::MenuItem(_) | HitTarget::Panel(_) => {}
         }
     }
 }

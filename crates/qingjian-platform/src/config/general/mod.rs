@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use super::scheme::Scheme;
 use super::{
     Appearance, CandidateRenderer, EmojiCount, FontSize, KeyHintMode, LayoutMode,
-    LegacyTraditional, LogLevel, NumpadDigit, PreeditMode, ShiftLetter,
+    LegacyTraditional, LogLevel, NumpadDigit, PreeditMode, ShiftLetter, ThirdInputMethod,
 };
 use crate::code_schemes::{self, WUBI86};
 
@@ -58,6 +58,9 @@ pub struct GeneralConfig {
     /// 候选窗口竖排 / 横排。
     pub layout: LayoutMode,
 
+    /// Windows 竖排候选窗在输入行上方时反向排列，首选与拼音行贴近输入行。缺省开。
+    pub vertical_reverse_above: bool,
+
     /// 横排时上 / 下键把单行展开成多行矩阵（左 / 右键改为移动候选高亮，Esc 第一下先收回）。缺省关：横排下的按键与以前一样。
     pub horizontal_grid: bool,
 
@@ -76,6 +79,10 @@ pub struct GeneralConfig {
 
     /// 译文字号（点），同上。
     pub annotation_font_size: FontSize,
+
+    /// 候选字字重（100–900，与 CSS 的 `font-weight` 一样），盖过主题 `candidate` 样式的；0 用主题的。
+    /// 不在范围里的当 0，其余取最近的整百。只对青简渲染器生效。
+    pub candidate_font_weight: u16,
 
     /// 候选窗口的过渡与循环动画。关掉与系统「减弱动态效果」一样：高亮直接跳过去，循环动画停在第一帧。
     pub animations: bool,
@@ -102,6 +109,10 @@ pub struct GeneralConfig {
 
     /// 有中文候选时英文最高排到第几位。缺省 1（不限制）；没有中文候选时英文照旧第一。
     pub english_min_position: usize,
+
+    /// 英文候选旁显示音标（`cargo /ˈkɑrɡoʊ/`）。缺省关，关掉时英文候选与以前完全一样。
+    /// 只影响英文候选：中文候选的译词、注音都不走这条路。查不到音标的词不出错、也不显示。
+    pub show_english_pronunciation: bool,
 
     /// 候选后面一次最多配几个 emoji（`kaixin` → 开心 😄），0 时候选里只有字词。
     pub emoji: EmojiCount,
@@ -132,12 +143,25 @@ pub struct GeneralConfig {
     /// Windows：按应用 exe 名记住中英状态，仅保存在本次 Server 运行期间。
     pub remember_mode_per_app: bool,
 
+    /// 连按两次 Shift 时切换到的第三输入法；缺省关。当前先保存用户选择，运行时接入随第三输入法实现补上。
+    pub double_shift_input: ThirdInputMethod,
+
     /// 中文模式下不在组句时敲的标点转成全角（`，。？！` 等，数字后的 `.` 保持半角）。
     /// Windows 悬浮状态条上可点切换；macOS 在偏好设置中选择默认模式。
     pub full_width_punctuation: bool,
 
     /// 英文模式下的同一件事，中英各记一份；缺省半角。只有 Windows 用（macOS 英文模式一律半角）。
     pub english_full_width_punctuation: bool,
+
+    /// 中文与日文模式下敲左括号、左引号、左书名号时连右半边一起补上，光标停在中间（#928）；缺省开。
+    pub pair_punctuation: bool,
+
+    /// 英文模式下的同一件事（半角括号与双引号）；缺省关：代码编辑器、浏览器地址栏自己会补，两边一起补会多出一个。
+    pub english_pair_punctuation: bool,
+
+    /// 中文标点开着也保持半角的符号，几个字符连写（如 `` ` `` 让它出反引号而不是 `·`，#893）；缺省空。
+    /// 只认会转全角的标点，别的字符忽略。
+    pub half_width_symbols: String,
 
     /// 组句中敲会转全角的标点（`,` `.` `?` `!` 等，翻页键除外）先把高亮候选上屏、再补该标点
     ///（`nihao,` 一气打完「你好，」）。缺省关：标点进英文直输段整段原样上屏，与以前一致。
@@ -166,6 +190,10 @@ pub struct GeneralConfig {
 
     /// 双拼方案下候选窗口的拼音行显示原始按键还是全拼，与 `shuangpin_raw_preedit` 各管各的，两项组合出四种显示。缺省关（全拼）。
     pub shuangpin_raw_window: bool,
+
+    /// 双拼方案下同时接受全拼（同一段输入里两种打法也能混用）。缺省关：只用选定的双拼方案。
+    /// 开着时家里有人打双拼、有人打全拼可以共用一份设置。
+    pub shuangpin_full_pinyin: bool,
 
     /// 一段拼音分几次选完时，先选的词留在输入框里、整段选完才一起上屏，退格先撤回选择。缺省开；关掉是选了就上屏。
     pub hold_selections: bool,
@@ -242,12 +270,14 @@ impl Default for GeneralConfig {
             appearance: Some(Appearance::default()),
             theme: DEFAULT_THEME.to_owned(),
             layout: LayoutMode::default(),
+            vertical_reverse_above: true,
             horizontal_grid: false,
             grid_page_keys: false,
             renderer: CandidateRenderer::default(),
             font: String::new(),
             candidate_font_size: FontSize::default(),
             annotation_font_size: FontSize::default(),
+            candidate_font_weight: 0,
             animations: true,
             preedit: PreeditMode::default(),
             english_candidates: true,
@@ -256,6 +286,7 @@ impl Default for GeneralConfig {
             english_in_chinese: true,
             english_max_in_chinese: qingjian_core::ENGLISH_CANDIDATES_MAX,
             english_min_position: 1,
+            show_english_pronunciation: false,
             emoji: EmojiCount::default(),
             kaomoji: EmojiCount::new(1),
             symbols: EmojiCount::new(1),
@@ -265,8 +296,12 @@ impl Default for GeneralConfig {
             english_mode: true,
             default_english: false,
             remember_mode_per_app: false,
+            double_shift_input: ThirdInputMethod::default(),
             full_width_punctuation: true,
             english_full_width_punctuation: false,
+            pair_punctuation: true,
+            english_pair_punctuation: false,
+            half_width_symbols: String::new(),
             punct_commits: false,
             aux_code_key: qingjian_core::DEFAULT_AUX_CODE_KEY.to_string(),
             aux_code_show: false,
@@ -274,6 +309,7 @@ impl Default for GeneralConfig {
             scheme: String::new(),
             shuangpin_raw_preedit: false,
             shuangpin_raw_window: false,
+            shuangpin_full_pinyin: false,
             hold_selections: true,
             key_hint: KeyHintMode::default(),
             key_hint_opacity: DEFAULT_KEY_HINT_OPACITY,
@@ -447,6 +483,13 @@ impl GeneralConfig {
             (Some(key), None) if qingjian_core::is_valid_aux_code_key(key, self.page_keys()) => key,
             _ => qingjian_core::DEFAULT_AUX_CODE_KEY,
         }
+    }
+
+    /// 设置里的候选字字重：100–900 取最近的整百，0 和范围外的为 `None`（用主题的）。
+    pub fn candidate_font_weight(&self) -> Option<u16> {
+        (100..=900)
+            .contains(&self.candidate_font_weight)
+            .then(|| ((self.candidate_font_weight + 50) / 100 * 100).min(900))
     }
 
     /// 夹到合法范围的每页候选数。

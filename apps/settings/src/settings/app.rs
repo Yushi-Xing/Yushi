@@ -9,7 +9,8 @@ use bamboo_slip::{App, FamilyList, FamilyTable, Key, RenderError, TextPainter, U
 use super::{SIZES, Settings};
 
 use crate::i18n::tr;
-use crate::jobs::model_download::Pack;
+use crate::jobs::dict_index::is_safe_link;
+use crate::jobs::download::{Item, Pack};
 use crate::library::{self, Library};
 use crate::message::{FieldId, Message, Popup, SizeKind};
 use crate::page_id::PageId;
@@ -33,6 +34,7 @@ impl App for Settings {
     fn update(&mut self, message: Message) -> bool {
         let armed = self.armed.take();
         let remove_armed = self.remove_armed.take();
+        let dict_remove_armed = self.dict_remove_armed.take();
         if !matches!(
             message,
             Message::Run(_)
@@ -41,6 +43,7 @@ impl App for Settings {
                 | Message::TestCloud
                 | Message::CheckUpdate
                 | Message::DownloadModel(_)
+                | Message::DownloadDict(_)
                 | Message::Import(_)
                 | Message::VocabularyExport(_)
                 | Message::ImportPhrases
@@ -74,6 +77,9 @@ impl App for Settings {
             Message::Record(shortcut) => self.recording = Some(shortcut),
             Message::StopRecording => self.recording = None,
             Message::Recorded(shortcut, press) => match shortcut.accept(&press, &self.config) {
+                Ok(value) if shortcut.taken(&value, &self.config) => {
+                    self.notice = Some((shortcut.title(), tr("shortcut.hotkey_taken").to_owned()));
+                }
                 Ok(value) => {
                     let (section, key) = shortcut.config_key();
                     self.write(section, key, value);
@@ -127,6 +133,7 @@ impl App for Settings {
                 }
                 self.library = Library::scan();
             }
+            Message::ExportDict(stem) => self.export_dict(&stem),
             Message::ModeKey(key, letter) => {
                 let mode = self.config.shortcut.mode.sanitized();
                 let (current, other, other_key) = if key == "expression" {
@@ -175,11 +182,47 @@ impl App for Settings {
                 }
             }
             Message::DownloadModel(model) => {
-                if let Err(error) = self.download.start(model, self.waker.clone()) {
+                let started = match Pack::of(model) {
+                    Some(pack) => self.download.start(pack.target(), self.waker.clone()),
+                    None => Err(tr("download.not_needed").to_owned()),
+                };
+                if let Err(error) = started {
                     self.notice = Some(("download", error));
                 }
             }
-            Message::CancelDownload => self.download.cancel(),
+            Message::FetchDictIndex => self.dict_index.start(self.waker.clone()),
+            Message::DownloadDict(id) => {
+                if let Some(entry) = self.dict_index.entry(&id)
+                    && let Err(error) = self.download.start(entry.target(), self.waker.clone())
+                {
+                    self.notice = Some(("dicts_download", error));
+                }
+            }
+            Message::DictShelf(shelf) => self.dict_shelf = shelf,
+            Message::RemoveDownload(id) => {
+                if dict_remove_armed.as_ref() != Some(&id) {
+                    self.dict_remove_armed = Some(id);
+                } else if let Some(entry) = self.dict_index.entry(&id) {
+                    let stem = entry.stem();
+                    let removed = if entry.glossary_language().is_some() {
+                        library::remove_glossary(&stem)
+                    } else {
+                        library::remove(library::Kind::Dictionary, &stem)
+                    };
+                    if let Err(error) = removed {
+                        self.notice = Some(("dicts_download", error));
+                    }
+                    self.library = Library::scan();
+                }
+            }
+            Message::OpenLink(url) => {
+                if is_safe_link(&url)
+                    && let Err(error) = action::open(&url)
+                {
+                    self.notice = Some(("dicts_download", error));
+                }
+            }
+            Message::CancelDownload(item) => self.download.cancel(&item),
             Message::UseModel(model) => self.use_model(model),
             Message::RemoveModel(model) => {
                 if remove_armed != Some(model) {
@@ -233,19 +276,27 @@ impl App for Settings {
                 };
                 self.write("general", key, f64::from(value));
             }
+            Message::Weight(delta) => {
+                let value = (i32::from(self.weight()) + delta * 100).clamp(100, 900);
+                self.write("general", "candidate_font_weight", i64::from(value));
+            }
             Message::ResetSizes => {
                 self.write("general", "candidate_font_size", 0.0);
                 self.write("general", "annotation_font_size", 0.0);
+                self.write("general", "candidate_font_weight", 0_i64);
             }
             Message::Run(action) => {
                 // 清空要点两下：第一下只是把按钮换成确认
-                if action == Action::ClearInputLog && armed != Some(action) {
+                if matches!(action, Action::ClearInputLog | Action::ClearClipboard)
+                    && armed != Some(action)
+                {
                     self.armed = Some(action);
                     self.notice = None;
                 } else {
                     self.notice = action.run(&self.path).map(|text| (action.slot(), text));
                 }
             }
+            Message::ExcludeClipboardApp => self.exclude_clipboard_app(),
             Message::ToggleSources => self.sources_open = !self.sources_open,
             Message::StatsCloud(cloud) => self.stats_cloud = cloud,
             Message::Search(edit) => {
@@ -289,8 +340,12 @@ impl App for Settings {
         text.use_families(&Arc::new(table));
     }
 
+    /// 窗口起来、拿到叫醒的句柄时取一次词库清单：进「词库」页时多半已经取好了。
+    /// 有上次缓存的清单就先按它补下升级前开着的词库。
     fn set_waker(&mut self, waker: Waker) {
+        self.dict_index.start(Some(waker.clone()));
         self.waker = Some(waker);
+        self.restore_next();
     }
 
     fn wake(&mut self) -> bool {
@@ -305,9 +360,23 @@ impl App for Settings {
         }
         // 下载线程每报一次进度都叫醒一次，重画进度条
         changed |= self.download.stage().is_some();
-        if let Some(model) = self.download.finished() {
+        match self.download.finished() {
             // 下好了直接用上它：用户点下载就是想用
-            self.use_model(Some(model));
+            Some(Item::Model(model)) => {
+                self.use_model(Some(model));
+                self.restore_next();
+            }
+            // 下好的词库和导入的一样缺省开着，重扫清单显示出来
+            Some(Item::Dict(id)) => {
+                self.library = Library::scan();
+                self.restore.done(&id);
+                self.restore_next();
+            }
+            None => {}
+        }
+        if self.dict_index.take_finished() {
+            changed = true;
+            self.restore_next();
         }
         if let Some(text) = self.update.finish(&self.config.update) {
             self.notice = Some(("update", text));

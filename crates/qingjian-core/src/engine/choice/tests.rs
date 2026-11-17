@@ -55,6 +55,41 @@ fn choice_waits_for_the_shell_then_moves_the_pick_up() {
     assert_eq!((note.from, note.ctx, note.app), (1, 0, false));
 }
 
+#[test]
+fn clearing_or_committing_cancels_the_pending_choice_request() {
+    for commit in [false, true] {
+        let mut engine =
+            Engine::new(Dictionary::parse("开发\tkai fa\t9000\n开罚\tkai fa\t10\n").unwrap());
+        engine.set_choice_model(Some(Arc::new(Prefers("开罚"))));
+        engine.set_input("kaifa");
+        let query = engine.query().unwrap();
+        assert!(engine.rescoring_pending());
+        if commit {
+            engine.commit(&query.candidates.items[0]);
+        } else {
+            engine.clear();
+        }
+        assert!(!engine.rescoring_pending());
+        assert!(!engine.request_rescoring());
+    }
+}
+
+#[test]
+fn repeated_queries_do_not_resubmit_the_same_inflight_work() {
+    let mut engine =
+        Engine::new(Dictionary::parse("开发\tkai fa\t9000\n开罚\tkai fa\t10\n").unwrap());
+    engine.set_choice_model(Some(Arc::new(Prefers("开罚"))));
+    engine.set_input("kaifa");
+    engine.query().unwrap();
+    assert!(engine.request_rescoring());
+    let serial = engine.choice.as_ref().unwrap().worker.latest();
+    for _ in 0..100 {
+        engine.query().unwrap();
+        assert!(engine.request_rescoring());
+        assert_eq!(engine.choice.as_ref().unwrap().worker.latest(), serial);
+    }
+}
+
 /// 假选词模型：选词打分一律相同（不重排），按音节出字时偏爱给定的字。
 struct Composes(&'static [char]);
 
@@ -286,4 +321,67 @@ fn the_choice_model_does_not_promote_a_corrected_sentence() {
     assert!(before.iter().any(|t| t == "虽然"), "{before:?}");
     settle(&mut engine);
     assert_eq!(first_texts(&engine)[0], "肃然");
+}
+
+/// 只记选择次数的学习器。
+#[derive(Default)]
+struct Choices(HashMap<String, u32>);
+
+impl crate::Learner for Choices {
+    fn record(&mut self, _candidate: &Candidate) {}
+
+    fn weight(&self, _text: &str) -> u32 {
+        0
+    }
+
+    fn record_choice(&mut self, input: &str, _reading: &str, text: &str) {
+        *self.0.entry(format!("{input}\t{text}")).or_default() += 1;
+    }
+
+    fn choice_weight(&self, input: &str, text: &str) -> u32 {
+        self.0
+            .get(&format!("{input}\t{text}"))
+            .copied()
+            .unwrap_or(0)
+    }
+}
+
+fn duohaijiating() -> Engine {
+    // 词图拆成 多还 + 家庭 分更高，选词模型也偏爱那条整句
+    let dictionary = "多孩家庭\tduo hai jia ting\t5\n多还\tduo hai\t9000\n家庭\tjia ting\t90000\n";
+    let mut engine =
+        Engine::new(Dictionary::parse(dictionary).unwrap()).with_learner(Box::<Choices>::default());
+    engine.set_choice_model(Some(Arc::new(Prefers("多还家庭"))));
+    engine.set_input("duohaijiating");
+    settle(&mut engine);
+    engine
+}
+
+#[test]
+fn a_long_word_picked_under_these_keys_stays_ahead_of_the_sentences() {
+    let mut engine = duohaijiating();
+    assert_eq!(first_texts(&engine), ["多还家庭", "多孩家庭"]);
+    let word = engine
+        .query()
+        .unwrap()
+        .candidates
+        .items
+        .into_iter()
+        .find(|c| c.text == "多孩家庭")
+        .unwrap();
+    assert_eq!(word.kind, CandidateKind::Chinese);
+    engine.commit(&word);
+    assert_eq!(
+        engine.learner().choice_weight("duohaijiating", "多孩家庭"),
+        1
+    );
+    assert_eq!(
+        engine.learner().choice_weight("duohaijiating", "多还家庭"),
+        0
+    );
+    engine.set_input("duohaijiating");
+    first_texts(&engine);
+    settle(&mut engine);
+    // 选过一次就排第一，模型偏爱的整句跟在后面
+    assert_eq!(first_texts(&engine), ["多孩家庭", "多还家庭"]);
 }

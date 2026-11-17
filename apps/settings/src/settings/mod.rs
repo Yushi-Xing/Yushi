@@ -2,6 +2,7 @@
 //! 结构体与构造在这里，各职责的 `impl` 在子模块。
 
 mod app;
+mod clipboard;
 mod config;
 mod fields;
 mod library;
@@ -24,8 +25,10 @@ use qingjian_platform::{Appearance, Config};
 use qingjian_render::{TextSizes, Theme, ThemeLibrary};
 
 use crate::jobs::cloud_test::CloudTest;
+use crate::jobs::dict_index::{DictIndex, Shelf};
+use crate::jobs::download::Downloads;
 use crate::jobs::import::ImportJob;
-use crate::jobs::model_download::ModelDownload;
+use crate::jobs::restore::Restore;
 use crate::jobs::update_check::UpdateCheck;
 use crate::library::Library;
 use crate::message::{FieldId, Popup, SizeKind};
@@ -91,8 +94,20 @@ pub struct Settings {
 
     pub import: ImportJob,
 
-    /// 实验功能里正在下的模型。
-    pub download: ModelDownload,
+    /// 正在下的模型或词库，一次一个。
+    pub download: Downloads,
+
+    /// 「词库」页从词库仓库取的可下载清单。
+    pub dict_index: DictIndex,
+
+    /// 从老版本升上来时要补下的词库，依次下。
+    pub restore: Restore,
+
+    /// 「可下载的」那一节选着的标签。
+    pub dict_shelf: Shelf,
+
+    /// 点过一次「删除」、等再点一次确认的下载词库（id）；点了别的就作废。
+    pub dict_remove_armed: Option<String>,
 
     /// 点过一次「删除」、等再点一次确认的模型；点了别的就作废。
     pub remove_armed: Option<qingjian_platform::LocalModel>,
@@ -185,7 +200,11 @@ impl Settings {
             recording: None,
             library: Library::scan(),
             import: ImportJob::default(),
-            download: ModelDownload::default(),
+            download: Downloads::default(),
+            dict_index: DictIndex::default(),
+            restore: Restore::default(),
+            dict_shelf: Shelf::default(),
+            dict_remove_armed: None,
             remove_armed: None,
             phrase: None,
             stats: None,
@@ -216,6 +235,16 @@ impl Settings {
                 general.candidate_font_size.0,
                 general.annotation_font_size.0,
             ))
+            .with_candidate_weight(general.candidate_font_weight())
+    }
+
+    /// 字重框里显示的数：设置里写了用它，没写用主题的。
+    pub fn weight(&self) -> u16 {
+        let general = &self.config.general;
+        general
+            .candidate_font_weight()
+            .or_else(|| self.theme(general.theme_id()).theme_weight("candidate"))
+            .unwrap_or(400)
     }
 
     /// 字号框里显示的数：设置里写了用它，没写用主题的。

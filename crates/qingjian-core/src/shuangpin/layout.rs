@@ -195,6 +195,21 @@ impl Layout {
             .map_or(&[], |(_, finals)| finals)
     }
 
+    /// 两个键拼出的音节：普通解码优先，模糊音能补成合法音节时保留原读音（供查询展开与上屏消耗共用）。
+    pub(crate) fn pair(&self, first: char, second: char, fuzzy: &FuzzyRules) -> Option<String> {
+        self.syllable(first, second).or_else(|| {
+            if !fuzzy.any() {
+                return None;
+            }
+            let initial = self.initial(first)?;
+            self.finals(second).iter().find_map(|final_| {
+                let raw = format!("{initial}{final_}");
+                let expanded = fuzzy.expand(&[SyllablePattern::complete(&raw)]);
+                expanded.has_alternatives().then_some(raw)
+            })
+        })
+    }
+
     /// 两个键拼成的音节；拼不出合法音节时为 `None`。
     pub fn syllable(&self, first: char, second: char) -> Option<String> {
         let pair = [first, second];
@@ -262,12 +277,12 @@ impl Layout {
     /// 把敲的键翻成全拼。两键一组从左到右配对；配不出合法音节的位置起全部原样留作尾巴；
     /// 末尾落单的一键当声母（或元音）前缀；用户自己敲的 `'` 结束当前配对。
     pub fn decode(&self, keys: &str) -> Decoded {
-        self.decode_fuzzy(keys, FuzzyRules::default())
+        self.decode_fuzzy(keys, &FuzzyRules::default())
     }
 
     /// 模糊音能补成合法音节时保留原读音，供查询展开与上屏消耗共用。
     /// 普通解码优先，关闭模糊音时行为与 [`Self::decode`] 一致。
-    pub(crate) fn decode_fuzzy(&self, keys: &str, fuzzy: FuzzyRules) -> Decoded {
+    pub(crate) fn decode_fuzzy(&self, keys: &str, fuzzy: &FuzzyRules) -> Decoded {
         let chars: Vec<char> = keys.chars().collect();
         let mut units = Vec::with_capacity(chars.len() / 2 + 1);
         let mut index = 0;
@@ -280,24 +295,11 @@ impl Layout {
             }
             let second = chars.get(index + 1).copied().filter(|c| *c != '\'');
             let unit = match second {
-                Some(second) => self
-                    .syllable(first, second)
-                    .or_else(|| {
-                        if !fuzzy.any() {
-                            return None;
-                        }
-                        let initial = self.initial(first)?;
-                        self.finals(second).iter().find_map(|final_| {
-                            let raw = format!("{initial}{final_}");
-                            let expanded = fuzzy.expand(&[SyllablePattern::complete(&raw)]);
-                            expanded.has_alternatives().then_some(raw)
-                        })
-                    })
-                    .map(|pinyin| Unit {
-                        keys: [first, second].iter().collect(),
-                        pinyin,
-                        complete: true,
-                    }),
+                Some(second) => self.pair(first, second, fuzzy).map(|pinyin| Unit {
+                    keys: [first, second].iter().collect(),
+                    pinyin,
+                    complete: true,
+                }),
                 None => self.partial(first).map(|pinyin| Unit {
                     keys: first.to_string(),
                     pinyin,

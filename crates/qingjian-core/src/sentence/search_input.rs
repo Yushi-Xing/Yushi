@@ -2,7 +2,7 @@
 
 use qingjian_dictionary::Dictionary;
 
-use super::{LanguageModel, Personal, SearchLimits};
+use super::{Context, LanguageModel, Personal, SearchLimits};
 
 /// 每个词各字的额外得分：`(起始音节位置, 词, 词的读音)` → 分。
 pub type Emission<'a> = &'a dyn Fn(usize, &str, &[String]) -> f64;
@@ -19,6 +19,9 @@ pub struct SearchInput<'a, W, C> {
 
     /// 个人 n-gram 与插值参数；没有个人数据就是 [`Personal::NONE`]。
     pub personal: Personal<'a>,
+
+    /// 当前输入之前连续上屏的两个词；未提供时从句首开始。
+    pub context: Context<'a>,
 
     pub weight: W,
 
@@ -50,6 +53,7 @@ where
             dictionaries,
             model,
             personal,
+            context: Context::START,
             weight,
             cost,
             tones: &[],
@@ -60,6 +64,10 @@ where
 
     pub fn with_tones(self, tones: &'a [Option<u8>]) -> Self {
         Self { tones, ..self }
+    }
+
+    pub fn with_context(self, context: Context<'a>) -> Self {
+        Self { context, ..self }
     }
 
     pub fn with_emission(self, emission: Emission<'a>) -> Self {

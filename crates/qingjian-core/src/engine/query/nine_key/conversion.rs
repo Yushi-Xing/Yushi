@@ -50,6 +50,7 @@ impl Engine {
                     |text| self.learner.weight(text),
                     |_, _| 0.0,
                 )
+                .with_context(self.chain.context())
                 .with_limits(self.search_limits);
                 sentence::convert(
                     &input,

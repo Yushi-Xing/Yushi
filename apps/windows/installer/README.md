@@ -1,5 +1,7 @@
 # 青简 Windows 安装包
 
+本 fork 默认在 InstaBox 上使用 Windows MSVC 交叉工具链构建，再通过 Wine 运行 Inno Setup 生成安装 EXE，见 [InstaBox 构建说明](../../../docs/notes/windows-instabox.md)。发布附件包括安装器、SHA256SUMS、包体清单、源码与构建信息及验证记录。只有用户明确要求时才运行 GitHub Actions；Wine 检查不代表 Windows 真机验收通过。
+
 用 [Inno Setup](https://jrsoftware.org/isinfo.php) 打的安装包，把 TSF DLL（64 位与 32 位各一份）、Server、设置程序与随包数据一起装进
 `C:\Program Files\Qingjian`，注册文本服务，并设登录自启。对应 macOS 的 pkg。
 
@@ -11,8 +13,8 @@ C:\Program Files\Qingjian\
     qingjian_tsf-<版本>-x86.dll   同上的 32 位版（企业微信 / WPS / 32 位 QQ 这类 32 位应用只能加载它）
     qingjian-server.exe       输入内核 Server（跑在应用进程外）
     qingjian-settings.exe     设置程序（apps\settings，三平台共用，不依赖 Windows App Runtime）
-    qingjian-settings-legacy.exe  旧版设置程序（WinUI，开始菜单「青简旧版设置」，留一个版本作回退）
-    Microsoft.UI.Xaml.dll …   旧版设置程序自带的 Windows App Runtime（自包含部署，见下节；约 56 MB / 185 个文件）
+    qingjian-settings-legacy.exe  仅兼容构建：旧版 WinUI 设置程序
+    Microsoft.UI.Xaml.dll …   仅兼容构建：旧版设置的 Windows App Runtime
     qingjian.ico              开始菜单 / 启动项快捷方式的图标（exe 里也嵌了一份）
     data\generated\           dict.qj / lm.qj / glossary-{en,ja,zh,es,vi}.qj / english.tsv / dicts\*.qj
     data\generated\codes\     随包辅码码表 stroke.qj + LICENSE-CNS11643.txt（tools\dict-convert 的 pack codes 生成）
@@ -23,7 +25,7 @@ Server 与设置程序按 **exe 相对**定位随包资源（`qingjian_platform:
 开发时是仓库 `ime\`（exe 在 `target\{debug,release}\` 下往上三层）。相对写法两套布局一致，只有根不同。
 
 用户数据仍在 `%APPDATA%\Qingjian`（config.toml、密钥 .env、学习数据、统计），三个进程的日志在 `%LOCALAPPDATA%\Qingjian\logs`（`server.` / `tsf.` / `settings.` 前缀，按天，留 7 天）；
-卸载不动这些。图标由 `regsvr32` 写到 `%ProgramData%\Qingjian\qingjian.ico`（DLL 里 include_bytes 内嵌）。
+卸载不动这些。输入法图标由 `regsvr32` 写到 `%ProgramData%\Qingjian\qingjian.ico`（DLL 里 include_bytes 内嵌单色深浅两版，按注册时任务栏深浅挑一版；之后 Server 启动与系统切深浅色时改写，任务栏在下次切换输入法时换过来。安装包给这个目录放开了普通用户写权限）。
 
 ## 安装程序做的几件事
 
@@ -47,13 +49,15 @@ Server 与设置程序按 **exe 相对**定位随包资源（`qingjian_platform:
 - 已开着的应用继续用进程里的旧 DLL 直到重启，Server 两个版本都服务（`OpenSession` 带协议版本，对不上只记警告）；
 - 装完删旧 DLL，删不掉的登记成重启后删。
 
-## 旧版设置程序自带 Windows App Runtime
+## 可选旧版设置与 Windows App Runtime
+
+标准包只构建和安装共享设置程序。需要旧版备用时，给 `build.ps1` 加 `-IncludeLegacySettings`，才会构建旧版、验证并收集全部运行库、添加旧版快捷方式；`-SkipBuild` 同样遵守该开关。兼容包不裁减运行库语言资源，避免缺文件导致窗口无法启动。升级标准包不会主动删除旧安装留下的兼容文件；菜单按文件是否存在显示入口。
 
 旧版设置界面用 Windows Reactor（WinUI 3）写，而它的框架依赖引导只有 Windows 11 走得通：要 Windows 11 才有的
 AppModel API 把框架包加进进程包图，Windows 10 上没有那两个函数（定位见 `docs\notes\windows-win10.md`）。
 所以旧版设置程序用**自包含部署**——`apps\windows\settings\build.rs` 让 `windows-reactor-setup` 把 Windows App Runtime
 铺到 `target\release\`，打包时按 `settings-runtime.txt` 挑进 `target\installer\settings-runtime`，本目录的
-`qingjian.iss` 再整个目录装到 `{app}` 下、与 `qingjian-settings-legacy.exe` 同级。下个版本删掉旧版设置程序时，这一节、`settings-runtime.txt` 与运行时文件一起删。
+`qingjian.iss` 在兼容构建中把它们装到 `{app}` 下、与 `qingjian-settings-legacy.exe` 同级。
 
 - 这些文件是运行时必需：少一件（或层级装错）设置窗口就起不来，`build.ps1` 发现缺文件会直接失败。
 - 升级 `windows-reactor` / `windows-reactor-setup` 时，照新版 crate 的 `assets/runtime.txt` 核对 `settings-runtime.txt`。
@@ -71,6 +75,14 @@ powershell -ExecutionPolicy Bypass -File apps\windows\installer\build.ps1
 成品在 `target\installer\qingjian-<版本>-windows-x86_64-setup.exe`。改了数据 / 脚本但二进制没变时加 `-SkipBuild`；`-Sign` 用自签证书签产物
 （uiAccess 要求 Server 签名 + 装 Program Files）。
 
+正常构建先编译 CLI，再运行 [打字体验门禁](../../../assets/eval/experience/README.md)，通过后才编译产品。结果在 `target/package-eval/experience/`；重跑时把上次报告移到 `target/experience-history/`。`-SkipBuild` 只重打既有二进制，不重新编译或执行体验回放。日常直接使用 Cargo 的人可以单独执行上述回放命令。
+
+Actions 恢复 Rust 缓存后先执行 `windows_package.py prepare`，清理 `target` 下的 `package-checks`、`package-eval`、`windows-package` 和 `installer` 四个一次性目录，避免缓存中的旧报告阻止新评测，或被当成本次证据。保留 release / debug / 32 位编译缓存，报告仍使用“目录存在即拒绝”的保护。
+
+最终 Windows 工作流还会先写入非默认偏好与真实格式的学习样例，逐字节验证首次安装、覆盖重装、卸载后重装和最终卸载均保留用户目录；检查包括配置注释、词频、选择表、个人词、搭配、英文词、敲错表、环境文件、主题与模型目录。安装脚本不把默认配置打到用户目录，也不在卸载时删除个人文件。
+
+每次打包同时生成 `target\installer\package-size.json`：从 `.iss` 的实际 `[Files]` 展开文件清单，记录安装包压缩字节、SHA256、安装文件总字节，以及二进制、数据、ONNX 与旧设置运行库的分组大小。比较标准包和 `-IncludeLegacySettings` 时使用同一批二进制制品与数据；预览发布会一并归档该清单。
+
 也可手动：`iscc /DAppVersion=0.1.0 apps\windows\installer\qingjian.iss`。
 
 ## 注意
@@ -80,3 +92,5 @@ powershell -ExecutionPolicy Bypass -File apps\windows\installer\build.ps1
 - **签名**：发版证书就绪后在这里加 `SignTool`（对应 mac 的 Developer ID）；开发期用 `-Sign` 的自签证书。
 - **没证书的包**（CI 内测版）：先设 `$env:QINGJIAN_UIACCESS = '0'` 再打，Server 不嵌 uiAccess——没签名的 exe 带 uiAccess=true 会起不来。
   代价是候选窗在 UWP 宿主里可能被盖住。`release.yml` 的 `windows` job 就是这么打的。
+
+ONNX Runtime 自身依赖 Visual C++ Runtime。`fetch-onnxruntime.ps1` 同时按 SHA-256 锁定下载 Microsoft 的发行版 CRT，将 DLL 放在应用目录，标准包也必须携带这些运行库；它与 Rust 产物的静态 CRT 设置是两件事。

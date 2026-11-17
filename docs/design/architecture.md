@@ -187,8 +187,8 @@ Engine 查词的词库是一个列表：主词库（随包 `dict.qj`）、附加
 （它们其实是通用词：医疗器械、侵权行为）；基础词库从 22 万条降到 8.7 万条、`dict.qj` 10 MB → 3 MB，领域词库合计 13 万条 7 MB。
 分词统计语料时仍把 `dicts/*.tsv` 一起当词表，词表与拆分前一致，语言模型不用重跑。
 壳负责装配，附加词库有两处：随包的领域词库在 `.app` 的 `Resources/dicts/`，缺省关闭，配置 `[dictionaries] domains` 列出打开的
-（缺省只有 `idioms`，偏好设置「词库」页可勾选、不能移除）；用户自己导入的放用户目录 `dicts/`（macOS 是 `~/Library/Application Support/Qingjian/dicts/`），
-目录里的 `.qj` / TSV 文件全部加载，配置 `[dictionaries] disabled` 列出要关掉的文件名；导入 = `qingjian_dictionary::import`
+（缺省只有 `idioms`，偏好设置「词库」页可勾选、不能移除）；用户自己导入的放用户目录 `custom/dicts/`、设置里下载的放 `downloads/dicts/`（用户目录的分类见 `qingjian_platform::UserDirs`），
+两处的 `.qj` / TSV 文件全部加载，配置 `[dictionaries] disabled` 列出要关掉的文件名；导入 = `qingjian_dictionary::import`
 把青简 TSV / Rime `.dict.yaml` / `.qj` 转成 `.qj` 放进去（Rime 的 YAML 头只取 `name:`，权重非整数当 1），
 移除 = 文件挪到 `dicts/removed/`，开关 = 改配置，三个动作之后 `Host::reload_dictionaries` 重新装配。这也是第三方词库带着自己许可证单独分发的落点：
 `.qj` 的 `META` 里有名称与许可证，偏好设置里直接显示。
@@ -219,7 +219,7 @@ CSR 偏移与后继）原样落盘，打开时 mmap 整个文件、校验一遍�
   自己写风险最小。若以后碰撞或分布出问题，换成 xxh3 并把 `FORMAT_VERSION` 加一。
 - 写文件先写同目录 `.qj.tmp` 再改名；数据文件只整体替换，从不就地修改（mmap 的安全前提）。
 - 生成：`cargo run --release -p qingjian-dict-convert -- pack dict --name … --license … --source …` → `dict.qj`，
-  `pack lm --name … --license …` → `lm.qj`（`bundle.sh` 在 TSV 比 `.qj` 新时自动重打）。`Dictionary::from_path` 按魔数自动选
+  `pack lm --name … --license …` → `lm.qj`（发在模型仓库，打包时按 `tools/release/models.lock` 取）。`Dictionary::from_path` 按魔数自动选
   `.qj` / TSV 路径，`BigramModel::from_path`（`.qj`）与 `from_paths`（TSV）分开；输入法与 CLI 有 `.qj` 就用它。
   释义表、emoji 表、英文词表还是 TSV（加载各 20 ms 以内，等有需要再进容器）。
 - 格式版本不兼容时 `FORMAT_VERSION` 加一，读旧版的代码按需保留；`Kind` 编号只增不改。
@@ -282,11 +282,11 @@ CC-CEDICT 表（`dict-convert cedict`）保留为备用来源，覆盖面广但�
   持久化在 `qingjian-learning` 的 `user-ngram.tsv`：三列 `前词\t后词\t次数` 是二元，四列 `前二词\t前词\t后词\t次数` 是三元，旧的三列文件照读。
   撤销（退格删光重选）、删词（`forget_word`）、减半都同时覆盖二元与三元。
 - **自动造词**：用户自己连着选出的两个词（不是整句路径里的），合起来不超过 4 个字、词库与用户词里都没有，
-  且这条转移已记够次数（同一段拼音里连着选的两次，分两段打的三次），就记成用户词并记一次选择。
+  且这条转移已记够次数（同一段拼音里连着选的一次，分两段打的三次），就记成用户词并记一次选择。
   同一段拼音里自选一个词之后剩下的部分走整句候选（`jidiaole` 选 挤、剩下 掉了 按空格）时，接缝处第一个词的转移按自选记双份，
   但不参与两词造词（我 + 的… 这种接缝太常见、转移计数早就够了，回放里会把 我的 造成用户词，之后它就得和 沃德 按选择次数比）。
   另外一段拼音分几次选完（`CommitChain` 记着这段里上屏的每个词）时，合起来的文本按「整段字母 → 合成词」记一次选择（`user-choices.tsv`），
-  记到两次且词库里没有、不超过 4 个字就造成用户词，下次整段打出来它靠选择次数直接排第一：这是「用户手动拼了一遍整句」最直接的信号，
+  一次选完且词库里没有、不超过 20 个字就造成用户词，下次整段打出来它靠选择次数直接排第一：这是「用户手动拼了一遍整句」最直接的信号，
   比等个人 n-gram 一份一份累到翻过静态模型快得多（「挤掉了」靠 n-gram 要选四次）。
   词级排序也用同一个语言模型：候选得分是 `log P(词 | 上一个上屏的词)`（个人 n-gram 插值，上文是链上的两个词）+ 封顶的选择次数加分，词库词频只做预选和兜底，
   所以 `ba` 在「做了」后面出 吧、句首看模型；同一输入串下选过的词（`user-choices.tsv`，键是候选覆盖的那段字母）排在得分之前，
@@ -496,7 +496,9 @@ CC-CEDICT 表（`dict-convert cedict`）保留为备用来源，覆盖面广但�
   一次要绘制的状态是 `Frame`（preedit 分段 + 候选页 + 可选的整句补全 `sentence` 与删候选提示 `notice`，后两者不参与 `Frame::is_empty`），preedit 用 `PreeditSegment`（Core `MarkedSegment` 的可序列化镜像，
   协议不耦合 Core 内部枚举），候选直接嵌 `qingjian_core::CandidateList`。同词干类型收进子目录：`key/{event,outcome}`、`frame/preedit/{kind,segment}`。
 - **Server 进程**：`apps/windows/server`（package `qingjian-windows-server`，bin `qingjian-server`）。`dispatch::Router` 按 `SessionId` 分派多会话（Windows 一个 Server 服务多个应用进程，
-  每会话各持组句状态，不同于 macOS 的进程级单例）。会话开 / 关、按键与上屏、Engine 装配、命名管道传输（`\\.\pipe\qingjian`）都已跑通，Windows 上端到端测过。
+  每会话各持组句状态，不同于 macOS 的进程级单例）。会话开 / 关、按键与上屏、Engine 装配、命名管道传输都已跑通，Windows 上端到端测过。
+  管道名是 `\\.\pipe\qingjian-<用户 SID>-<登录会话号>`（`qingjian_platform::pipe`），两端各按自己的令牌算；安全描述符只给本用户全权，AppContainer 只能读写数据、建不了实例；连上后 Server 模拟客户端核对是同一个用户，DLL 核对管道所有者是自己、对面进程是同目录的 `qingjian-server.exe`（AppContainer 宿主打不开桌面进程，只核对所有者）；一个客户端进程最多 64 条连接。升级后没重启的应用里还是老 DLL，Server 过渡期也在旧名字 `\\.\pipe\qingjian` 上服务（同样核对用户）。
+  DLL 报的会话号只在它那条连接内有效：管道层（`ipc/sessions.rs`）按连接换成 Server 分配的全局号再交给 Router，碰本连接没开过的会话就断开，别的进程拿猜到的线程 id 读不到、也动不了别人的组句（#699）。
 - **候选窗口（Server 进程自绘 + uiAccess）**：候选窗从前在**应用进程内的 DLL** 自绘，普通置顶窗被微软商店 / 任务栏搜索这些**更高 z-band** 的宿主盖住。现改由 **Server 进程**自绘（`server/src/ui/`：一条专用 UI 线程注册窗口类 + 建 GDI 分层窗 + 跑消息循环，HWND 只在该线程碰；工人线程经 `Sender<UiCommand>` + `PostThreadMessageW(WM_APP)` 把「显示(`Frame`+屏幕矩形) / 隐藏」marshal 过去；进程级 `SetProcessDpiAwarenessContext(PER_MONITOR_AWARE_V2)` 按物理像素对齐应用报来的矩形）。DLL 只量光标屏幕矩形（`GetTextExt`，退鼠标）发 `PositionCandidates{rect}`，并在组句于 DLL 侧结束（应用终止组句 / 断线，`OnCompositionTerminated` 这条 Server 无从知晓）时发 `HideCandidates`；Server 握着 `Frame` 直接自绘，云端异步更新也直接刷自己的窗、不回传 DLL（渲染代码——词性 + 译文 + 分页 + 柔和阴影，对齐 macOS——整块从 DLL 搬到 Server）。**盖过高 z-band 宿主**靠 Server exe 的 `uiAccess="true"` manifest（`server/build.rs` 用 embed-manifest 嵌）+ 代码签名 + 装 Program Files 三者齐备（`SetWindowPos(HWND_TOPMOST)` 才自动升进 UIAccess 高带）：开发自签 + 本机受信任根（`installer/sign-local.ps1`），发版换 Certum 开源代码签名证书；uiAccess exe 不能 CreateProcess 拉起（报 740），装完 / 登录都走 ShellExecute（安装器完成页 `ShellExecAsOriginalUser` + `{commonstartup}` 启动快捷方式由 Explorer 拉起才授 uiAccess，故不用计划任务）。搜索页可能在候选窗创建后弹出并排到它前面，因此每次显示候选都用 `SetWindowPos(HWND_TOPMOST)` 重新升到当前置顶序列首位，并带 `SWP_NOACTIVATE` 保留应用焦点。候选窗每显示一页，Server 调 `Engine::note_displayed`（收窗传空）告知当前页——生词「看到轮次」据此推进、橙色标记满 `FRESH_UNTIL` 轮才毕业，对齐 macOS 壳的 `render`。
   候选窗只在候选与译词的点击区域收鼠标（`WM_NCHITTEST` 回 `HTCLIENT`，其余 `HTTRANSPARENT` 穿透，`MA_NOACTIVATE` 不抢焦点，`ui/candidates/click.rs`）；
   点中的目标经工人通道交给 Router（`dispatch/key/click.rs`，与数字键 / 译词键同一套上屏），Server 写不了文档，上屏的字挂在焦点会话上，
@@ -510,11 +512,11 @@ CC-CEDICT 表（`dict-convert cedict`）保留为备用来源，覆盖面广但�
   COM 层：`DllGetClassObject` → `IClassFactory` → `#[implement(ITfTextInputProcessor, ITfKeyEventSink, ITfDisplayAttributeProvider)]` → `Activate` 挂击键 sink + 登记翻译保留键 + 语言栏中英按钮 + 连管道 → `OnKeyDown` 转发按键、经异步编辑会话（`TF_ES_READWRITE`，不带 SYNC）写组句 / 上屏；`DllRegisterServer` 写 InprocServer32 并经 `ITfInputProcessorProfiles` / `ITfCategoryMgr` 注册文本服务与各能力类别。
   组句拼音的**内联下划线**（对应 macOS marked text 下划线）走 TSF 显示属性协议（`com/display_attribute/`）：注册 `GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER` 类别 + 一个自定义显示属性 GUID（细实线、`TF_ATTR_INPUT`），
   `ITfDisplayAttributeProvider`（实现在 TextService 上）把 GUID 对应的 `TF_DISPLAYATTRIBUTE` 交给系统；收键写组句时用 `ITfCategoryMgr::RegisterGUID` 把 GUID 换成 atom，`SetValue` 进组句范围的 `GUID_PROP_ATTRIBUTE` 属性，宿主据此在拼音底下画线。
-  收键与运行细节记进 `%LOCALAPPDATA%\Qingjian\logs\tsf.<日期>.log`（与 Server / 设置程序同目录，按天一个文件、留 7 天；多进程追加同一文件）；候选窗口不再由 DLL 自绘（已搬到 Server 进程，见上「候选窗口」），DLL 侧只做 preedit 内联 + 上报光标矩形；云联想已接。
+  收键与运行细节记进 `%LOCALAPPDATA%\Qingjian\logs\tsf.<日期>.log`（与 Server / 设置程序同目录，按天一个文件、留 7 天；多进程追加同一文件）。这份日志不随 `log_level` 变、写在每个应用进程里，所以不记用户打的内容：可打印键只记类别（字母 / 数字 / 符号，不记虚拟键码），拼音与上屏文字只记长度，功能键才记键码（`com::log::key_label`）；候选窗口不再由 DLL 自绘（已搬到 Server 进程，见上「候选窗口」），DLL 侧只做 preedit 内联 + 上报光标矩形；云联想已接。
 - **交叉编译验证**：`qingjian-core` / `-dictionary` / `-format` / `-lm` / `-platform` / `apps/windows/{server,tsf}` 已能
   `cargo check --target x86_64-pc-windows-gnu` 通过（借此修掉 `qingjian-format` 里 unix 专有的 `Mmap::advise` 未 `cfg` 的移植 bug）；
   本机只 `check`，真正编译在 Windows 机器上做（`qingjian-neural` 的 candle 后端在 Windows 走 CPU，已接进 Server，见下「本地整句模型」）。
-- **本地整句模型（Server 进程，与 macOS 的 `host/model/mod.rs` 对齐）**：`server/src/dispatch/rescore/`。启动时 `find_model` 找用户 `%APPDATA%\Qingjian\models\hanzhang-tongbian\`（设置里下载的）与随包 `data\models\hanzhang-tongbian\`（安装包不带，开发时用）；选的模型没下载就不用模型，不再回退；旧用户目录 `model-p2c\` 仍可读取。接受 `.qjm` 单文件或三件套目录；`[model] enabled` 开着就起线程加载并预热（`ModelLoader`），下一次按键 / tick 接上 `set_async_sentence_scorer`。
+- **本地整句模型（Server 进程，与 macOS 的 `host/model/mod.rs` 对齐）**：`server/src/dispatch/rescore/`。启动时 `find_model` 找 `%LOCALAPPDATA%\Qingjian\downloads\models\hanzhang-tongbian\`（设置里下载的）与随包 `data\models\hanzhang-tongbian\`（安装包不带，开发时用）；选的模型没下载就不用模型，不再回退。接受 `.qjm` 单文件或三件套目录；`[model] enabled` 开着就起线程加载并预热（`ModelLoader`），下一次按键 / tick 接上 `set_async_sentence_scorer`。
   Server 没有定时器：缓冲变化后 `schedule_rescoring` 起防抖，工人循环 `recv_timeout(router.next_tick())` 按 `RescoreState` 的节拍醒来（防抖 30 ms → `request_rescoring`；后台线程交了结果经 `Engine::set_rescoring_wake` 往工人循环投 `Work::Wake` 马上收，另有 20 ms 一次的 `poll_rescoring` 兜底，最多等 2 s），DLL 组句期间每 80 ms 的 `Poll` 也顺带 `tick`。分到了重查一次、重建候选布局（云端词与整句补全留着）、由 Server 自绘的候选窗直接重画，DLL 下一次 `Poll` 拿到新帧更新内联 preedit；翻过页 / 动过高亮不动。热加载 `[model]` 变了才重载 / 卸载。
   前文：DLL 在**起组句的那次读写编辑会话**里顺手读选区起点前 64 个 UTF-16 单元（`com/edit/surrounding.rs::text_before_caret`，拼音还没插进去、不用再开一次会话），随 `ClientMessage::Surrounding` 单向送来。**密码框与私密输入**（2026-09-12 查了微软文档 / SampleIME / Chromium 源码后定）：
   TSF 规定键盘类 TIP 必须看上下文的 `GUID_COMPARTMENT_KEYBOARD_DISABLED`（微软文档明说密码框应禁用文本服务、`IS_PASSWORD` 只是标注不提供保护；Chromium 给密码框的上下文设的就是它），

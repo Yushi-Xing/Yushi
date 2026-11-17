@@ -12,7 +12,10 @@ pub use tone::Tone;
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct Frame {
-    /// 顶部拼音行；配置成只在行内显示时为 `None`。
+    /// 窗口位于输入行上方：拼音行在底部，首选紧挨其上，逻辑索引不变。
+    pub upward: bool,
+
+    /// 拼音行（上方窗口时位于底部）；配置成只在行内显示时为 `None`。
     pub preedit: Option<Preedit>,
 
     /// 候选行。
@@ -44,6 +47,10 @@ pub struct Frame {
 
     /// 输入状态（中 / 英、简 / 繁、标点、方案）。
     pub mode: Mode,
+
+    /// 候选倒着排：第一个在最后（竖排就是最下面）。窗口在光标上方时壳打开它，序号从靠近输入行的一头数；
+    /// 序号、高亮、点击仍按原来的下标。
+    pub reversed: bool,
 }
 
 impl Frame {

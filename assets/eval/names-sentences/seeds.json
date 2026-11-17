@@ -1,0 +1,931 @@
+[
+  {
+    "id": "common_name-01",
+    "category": "common_name",
+    "text": "张伟",
+    "syllables": [
+      "zhang",
+      "wei"
+    ]
+  },
+  {
+    "id": "common_name-02",
+    "category": "common_name",
+    "text": "王伟",
+    "syllables": [
+      "wang",
+      "wei"
+    ]
+  },
+  {
+    "id": "common_name-03",
+    "category": "common_name",
+    "text": "李伟",
+    "syllables": [
+      "li",
+      "wei"
+    ]
+  },
+  {
+    "id": "common_name-04",
+    "category": "common_name",
+    "text": "王芳",
+    "syllables": [
+      "wang",
+      "fang"
+    ]
+  },
+  {
+    "id": "common_name-05",
+    "category": "common_name",
+    "text": "李娜",
+    "syllables": [
+      "li",
+      "na"
+    ]
+  },
+  {
+    "id": "common_name-06",
+    "category": "common_name",
+    "text": "张敏",
+    "syllables": [
+      "zhang",
+      "min"
+    ]
+  },
+  {
+    "id": "common_name-07",
+    "category": "common_name",
+    "text": "刘洋",
+    "syllables": [
+      "liu",
+      "yang"
+    ]
+  },
+  {
+    "id": "common_name-08",
+    "category": "common_name",
+    "text": "李强",
+    "syllables": [
+      "li",
+      "qiang"
+    ]
+  },
+  {
+    "id": "common_name-09",
+    "category": "common_name",
+    "text": "陈杰",
+    "syllables": [
+      "chen",
+      "jie"
+    ]
+  },
+  {
+    "id": "common_name-10",
+    "category": "common_name",
+    "text": "王磊",
+    "syllables": [
+      "wang",
+      "lei"
+    ]
+  },
+  {
+    "id": "common_name-11",
+    "category": "common_name",
+    "text": "张杰",
+    "syllables": [
+      "zhang",
+      "jie"
+    ]
+  },
+  {
+    "id": "common_name-12",
+    "category": "common_name",
+    "text": "李静",
+    "syllables": [
+      "li",
+      "jing"
+    ]
+  },
+  {
+    "id": "common_name-13",
+    "category": "common_name",
+    "text": "刘磊",
+    "syllables": [
+      "liu",
+      "lei"
+    ]
+  },
+  {
+    "id": "common_name-14",
+    "category": "common_name",
+    "text": "王霞",
+    "syllables": [
+      "wang",
+      "xia"
+    ]
+  },
+  {
+    "id": "common_name-15",
+    "category": "common_name",
+    "text": "刘军",
+    "syllables": [
+      "liu",
+      "jun"
+    ]
+  },
+  {
+    "id": "common_name-16",
+    "category": "common_name",
+    "text": "王丽",
+    "syllables": [
+      "wang",
+      "li"
+    ]
+  },
+  {
+    "id": "common_name-17",
+    "category": "common_name",
+    "text": "张涛",
+    "syllables": [
+      "zhang",
+      "tao"
+    ]
+  },
+  {
+    "id": "common_name-18",
+    "category": "common_name",
+    "text": "李明",
+    "syllables": [
+      "li",
+      "ming"
+    ]
+  },
+  {
+    "id": "common_name-19",
+    "category": "common_name",
+    "text": "陈晨",
+    "syllables": [
+      "chen",
+      "chen"
+    ]
+  },
+  {
+    "id": "common_name-20",
+    "category": "common_name",
+    "text": "杨帆",
+    "syllables": [
+      "yang",
+      "fan"
+    ]
+  },
+  {
+    "id": "common_name-21",
+    "category": "common_name",
+    "text": "赵敏",
+    "syllables": [
+      "zhao",
+      "min"
+    ]
+  },
+  {
+    "id": "common_name-22",
+    "category": "common_name",
+    "text": "吴刚",
+    "syllables": [
+      "wu",
+      "gang"
+    ]
+  },
+  {
+    "id": "common_name-23",
+    "category": "common_name",
+    "text": "周婷",
+    "syllables": [
+      "zhou",
+      "ting"
+    ]
+  },
+  {
+    "id": "common_name-24",
+    "category": "common_name",
+    "text": "徐静",
+    "syllables": [
+      "xu",
+      "jing"
+    ]
+  },
+  {
+    "id": "public_name-01",
+    "category": "public_name",
+    "text": "李白",
+    "syllables": [
+      "li",
+      "bai"
+    ]
+  },
+  {
+    "id": "public_name-02",
+    "category": "public_name",
+    "text": "杜甫",
+    "syllables": [
+      "du",
+      "fu"
+    ]
+  },
+  {
+    "id": "public_name-03",
+    "category": "public_name",
+    "text": "苏轼",
+    "syllables": [
+      "su",
+      "shi"
+    ]
+  },
+  {
+    "id": "public_name-04",
+    "category": "public_name",
+    "text": "白居易",
+    "syllables": [
+      "bai",
+      "ju",
+      "yi"
+    ]
+  },
+  {
+    "id": "public_name-05",
+    "category": "public_name",
+    "text": "李清照",
+    "syllables": [
+      "li",
+      "qing",
+      "zhao"
+    ]
+  },
+  {
+    "id": "public_name-06",
+    "category": "public_name",
+    "text": "鲁迅",
+    "syllables": [
+      "lu",
+      "xun"
+    ]
+  },
+  {
+    "id": "public_name-07",
+    "category": "public_name",
+    "text": "老舍",
+    "syllables": [
+      "lao",
+      "she"
+    ]
+  },
+  {
+    "id": "public_name-08",
+    "category": "public_name",
+    "text": "曹雪芹",
+    "syllables": [
+      "cao",
+      "xue",
+      "qin"
+    ]
+  },
+  {
+    "id": "public_name-09",
+    "category": "public_name",
+    "text": "陶渊明",
+    "syllables": [
+      "tao",
+      "yuan",
+      "ming"
+    ]
+  },
+  {
+    "id": "public_name-10",
+    "category": "public_name",
+    "text": "张爱玲",
+    "syllables": [
+      "zhang",
+      "ai",
+      "ling"
+    ]
+  },
+  {
+    "id": "public_name-11",
+    "category": "public_name",
+    "text": "钱钟书",
+    "syllables": [
+      "qian",
+      "zhong",
+      "shu"
+    ]
+  },
+  {
+    "id": "public_name-12",
+    "category": "public_name",
+    "text": "沈从文",
+    "syllables": [
+      "shen",
+      "cong",
+      "wen"
+    ]
+  },
+  {
+    "id": "public_name-13",
+    "category": "public_name",
+    "text": "钱学森",
+    "syllables": [
+      "qian",
+      "xue",
+      "sen"
+    ]
+  },
+  {
+    "id": "public_name-14",
+    "category": "public_name",
+    "text": "袁隆平",
+    "syllables": [
+      "yuan",
+      "long",
+      "ping"
+    ]
+  },
+  {
+    "id": "public_name-15",
+    "category": "public_name",
+    "text": "屠呦呦",
+    "syllables": [
+      "tu",
+      "you",
+      "you"
+    ]
+  },
+  {
+    "id": "public_name-16",
+    "category": "public_name",
+    "text": "钟南山",
+    "syllables": [
+      "zhong",
+      "nan",
+      "shan"
+    ]
+  },
+  {
+    "id": "daily_sentence-01",
+    "category": "daily_sentence",
+    "text": "你好",
+    "syllables": [
+      "ni",
+      "hao"
+    ]
+  },
+  {
+    "id": "daily_sentence-02",
+    "category": "daily_sentence",
+    "text": "谢谢你",
+    "syllables": [
+      "xie",
+      "xie",
+      "ni"
+    ]
+  },
+  {
+    "id": "daily_sentence-03",
+    "category": "daily_sentence",
+    "text": "不好意思",
+    "syllables": [
+      "bu",
+      "hao",
+      "yi",
+      "si"
+    ]
+  },
+  {
+    "id": "daily_sentence-04",
+    "category": "daily_sentence",
+    "text": "没关系",
+    "syllables": [
+      "mei",
+      "guan",
+      "xi"
+    ]
+  },
+  {
+    "id": "daily_sentence-05",
+    "category": "daily_sentence",
+    "text": "请稍等一下",
+    "syllables": [
+      "qing",
+      "shao",
+      "deng",
+      "yi",
+      "xia"
+    ]
+  },
+  {
+    "id": "daily_sentence-06",
+    "category": "daily_sentence",
+    "text": "我马上就到",
+    "syllables": [
+      "wo",
+      "ma",
+      "shang",
+      "jiu",
+      "dao"
+    ]
+  },
+  {
+    "id": "daily_sentence-07",
+    "category": "daily_sentence",
+    "text": "你现在方便吗",
+    "syllables": [
+      "ni",
+      "xian",
+      "zai",
+      "fang",
+      "bian",
+      "ma"
+    ]
+  },
+  {
+    "id": "daily_sentence-08",
+    "category": "daily_sentence",
+    "text": "我们明天见",
+    "syllables": [
+      "wo",
+      "men",
+      "ming",
+      "tian",
+      "jian"
+    ]
+  },
+  {
+    "id": "daily_sentence-09",
+    "category": "daily_sentence",
+    "text": "今天晚上吃什么",
+    "syllables": [
+      "jin",
+      "tian",
+      "wan",
+      "shang",
+      "chi",
+      "shen",
+      "me"
+    ]
+  },
+  {
+    "id": "daily_sentence-10",
+    "category": "daily_sentence",
+    "text": "我想喝一杯咖啡",
+    "syllables": [
+      "wo",
+      "xiang",
+      "he",
+      "yi",
+      "bei",
+      "ka",
+      "fei"
+    ]
+  },
+  {
+    "id": "daily_sentence-11",
+    "category": "daily_sentence",
+    "text": "记得早点休息",
+    "syllables": [
+      "ji",
+      "de",
+      "zao",
+      "dian",
+      "xiu",
+      "xi"
+    ]
+  },
+  {
+    "id": "daily_sentence-12",
+    "category": "daily_sentence",
+    "text": "路上注意安全",
+    "syllables": [
+      "lu",
+      "shang",
+      "zhu",
+      "yi",
+      "an",
+      "quan"
+    ]
+  },
+  {
+    "id": "daily_sentence-13",
+    "category": "daily_sentence",
+    "text": "周末一起出去玩",
+    "syllables": [
+      "zhou",
+      "mo",
+      "yi",
+      "qi",
+      "chu",
+      "qu",
+      "wan"
+    ]
+  },
+  {
+    "id": "daily_sentence-14",
+    "category": "daily_sentence",
+    "text": "生日快乐",
+    "syllables": [
+      "sheng",
+      "ri",
+      "kuai",
+      "le"
+    ]
+  },
+  {
+    "id": "daily_sentence-15",
+    "category": "daily_sentence",
+    "text": "祝你工作顺利",
+    "syllables": [
+      "zhu",
+      "ni",
+      "gong",
+      "zuo",
+      "shun",
+      "li"
+    ]
+  },
+  {
+    "id": "daily_sentence-16",
+    "category": "daily_sentence",
+    "text": "最近天气有点冷",
+    "syllables": [
+      "zui",
+      "jin",
+      "tian",
+      "qi",
+      "you",
+      "dian",
+      "leng"
+    ]
+  },
+  {
+    "id": "daily_sentence-17",
+    "category": "daily_sentence",
+    "text": "请把文件发给我",
+    "syllables": [
+      "qing",
+      "ba",
+      "wen",
+      "jian",
+      "fa",
+      "gei",
+      "wo"
+    ]
+  },
+  {
+    "id": "daily_sentence-18",
+    "category": "daily_sentence",
+    "text": "这个问题已经解决了",
+    "syllables": [
+      "zhe",
+      "ge",
+      "wen",
+      "ti",
+      "yi",
+      "jing",
+      "jie",
+      "jue",
+      "le"
+    ]
+  },
+  {
+    "id": "daily_sentence-19",
+    "category": "daily_sentence",
+    "text": "明天下午三点开会",
+    "syllables": [
+      "ming",
+      "tian",
+      "xia",
+      "wu",
+      "san",
+      "dian",
+      "kai",
+      "hui"
+    ]
+  },
+  {
+    "id": "daily_sentence-20",
+    "category": "daily_sentence",
+    "text": "我正在整理会议记录",
+    "syllables": [
+      "wo",
+      "zheng",
+      "zai",
+      "zheng",
+      "li",
+      "hui",
+      "yi",
+      "ji",
+      "lu"
+    ]
+  },
+  {
+    "id": "daily_sentence-21",
+    "category": "daily_sentence",
+    "text": "麻烦确认一下时间",
+    "syllables": [
+      "ma",
+      "fan",
+      "que",
+      "ren",
+      "yi",
+      "xia",
+      "shi",
+      "jian"
+    ]
+  },
+  {
+    "id": "daily_sentence-22",
+    "category": "daily_sentence",
+    "text": "我们需要办理手续",
+    "syllables": [
+      "wo",
+      "men",
+      "xu",
+      "yao",
+      "ban",
+      "li",
+      "shou",
+      "xu"
+    ]
+  },
+  {
+    "id": "daily_sentence-23",
+    "category": "daily_sentence",
+    "text": "请问地铁站怎么走",
+    "syllables": [
+      "qing",
+      "wen",
+      "di",
+      "tie",
+      "zhan",
+      "zen",
+      "me",
+      "zou"
+    ]
+  },
+  {
+    "id": "daily_sentence-24",
+    "category": "daily_sentence",
+    "text": "我想买一张火车票",
+    "syllables": [
+      "wo",
+      "xiang",
+      "mai",
+      "yi",
+      "zhang",
+      "huo",
+      "che",
+      "piao"
+    ]
+  },
+  {
+    "id": "daily_sentence-25",
+    "category": "daily_sentence",
+    "text": "请帮我查一下订单",
+    "syllables": [
+      "qing",
+      "bang",
+      "wo",
+      "cha",
+      "yi",
+      "xia",
+      "ding",
+      "dan"
+    ]
+  },
+  {
+    "id": "daily_sentence-26",
+    "category": "daily_sentence",
+    "text": "这个地址可以送货吗",
+    "syllables": [
+      "zhe",
+      "ge",
+      "di",
+      "zhi",
+      "ke",
+      "yi",
+      "song",
+      "huo",
+      "ma"
+    ]
+  },
+  {
+    "id": "daily_sentence-27",
+    "category": "daily_sentence",
+    "text": "今天的工作已经完成了",
+    "syllables": [
+      "jin",
+      "tian",
+      "de",
+      "gong",
+      "zuo",
+      "yi",
+      "jing",
+      "wan",
+      "cheng",
+      "le"
+    ]
+  },
+  {
+    "id": "daily_sentence-28",
+    "category": "daily_sentence",
+    "text": "我觉得这个办法不错",
+    "syllables": [
+      "wo",
+      "jue",
+      "de",
+      "zhe",
+      "ge",
+      "ban",
+      "fa",
+      "bu",
+      "cuo"
+    ]
+  },
+  {
+    "id": "daily_sentence-29",
+    "category": "daily_sentence",
+    "text": "有时间给我打电话",
+    "syllables": [
+      "you",
+      "shi",
+      "jian",
+      "gei",
+      "wo",
+      "da",
+      "dian",
+      "hua"
+    ]
+  },
+  {
+    "id": "daily_sentence-30",
+    "category": "daily_sentence",
+    "text": "我们一起去图书馆",
+    "syllables": [
+      "wo",
+      "men",
+      "yi",
+      "qi",
+      "qu",
+      "tu",
+      "shu",
+      "guan"
+    ]
+  },
+  {
+    "id": "daily_sentence-31",
+    "category": "daily_sentence",
+    "text": "请问附近有超市吗",
+    "syllables": [
+      "qing",
+      "wen",
+      "fu",
+      "jin",
+      "you",
+      "chao",
+      "shi",
+      "ma"
+    ]
+  },
+  {
+    "id": "daily_sentence-32",
+    "category": "daily_sentence",
+    "text": "我会尽快回复你的消息",
+    "syllables": [
+      "wo",
+      "hui",
+      "jin",
+      "kuai",
+      "hui",
+      "fu",
+      "ni",
+      "de",
+      "xiao",
+      "xi"
+    ]
+  },
+  {
+    "id": "name_sentence-01",
+    "category": "name_sentence",
+    "text": "请联系张伟",
+    "syllables": [
+      "qing",
+      "lian",
+      "xi",
+      "zhang",
+      "wei"
+    ]
+  },
+  {
+    "id": "name_sentence-02",
+    "category": "name_sentence",
+    "text": "我和李明一起去",
+    "syllables": [
+      "wo",
+      "he",
+      "li",
+      "ming",
+      "yi",
+      "qi",
+      "qu"
+    ]
+  },
+  {
+    "id": "name_sentence-03",
+    "category": "name_sentence",
+    "text": "王芳今天请假了",
+    "syllables": [
+      "wang",
+      "fang",
+      "jin",
+      "tian",
+      "qing",
+      "jia",
+      "le"
+    ]
+  },
+  {
+    "id": "name_sentence-04",
+    "category": "name_sentence",
+    "text": "请把资料发给刘洋",
+    "syllables": [
+      "qing",
+      "ba",
+      "zi",
+      "liao",
+      "fa",
+      "gei",
+      "liu",
+      "yang"
+    ]
+  },
+  {
+    "id": "name_sentence-05",
+    "category": "name_sentence",
+    "text": "陈杰负责这个项目",
+    "syllables": [
+      "chen",
+      "jie",
+      "fu",
+      "ze",
+      "zhe",
+      "ge",
+      "xiang",
+      "mu"
+    ]
+  },
+  {
+    "id": "name_sentence-06",
+    "category": "name_sentence",
+    "text": "李白是一位诗人",
+    "syllables": [
+      "li",
+      "bai",
+      "shi",
+      "yi",
+      "wei",
+      "shi",
+      "ren"
+    ]
+  },
+  {
+    "id": "name_sentence-07",
+    "category": "name_sentence",
+    "text": "我们学习鲁迅的作品",
+    "syllables": [
+      "wo",
+      "men",
+      "xue",
+      "xi",
+      "lu",
+      "xun",
+      "de",
+      "zuo",
+      "pin"
+    ]
+  },
+  {
+    "id": "name_sentence-08",
+    "category": "name_sentence",
+    "text": "袁隆平研究杂交水稻",
+    "syllables": [
+      "yuan",
+      "long",
+      "ping",
+      "yan",
+      "jiu",
+      "za",
+      "jiao",
+      "shui",
+      "dao"
+    ]
+  }
+]

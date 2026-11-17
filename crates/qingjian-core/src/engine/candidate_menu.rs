@@ -5,6 +5,67 @@ use crate::candidate::{Candidate, CandidateKind};
 use crate::{Language, Sense, Translation};
 
 impl Engine {
+    /// 仅提升覆盖当前整段拼音的最近选择；置顶、降权和输入匹配约束仍然有效。
+    pub(super) fn apply_preferred_choice(&self, items: &mut Vec<Candidate>) {
+        if self.english_mode
+            || !self.phonetic
+            || self.raw_mode()
+            || self.expression_mode()
+            || self.question_mode()
+            || self.aux_filter().is_some()
+        {
+            return;
+        }
+        let input = self.whole_scope().1;
+        let Some(text) = self.learner.preferred_choice(&input) else {
+            return;
+        };
+        let Some(at) = items.iter().position(|candidate| {
+            candidate.text == text
+                && match candidate.kind {
+                    CandidateKind::Chinese => {
+                        self.consumed_by(candidate).0 == self.composition.scope().len()
+                    }
+                    CandidateKind::Cloud => true,
+                    _ => false,
+                }
+        }) else {
+            return;
+        };
+        let preferred = items.remove(at);
+        items.insert(0, preferred);
+    }
+
+    /// 给不走中文 Composition 的候选排序（如越南语）：选择权重优先，再应用该输入串下的降权。
+    /// 调用方应给 `input` 加模式前缀，避免与拼音学习记录混用。
+    pub fn rank_external_candidates(&self, input: &str, candidates: &mut [Candidate]) {
+        candidates.sort_by_key(|candidate| {
+            std::cmp::Reverse(self.learner.choice_weight(input, &candidate.text))
+        });
+        candidates.sort_by_key(|candidate| self.learner.demotion(input, &candidate.text));
+    }
+
+    /// 提高外部候选在指定输入串下的权重。
+    pub fn promote_external_candidate(&mut self, input: &str, text: &str) {
+        self.learner.record_choice(input, "", text);
+        self.learner.flush();
+    }
+
+    pub fn demote_external_candidate(&mut self, input: &str, text: &str) {
+        self.learner.demote(input, text);
+        self.learner.flush();
+    }
+
+    pub fn undemote_external_candidate(&mut self, input: &str, text: &str) -> bool {
+        let changed = self.learner.undemote(input, text);
+        self.learner.flush();
+        changed
+    }
+
+    pub fn external_candidate_demotion(&self, input: &str, text: &str) -> u32 {
+        self.learner.demotion(input, text)
+    }
+
     /// 这个候选存进学习数据与自定义短语时用的写法：繁体输出开着时换回简体。
     pub(super) fn stored_text(&self, candidate: &Candidate) -> String {
         // 短语候选显示的是换过时间变量的文字，存的是带 `{year}` 这类变量的原文：按位置找回原文，取消置顶才认得
@@ -78,6 +139,7 @@ impl Engine {
                 part_of_speech,
                 text: text.to_owned(),
                 reading: None,
+                pronunciation: None,
                 fresh: false,
             }),
         }
@@ -111,6 +173,7 @@ impl Engine {
                 part_of_speech: None,
                 text: text.to_owned(),
                 reading: None,
+                pronunciation: None,
                 fresh: false,
             }),
         }

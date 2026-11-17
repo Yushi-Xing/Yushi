@@ -1,0 +1,2041 @@
+{
+  "seed_sha256": "005b3440fd7291301159ecf876c9b8ba2b37f7839e2a6c17e5e813ed9f63da84",
+  "supplement_sha256": "8652e5022ef6836c804822d9d1c772e34c6255aeb597edd09ff516d67dffb887",
+  "results": [
+    {
+      "id": "common_name-01/clean",
+      "text": "张伟",
+      "pinyin": "zhangwei",
+      "top": "张伟",
+      "position": 0
+    },
+    {
+      "id": "common_name-01/last_initial",
+      "text": "张伟",
+      "pinyin": "zhangw",
+      "top": "掌握",
+      "position": 1
+    },
+    {
+      "id": "common_name-01/initials",
+      "text": "张伟",
+      "pinyin": "zw",
+      "top": "作为",
+      "position": 41
+    },
+    {
+      "id": "common_name-02/clean",
+      "text": "王伟",
+      "pinyin": "wangwei",
+      "top": "王伟",
+      "position": 0
+    },
+    {
+      "id": "common_name-02/last_initial",
+      "text": "王伟",
+      "pinyin": "wangw",
+      "top": "往往",
+      "position": 2
+    },
+    {
+      "id": "common_name-02/initials",
+      "text": "王伟",
+      "pinyin": "ww",
+      "top": "我玩",
+      "position": 20
+    },
+    {
+      "id": "common_name-03/clean",
+      "text": "李伟",
+      "pinyin": "liwei",
+      "top": "例为",
+      "position": 4
+    },
+    {
+      "id": "common_name-03/last_initial",
+      "text": "李伟",
+      "pinyin": "liw",
+      "top": "礼物",
+      "position": 19
+    },
+    {
+      "id": "common_name-03/initials",
+      "text": "李伟",
+      "pinyin": "lw",
+      "top": "另外",
+      "position": 33
+    },
+    {
+      "id": "common_name-04/clean",
+      "text": "王芳",
+      "pinyin": "wangfang",
+      "top": "王方",
+      "position": 1
+    },
+    {
+      "id": "common_name-04/last_initial",
+      "text": "王芳",
+      "pinyin": "wangf",
+      "top": "往返",
+      "position": 19
+    },
+    {
+      "id": "common_name-04/initials",
+      "text": "王芳",
+      "pinyin": "wf",
+      "top": "无法",
+      "position": 44
+    },
+    {
+      "id": "common_name-05/clean",
+      "text": "李娜",
+      "pinyin": "lina",
+      "top": "Lina",
+      "position": 4
+    },
+    {
+      "id": "common_name-05/last_initial",
+      "text": "李娜",
+      "pinyin": "lin",
+      "top": "林",
+      "position": null
+    },
+    {
+      "id": "common_name-05/initials",
+      "text": "李娜",
+      "pinyin": "ln",
+      "top": "ln",
+      "position": 40
+    },
+    {
+      "id": "common_name-06/clean",
+      "text": "张敏",
+      "pinyin": "zhangmin",
+      "top": "张敏",
+      "position": 0
+    },
+    {
+      "id": "common_name-06/last_initial",
+      "text": "张敏",
+      "pinyin": "zhangm",
+      "top": "张明",
+      "position": 19
+    },
+    {
+      "id": "common_name-06/initials",
+      "text": "张敏",
+      "pinyin": "zm",
+      "top": "怎么",
+      "position": 167
+    },
+    {
+      "id": "common_name-07/clean",
+      "text": "刘洋",
+      "pinyin": "liuyang",
+      "top": "浏阳",
+      "position": 15
+    },
+    {
+      "id": "common_name-07/last_initial",
+      "text": "刘洋",
+      "pinyin": "liuy",
+      "top": "流域",
+      "position": 165
+    },
+    {
+      "id": "common_name-07/initials",
+      "text": "刘洋",
+      "pinyin": "ly",
+      "top": "另一",
+      "position": null
+    },
+    {
+      "id": "common_name-08/clean",
+      "text": "李强",
+      "pinyin": "liqiang",
+      "top": "李强",
+      "position": 0
+    },
+    {
+      "id": "common_name-08/last_initial",
+      "text": "李强",
+      "pinyin": "liq",
+      "top": "liquid",
+      "position": 22
+    },
+    {
+      "id": "common_name-08/initials",
+      "text": "李强",
+      "pinyin": "lq",
+      "top": "篮球",
+      "position": 24
+    },
+    {
+      "id": "common_name-09/clean",
+      "text": "陈杰",
+      "pinyin": "chenjie",
+      "top": "陈捷",
+      "position": 1
+    },
+    {
+      "id": "common_name-09/last_initial",
+      "text": "陈杰",
+      "pinyin": "chenj",
+      "top": "趁机",
+      "position": 79
+    },
+    {
+      "id": "common_name-09/initials",
+      "text": "陈杰",
+      "pinyin": "cj",
+      "top": "超级",
+      "position": null
+    },
+    {
+      "id": "common_name-10/clean",
+      "text": "王磊",
+      "pinyin": "wanglei",
+      "top": "王雷",
+      "position": 1
+    },
+    {
+      "id": "common_name-10/last_initial",
+      "text": "王磊",
+      "pinyin": "wangl",
+      "top": "wangle",
+      "position": 25
+    },
+    {
+      "id": "common_name-10/initials",
+      "text": "王磊",
+      "pinyin": "wl",
+      "top": "为了",
+      "position": 104
+    },
+    {
+      "id": "common_name-11/clean",
+      "text": "张杰",
+      "pinyin": "zhangjie",
+      "top": "张杰",
+      "position": 0
+    },
+    {
+      "id": "common_name-11/last_initial",
+      "text": "张杰",
+      "pinyin": "zhangj",
+      "top": "张杰",
+      "position": 0
+    },
+    {
+      "id": "common_name-11/initials",
+      "text": "张杰",
+      "pinyin": "zj",
+      "top": "自己",
+      "position": 61
+    },
+    {
+      "id": "common_name-12/clean",
+      "text": "李静",
+      "pinyin": "lijing",
+      "top": "历经",
+      "position": 4
+    },
+    {
+      "id": "common_name-12/last_initial",
+      "text": "李静",
+      "pinyin": "lij",
+      "top": "理解",
+      "position": 28
+    },
+    {
+      "id": "common_name-12/initials",
+      "text": "李静",
+      "pinyin": "lj",
+      "top": "了解",
+      "position": 117
+    },
+    {
+      "id": "common_name-13/clean",
+      "text": "刘磊",
+      "pinyin": "liulei",
+      "top": "流泪",
+      "position": 3
+    },
+    {
+      "id": "common_name-13/last_initial",
+      "text": "刘磊",
+      "pinyin": "liul",
+      "top": "榴莲",
+      "position": 127
+    },
+    {
+      "id": "common_name-13/initials",
+      "text": "刘磊",
+      "pinyin": "ll",
+      "top": "来了",
+      "position": 487
+    },
+    {
+      "id": "common_name-14/clean",
+      "text": "王霞",
+      "pinyin": "wangxia",
+      "top": "往下",
+      "position": 5
+    },
+    {
+      "id": "common_name-14/last_initial",
+      "text": "王霞",
+      "pinyin": "wangx",
+      "top": "妄想",
+      "position": 108
+    },
+    {
+      "id": "common_name-14/initials",
+      "text": "王霞",
+      "pinyin": "wx",
+      "top": "我想",
+      "position": null
+    },
+    {
+      "id": "common_name-15/clean",
+      "text": "刘军",
+      "pinyin": "liujun",
+      "top": "刘俊",
+      "position": 4
+    },
+    {
+      "id": "common_name-15/last_initial",
+      "text": "刘军",
+      "pinyin": "liuj",
+      "top": "流经",
+      "position": 30
+    },
+    {
+      "id": "common_name-15/initials",
+      "text": "刘军",
+      "pinyin": "lj",
+      "top": "了解",
+      "position": 243
+    },
+    {
+      "id": "common_name-16/clean",
+      "text": "王丽",
+      "pinyin": "wangli",
+      "top": "王立",
+      "position": 15
+    },
+    {
+      "id": "common_name-16/last_initial",
+      "text": "王丽",
+      "pinyin": "wangl",
+      "top": "wangle",
+      "position": 272
+    },
+    {
+      "id": "common_name-16/initials",
+      "text": "王丽",
+      "pinyin": "wl",
+      "top": "为了",
+      "position": null
+    },
+    {
+      "id": "common_name-17/clean",
+      "text": "张涛",
+      "pinyin": "zhangtao",
+      "top": "张涛",
+      "position": 0
+    },
+    {
+      "id": "common_name-17/last_initial",
+      "text": "张涛",
+      "pinyin": "zhangt",
+      "top": "张图",
+      "position": 2
+    },
+    {
+      "id": "common_name-17/initials",
+      "text": "张涛",
+      "pinyin": "zt",
+      "top": "昨天",
+      "position": 101
+    },
+    {
+      "id": "common_name-18/clean",
+      "text": "李明",
+      "pinyin": "liming",
+      "top": "黎明",
+      "position": 2
+    },
+    {
+      "id": "common_name-18/last_initial",
+      "text": "李明",
+      "pinyin": "lim",
+      "top": "limited",
+      "position": 18
+    },
+    {
+      "id": "common_name-18/initials",
+      "text": "李明",
+      "pinyin": "lm",
+      "top": "里面",
+      "position": 29
+    },
+    {
+      "id": "common_name-19/clean",
+      "text": "陈晨",
+      "pinyin": "chenchen",
+      "top": "晨晨",
+      "position": 3
+    },
+    {
+      "id": "common_name-19/last_initial",
+      "text": "陈晨",
+      "pinyin": "chenc",
+      "top": "陈朝",
+      "position": 20
+    },
+    {
+      "id": "common_name-19/initials",
+      "text": "陈晨",
+      "pinyin": "cc",
+      "top": "cc",
+      "position": 215
+    },
+    {
+      "id": "common_name-20/clean",
+      "text": "杨帆",
+      "pinyin": "yangfan",
+      "top": "扬帆",
+      "position": 1
+    },
+    {
+      "id": "common_name-20/last_initial",
+      "text": "杨帆",
+      "pinyin": "yangf",
+      "top": "养肥",
+      "position": 3
+    },
+    {
+      "id": "common_name-20/initials",
+      "text": "杨帆",
+      "pinyin": "yf",
+      "top": "衣服",
+      "position": 69
+    },
+    {
+      "id": "common_name-21/clean",
+      "text": "赵敏",
+      "pinyin": "zhaomin",
+      "top": "赵敏",
+      "position": 0
+    },
+    {
+      "id": "common_name-21/last_initial",
+      "text": "赵敏",
+      "pinyin": "zhaom",
+      "top": "招募",
+      "position": 18
+    },
+    {
+      "id": "common_name-21/initials",
+      "text": "赵敏",
+      "pinyin": "zm",
+      "top": "怎么",
+      "position": 168
+    },
+    {
+      "id": "common_name-22/clean",
+      "text": "吴刚",
+      "pinyin": "wugang",
+      "top": "吴刚",
+      "position": 0
+    },
+    {
+      "id": "common_name-22/last_initial",
+      "text": "吴刚",
+      "pinyin": "wug",
+      "top": "五个",
+      "position": 153
+    },
+    {
+      "id": "common_name-22/initials",
+      "text": "吴刚",
+      "pinyin": "wg",
+      "top": "我给",
+      "position": 496
+    },
+    {
+      "id": "common_name-23/clean",
+      "text": "周婷",
+      "pinyin": "zhouting",
+      "top": "周廷",
+      "position": 3
+    },
+    {
+      "id": "common_name-23/last_initial",
+      "text": "周婷",
+      "pinyin": "zhout",
+      "top": "周天",
+      "position": 39
+    },
+    {
+      "id": "common_name-23/initials",
+      "text": "周婷",
+      "pinyin": "zt",
+      "top": "昨天",
+      "position": null
+    },
+    {
+      "id": "common_name-24/clean",
+      "text": "徐静",
+      "pinyin": "xujing",
+      "top": "虚惊",
+      "position": 4
+    },
+    {
+      "id": "common_name-24/last_initial",
+      "text": "徐静",
+      "pinyin": "xuj",
+      "top": "续集",
+      "position": 62
+    },
+    {
+      "id": "common_name-24/initials",
+      "text": "徐静",
+      "pinyin": "xj",
+      "top": "学姐",
+      "position": null
+    },
+    {
+      "id": "public_name-01/clean",
+      "text": "李白",
+      "pinyin": "libai",
+      "top": "礼拜",
+      "position": 2
+    },
+    {
+      "id": "public_name-01/last_initial",
+      "text": "李白",
+      "pinyin": "lib",
+      "top": "lib",
+      "position": 17
+    },
+    {
+      "id": "public_name-01/initials",
+      "text": "李白",
+      "pinyin": "lb",
+      "top": "老板",
+      "position": 12
+    },
+    {
+      "id": "public_name-02/clean",
+      "text": "杜甫",
+      "pinyin": "dufu",
+      "top": "杜甫",
+      "position": 0
+    },
+    {
+      "id": "public_name-02/last_initial",
+      "text": "杜甫",
+      "pinyin": "duf",
+      "top": "Duffy",
+      "position": 3
+    },
+    {
+      "id": "public_name-02/initials",
+      "text": "杜甫",
+      "pinyin": "df",
+      "top": "地方",
+      "position": 31
+    },
+    {
+      "id": "public_name-03/clean",
+      "text": "苏轼",
+      "pinyin": "sushi",
+      "top": "素食",
+      "position": 4
+    },
+    {
+      "id": "public_name-03/last_initial",
+      "text": "苏轼",
+      "pinyin": "sus",
+      "top": "suspect",
+      "position": 17
+    },
+    {
+      "id": "public_name-03/initials",
+      "text": "苏轼",
+      "pinyin": "ss",
+      "top": "是谁",
+      "position": 160
+    },
+    {
+      "id": "public_name-04/clean",
+      "text": "白居易",
+      "pinyin": "baijuyi",
+      "top": "白居易",
+      "position": 0
+    },
+    {
+      "id": "public_name-04/last_initial",
+      "text": "白居易",
+      "pinyin": "baijuy",
+      "top": "白居易",
+      "position": 0
+    },
+    {
+      "id": "public_name-04/initials",
+      "text": "白居易",
+      "pinyin": "bjy",
+      "top": "不介意",
+      "position": 2
+    },
+    {
+      "id": "public_name-04/mixed_initials",
+      "text": "白居易",
+      "pinyin": "baijyi",
+      "top": "白居易",
+      "position": 0
+    },
+    {
+      "id": "public_name-05/clean",
+      "text": "李清照",
+      "pinyin": "liqingzhao",
+      "top": "李清照",
+      "position": 0
+    },
+    {
+      "id": "public_name-05/last_initial",
+      "text": "李清照",
+      "pinyin": "liqingz",
+      "top": "李清照",
+      "position": 0
+    },
+    {
+      "id": "public_name-05/initials",
+      "text": "李清照",
+      "pinyin": "lqz",
+      "top": "李清照",
+      "position": 0
+    },
+    {
+      "id": "public_name-05/mixed_initials",
+      "text": "李清照",
+      "pinyin": "liqzhao",
+      "top": "李清照",
+      "position": 0
+    },
+    {
+      "id": "public_name-06/clean",
+      "text": "鲁迅",
+      "pinyin": "luxun",
+      "top": "鲁迅",
+      "position": 0
+    },
+    {
+      "id": "public_name-06/last_initial",
+      "text": "鲁迅",
+      "pinyin": "lux",
+      "top": "lux",
+      "position": 18
+    },
+    {
+      "id": "public_name-06/initials",
+      "text": "鲁迅",
+      "pinyin": "lx",
+      "top": "类型",
+      "position": 19
+    },
+    {
+      "id": "public_name-07/clean",
+      "text": "老舍",
+      "pinyin": "laoshe",
+      "top": "老舍",
+      "position": 0
+    },
+    {
+      "id": "public_name-07/last_initial",
+      "text": "老舍",
+      "pinyin": "laos",
+      "top": "Laos",
+      "position": 23
+    },
+    {
+      "id": "public_name-07/initials",
+      "text": "老舍",
+      "pinyin": "ls",
+      "top": "老师",
+      "position": 139
+    },
+    {
+      "id": "public_name-08/clean",
+      "text": "曹雪芹",
+      "pinyin": "caoxueqin",
+      "top": "曹雪芹",
+      "position": 0
+    },
+    {
+      "id": "public_name-08/last_initial",
+      "text": "曹雪芹",
+      "pinyin": "caoxueq",
+      "top": "曹雪芹",
+      "position": 0
+    },
+    {
+      "id": "public_name-08/initials",
+      "text": "曹雪芹",
+      "pinyin": "cxq",
+      "top": "曹雪芹",
+      "position": 0
+    },
+    {
+      "id": "public_name-08/mixed_initials",
+      "text": "曹雪芹",
+      "pinyin": "caoxqin",
+      "top": "曹雪芹",
+      "position": 0
+    },
+    {
+      "id": "public_name-09/clean",
+      "text": "陶渊明",
+      "pinyin": "taoyuanming",
+      "top": "陶渊明",
+      "position": 0
+    },
+    {
+      "id": "public_name-09/last_initial",
+      "text": "陶渊明",
+      "pinyin": "taoyuanm",
+      "top": "陶渊明",
+      "position": 0
+    },
+    {
+      "id": "public_name-09/initials",
+      "text": "陶渊明",
+      "pinyin": "tym",
+      "top": "tympanum",
+      "position": 3
+    },
+    {
+      "id": "public_name-09/mixed_initials",
+      "text": "陶渊明",
+      "pinyin": "taoyming",
+      "top": "陶渊明",
+      "position": 0
+    },
+    {
+      "id": "public_name-10/clean",
+      "text": "张爱玲",
+      "pinyin": "zhangailing",
+      "top": "张爱玲",
+      "position": 0
+    },
+    {
+      "id": "public_name-10/last_initial",
+      "text": "张爱玲",
+      "pinyin": "zhangail",
+      "top": "张爱玲",
+      "position": 0
+    },
+    {
+      "id": "public_name-10/initials",
+      "text": "张爱玲",
+      "pinyin": "zal",
+      "top": "咋了",
+      "position": null
+    },
+    {
+      "id": "public_name-10/mixed_initials",
+      "text": "张爱玲",
+      "pinyin": "zhangaling",
+      "top": "张阿玲",
+      "position": null
+    },
+    {
+      "id": "public_name-11/clean",
+      "text": "钱钟书",
+      "pinyin": "qianzhongshu",
+      "top": "钱钟书",
+      "position": 0
+    },
+    {
+      "id": "public_name-11/last_initial",
+      "text": "钱钟书",
+      "pinyin": "qianzhongs",
+      "top": "钱钟书",
+      "position": 0
+    },
+    {
+      "id": "public_name-11/initials",
+      "text": "钱钟书",
+      "pinyin": "qzs",
+      "top": "清真寺",
+      "position": 5
+    },
+    {
+      "id": "public_name-11/mixed_initials",
+      "text": "钱钟书",
+      "pinyin": "qianzshu",
+      "top": "钱钟书",
+      "position": 0
+    },
+    {
+      "id": "public_name-12/clean",
+      "text": "沈从文",
+      "pinyin": "shencongwen",
+      "top": "沈从文",
+      "position": 0
+    },
+    {
+      "id": "public_name-12/last_initial",
+      "text": "沈从文",
+      "pinyin": "shencongw",
+      "top": "沈从文",
+      "position": 0
+    },
+    {
+      "id": "public_name-12/initials",
+      "text": "沈从文",
+      "pinyin": "scw",
+      "top": "沈从文",
+      "position": 0
+    },
+    {
+      "id": "public_name-12/mixed_initials",
+      "text": "沈从文",
+      "pinyin": "shencwen",
+      "top": "沈从文",
+      "position": 0
+    },
+    {
+      "id": "public_name-13/clean",
+      "text": "钱学森",
+      "pinyin": "qianxuesen",
+      "top": "钱学森",
+      "position": 0
+    },
+    {
+      "id": "public_name-13/last_initial",
+      "text": "钱学森",
+      "pinyin": "qianxues",
+      "top": "钱学森",
+      "position": 0
+    },
+    {
+      "id": "public_name-13/initials",
+      "text": "钱学森",
+      "pinyin": "qxs",
+      "top": "钱学森",
+      "position": 0
+    },
+    {
+      "id": "public_name-13/mixed_initials",
+      "text": "钱学森",
+      "pinyin": "qianxsen",
+      "top": "钱学森",
+      "position": 0
+    },
+    {
+      "id": "public_name-14/clean",
+      "text": "袁隆平",
+      "pinyin": "yuanlongping",
+      "top": "袁隆平",
+      "position": 0
+    },
+    {
+      "id": "public_name-14/last_initial",
+      "text": "袁隆平",
+      "pinyin": "yuanlongp",
+      "top": "袁隆平",
+      "position": 0
+    },
+    {
+      "id": "public_name-14/initials",
+      "text": "袁隆平",
+      "pinyin": "ylp",
+      "top": "袁隆平",
+      "position": 0
+    },
+    {
+      "id": "public_name-14/mixed_initials",
+      "text": "袁隆平",
+      "pinyin": "yuanlping",
+      "top": "袁隆平",
+      "position": 0
+    },
+    {
+      "id": "public_name-15/clean",
+      "text": "屠呦呦",
+      "pinyin": "tuyouyou",
+      "top": "土又有",
+      "position": 1
+    },
+    {
+      "id": "public_name-15/last_initial",
+      "text": "屠呦呦",
+      "pinyin": "tuyouy",
+      "top": "屠呦呦",
+      "position": 0
+    },
+    {
+      "id": "public_name-15/initials",
+      "text": "屠呦呦",
+      "pinyin": "tyy",
+      "top": "投影仪",
+      "position": 7
+    },
+    {
+      "id": "public_name-15/mixed_initials",
+      "text": "屠呦呦",
+      "pinyin": "tuyyou",
+      "top": "图也有",
+      "position": 1
+    },
+    {
+      "id": "public_name-16/clean",
+      "text": "钟南山",
+      "pinyin": "zhongnanshan",
+      "top": "钟南山",
+      "position": 0
+    },
+    {
+      "id": "public_name-16/last_initial",
+      "text": "钟南山",
+      "pinyin": "zhongnans",
+      "top": "中南",
+      "position": 1
+    },
+    {
+      "id": "public_name-16/initials",
+      "text": "钟南山",
+      "pinyin": "zns",
+      "top": "只能说",
+      "position": 187
+    },
+    {
+      "id": "public_name-16/mixed_initials",
+      "text": "钟南山",
+      "pinyin": "zhongnshan",
+      "top": "中山",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-01/clean",
+      "text": "你好",
+      "pinyin": "nihao",
+      "top": "你好",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-01/last_initial",
+      "text": "你好",
+      "pinyin": "nih",
+      "top": "NIH",
+      "position": 4
+    },
+    {
+      "id": "daily_sentence-01/initials",
+      "text": "你好",
+      "pinyin": "nh",
+      "top": "你好",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-02/clean",
+      "text": "谢谢你",
+      "pinyin": "xiexieni",
+      "top": "谢谢你",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-02/last_initial",
+      "text": "谢谢你",
+      "pinyin": "xiexien",
+      "top": "谢谢嗯",
+      "position": 1
+    },
+    {
+      "id": "daily_sentence-02/initials",
+      "text": "谢谢你",
+      "pinyin": "xxn",
+      "top": "谢谢你",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-02/mixed_initials",
+      "text": "谢谢你",
+      "pinyin": "xiexni",
+      "top": "谢谢你",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-03/clean",
+      "text": "不好意思",
+      "pinyin": "buhaoyisi",
+      "top": "不好意思",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-03/last_initial",
+      "text": "不好意思",
+      "pinyin": "buhaoyis",
+      "top": "不好意思",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-03/initials",
+      "text": "不好意思",
+      "pinyin": "bhys",
+      "top": "不好意思",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-03/mixed_initials",
+      "text": "不好意思",
+      "pinyin": "buhyis",
+      "top": "不好意思",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-04/clean",
+      "text": "没关系",
+      "pinyin": "meiguanxi",
+      "top": "没关系",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-04/last_initial",
+      "text": "没关系",
+      "pinyin": "meiguanx",
+      "top": "没关系",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-04/initials",
+      "text": "没关系",
+      "pinyin": "mgx",
+      "top": "没关系",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-04/mixed_initials",
+      "text": "没关系",
+      "pinyin": "meigxi",
+      "top": "没关系",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-05/clean",
+      "text": "请稍等一下",
+      "pinyin": "qingshaodengyixia",
+      "top": "请稍等一下",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-05/last_initial",
+      "text": "请稍等一下",
+      "pinyin": "qingshaodengyix",
+      "top": "请稍等一下",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-05/initials",
+      "text": "请稍等一下",
+      "pinyin": "qsdyx",
+      "top": "请稍等一下",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-05/mixed_initials",
+      "text": "请稍等一下",
+      "pinyin": "qingsdengyxia",
+      "top": "请稍等一下",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-06/clean",
+      "text": "我马上就到",
+      "pinyin": "womashangjiudao",
+      "top": "我马上就到",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-06/last_initial",
+      "text": "我马上就到",
+      "pinyin": "womashangjiud",
+      "top": "我马上就的",
+      "position": 2
+    },
+    {
+      "id": "daily_sentence-06/initials",
+      "text": "我马上就到",
+      "pinyin": "wmsjd",
+      "top": "我没时间的",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-06/mixed_initials",
+      "text": "我马上就到",
+      "pinyin": "womshangjdao",
+      "top": "我马上见到",
+      "position": 1
+    },
+    {
+      "id": "daily_sentence-07/clean",
+      "text": "你现在方便吗",
+      "pinyin": "nixianzaifangbianma",
+      "top": "你现在方便吗",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-07/last_initial",
+      "text": "你现在方便吗",
+      "pinyin": "nixianzaifangbianm",
+      "top": "你现在方便面",
+      "position": 1
+    },
+    {
+      "id": "daily_sentence-07/initials",
+      "text": "你现在方便吗",
+      "pinyin": "nxzfbm",
+      "top": "女性政府部门",
+      "position": 2
+    },
+    {
+      "id": "daily_sentence-07/mixed_initials",
+      "text": "你现在方便吗",
+      "pinyin": "nixzaifbianm",
+      "top": "你现在方便面",
+      "position": 1
+    },
+    {
+      "id": "daily_sentence-08/clean",
+      "text": "我们明天见",
+      "pinyin": "womenmingtianjian",
+      "top": "我们明天见",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-08/last_initial",
+      "text": "我们明天见",
+      "pinyin": "womenmingtianj",
+      "top": "我们明天就",
+      "position": 1
+    },
+    {
+      "id": "daily_sentence-08/initials",
+      "text": "我们明天见",
+      "pinyin": "wmmtj",
+      "top": "我们明天就",
+      "position": 1
+    },
+    {
+      "id": "daily_sentence-08/mixed_initials",
+      "text": "我们明天见",
+      "pinyin": "wommingtjian",
+      "top": "我们明天见",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-09/clean",
+      "text": "今天晚上吃什么",
+      "pinyin": "jintianwanshangchishenme",
+      "top": "今天晚上吃什么",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-09/last_initial",
+      "text": "今天晚上吃什么",
+      "pinyin": "jintianwanshangchishenm",
+      "top": "今天晚上吃什么",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-09/initials",
+      "text": "今天晚上吃什么",
+      "pinyin": "jtwscsm",
+      "top": "今天晚上吃什么",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-09/mixed_initials",
+      "text": "今天晚上吃什么",
+      "pinyin": "jintwanschisme",
+      "top": "今天晚上吃什么",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-10/clean",
+      "text": "我想喝一杯咖啡",
+      "pinyin": "woxiangheyibeikafei",
+      "top": "我想喝一杯咖啡",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-10/last_initial",
+      "text": "我想喝一杯咖啡",
+      "pinyin": "woxiangheyibeikaf",
+      "top": "我想喝一杯咖啡",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-10/initials",
+      "text": "我想喝一杯咖啡",
+      "pinyin": "wxhybkf",
+      "top": "我喜欢一杯咖啡",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-10/mixed_initials",
+      "text": "我想喝一杯咖啡",
+      "pinyin": "woxheybeikfei",
+      "top": "我想喝一杯咖啡",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-11/clean",
+      "text": "记得早点休息",
+      "pinyin": "jidezaodianxiuxi",
+      "top": "记得早点休息",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-11/last_initial",
+      "text": "记得早点休息",
+      "pinyin": "jidezaodianxiux",
+      "top": "记得早点休息",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-11/initials",
+      "text": "记得早点休息",
+      "pinyin": "jdzdxx",
+      "top": "记得早点休息",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-11/mixed_initials",
+      "text": "记得早点休息",
+      "pinyin": "jidzaodxiux",
+      "top": "记得早点休息",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-12/clean",
+      "text": "路上注意安全",
+      "pinyin": "lushangzhuyianquan",
+      "top": "路上注意安全",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-12/last_initial",
+      "text": "路上注意安全",
+      "pinyin": "lushangzhuyianq",
+      "top": "路上注意安全",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-12/initials",
+      "text": "路上注意安全",
+      "pinyin": "lszyaq",
+      "top": "来深圳呀亲",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-12/mixed_initials",
+      "text": "路上注意安全",
+      "pinyin": "luszhuyanq",
+      "top": "卢斯主演去",
+      "position": 3
+    },
+    {
+      "id": "daily_sentence-13/clean",
+      "text": "周末一起出去玩",
+      "pinyin": "zhoumoyiqichuquwan",
+      "top": "周末一起出去玩",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-13/last_initial",
+      "text": "周末一起出去玩",
+      "pinyin": "zhoumoyiqichuquw",
+      "top": "周末一起出去玩",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-13/initials",
+      "text": "周末一起出去玩",
+      "pinyin": "zmyqcqw",
+      "top": "咱们一起出去玩",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-13/mixed_initials",
+      "text": "周末一起出去玩",
+      "pinyin": "zhoumyiqchuqwan",
+      "top": "周末一起出去玩",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-14/clean",
+      "text": "生日快乐",
+      "pinyin": "shengrikuaile",
+      "top": "生日快乐",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-14/last_initial",
+      "text": "生日快乐",
+      "pinyin": "shengrikuail",
+      "top": "生日快乐",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-14/initials",
+      "text": "生日快乐",
+      "pinyin": "srkl",
+      "top": "生日快乐",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-14/mixed_initials",
+      "text": "生日快乐",
+      "pinyin": "shengrkuail",
+      "top": "生日快乐",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-15/clean",
+      "text": "祝你工作顺利",
+      "pinyin": "zhunigongzuoshunli",
+      "top": "祝你工作顺利",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-15/last_initial",
+      "text": "祝你工作顺利",
+      "pinyin": "zhunigongzuoshunl",
+      "top": "祝你工作顺利",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-15/initials",
+      "text": "祝你工作顺利",
+      "pinyin": "zngzsl",
+      "top": "在哪工作顺利",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-15/mixed_initials",
+      "text": "祝你工作顺利",
+      "pinyin": "zhungongzshunl",
+      "top": "准工作顺利",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-16/clean",
+      "text": "最近天气有点冷",
+      "pinyin": "zuijintianqiyoudianleng",
+      "top": "最近天气有点冷",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-16/last_initial",
+      "text": "最近天气有点冷",
+      "pinyin": "zuijintianqiyoudianl",
+      "top": "最近天气有点冷",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-16/initials",
+      "text": "最近天气有点冷",
+      "pinyin": "zjtqydl",
+      "top": "这几天去意大利",
+      "position": 1
+    },
+    {
+      "id": "daily_sentence-16/mixed_initials",
+      "text": "最近天气有点冷",
+      "pinyin": "zuijtianqyoudleng",
+      "top": "最近天气有点冷",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-17/clean",
+      "text": "请把文件发给我",
+      "pinyin": "qingbawenjianfageiwo",
+      "top": "请把文件发给我",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-17/last_initial",
+      "text": "请把文件发给我",
+      "pinyin": "qingbawenjianfageiw",
+      "top": "请把文件发给我",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-17/initials",
+      "text": "请把文件发给我",
+      "pinyin": "qbwjfgw",
+      "top": "去帮我就发给我",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-17/mixed_initials",
+      "text": "请把文件发给我",
+      "pinyin": "qingbwenjfagwo",
+      "top": "请把文件发给我",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-18/clean",
+      "text": "这个问题已经解决了",
+      "pinyin": "zhegewentiyijingjiejuele",
+      "top": "这个问题已经解决了",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-18/last_initial",
+      "text": "这个问题已经解决了",
+      "pinyin": "zhegewentiyijingjiejuel",
+      "top": "这个问题已经解决了",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-18/initials",
+      "text": "这个问题已经解决了",
+      "pinyin": "zgwtyjjjl",
+      "top": "这个问题已经解决了",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-18/mixed_initials",
+      "text": "这个问题已经解决了",
+      "pinyin": "zhegwentyijjiejle",
+      "top": "这个问题已经解决了",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-19/clean",
+      "text": "明天下午三点开会",
+      "pinyin": "mingtianxiawusandiankaihui",
+      "top": "明天下午三点开会",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-19/last_initial",
+      "text": "明天下午三点开会",
+      "pinyin": "mingtianxiawusandiankaih",
+      "top": "明天下午三点开会",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-19/initials",
+      "text": "明天下午三点开会",
+      "pinyin": "mtxwsdkh",
+      "top": "明天下午睡得可好",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-19/mixed_initials",
+      "text": "明天下午三点开会",
+      "pinyin": "mingtxiawsandkaih",
+      "top": "明天下午三点开会",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-20/clean",
+      "text": "我正在整理会议记录",
+      "pinyin": "wozhengzaizhenglihuiyijilu",
+      "top": "我正在整理会议记录",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-20/last_initial",
+      "text": "我正在整理会议记录",
+      "pinyin": "wozhengzaizhenglihuiyijil",
+      "top": "我正在整理会议记录",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-20/initials",
+      "text": "我正在整理会议记录",
+      "pinyin": "wzzzlhyjl",
+      "top": "我只在这里还有家里",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-20/mixed_initials",
+      "text": "我正在整理会议记录",
+      "pinyin": "wozzaizlihyijlu",
+      "top": "我正在整理会议记录",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-21/clean",
+      "text": "麻烦确认一下时间",
+      "pinyin": "mafanquerenyixiashijian",
+      "top": "麻烦确认一下时间",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-21/last_initial",
+      "text": "麻烦确认一下时间",
+      "pinyin": "mafanquerenyixiashij",
+      "top": "麻烦确认一下时间",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-21/initials",
+      "text": "麻烦确认一下时间",
+      "pinyin": "mfqryxsj",
+      "top": "麻烦确认一下时间",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-21/mixed_initials",
+      "text": "麻烦确认一下时间",
+      "pinyin": "mafqueryixshij",
+      "top": "麻烦去而一些时间",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-22/clean",
+      "text": "我们需要办理手续",
+      "pinyin": "womenxuyaobanlishouxu",
+      "top": "我们需要办理手续",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-22/last_initial",
+      "text": "我们需要办理手续",
+      "pinyin": "womenxuyaobanlishoux",
+      "top": "我们需要办理手续",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-22/initials",
+      "text": "我们需要办理手续",
+      "pinyin": "wmxyblsx",
+      "top": "我们需要不来实现",
+      "position": 2
+    },
+    {
+      "id": "daily_sentence-22/mixed_initials",
+      "text": "我们需要办理手续",
+      "pinyin": "womxuybanlshoux",
+      "top": "我们需要办理手续",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-23/clean",
+      "text": "请问地铁站怎么走",
+      "pinyin": "qingwenditiezhanzenmezou",
+      "top": "请问地铁站怎么走",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-23/last_initial",
+      "text": "请问地铁站怎么走",
+      "pinyin": "qingwenditiezhanzenmez",
+      "top": "请问地铁站怎么做",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-23/initials",
+      "text": "请问地铁站怎么走",
+      "pinyin": "qwdtzzmz",
+      "top": "请问地铁站这么早",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-23/mixed_initials",
+      "text": "请问地铁站怎么走",
+      "pinyin": "qingwditzhanzmez",
+      "top": "请问地铁站这么早",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-24/clean",
+      "text": "我想买一张火车票",
+      "pinyin": "woxiangmaiyizhanghuochepiao",
+      "top": "我想买一张火车票",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-24/last_initial",
+      "text": "我想买一张火车票",
+      "pinyin": "woxiangmaiyizhanghuochep",
+      "top": "我想买一张火车票",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-24/initials",
+      "text": "我想买一张火车票",
+      "pinyin": "wxmyzhcp",
+      "top": "我想买一张唱片",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-24/mixed_initials",
+      "text": "我想买一张火车票",
+      "pinyin": "woxmaiyzhanghchep",
+      "top": "我想买一张火车票",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-25/clean",
+      "text": "请帮我查一下订单",
+      "pinyin": "qingbangwochayixiadingdan",
+      "top": "请帮我查一下订单",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-25/last_initial",
+      "text": "请帮我查一下订单",
+      "pinyin": "qingbangwochayixiadingd",
+      "top": "请帮我查一下订的",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-25/initials",
+      "text": "请帮我查一下订单",
+      "pinyin": "qbwcyxdd",
+      "top": "全部完成游戏的的",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-25/mixed_initials",
+      "text": "请帮我查一下订单",
+      "pinyin": "qingbwocyixdingd",
+      "top": "请帮我吃一小叮当",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-26/clean",
+      "text": "这个地址可以送货吗",
+      "pinyin": "zhegedizhikeyisonghuoma",
+      "top": "这个地址可以送货吗",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-26/last_initial",
+      "text": "这个地址可以送货吗",
+      "pinyin": "zhegedizhikeyisonghuom",
+      "top": "这个地址可以送货吗",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-26/initials",
+      "text": "这个地址可以送货吗",
+      "pinyin": "zgdzkyshm",
+      "top": "这个动作可以什么",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-26/mixed_initials",
+      "text": "这个地址可以送货吗",
+      "pinyin": "zhegdizkeysonghma",
+      "top": "这个地址可以送货吗",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-27/clean",
+      "text": "今天的工作已经完成了",
+      "pinyin": "jintiandegongzuoyijingwanchengle",
+      "top": "今天的工作已经完成了",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-27/last_initial",
+      "text": "今天的工作已经完成了",
+      "pinyin": "jintiandegongzuoyijingwanchengl",
+      "top": "今天的工作已经完成了",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-27/initials",
+      "text": "今天的工作已经完成了",
+      "pinyin": "jtdgzyjwcl",
+      "top": "今天的工作已经完成了",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-27/mixed_initials",
+      "text": "今天的工作已经完成了",
+      "pinyin": "jintdegzuoyjingwchengl",
+      "top": "今天的工作已经完成了",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-28/clean",
+      "text": "我觉得这个办法不错",
+      "pinyin": "wojuedezhegebanfabucuo",
+      "top": "我觉得这个办法不错",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-28/last_initial",
+      "text": "我觉得这个办法不错",
+      "pinyin": "wojuedezhegebanfabuc",
+      "top": "我觉得这个办法不错",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-28/initials",
+      "text": "我觉得这个办法不错",
+      "pinyin": "wjdzgbfbc",
+      "top": "我觉得这个部分班次",
+      "position": 1
+    },
+    {
+      "id": "daily_sentence-28/mixed_initials",
+      "text": "我觉得这个办法不错",
+      "pinyin": "wojdezgebfabcuo",
+      "top": "我觉得这个办法不错",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-29/clean",
+      "text": "有时间给我打电话",
+      "pinyin": "youshijiangeiwodadianhua",
+      "top": "有时间给我打电话",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-29/last_initial",
+      "text": "有时间给我打电话",
+      "pinyin": "youshijiangeiwodadianh",
+      "top": "有时间给我打电话",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-29/initials",
+      "text": "有时间给我打电话",
+      "pinyin": "ysjgwddh",
+      "top": "有时间给我打电话",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-29/mixed_initials",
+      "text": "有时间给我打电话",
+      "pinyin": "yousjiangwoddianh",
+      "top": "有时间我打电话",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-30/clean",
+      "text": "我们一起去图书馆",
+      "pinyin": "womenyiqiqutushuguan",
+      "top": "我们一起去图书馆",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-30/last_initial",
+      "text": "我们一起去图书馆",
+      "pinyin": "womenyiqiqutushug",
+      "top": "我们一起去图书馆",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-30/initials",
+      "text": "我们一起去图书馆",
+      "pinyin": "wmyqqtsg",
+      "top": "我们一起去图书馆",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-30/mixed_initials",
+      "text": "我们一起去图书馆",
+      "pinyin": "womyiqqutshug",
+      "top": "我们一起去图书馆",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-31/clean",
+      "text": "请问附近有超市吗",
+      "pinyin": "qingwenfujinyouchaoshima",
+      "top": "请问附近有超市吗",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-31/last_initial",
+      "text": "请问附近有超市吗",
+      "pinyin": "qingwenfujinyouchaoshim",
+      "top": "请问附近有超市买",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-31/initials",
+      "text": "请问附近有超市吗",
+      "pinyin": "qwfjycsm",
+      "top": "前往附近有吃什么",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-31/mixed_initials",
+      "text": "请问附近有超市吗",
+      "pinyin": "qingwfujyoucshim",
+      "top": "请问附近有超市买",
+      "position": null
+    },
+    {
+      "id": "daily_sentence-32/clean",
+      "text": "我会尽快回复你的消息",
+      "pinyin": "wohuijinkuaihuifunidexiaoxi",
+      "top": "我会尽快回复你的消息",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-32/last_initial",
+      "text": "我会尽快回复你的消息",
+      "pinyin": "wohuijinkuaihuifunidexiaox",
+      "top": "我会尽快回复你的消息",
+      "position": 0
+    },
+    {
+      "id": "daily_sentence-32/initials",
+      "text": "我会尽快回复你的消息",
+      "pinyin": "whjkhfndxx",
+      "top": "我会尽快回复你的谢谢",
+      "position": 1
+    },
+    {
+      "id": "daily_sentence-32/mixed_initials",
+      "text": "我会尽快回复你的消息",
+      "pinyin": "wohjinkhuifnidxiaox",
+      "top": "我会尽快回复你的消息",
+      "position": 0
+    },
+    {
+      "id": "name_sentence-01/clean",
+      "text": "请联系张伟",
+      "pinyin": "qinglianxizhangwei",
+      "top": "请联系张伟",
+      "position": 0
+    },
+    {
+      "id": "name_sentence-01/last_initial",
+      "text": "请联系张伟",
+      "pinyin": "qinglianxizhangw",
+      "top": "请联系掌握",
+      "position": 2
+    },
+    {
+      "id": "name_sentence-01/initials",
+      "text": "请联系张伟",
+      "pinyin": "qlxzw",
+      "top": "去了现在我",
+      "position": null
+    },
+    {
+      "id": "name_sentence-01/mixed_initials",
+      "text": "请联系张伟",
+      "pinyin": "qinglxizwei",
+      "top": "请联系作为",
+      "position": null
+    },
+    {
+      "id": "name_sentence-02/clean",
+      "text": "我和李明一起去",
+      "pinyin": "wohelimingyiqiqu",
+      "top": "我和黎明一起去",
+      "position": null
+    },
+    {
+      "id": "name_sentence-02/last_initial",
+      "text": "我和李明一起去",
+      "pinyin": "wohelimingyiqiq",
+      "top": "我和黎明一起去",
+      "position": null
+    },
+    {
+      "id": "name_sentence-02/initials",
+      "text": "我和李明一起去",
+      "pinyin": "whlmyqq",
+      "top": "我回来吗一起去",
+      "position": null
+    },
+    {
+      "id": "name_sentence-02/mixed_initials",
+      "text": "我和李明一起去",
+      "pinyin": "wohlimyiqqu",
+      "top": "我怀里吗一起去",
+      "position": null
+    },
+    {
+      "id": "name_sentence-03/clean",
+      "text": "王芳今天请假了",
+      "pinyin": "wangfangjintianqingjiale",
+      "top": "王方今天请假了",
+      "position": null
+    },
+    {
+      "id": "name_sentence-03/last_initial",
+      "text": "王芳今天请假了",
+      "pinyin": "wangfangjintianqingjial",
+      "top": "王方今天请假了",
+      "position": null
+    },
+    {
+      "id": "name_sentence-03/initials",
+      "text": "王芳今天请假了",
+      "pinyin": "wfjtqjl",
+      "top": "晚饭今天请假了",
+      "position": null
+    },
+    {
+      "id": "name_sentence-03/mixed_initials",
+      "text": "王芳今天请假了",
+      "pinyin": "wangfjintqingjle",
+      "top": "往返今天请假了",
+      "position": null
+    },
+    {
+      "id": "name_sentence-04/clean",
+      "text": "请把资料发给刘洋",
+      "pinyin": "qingbaziliaofageiliuyang",
+      "top": "请把资料发给浏阳",
+      "position": 2
+    },
+    {
+      "id": "name_sentence-04/last_initial",
+      "text": "请把资料发给刘洋",
+      "pinyin": "qingbaziliaofageiliuy",
+      "top": "请把资料发给流域",
+      "position": null
+    },
+    {
+      "id": "name_sentence-04/initials",
+      "text": "请把资料发给刘洋",
+      "pinyin": "qbzlfgly",
+      "top": "全部资料发给了一",
+      "position": null
+    },
+    {
+      "id": "name_sentence-04/mixed_initials",
+      "text": "请把资料发给刘洋",
+      "pinyin": "qingbzilfagliuy",
+      "top": "情报资料发过六一",
+      "position": null
+    },
+    {
+      "id": "name_sentence-05/clean",
+      "text": "陈杰负责这个项目",
+      "pinyin": "chenjiefuzezhegexiangmu",
+      "top": "陈捷负责这个项目",
+      "position": null
+    },
+    {
+      "id": "name_sentence-05/last_initial",
+      "text": "陈杰负责这个项目",
+      "pinyin": "chenjiefuzezhegexiangm",
+      "top": "陈皆负责这个项目",
+      "position": null
+    },
+    {
+      "id": "name_sentence-05/initials",
+      "text": "陈杰负责这个项目",
+      "pinyin": "cjfzzgxm",
+      "top": "曾经负责整个项目",
+      "position": null
+    },
+    {
+      "id": "name_sentence-05/mixed_initials",
+      "text": "陈杰负责这个项目",
+      "pinyin": "chenjfuzzhegxiangm",
+      "top": "趁机负责这个项目",
+      "position": null
+    },
+    {
+      "id": "name_sentence-06/clean",
+      "text": "李白是一位诗人",
+      "pinyin": "libaishiyiweishiren",
+      "top": "李白是一位诗人",
+      "position": 0
+    },
+    {
+      "id": "name_sentence-06/last_initial",
+      "text": "李白是一位诗人",
+      "pinyin": "libaishiyiweishir",
+      "top": "李白是一位诗人",
+      "position": 0
+    },
+    {
+      "id": "name_sentence-06/initials",
+      "text": "李白是一位诗人",
+      "pinyin": "lbsywsr",
+      "top": "老板是一位商人",
+      "position": null
+    },
+    {
+      "id": "name_sentence-06/mixed_initials",
+      "text": "李白是一位诗人",
+      "pinyin": "libshiyweisren",
+      "top": "离别是一位商人",
+      "position": null
+    },
+    {
+      "id": "name_sentence-07/clean",
+      "text": "我们学习鲁迅的作品",
+      "pinyin": "womenxuexiluxundezuopin",
+      "top": "我们学习鲁迅的作品",
+      "position": 0
+    },
+    {
+      "id": "name_sentence-07/last_initial",
+      "text": "我们学习鲁迅的作品",
+      "pinyin": "womenxuexiluxundezuop",
+      "top": "我们学习鲁迅的作品",
+      "position": 0
+    },
+    {
+      "id": "name_sentence-07/initials",
+      "text": "我们学习鲁迅的作品",
+      "pinyin": "wmxxlxdzp",
+      "top": "我们学校了许多作品",
+      "position": null
+    },
+    {
+      "id": "name_sentence-07/mixed_initials",
+      "text": "我们学习鲁迅的作品",
+      "pinyin": "womxuexluxdezpin",
+      "top": "我们学校路线的作品",
+      "position": null
+    },
+    {
+      "id": "name_sentence-08/clean",
+      "text": "袁隆平研究杂交水稻",
+      "pinyin": "yuanlongpingyanjiuzajiaoshuidao",
+      "top": "袁隆平研究杂交水稻",
+      "position": 0
+    },
+    {
+      "id": "name_sentence-08/last_initial",
+      "text": "袁隆平研究杂交水稻",
+      "pinyin": "yuanlongpingyanjiuzajiaoshuid",
+      "top": "袁隆平研究杂交水稻",
+      "position": 0
+    },
+    {
+      "id": "name_sentence-08/initials",
+      "text": "袁隆平研究杂交水稻",
+      "pinyin": "ylpyjzjsd",
+      "top": "原来朋友简直就是的",
+      "position": null
+    },
+    {
+      "id": "name_sentence-08/mixed_initials",
+      "text": "袁隆平研究杂交水稻",
+      "pinyin": "yuanlpingyjiuzjiaosdao",
+      "top": "袁隆平研究杂交水稻",
+      "position": 0
+    }
+  ],
+  "data_locks_sha256": {
+    "dicts.lock": "fe209ee2d440596ebda31e7d6e56f446d592a4f7a2292c8491c5fe7bebbc8000",
+    "models.lock": "7e46f7f9cc0ab675eec6fb58bc44b414329daab5c761a3d38e80b13954152b56",
+    "dicts-extra.lock": "ab965e76d2c8cb119c8c1a5620d114cffb8e2efe477039e9aa2f4ef743aa2a5b"
+  }
+}

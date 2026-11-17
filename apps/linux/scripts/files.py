@@ -2,6 +2,7 @@
 # //! 安装文件清单与校验；不管理桌面服务、系统文件或用户数据。
 # //! 装哪几支（fcitx5 / fcitx4 插件、IBus 前端、systemd 单元）由 install.sh 决定，这里只按给的路径照做。
 import argparse
+import gzip
 import hashlib
 import json
 import os
@@ -40,47 +41,55 @@ def parse_args():
     return parser.parse_args()
 
 
-def product_data(root, resources, files):
-    """产品数据按 tools/release/data.lock 校验后加入清单。"""
-    generated = root / 'data/generated'
-    dictionary = generated / 'dict.qj'
-    archive = root / 'target/release-data/qingjian-data.tar.gz'
-    lock = dict(line.strip().split(' = ', 1) for line in (root / 'tools/release/data.lock').read_text().splitlines() if ' = ' in line)
-    if not dictionary.is_file() or not archive.is_file():
-        raise SystemExit('缺少产品数据，请先运行 tools/release/data-fetch.sh，或用 --sample 体验样例词库')
-    if digest(archive) != lock.get('qingjian-data.tar.gz'):
-        raise SystemExit('产品数据包与 tools/release/data.lock 校验值不符')
-    verified = {}
-    with tarfile.open(archive) as bundle:
-        for member in bundle.getmembers():
-            if not member.isfile():
-                continue
-            source = (root / member.name).resolve()
-            if not source.is_relative_to((root / 'data').resolve()):
-                raise SystemExit('数据包路径越界')
-            checksum = digest_stream(bundle.extractfile(member))
-            if not source.is_file() or digest(source) != checksum:
-                raise SystemExit(f'产品数据校验失败：{member.name}')
-            verified[source] = checksum
-    wanted = ('dict.qj', 'lm.qj', 'lm-unigram.tsv', 'lm-bigram.tsv', 'english.tsv')
-    for source in generated.rglob('*'):
-        # 点开头的是 macOS 打包混进来的 AppleDouble（`._dict.qj`），data-v1 发布包里有 19 个，不是产品数据
-        if source.name.startswith('.'):
+def bundled_dicts(root, resources, files):
+    """随包词库按 tools/release/dicts.lock 校验后加入清单：缓存的 .qjz 对上锁文件，解开的 .qj 对上 .qjz 的内容。"""
+    for line in (root / 'tools/release/dicts.lock').read_text().splitlines():
+        if not line.strip() or line.startswith('#'):
             continue
-        if source.is_file() and (source.name in wanted or source.name.startswith('glossary-') or source.parent.name in ('dicts', 'codes')):
-            if source.resolve() not in verified:
-                raise SystemExit(f'产品数据没有校验记录：{source}')
-            files[resources / source.relative_to(root)] = source
-    p2c_model = root / 'data/models/hanzhang-tongbian/hanzhang-tongbian-small.qjm'
-    if not p2c_model.is_file() or verified.get(p2c_model.resolve()) != digest(p2c_model):
-        raise SystemExit('含章·通变缺失或不在已校验的数据包中')
-    files[resources / p2c_model.relative_to(root)] = p2c_model
+        tag, rest = line.split(' = ', 1)
+        expected, installed = rest.split()
+        packed = root / 'target/release-data/dicts' / f'{tag}.qjz'
+        source = root / 'data/generated' / installed
+        if not packed.is_file() or not source.is_file():
+            raise SystemExit(f'缺少随包词库 {tag}，请先运行 tools/release/data-fetch.sh，或用 --sample 体验样例词库')
+        if digest(packed) != expected:
+            raise SystemExit(f'{packed.name} 与 tools/release/dicts.lock 校验值不符')
+        with gzip.open(packed) as stream:
+            if digest_stream(stream) != digest(source):
+                raise SystemExit(f'随包词库校验失败：{installed}')
+        files[resources / source.relative_to(root)] = source
+
+
+def bundled_models(root, resources, files):
+    """随包模型（语言模型、含章·通变）按 tools/release/models.lock 校验后加入清单：缓存的压缩包对上锁文件，解出的文件对上包里的同名文件。"""
+    for line in (root / 'tools/release/models.lock').read_text().splitlines():
+        if not line.strip() or line.startswith('#'):
+            continue
+        tag, rest = line.split(' = ', 1)
+        expected, installed = rest.split()
+        packed = root / 'target/release-data/models' / f'{tag}.tar.gz'
+        source = root / installed
+        if not packed.is_file() or not source.is_file():
+            raise SystemExit(f'缺少随包模型 {tag}，请先运行 tools/release/data-fetch.sh，或用 --sample 体验样例词库')
+        if digest(packed) != expected:
+            raise SystemExit(f'{packed.name} 与 tools/release/models.lock 校验值不符')
+        with tarfile.open(packed) as archive:
+            member = next((m for m in archive.getmembers() if m.isfile() and Path(m.name).name == source.name), None)
+            if member is None or digest_stream(archive.extractfile(member)) != digest(source):
+                raise SystemExit(f'随包模型校验失败：{installed}')
+        files[resources / source.relative_to(root)] = source
+
+
+def product_data(root, resources, files):
+    """产品数据：随包词库按 dicts.lock、模型按 models.lock 校验后加入清单。"""
+    bundled_dicts(root, resources, files)
+    bundled_models(root, resources, files)
 
 
 def resource_files(root, resources, sample):
     """随包资源：目标路径 → 源文件。布局与 Server 的 paths::resource_root 对应（其下 assets/ 与 data/generated/）。"""
     files = {}
-    for kind in ('sample', 'glossary', 'levels', 'emoji'):
+    for kind in ('sample', 'levels', 'emoji'):
         for source in (root / 'assets' / kind).rglob('*'):
             if source.is_file():
                 files[resources / source.relative_to(root)] = source

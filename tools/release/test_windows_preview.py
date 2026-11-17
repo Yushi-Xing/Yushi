@@ -33,9 +33,10 @@ class PreviewTests(unittest.TestCase):
         license_path=root/'assets/lexicon/00_meta/THUOCL_LICENSE.txt'
         license_path.parent.mkdir(parents=True)
         shutil.copy2(REPO/'assets/lexicon/00_meta/THUOCL_LICENSE.txt',license_path)
-        lock = root/'tools/release/data.lock'
-        lock.parent.mkdir(parents=True)
-        lock.write_text((REPO/'tools/release/data.lock').read_text())
+        for name in ['dicts.lock', 'dicts-extra.lock', 'models.lock']:
+            lock = root/'tools/release'/name
+            lock.parent.mkdir(parents=True, exist_ok=True)
+            lock.write_text((REPO/'tools/release'/name).read_text())
         installer = root/f'target/installer/qingjian-{RELEASE}-windows-x86_64-setup.exe'
         installer.parent.mkdir(parents=True)
         installer.write_bytes(b'MZ'+b'\0'*1_000_000)

@@ -66,10 +66,22 @@ pub fn entry_row(
     } else if entry.license.is_empty() {
         count(entry.entries)
     } else {
-        format!("{} · {}", count(entry.entries), entry.license)
+        format!(
+            "{} · {}",
+            count(entry.entries),
+            license_label(&entry.license)
+        )
     };
     let detail = text(ui, page, &detail)?;
     let mut trailing = vec![detail];
+    if removable && kind == Kind::Dictionary {
+        trailing.push(Button::new(tr("lists.export")).build(
+            ui,
+            theme,
+            ("export", kind, entry.stem.as_str()),
+            Message::ExportDict(entry.stem.clone()),
+        )?);
+    }
     if removable {
         trailing.push(Button::new(tr("lists.remove")).build(
             ui,
@@ -116,6 +128,19 @@ pub fn entry_row(
 pub fn domain_grid(ui: &mut Ui<Message>, page: &Page) -> Result<NodeId, RenderError> {
     let config = &page.settings.config.dictionaries;
     let mut cells = Vec::new();
+    if let Some(base) = &page.settings.library.base {
+        let toggle = Message::Set("dictionaries", "base", toml_edit::Value::from(!config.base));
+        let checkbox = Checkbox::new(config.base && !base.broken, tr("dictionaries.base"))
+            .disabled(base.broken)
+            .build(ui, &page.theme, ("domain", base.stem.as_str()), toggle)?;
+        let detail = if base.broken {
+            tr("lists.broken").to_owned()
+        } else {
+            count(base.entries)
+        };
+        let detail = text(ui, page, &detail)?;
+        cells.push(grid_cell(ui, page, &[checkbox, detail])?);
+    }
     for entry in &page.settings.library.domains {
         // 通用词库缺省开着，关掉是记进 disabled；领域词库缺省关着，打开是记进 domains
         let (on, message) = if entry.stem == GENERAL_DICTIONARY {
@@ -151,20 +176,7 @@ pub fn domain_grid(ui: &mut Ui<Message>, page: &Page) -> Result<NodeId, RenderEr
             .disabled(entry.broken)
             .build(ui, &page.theme, ("domain", entry.stem.as_str()), message)?;
         let detail = text(ui, page, &count(entry.entries))?;
-        cells.push(ui.scene().node(
-            Style {
-                flex_direction: FlexDirection::Row,
-                align_items: AlignItems::CENTER,
-                gap: page.gap(8.0),
-                size: Size {
-                    width: Dimension::percent(0.5),
-                    height: Dimension::auto(),
-                },
-                ..Style::default()
-            },
-            Visual::Group,
-            &[checkbox, detail],
-        )?);
+        cells.push(grid_cell(ui, page, &[checkbox, detail])?);
     }
     let gap = LengthPercentage::length(page.px(14.0));
     ui.scene().node(
@@ -185,6 +197,28 @@ pub fn domain_grid(ui: &mut Ui<Message>, page: &Page) -> Result<NodeId, RenderEr
         },
         Visual::Group,
         &cells,
+    )
+}
+
+/// 随包词库格子里的一格：占半行，勾选框后面跟条数。
+fn grid_cell(
+    ui: &mut Ui<Message>,
+    page: &Page,
+    children: &[NodeId],
+) -> Result<NodeId, RenderError> {
+    ui.scene().node(
+        Style {
+            flex_direction: FlexDirection::Row,
+            align_items: AlignItems::CENTER,
+            gap: page.gap(8.0),
+            size: Size {
+                width: Dimension::percent(0.5),
+                height: Dimension::auto(),
+            },
+            ..Style::default()
+        },
+        Visual::Group,
+        children,
     )
 }
 
@@ -249,6 +283,20 @@ fn count(entries: usize) -> String {
         Some((number, unit)) => tr_args("lists.entries_large", &[("n", &number), ("unit", &unit)]),
         None => tr_args("lists.entries", &[("n", &entries)]),
     }
+}
+
+/// SPDX 许可表达式写成好读的：`MIT AND CC-BY-SA-4.0` → `MIT / CC BY-SA 4.0`。
+pub fn license_label(spdx: &str) -> String {
+    spdx.split(" AND ")
+        .map(|id| match id.strip_prefix("CC-") {
+            Some(rest) => match rest.rsplit_once('-') {
+                Some((terms, version)) => format!("CC {terms} {version}"),
+                None => format!("CC {rest}"),
+            },
+            None => id.to_owned(),
+        })
+        .collect::<Vec<_>>()
+        .join(" / ")
 }
 
 #[cfg(test)]

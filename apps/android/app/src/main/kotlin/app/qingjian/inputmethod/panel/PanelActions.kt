@@ -18,6 +18,9 @@ interface PanelActions {
     /** 候选展开里点了第 [index] 个候选。 */
     fun selectCandidate(index: Int)
 
+    /** 候选展开里点了「全部 / 单字」。 */
+    fun toggleSingleChars()
+
     /** 清空组句（候选展开里的「重输」）。 */
     fun clearComposition()
 
@@ -60,6 +63,9 @@ interface PanelActions {
     /** 编辑常用语：[phrase] 为 null 是新加一条，放进 [group]。 */
     fun editPhrase(phrase: PhraseItem?, group: String)
 
+    /** 剪贴板第 [index] 条（文字 [text]）的「编辑」：开编辑框，完成后改掉这条、挪到最前，回剪贴板页。 */
+    fun editClip(index: Int, text: String)
+
     /** 常用语改过：带输入码的重新挂进候选。 */
     fun phrasesChanged()
 
@@ -76,4 +82,10 @@ interface PanelActions {
 
     /** 剪贴板最多存多少条（设置里的）。 */
     val clipboardLimit: Int
+
+    /** 当前应用勾没勾游戏键盘；没有可勾的应用（青简自己的输入框）是 null，功能面板就不放这一格。 */
+    val gameKeyboard: Boolean?
+
+    /** 功能面板的「游戏键盘」：给当前应用开或关。 */
+    fun toggleGameKeyboard()
 }

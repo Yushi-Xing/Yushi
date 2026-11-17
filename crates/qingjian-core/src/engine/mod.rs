@@ -7,13 +7,18 @@ mod alignment;
 mod annotation;
 mod aux_code;
 mod candidate_menu;
+mod candidate_view;
+mod caret;
 mod choice;
 mod code_keys;
 mod commit;
 mod composing;
+mod contacts;
 mod correcting;
 mod decoded;
+mod dictionaries;
 mod extras;
+mod follow_up;
 mod gloss;
 mod held;
 mod input_log;
@@ -21,9 +26,10 @@ mod key_hint;
 mod learning;
 mod marked;
 mod mode_keys;
+mod pairing;
 mod panel;
 mod parsing;
-mod prediction;
+pub(crate) mod prediction;
 mod privacy;
 mod query;
 mod raw;
@@ -47,6 +53,7 @@ use qingjian_dictionary::{AuxCodeLookup, Dictionary, WordList};
 pub use alignment::Alignment;
 pub use annotation::AnnotationReport;
 pub use aux_code::is_valid_aux_code_key;
+pub use candidate_view::CandidateView;
 pub use choice::{CharTable, ChoiceModel, ChoiceScore, ChoiceTier};
 pub use commit::{LastCommit, Transition};
 pub use gloss::{FilledGloss, GlossFiller, NoGlossFiller};
@@ -80,7 +87,7 @@ use crate::correction::{Correction, TypoCosts};
 use crate::emoji::EmojiTable;
 use crate::fuzzy::FuzzyRules;
 use crate::history::InputHistory;
-use crate::panel::{NoPanelHistory, PanelHistory, SymbolPanel};
+use crate::panel::{NoPanelHistory, PanelGroup, PanelHistory, SymbolPanel, TranslationCache};
 use crate::parser::{self, ParseError, Segmentation};
 use crate::punctuation::Punctuation;
 use crate::sentence::{self, Interpolation, LanguageModel, NoLanguageModel, SentenceScorer};
@@ -131,8 +138,20 @@ pub struct Engine {
     /// 中文标点转换开关。
     full_width_punctuation: bool,
 
+    /// 中文标点开着也保持半角的符号（`[general] half_width_symbols`，#893）。
+    half_width_symbols: Vec<char>,
+
+    /// 成对符号开关：中文与日文模式一份、英文模式一份（见 [`Self::pair_punctuation`]）。
+    pair_punctuation: (bool, bool),
+
     /// 用户定义的短语，按输入码精确匹配、按权重排在最前。
     custom_phrases: Vec<crate::CustomPhrase>,
+
+    /// 屏蔽词：候选文本里含有其中任何一个就整条丢掉。自定义短语不过这一关。
+    blocked: Vec<String>,
+
+    /// 通讯录（壳读系统通讯录交来，用户在设置里开了才有）：名字并进查词，见 [`Self::set_contacts`]。
+    contacts: Option<crate::ContactBook>,
 
     /// 中文模式下整段是英文词（或像英文词的开头）时给不给英文候选与补全（配置 `[general] english_in_chinese`，缺省开）。
     english_in_chinese: bool,
@@ -145,6 +164,13 @@ pub struct Engine {
 
     /// 中文模式下英文候选（精确词 + 补全）最多几个（配置 `[general] english_max_in_chinese`，缺省 4）。
     english_max_in_chinese: usize,
+
+    /// 英文候选旁显示音标（配置 `[general] show_english_pronunciation`，缺省关）。
+    /// 开着时把音标填进 `Candidate::reading`，平台层的 annotation 会画在候选词后面。
+    show_english_pronunciation: bool,
+
+    /// 英文音标表（随包 `english-ipa.qj`），键是小写词、值是 `/ˈkɑrɡoʊ/`。没有就一律不显示音标。
+    english_pronunciations: Option<WordList>,
 
     /// 有中文候选时英文最高排到第几位（配置 `[general] english_min_position`，缺省 1 即不限制）。
     english_min_position: usize,
@@ -203,6 +229,13 @@ pub struct Engine {
 
     /// 整句转换的搜索规模；同上，只有回放调参会改（`set_search_limits`）。见 [`sentence::SearchLimits`]。
     search_limits: sentence::SearchLimits,
+
+    /// 当前输入的浏览方式，结束组句后复位。
+    candidate_view: CandidateView,
+
+    default_candidate_view: CandidateView,
+
+    candidate_word_limit: usize,
 
     /// 敲错纠正的代价；同上，只有回放调参会改（`set_typo_costs`）。
     typo_costs: TypoCosts,
@@ -306,6 +339,10 @@ pub struct Engine {
 
     /// 连续上屏的链，个人 n-gram 与自动造词靠它。
     chain: CommitChain,
+    /// 是否学习连续上屏的五笔新词；不控制拼音、双拼学习或已有词的词频。
+    auto_phrase: bool,
+    /// 五笔连续组词窗口最多容纳的汉字数，范围为 2～10。
+    auto_phrase_max_chars: usize,
 
     /// 模糊音开关，缺省全关。
     fuzzy: FuzzyRules,
@@ -319,11 +356,19 @@ pub struct Engine {
     /// 双拼方案下候选窗口的拼音行显示原始按键还是全拼，与 [`Self::shuangpin_raw_preedit`] 各管各的。
     shuangpin_raw_window: bool,
 
+    /// 双拼方案下同时接受全拼（以及同一输入里两种打法的混用），见 [`crate::shuangpin`] 的混输一节。
+    shuangpin_full_pinyin: bool,
+
     /// 注音模式开关，開著時緩衝區裡是注音大千鍵位，查詞前先解成拼音（見 [`crate::zhuyin`]）。
     zhuyin: bool,
 
     /// 九宫格方案：缓冲区里是数字键（可混着已选定的字母），见 [`crate::nine_key`]。
     nine_key: bool,
+
+    /// 九宫格要保住的读法：(当时的缓冲区, 各音节在缓冲区里的起点与写法)。退格把选定的音节退回成数字、
+    /// 点拼音行把光标挪进中间时记下；之后只删键或挪光标时候选与拼音行仍按这些写法排
+    /// （`ni` 退回成 `64` 还读 ni，不换成默认的 mi），见 `unpin_nine_key`、`keep_nine_key_reading`。
+    nine_key_unpinned: Option<(String, Vec<(usize, String)>)>,
 
     /// 形码方案（五笔或用户导入的）。`Some` 时编码参与查询，按前缀查表（见 [`Engine::query_code`]）。
     code: Option<CodeScheme>,
@@ -357,6 +402,15 @@ pub struct Engine {
 
     /// 面板条目的使用记录：打开面板时排「常用」，从面板上屏时记一次；缺省不记。
     panel_history: Box<dyn PanelHistory>,
+
+    /// 面板上次关掉时停在哪组：没在组句时打开就回到那组。
+    panel_group: Option<PanelGroup>,
+
+    /// 翻译组上次选的目标语言；没选过跟学习语言走。
+    panel_language: Option<Language>,
+
+    /// 翻译组的译文缓存，换联想提供方时清空。
+    panel_translations: TranslationCache,
 
     /// 辅码态：`None` 是拼音态，`Some` 是辅码态（空串 = 刚敲下触发键、码段还没开始）。
     /// 码段不进 `composition`：它与拼音分段记账、分段画（见 [`AuxSegment`]）。
@@ -431,10 +485,14 @@ const EMOJI_TOTAL: usize = 3;
 /// 「日期 / 时间 / 星期」这几个词排在前几条里才跟快捷写法（同 emoji 配词的范围；九宫格 7474 的日期常排第四）：再往后多半是长输入的前缀词。
 const KEYWORD_SCAN: usize = 5;
 
+/// 快捷写法最多几条紧跟第一个词（sj 的十五条全插在前面，会把简拼原来第一页的
+/// 词——世纪、时间——整片推到后面去）。其余垫到候选末尾。
+const INLINE_SHORTCUTS: usize = 3;
+
 /// 自动造词：用户连着选出的两个词，合起来不在词库里、且这条接续已记过这么多次，就记成用户词。
-/// 同一段拼音里连着选出来的（`qingjian` 选 青 再选 简）是「用户把它当一个词打」的强信号，两次就够；
-/// 第一次可能是误选或偶然。
-const AUTO_WORD_THRESHOLD_SAME_BUFFER: u32 = 2;
+/// 同一段拼音里连着选出来的（`qingjian` 选 青 再选 简）是「用户把它当一个词打」的强信号，一次就造：
+/// 下次整段与简拼都排在前面，不用逐字再选；选错造出的词只在敲同样的音时出现，可以删掉。
+const AUTO_WORD_THRESHOLD_SAME_BUFFER: u32 = 1;
 
 /// 分两段打的（`qing` 选 青、再打 `jian` 选 简）信号弱一些，要三次，免得 了我 这类虚词接续也成词。
 const AUTO_WORD_THRESHOLD: u32 = 3;
@@ -442,8 +500,20 @@ const AUTO_WORD_THRESHOLD: u32 = 3;
 /// 退格撤销最多回看几次上屏：删掉「沃德 书」两个词再重打时，要能找到两个词之前的那一次。
 const RECENT_COMMITS: usize = 4;
 
-/// 自动造出的词最多几个字：再长就不是词而是短语了。
+/// 全拼选过的词按简拼另记一份选择时键的前缀（`^ss`）：与真在那串键下的选择分开，排序时排在它们后面，
+/// 中英文谁在前也不看它。真的键只有小写字母，不会撞上。
+const ABBREVIATION_CHOICE_PREFIX: char = '^';
+
+/// 前后两个词自动合成的词最多几个字：再长就不是词而是短语了。
 const AUTO_WORD_MAX_CHARS: usize = 4;
+
+/// 一次选中的整句（几个多字词拼成，交易 + 中心）记成用户词的最多几个字：一次接受的长句多半是模型给的首选，
+/// 下次一字不差再打的机会也小（分几次选完的见 [`BUFFER_PHRASE_MAX_CHARS`]）。冻结回放里 4 字与 6 字逐条相同，取宽的。
+const SENTENCE_WORD_MAX_CHARS: usize = 6;
+
+/// 一段拼音分几次选完、合起来记成用户词的最多几个字（整句记忆）：用户逐字纠正过的整句，下次同样的全拼或简拼直接出。
+/// 再长的多半是一大段话，下次一字不差再打一遍的机会很小。
+const BUFFER_PHRASE_MAX_CHARS: usize = 20;
 
 /// 用户自己点选的词，转移记几份；整句路径里顺带的记一份。
 /// 整句是模型自己算出来的，按空格接受它会把这条路径喂回模型，形成自我强化；用户明确改选的词要能压过这种回声。
@@ -510,12 +580,18 @@ impl Engine {
             english_mode: false,
             punctuation: Punctuation::default(),
             full_width_punctuation: true,
+            half_width_symbols: Vec::new(),
+            pair_punctuation: (true, false),
             custom_phrases: Vec::new(),
+            blocked: Vec::new(),
+            contacts: None,
             english_in_chinese: true,
             chinese_first: false,
             spelling_correction: true,
             english_max_in_chinese: ENGLISH_CANDIDATES_MAX,
             english_min_position: 1,
+            show_english_pronunciation: false,
+            english_pronunciations: None,
             auto_space: false,
             shift_letter_compose: false,
             predictor: Box::new(NoPredictor),
@@ -534,6 +610,9 @@ impl Engine {
             interpolation: Interpolation::DEFAULT,
             typo_costs: TypoCosts::DEFAULT,
             search_limits: sentence::SearchLimits::DEFAULT,
+            candidate_view: CandidateView::default(),
+            default_candidate_view: CandidateView::default(),
+            candidate_word_limit: CandidateView::WORD_LIMIT,
             neural_context: RESCORE_CONTEXT_CHARS,
             correction_cache: std::cell::RefCell::new(None),
             span_cache: std::cell::RefCell::new(sentence::SpanCache::default()),
@@ -568,12 +647,16 @@ impl Engine {
             prediction_sequence: 0,
             pending_predictions: HashMap::new(),
             chain: CommitChain::default(),
+            auto_phrase: true,
+            auto_phrase_max_chars: 4,
             fuzzy: FuzzyRules::default(),
             shuangpin: None,
             shuangpin_raw_preedit: false,
             shuangpin_raw_window: false,
+            shuangpin_full_pinyin: false,
             zhuyin: false,
             nine_key: false,
+            nine_key_unpinned: None,
             code: None,
             phonetic: true,
             emoji: None,
@@ -584,6 +667,9 @@ impl Engine {
             symbol_limit: 1,
             panel: None,
             panel_history: Box::new(NoPanelHistory),
+            panel_group: None,
+            panel_language: None,
+            panel_translations: TranslationCache::default(),
             aux_code: None,
             aux_enabled: false,
             aux_show: false,

@@ -84,7 +84,7 @@ fn shipped_model_stays_idle_after_plain_and_mixed_input_settle() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");
     let generated = root.join("data/generated");
     let mut spec = AssemblySpec::new(generated.join("dict.qj"));
-    spec.english = Some(generated.join("english.tsv"));
+    spec.english = Some(generated.join("english.qj"));
     spec.language_model = Some(LanguageModelFiles::find(&generated).expect("product LM"));
     let scores = Arc::new(AtomicUsize::new(0));
     let generations = Arc::new(AtomicUsize::new(0));

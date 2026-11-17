@@ -1,10 +1,12 @@
 //! 形码方案：随包的（如 86 五笔）与用户数据目录 `schemes/<id>/` 下自己放进去的，同一种格式、同一套找法。
 //!
 //! 一套方案一个目录，目录名就是 id：`scheme.toml` 写名字、元信息与按键规则（见 `Descriptor`，必须有），码表是 `词\t编码\t词频` 的 TSV。
+//! 随包的方案也可以是单个 `<id>.qj`（词库仓库发的码表，`Kind::CodeTable`）：名字、作者、许可、版本、简介取文件头的元数据，按键规则用缺省。
+//! 其中随包 `wubi86.qj` 使用 86 五笔组词规则；用户方案仍须在描述中显式声明。
 //! 用户目录里与随包同 id 的方案盖过随包那套；老位置 `wubi/wubi86.tsv` 仍认，只换随包五笔的码表。
 //! 用户导入的形码词库在用户目录 `code_dicts/` 下（见 [`qingjian_dictionary::import::import_code_words`]），按文件头记的方案 id
 //! 跟那套方案的码表合在一起，不用整份换掉码表。
-//! 随包的 `schemes` 目录在哪由壳给（macOS 在 `Resources/`，Windows 在安装目录的 `assets/`）。
+//! 随包的 `schemes` 目录在哪由壳给（macOS 在 `Resources/`，其他平台在随包根的 `data/generated/`）。
 
 mod descriptor;
 mod entry;
@@ -13,10 +15,11 @@ use std::path::{Path, PathBuf};
 use std::time::SystemTime;
 
 use qingjian_dictionary::import::code_words_scheme;
+use qingjian_format::{Container, Kind};
 
 use self::descriptor::Descriptor;
 pub use self::entry::CodeSchemeEntry;
-use crate::Scheme;
+use crate::{Scheme, SchemeMeta};
 
 /// `scheme.toml` 里 `type` 写这个（或不写）就是形码方案。
 pub const KIND: &str = "code";
@@ -156,8 +159,15 @@ fn scan(dir: &Path, bundled: bool) -> Vec<CodeSchemeEntry> {
     let mut entries: Vec<CodeSchemeEntry> = children
         .filter_map(Result::ok)
         .map(|child| child.path())
-        .filter(|path| path.is_dir())
-        .filter_map(|path| read(&path, bundled))
+        .filter_map(|path| {
+            if path.is_dir() {
+                read(&path, bundled)
+            } else if bundled && path.extension().is_some_and(|ext| ext == "qj") {
+                read_packed(&path)
+            } else {
+                None
+            }
+        })
         .collect();
     entries.sort_by(|a, b| a.id.cmp(&b.id));
     entries
@@ -171,7 +181,7 @@ pub fn from_dir(dir: &Path) -> Option<CodeSchemeEntry> {
 fn read(dir: &Path, bundled: bool) -> Option<CodeSchemeEntry> {
     let id = dir.file_name()?.to_str()?.to_owned();
     if !is_valid_id(&id) {
-        tracing::warn!(dir = %dir.display(), "形码方案的目录名不能当 id，跳过");
+        tracing::warn!(dir = %dir.display(), "code scheme directory name is not a valid id, skipped");
         return None;
     }
     let path = dir.join(DESCRIPTOR);
@@ -179,16 +189,16 @@ fn read(dir: &Path, bundled: bool) -> Option<CodeSchemeEntry> {
         Ok(text) => match toml::from_str(&text) {
             Ok(descriptor) => descriptor,
             Err(error) => {
-                tracing::warn!(file = %path.display(), %error, "scheme.toml 解析失败，跳过");
+                tracing::warn!(file = %path.display(), %error, "failed to parse scheme.toml, skipped");
                 return None;
             }
         },
         Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
-            tracing::warn!(dir = %dir.display(), "方案目录里没有 scheme.toml，跳过");
+            tracing::warn!(dir = %dir.display(), "scheme.toml missing from code scheme directory, skipped");
             return None;
         }
         Err(error) => {
-            tracing::warn!(file = %path.display(), %error, "scheme.toml 读不了，跳过");
+            tracing::warn!(file = %path.display(), %error, "failed to read scheme.toml, skipped");
             return None;
         }
     };
@@ -196,13 +206,13 @@ fn read(dir: &Path, bundled: bool) -> Option<CodeSchemeEntry> {
         "" | KIND => {}
         crate::shuangpin_schemes::KIND | crate::aux_schemes::KIND => return None,
         kind => {
-            tracing::warn!(file = %path.display(), kind, "不认识的方案种类，跳过");
+            tracing::warn!(file = %path.display(), kind, "unknown scheme kind, skipped");
             return None;
         }
     }
     let table = dir.join(&descriptor.table);
     if !table.is_file() {
-        tracing::warn!(file = %table.display(), "形码方案的码表不在，跳过");
+        tracing::warn!(file = %table.display(), "code scheme table missing, skipped");
         return None;
     }
     let label = match descriptor.name.trim() {
@@ -218,7 +228,47 @@ fn read(dir: &Path, bundled: bool) -> Option<CodeSchemeEntry> {
         auto_commit: descriptor.auto_commit,
         top: descriptor.top,
         code_length: descriptor.code_length,
+        phrase_rule: descriptor.phrase_rule,
         bundled,
+    })
+}
+
+/// 读一个打包成 `.qj` 的随包方案（文件主干就是 id）；不能用时记日志、返回 `None`。
+/// 只认随包目录里的：设置页移除用户方案是整个删目录，用户目录仍是一套方案一个目录。
+fn read_packed(path: &Path) -> Option<CodeSchemeEntry> {
+    let id = path.file_stem()?.to_str()?.to_owned();
+    if !is_valid_id(&id) {
+        tracing::warn!(file = %path.display(), "code scheme file name is not a valid id, skipped");
+        return None;
+    }
+    let metadata = match Container::open(path, Kind::CodeTable) {
+        Ok(container) => container.metadata().clone(),
+        Err(error) => {
+            tracing::warn!(file = %path.display(), %error, "code scheme table unreadable, skipped");
+            return None;
+        }
+    };
+    let descriptor = Descriptor::default();
+    let phrase_rule = if id == WUBI86 { WUBI86 } else { "" }.to_owned();
+    Some(CodeSchemeEntry {
+        label: match metadata.name.trim() {
+            "" => id.clone(),
+            name => name.to_owned(),
+        },
+        id,
+        meta: SchemeMeta {
+            author: metadata.attribution,
+            version: metadata.version,
+            description: metadata.description,
+            license: metadata.license,
+        },
+        table: path.to_path_buf(),
+        words: Vec::new(),
+        auto_commit: descriptor.auto_commit,
+        top: descriptor.top,
+        code_length: descriptor.code_length,
+        phrase_rule,
+        bundled: true,
     })
 }
 

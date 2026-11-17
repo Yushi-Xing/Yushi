@@ -115,9 +115,9 @@ pub fn keyboard_scenes() -> Vec<(&'static str, Keyboard)> {
     ]
 }
 
-/// 86 版五笔字根图，读随包的字形表（`assets/schemes/wubi86/roots86-glyphs.tsv`）。
+/// 86 版五笔字根图，读随包的字形表（`crates/qingjian-core/data/roots86-glyphs.tsv`）。
 fn wubi() -> Keyboard {
-    const TABLE: &str = include_str!("../../../../assets/schemes/wubi86/roots86-glyphs.tsv");
+    const TABLE: &str = include_str!("../../../qingjian-core/data/roots86-glyphs.tsv");
     let mut keys: Vec<(char, Keycap)> = Vec::new();
     for line in TABLE.lines().filter(|line| !line.starts_with('#')) {
         let fields: Vec<&str> = line.split('\t').collect();
@@ -207,6 +207,7 @@ pub fn cloud() -> Frame {
 /// 纠错后的拼音行（删除线 + 淡色剩余）加日文译词（汉字注假名）。
 pub fn corrected_japanese() -> Frame {
     Frame {
+        upward: false,
         preedit: Some(Preedit {
             segments: vec![
                 PreeditSegment {
@@ -257,12 +258,14 @@ pub fn corrected_japanese() -> Frame {
         mode: Mode::default(),
         columns: 0,
         column_ems: Vec::new(),
+        reversed: false,
     }
 }
 
 /// 四条验收用的一行：汉字（zh 字形）、英文、彩色 emoji、日文假名与汉字。
 pub fn probe() -> Frame {
     Frame {
+        upward: false,
         preedit: None,
         rows: vec![Row::plain(0, "青简 hello 🙂 日本語 骨直曜")],
         highlighted: None,
@@ -274,6 +277,7 @@ pub fn probe() -> Frame {
         mode: Mode::default(),
         columns: 0,
         column_ems: Vec::new(),
+        reversed: false,
     }
 }
 
@@ -298,6 +302,7 @@ pub fn aux_code() -> Frame {
         row.code = Some(code.to_owned());
     }
     Frame {
+        upward: false,
         preedit: Some(Preedit {
             segments: vec![
                 PreeditSegment {
@@ -321,12 +326,14 @@ pub fn aux_code() -> Frame {
         mode: Mode::default(),
         columns: 0,
         column_ems: Vec::new(),
+        reversed: false,
     }
 }
 
 /// 组句中还没有候选：只有拼音行。
 pub fn preedit_only() -> Frame {
     Frame {
+        upward: false,
         preedit: Some(Preedit::plain("zhong'wen'shu'ru", 8)),
         ..Frame::default()
     }
@@ -335,6 +342,7 @@ pub fn preedit_only() -> Frame {
 /// 候选都很短、没有译文、不高亮：竖排窗口要撑到最小宽度。
 pub fn short() -> Frame {
     Frame {
+        upward: false,
         preedit: Some(Preedit::plain("a", 1)),
         rows: vec![
             Row::plain(0, "啊"),
@@ -350,6 +358,7 @@ pub fn short() -> Frame {
         mode: Mode::default(),
         columns: 0,
         column_ems: Vec::new(),
+        reversed: false,
     }
 }
 
@@ -383,6 +392,7 @@ pub fn matrix() -> Frame {
         row.index = String::new();
     }
     Frame {
+        upward: false,
         preedit: Some(Preedit::plain("shi", 3)),
         rows,
         highlighted: Some(6),
@@ -394,5 +404,6 @@ pub fn matrix() -> Frame {
         mode: Mode::default(),
         columns: 5,
         column_ems: vec![1.0; 5],
+        reversed: false,
     }
 }

@@ -40,10 +40,10 @@ pub use candidate_action::CandidateAction;
 pub mod linux;
 
 pub use client::ClientMessage;
-pub use codec::{CodecError, DEFAULT_PIPE_NAME, read_message, write_message};
+pub use codec::{CodecError, read_message, write_message};
 pub use frame::{Frame, PreeditKind, PreeditSegment};
 pub use indicator::{IndicatorCommand, IndicatorState};
-pub use key::{KeyEvent, KeyModifiers, KeyOutcome};
+pub use key::{CaretEdit, KeyEvent, KeyModifiers, KeyOutcome};
 pub use screen_rect::ScreenRect;
 pub use server::{InputSettings, ServerMessage};
 pub use session::SessionId;

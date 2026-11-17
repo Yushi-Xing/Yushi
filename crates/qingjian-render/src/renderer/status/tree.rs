@@ -33,7 +33,9 @@ impl Renderer {
             candidate_nodes: Vec::new(),
             sense_nodes: Vec::new(),
             action_nodes: Vec::new(),
+            preedit_node: None,
             material_root: None,
+            material_corner: None,
             root_radius: 0.0,
         };
         let root = builder.status(spec, &frame, cells)?;

@@ -35,6 +35,17 @@ const GENERATE_MAX_CHARS: usize = 32;
 const GENERATED_CANDIDATES: usize = 2;
 
 impl Engine {
+    /// 输入结束或切换会话：取消尚未执行的模型工作，下一段输入重新准备缓存。
+    pub(super) fn cancel_rescoring(&self) {
+        self.cancel_choice();
+        if let Some(worker) = &self.rescorer {
+            worker.cancel_outdated(0);
+        }
+        if self.has_sentence_scorer() {
+            *self.neural_cache.borrow_mut() = NeuralCache::default();
+        }
+    }
+
     /// 接了重打分器（同步或异步）。
     pub fn has_sentence_scorer(&self) -> bool {
         self.sentence_scorer.is_some()

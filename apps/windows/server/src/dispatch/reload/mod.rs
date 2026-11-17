@@ -41,9 +41,9 @@ pub fn attach_custom_phrases(engine: &mut Engine, config: &Config) {
     }
 }
 
-/// 按 `[predict]` 接云联想、整句候选翻译与释义兜底；关着或缺密钥就退回本地实现。启动与热加载共用。
+/// 按 `[predict]` 接云联想与释义兜底；关着或缺密钥就退回本地实现。启动与热加载共用。
 pub fn attach_cloud(engine: &mut Engine, predict: &PredictConfig, usage_path: Option<PathBuf>) {
-    if !predict.enabled && !predict.sentence_translation {
+    if !predict.enabled {
         tracing::info!("云联想未开启（[predict] enabled = false）");
         engine.set_predictor(Box::new(NoPredictor));
         engine.set_gloss_filler(Box::new(NoGlossFiller));
@@ -52,7 +52,7 @@ pub fn attach_cloud(engine: &mut Engine, predict: &PredictConfig, usage_path: Op
     match CloudPredictor::new_with_usage(predict, usage_path.clone()) {
         Ok(predictor) => {
             engine.set_predictor(Box::new(predictor));
-            tracing::info!(model = %predict.model, cloud = predict.enabled, sentence_translation = predict.sentence_translation, "云联想已接入");
+            tracing::info!(model = %predict.model, "云联想已接入");
         }
         Err(error) => {
             tracing::warn!(%error, "云联想接入失败（缺 API key？），退回本地候选");
@@ -78,21 +78,21 @@ fn swap_translator(
     engine: &mut Engine,
     language: Option<Language>,
     root: &Path,
-    user_dir: Option<&Path>,
+    dirs: &DataDirs,
 ) -> bool {
     let Some(language) = language else {
         engine.set_translator(Box::new(NoTranslator));
         tracing::info!("学习语言已关，不显示译文");
         return true;
     };
-    let Some(path) = assembly::glossary_file(root, language) else {
+    let Some(path) = assembly::glossary_file(root, dirs.downloads().as_deref(), language) else {
         tracing::warn!(
             language = language.code(),
             "没有这门语言的释义表，学习语言不变"
         );
         return false;
     };
-    match assembly::load_glossary(language, &path, user_dir) {
+    match assembly::load_glossary(language, &path, dirs.learning().as_deref()) {
         Ok(glossary) => {
             tracing::info!(language = language.code(), "释义表已切换");
             engine.set_translator(Box::new(glossary));
@@ -137,8 +137,12 @@ impl Router {
         let code_files = dirs.code_snapshot();
         let code_word_files = dirs.code_word_snapshot();
         let dictionary_files = dirs.dict_snapshot();
-        let updates = dirs.user_root.as_deref().map(|dir| {
-            qingjian_update::Checker::new(dir.join(UPDATE_STATE_FILE), env!("CARGO_PKG_VERSION"))
+        let glossary_files = dirs.glossary_snapshot();
+        let updates = dirs.user.as_ref().map(|user| {
+            qingjian_update::Checker::new(
+                user.cache().join(UPDATE_STATE_FILE),
+                env!("CARGO_PKG_VERSION"),
+            )
         });
         self.reload = Some(ConfigReload {
             config_path,
@@ -152,6 +156,7 @@ impl Router {
             applied_dictionaries: config.dictionaries.clone(),
             applied_aux_code: config.aux_code.clone(),
             dictionary_files,
+            glossary_files,
             applied_language: assembly::learning_language(config),
             update: config.update.clone(),
             updates,
@@ -178,6 +183,12 @@ impl Router {
             self.engine
                 .set_extra_dictionaries(reload.load_dictionaries());
             reload.dictionary_files = files;
+        }
+        // 设置页下载装上（或更新了）释义表：英→中表与配置里的学习语言都按新文件重装
+        let glossaries = reload.dirs.glossary_snapshot();
+        if glossaries != reload.glossary_files {
+            reload.glossary_files = glossaries;
+            self.reload_glossaries();
         }
         // 用户主题文件改了：戳变了设置就不等，UI 线程重读主题当场换上（边改主题边看效果）
         if let Some(dir) = qingjian_platform::dirs::themes_dir() {
@@ -228,9 +239,33 @@ impl Router {
         }
     }
 
+    /// 下载的释义表变了：英→中表重装；学习语言按当前配置重新换一次表（之前缺表没换成的这次能换上）。
+    fn reload_glossaries(&mut self) {
+        let Some(reload) = &mut self.reload else {
+            return;
+        };
+        let downloads = reload.dirs.downloads();
+        // 下载的删了、又没随包的：英文候选右侧留空
+        let english =
+            assembly::glossary_file(&reload.root, downloads.as_deref(), Language::Chinese)
+                .and_then(|path| assembly::load_english_glossary(&path));
+        match english {
+            Some(glossary) => self.engine.set_english_translator(Box::new(glossary)),
+            None => self.engine.set_english_translator(Box::new(NoTranslator)),
+        }
+        let language = match Config::load(&reload.config_path) {
+            Ok(config) => assembly::learning_language(&config),
+            Err(_) => reload.applied_language,
+        };
+        if swap_translator(&mut self.engine, language, &reload.root, &reload.dirs) {
+            reload.applied_language = language;
+        }
+    }
+
     /// 应用新配置。学习语言变了换释义表（词汇等级表启动时已全装，不用换）。
     fn apply_config(&mut self, config: &Config, phrases_valid: bool) {
-        self.engine.set_fuzzy(config.fuzzy);
+        crate::clipboard_process::sync(config.clipboard.enabled);
+        self.engine.set_fuzzy(config.fuzzy.clone());
         if phrases_valid {
             attach_custom_phrases(&mut self.engine, config);
         } else {
@@ -240,6 +275,8 @@ impl Router {
         self.reload_schemes(config);
         self.engine.set_traditional(config.general.traditional());
         self.engine.set_learning(config.general.learning);
+        self.engine
+            .set_auto_phrase(config.auto_phrase.enabled, config.auto_phrase.max_chars);
         self.engine.set_mode_keys(config.shortcut.mode);
         self.engine
             .set_aux_code_key(config.general.aux_code_key(), config.general.page_keys());
@@ -260,6 +297,8 @@ impl Router {
         self.engine
             .set_english_in_chinese(config.general.english_in_chinese);
         self.engine
+            .set_show_english_pronunciation(config.general.show_english_pronunciation);
+        self.engine
             .set_english_max_in_chinese(config.general.english_max_in_chinese());
         self.engine
             .set_english_min_position(config.general.english_min_position());
@@ -267,14 +306,24 @@ impl Router {
             .set_shift_letter_compose(config.general.shift_letter.compose());
         self.engine.set_auto_space(config.general.auto_space);
         self.engine
+            .set_half_width_symbols(&config.general.half_width_symbols);
+        self.engine.set_pair_punctuation(
+            config.general.pair_punctuation,
+            config.general.english_pair_punctuation,
+        );
+        self.engine
             .set_shuangpin_raw_preedit(config.general.shuangpin_raw_preedit);
         self.engine
             .set_shuangpin_raw_window(config.general.shuangpin_raw_window);
+        self.engine
+            .set_shuangpin_full_pinyin(config.general.shuangpin_full_pinyin);
         self.engine
             .set_hold_selections(config.general.hold_selections);
         self.engine
             .set_context_memory(config.model.context_memory_seconds);
         let previous = self.config.render_settings();
+        let reverse_changed =
+            self.config.vertical_reverse_above != config.general.vertical_reverse_above;
         let next = RouterConfig::from(config);
         self.reload_mode(&next);
         let themes_stamp = self.config.themes_stamp;
@@ -288,6 +337,12 @@ impl Router {
         if settings != previous {
             self.candidates.configure(settings);
         }
+        if reverse_changed {
+            // 文字与光标可能没变，强制重发正在显示的帧，避免方向键已切换而窗口仍是旧顺序。
+            self.last_shown = None;
+            let frame = self.self_drawn_frame();
+            self.reconcile_candidates(&frame);
+        }
         self.reconcile_status();
         self.apply_model_config(&config.model);
 
@@ -298,20 +353,15 @@ impl Router {
         if config.predict != reload.applied_predict {
             let usage_path = reload
                 .dirs
-                .user_root
+                .user
                 .as_ref()
-                .map(|dir| dir.join(API_USAGE_FILE));
+                .map(|user| user.records().join(API_USAGE_FILE));
             attach_cloud(&mut self.engine, &config.predict, usage_path);
             reload.applied_predict = config.predict.clone();
         }
         let language = assembly::learning_language(config);
         if language != reload.applied_language
-            && swap_translator(
-                &mut self.engine,
-                language,
-                &reload.root,
-                reload.dirs.user_root.as_deref(),
-            )
+            && swap_translator(&mut self.engine, language, &reload.root, &reload.dirs)
         {
             reload.applied_language = language;
         }
@@ -319,6 +369,9 @@ impl Router {
             reload.applied_dictionaries = config.dictionaries.clone();
             self.engine
                 .set_extra_dictionaries(reload.load_dictionaries());
+            self.engine
+                .set_blocked_words(config.dictionaries.blocked.clone());
+            self.engine.set_base_words(config.dictionaries.base);
         }
         if config.aux_code != reload.applied_aux_code {
             reload.applied_aux_code = config.aux_code.clone();

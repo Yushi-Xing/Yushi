@@ -16,8 +16,8 @@ The macOS and Windows versions are in beta with nearly the same features; keys f
 | 9-key keypad | — | — | — | ✓ |
 | Double pinyin, fuzzy pinyin | ✓ | ✓ | ✓ | ✓ |
 | Dachen Zhuyin | — | ✓ | ✓ | ✓ |
-| Wubi, Wubi–pinyin mixed input | ✓ | ✓ | — | ✓ |
-| Custom double pinyin / shape-based schemes | ✓ | ✓ | — | — |
+| Wubi, Wubi–pinyin mixed input | ✓ | ✓ | ✓ | ✓ |
+| Custom double pinyin / shape-based schemes | ✓ | ✓ | ✓ | — |
 | Auxiliary code | ✓ | ✓ | — | — |
 | Key hints and radical chart | ✓ | ✓ | — | — |
 | Local sentence model | ✓ | ✓ | ✓ | — |
@@ -32,8 +32,9 @@ The macOS and Windows versions are in beta with nearly the same features; keys f
 | Custom phrases | ✓ | ✓ | ✓ | ✓ (saved phrases) |
 | System text replacements | ✓ | — | — | — |
 | Importing pinyin dictionaries | ✓ | ✓ | ✓ | ✓ |
-| Importing Wubi dictionaries | ✓ | ✓ | — | — |
-| Voice input, swipe typing, clipboard | — | — | — | ✓ |
+| Importing Wubi dictionaries | ✓ | ✓ | ✓ | — |
+| Qingjian Clipboard (copy history, local network sync) | ✓ | ✓ | — | ✓ |
+| Voice input, swipe typing, next-word suggestions | — | — | — | ✓ |
 
 ## Learning languages
 
@@ -73,7 +74,7 @@ The macOS and Windows versions are in beta with nearly the same features; keys f
 | Quick translation bar | — | — | — | ✓ |
 | Filling in glosses automatically | ✓ | ✓ | ✓ | ✓ |
 | Sentence translation for the vocabulary book | ✓ | ✓ | ✓ | — |
-| Translating sentence candidates | — | ✓ | — | — |
+| Translating in the symbol panel | ✓ | ✓ | — | — |
 | AI usage statistics | ✓ | ✓ | ✓ | — |
 
 Installation and platform-specific features: [Installation](../getting-started/install.md) (macOS, Windows), [Linux](linux.md), [Android](android.md).

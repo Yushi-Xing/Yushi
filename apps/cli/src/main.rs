@@ -3,11 +3,14 @@
 //! 输入拼音，打印候选（词性 + 译文）和各阶段耗时；输入序号上屏并记入用户词频。
 //! 不依赖任何平台 API，是 Core 的第一个「壳」。
 
+#![forbid(unsafe_code)]
+
 mod args;
 mod cold;
 mod display;
 mod error;
 mod eval;
+mod experience;
 mod logging;
 mod mine;
 mod repl;
@@ -29,6 +32,7 @@ use qingjian_dictionary::{
 };
 use qingjian_learning::FrequencyLearner;
 use qingjian_lm::BigramModel;
+use qingjian_platform::pronunciations::{ENGLISH_PRONUNCIATIONS_FILE, load_english_pronunciations};
 use qingjian_platform::{Config, Scheme, code_schemes, shuangpin_schemes};
 use qingjian_predict::CloudPredictor;
 use qingjian_translate::Glossary;
@@ -50,6 +54,9 @@ fn run() -> Result<(), CliError> {
     dotenvy::dotenv().ok();
     let args = Args::parse();
     let _log_guard = logging::init()?;
+    if let Some(output) = &args.experience {
+        return experience::run(output, args.experience_all, args.experience_word_limit);
+    }
 
     let started = Instant::now();
     let mut engine = build_engine(&args)?;
@@ -232,6 +239,10 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
         let path = args::default_data_file("english.tsv");
         path.is_file().then_some(path)
     });
+    let english_ipa = args.english_ipa.clone().or_else(|| {
+        let path = Path::new("data/generated").join(ENGLISH_PRONUNCIATIONS_FILE);
+        path.is_file().then_some(path)
+    });
     let started = Instant::now();
     let english = english_path.as_ref().map(WordList::from_path).transpose()?;
     let english_load = started.elapsed();
@@ -249,7 +260,7 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
         dict_ms = dict_load.as_millis(),
         glossary_ms = glossary_load.as_millis(),
         english_ms = english_load.as_millis(),
-        "加载完成"
+        "data loaded"
     );
     let mut engine = Engine::new(dictionary)
         .with_translator(Box::new(glossary))
@@ -264,12 +275,12 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
     if general.as_os_str() != "none" && general.is_file() {
         let mut dictionary = Dictionary::from_path(&general)?;
         dictionary.set_secondary(true);
-        tracing::info!(path = %general.display(), entries = dictionary.len(), "通用词库已加载");
+        tracing::info!(path = %general.display(), entries = dictionary.len(), "general dictionary loaded");
         extras.push(dictionary);
     }
     for path in &args.extra_dict {
         let dictionary = Dictionary::from_path(path)?;
-        tracing::info!(path = %path.display(), entries = dictionary.len(), "附加词库已加载");
+        tracing::info!(path = %path.display(), entries = dictionary.len(), "extra dictionary loaded");
         extras.push(dictionary);
     }
     engine.set_extra_dictionaries(extras);
@@ -277,12 +288,16 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
     let zh_glossary = args::default_data_file("glossary-zh.tsv");
     if zh_glossary.is_file() {
         let glossary = Glossary::from_path(Language::Chinese, &zh_glossary)?;
-        tracing::info!(glosses = glossary.len(), "英→中释义表已加载");
+        tracing::info!(glosses = glossary.len(), "english-chinese glossary loaded");
         engine = engine.with_english_translator(Box::new(glossary));
     }
     if let Some(words) = english {
         engine = engine.with_english(words);
     }
+    if let Some(path) = english_ipa {
+        engine.set_english_pronunciations(load_english_pronunciations(&path));
+    }
+    engine.set_show_english_pronunciation(args.show_english_pronunciation);
     engine.set_english_max_in_chinese(args.english_max_in_chinese);
     engine.set_english_min_position(args.english_min_position);
     engine.set_english_in_chinese(!args.no_english_in_chinese);
@@ -304,7 +319,7 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
         tracing::info!(
             words = table.len(),
             load_ms = started.elapsed().as_millis(),
-            "emoji 表已加载"
+            "emoji table loaded"
         );
         engine = engine.with_emoji(table);
     }
@@ -324,7 +339,7 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
             words = model.word_count(),
             bigrams = model.bigram_count(),
             load_ms = started.elapsed().as_millis(),
-            "语言模型已加载"
+            "language model loaded"
         );
         bigram_model = Some(model);
     }
@@ -341,8 +356,8 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
         tracing::info!(
             load_ms = started.elapsed().as_millis(),
             weight = args.neural_weight.unwrap_or(qingjian_core::NEURAL_WEIGHT),
-            kind = if p2c { "P2C" } else { "字级" },
-            "神经重打分已启用"
+            kind = if p2c { "P2C" } else { "char" },
+            "neural rescoring enabled"
         );
         engine = if args.neural_async {
             engine.with_async_sentence_scorer(
@@ -368,7 +383,7 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
         tracing::info!(
             load_ms = started.elapsed().as_millis(),
             tier = args.zhiyi_tier.key(),
-            "知意选词重排已启用"
+            "zhiyi reranking enabled"
         );
     }
     if let Some(path) = &args.ngram {
@@ -380,7 +395,7 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
             trigrams = model.trigram_count(),
             mb = model.bytes() >> 20,
             load_ms = started.elapsed().as_millis(),
-            "三元模型已加载"
+            "trigram model loaded"
         );
         if !args.no_ngram_words {
             let started = Instant::now();
@@ -390,7 +405,7 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
             tracing::info!(
                 entries = words.len(),
                 build_ms = started.elapsed().as_millis(),
-                "三元模型词表补词已生成"
+                "trigram model words added"
             );
             words.set_secondary(true);
             engine.set_model_words(Some(words));
@@ -445,14 +460,16 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
             if name == "all" {
                 rules = FuzzyRules::ALL;
             } else if !rules.enable(name) {
-                tracing::warn!(name, "不认识的模糊音规则，忽略");
+                tracing::warn!(name, "unknown fuzzy rule, ignored");
             }
         }
         config.fuzzy = rules;
     }
     if config.fuzzy.any() {
-        tracing::info!(rules = ?config.fuzzy, "模糊音已启用");
+        tracing::info!(rules = ?config.fuzzy, "fuzzy pinyin enabled");
     }
+    engine.set_blocked_words(config.dictionaries.blocked.clone());
+    engine.set_base_words(config.dictionaries.base);
     engine.set_traditional(config.general.traditional());
     engine.set_fuzzy(config.fuzzy);
     engine.set_mode_keys(config.shortcut.mode);
@@ -473,11 +490,14 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
         config.general.scheme()
     };
     let code = config.general.code().is_some() || args.code.is_some();
-    tracing::info!(pinyin = scheme.key(), code, "输入方案已启用");
+    tracing::info!(pinyin = scheme.key(), code, "input scheme enabled");
     match custom {
         Some(layout) => engine.set_shuangpin_layout(Some(layout)),
         None => engine.set_shuangpin(scheme.shuangpin()),
     }
+    engine.set_shuangpin_full_pinyin(
+        args.shuangpin_full_pinyin || config.general.shuangpin_full_pinyin,
+    );
     engine.set_zhuyin_mode(scheme == Scheme::Zhuyin);
     engine.set_nine_key(args.nine_key);
     // 拼音侧关掉且形码开着才是「只用形码」；两边都关着时留拼音兜底
@@ -485,7 +505,7 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
     // 形码的码表由 `--code` 显式给（配置只说「用哪套」，码表文件在哪由壳决定）
     if let Some(path) = &args.code {
         engine.set_code_scheme(Some(load_code_scheme(path)?));
-        tracing::info!(table = %path.display(), "形码方案已载入");
+        tracing::info!(table = %path.display(), "code scheme loaded");
     }
     engine.set_aux_code_key(config.general.aux_code_key(), config.general.page_keys());
     engine.set_aux_keep_empty(config.general.aux_code_keep_empty);
@@ -503,7 +523,7 @@ fn build_engine(args: &Args) -> Result<Engine, CliError> {
                 path = %path.display(),
                 entries = table.len(),
                 words = table.word_count(),
-                "辅码码表已加载"
+                "aux code table loaded"
             );
             tables.push(Arc::new(table));
         }

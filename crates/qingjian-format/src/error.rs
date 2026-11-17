@@ -45,4 +45,10 @@ pub enum FormatError {
 
     #[error("section {} is too large", tag_str(.0))]
     SectionTooLarge([u8; 4]),
+
+    #[error("not a .qjz file (unknown compression)")]
+    UnknownCompression,
+
+    #[error(".qjz unpacks to more than the allowed size")]
+    TooLarge,
 }

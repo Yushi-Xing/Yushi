@@ -84,7 +84,7 @@ fn disabled_rules_and_apostrophes_do_not_accept_unrelated_nonstandard_readings()
         ),
         (FuzzyRules::ALL, "tin'wo'suo", true),
     ] {
-        engine.set_fuzzy(rules);
+        engine.set_fuzzy(rules.clone());
         engine.set_input(typed);
         let query = engine.query().unwrap();
         assert_eq!(

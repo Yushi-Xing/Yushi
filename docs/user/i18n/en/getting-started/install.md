@@ -51,6 +51,17 @@ After installing:
 
 If you can't switch to Qingjian in some program, log out and back in, or restart that program.
 
+### Set Qingjian as the default input method (Windows 11)
+
+1. Open Settings → Time & language → Typing → Advanced keyboard settings, or search Windows Settings for "Advanced keyboard settings".
+2. Under "Override for default input method", select the entry containing "青简".
+3. To use the same input method across apps, clear "Let me use a different input method for each app window".
+4. Press `Win + Space` to switch to Qingjian, then type `nihao` in a newly opened Notepad window to check it.
+
+If Qingjian is missing from the list, sign out and back in after installation, then reopen this page. Windows controls the default input method; Qingjian's "Default English mode" setting controls its own Chinese/English state.
+
+See the [Windows default input method instructions](https://consumer.huawei.com/cn/support/content/zh-cn15879283/).
+
 **Known issue**: because beta builds don't have a proper code signature, the candidate window may be hidden and invisible in system UI such as the Start menu, the taskbar search box and Settings; typing and committing text still work. This will be fixed in the signed release.
 
 ## Upgrading
